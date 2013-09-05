@@ -1,4 +1,4 @@
-twly_fileHandler
+twly_local
 ==========
 
 Local web application of http://twly.herokuapp.com/
