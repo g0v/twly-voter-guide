@@ -1,0 +1,75 @@
+﻿<!--[if lt IE 10]>
+<!DOCTYPE html>
+<![endif]-->
+{% extends "legislator/nav_base.html" %}
+{% block title %}
+	{% if proposal %}
+		<title>立委投票指南:{{ proposal.primary_proposer.0.name }}的單一提案</title>
+		<meta property="og:title" content="立委投票指南:{{ proposal.primary_proposer.0.name }}的單一提案"/>
+		<meta itemprop="name" content="立委投票指南:{{ proposal.primary_proposer.0.name }}的單一提案">	
+	{% else %}
+		<title>立委投票指南:單一提案</title>
+		<meta property="og:title" content="立委投票指南:單一提案"/>
+		<meta itemprop="name" content="立委投票指南:單一提案">	
+	{% endif %}	
+{% endblock %}
+{% block left %} 
+
+{% endblock %}
+{% block right %}
+<div class="row-fluid">
+<div class="span7">
+<br>
+	{% if proposal %}
+		<div class="hero-unit">
+			<div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}"></div>
+			<p class="text-success">提案日期：{{ proposal.date|date:"Y-m-d" }}</p>
+			<p class="lead">{{proposal.content|linebreaksbr }}</p>
+		</div>			
+	{% endif %}
+</div>
+<div class="span5">
+	<br>
+	{% if proposal %}
+		<table class="table table-bordered">
+		<tr style="text-align:center; font-weight:bold;background-color: #FFFFCC;"><td>共同提案人</td><td>主提案數</td><td>縣市</td><td>行政區</td><td>委員會</td></tr>
+		{% for ly in proposal.sorted_proposer_set %}
+			<tr><td><a href="{% url 'legislator:proposer_detail' ly.id %}" rel="tooltip" title="這個立委的提案">
+			{% if ly.party == "中國國民黨" %}
+			<font color=blue>
+			{% elif ly.party == "民主進步黨" %}
+			<font color=green>
+			{% elif ly.party == "親民黨" %}
+			<font color=orange>
+			{% elif ly.party == "台灣團結聯盟" %}
+			<font color=brown>
+			{% elif ly.party == "無" %}
+			<font color=gray>
+			{% endif %}	
+			{{ ly.name }}</font></a></td><td>{{ly.npriproposer}}</td><td>{{ly.district}}</td>
+			<td>{% if ly.districtDetail %}{{ly.districtDetail}}{% endif %}</td><td>{{ly.committee}}</td></tr>
+		{% endfor %}
+		<tr class="info" ><td colspan=5 style="text-align:center;">#註：
+		<font color=blue>中國國民黨</font>&nbsp;-&nbsp;<font color=green>民主進步黨</font>&nbsp;-&nbsp;
+		<font color=orange>親民黨</font>&nbsp;-&nbsp;<font color=brown>台灣團結聯盟</font>&nbsp;-&nbsp;
+		<font color=gray>無黨籍</font></td>
+		</tr>			
+		</table>	
+	{% endif %}	
+	<hr>	
+	<div class="fb-comments" data-width="400" data-num-posts="5" href={{current_url}}></div>
+</div>
+</div>
+{% endblock %}
+{% block backtotop %}	
+	<div align="center">
+	<a href="#top" class="lead"><i class="icon-arrow-up"></i>回頭</a>
+	</div>	  
+{% endblock %}
+{% block script %}
+	<script>
+	$(document).ready( function() {
+		$("[rel='tooltip']").tooltip();
+	});
+	</script>
+{% endblock %}

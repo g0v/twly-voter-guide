@@ -1,0 +1,40 @@
+﻿<!--[if lt IE 10]>
+<!DOCTYPE html>
+<![endif]-->
+{% extends "legislator/nav_base.html" %}
+{% block title %}
+	<title>立委投票指南:重大議題</title>
+	<meta property="og:title" content="立委投票指南:重大議題"/>
+	<meta itemprop="name" content="立委投票指南:重大議題">			
+{% endblock %}
+
+{% block right %}
+<br>
+<div class="row-fluid">
+<div class="span2">
+	<table class="table">
+	{% for fragment in issues %}
+		<tr style="background-color: {% cycle 'white' '#EEEEEE' %};"><td>
+		{% if fragment.reference %}
+			<a href="{% url 'legislator:issue' fragment.id %}" >{{fragment.title}}</a>
+		{% else %}
+			{{fragment.title}}
+		{% endif %}
+		</td></tr>
+	{% endfor %}	
+	</table>
+</div>
+<div class="span10">
+	<iframe src='http://embed.verite.co/timeline/?source=0Am6gVfTCSAPLdHZnZVhocmtOUWlaTFB0NTVfd2RzZFE&font=Bevan-PotanoSans&maptype=ROADMAP&lang=zh-tw&start_at_end=true&height=550' width='100%' height='550' frameborder='0'></iframe>
+	<hr>
+	<div class="fb-like pull-right" data-send="false" data-width="320" data-show-faces="true" href="http://twly.herokuapp.com/"></div>	
+	<div class="fb-comments" data-width="480" data-num-posts="3" data-href={{current_url}}></div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready( function() {
+	$('#issues').addClass('active');
+});
+</script>
+{% endblock %}

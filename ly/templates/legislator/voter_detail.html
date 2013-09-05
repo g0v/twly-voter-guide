@@ -1,0 +1,189 @@
+﻿<!--[if lt IE 10]>
+<!DOCTYPE html>
+<![endif]-->
+{% extends "legislator/nav_base.html" %}
+{% load ly_extras %}
+{% block title %}
+	{% if ly %}
+		{% if index == 'conscience' %}
+			<title>立委投票指南:{{ly.name}}的脫黨表決紀錄</title>
+			<meta property="og:title" content="立委投票指南:{{ly.name}}的脫黨表決紀錄"/>
+			<meta itemprop="name" content="立委投票指南:{{ly.name}}的脫黨表決紀錄">
+		{% else %}
+			<title>立委投票指南:{{ly.name}}的投票表決紀錄</title>
+			<meta property="og:title" content="立委投票指南:{{ly.name}}的投票表決紀錄"/>
+			<meta itemprop="name" content="立委投票指南:{{ly.name}}的投票表決紀錄">
+		{% endif %}			
+	{% else%}
+		<title>立委投票指南:立委的投票表決紀錄</title>
+		<meta property="og:title" content="立委投票指南:立委的投票表決紀錄"/>
+		<meta itemprop="name" content="立委投票指南:立委的投票表決紀錄">		
+	{% endif %}
+{% endblock %}
+{% block left %} 
+
+{% endblock %}
+
+{% block right %}
+<div class="row-fluid">
+	<div class="span3">
+	<br>
+		{% if ly %}
+		<table class="table table-bordered">
+		<tr><td style="background-color: lightgrey;">立委</td><td><b>{{ ly.name }}</b></td></tr>
+		<tr><td style="background-color: lightgrey;">選區縣市</td><td><a href="{% url 'legislator:index_district' ly.district %}" rel="tooltip" title="查看該選區的立委" >{{ly.district}}</a></td></tr>
+		{% if ly.districtDetail %}<tr><td style="background-color: lightgrey;">行政區</td><td><abbr title="{{ ly.districtDetail }}">{{ ly.districtDetail|truncatechars:10 }}</abbr></td></tr>{% endif %}
+		<tr><td style="background-color: lightgrey;">現任委員會</td><td>{% if ly.enable %}<a href="{% url 'legislator:index_committee' ly.committee %}" >{{ ly.committee|truncatechars:7 }}</a>{% else %}已離職{% endif %}</td></tr>	<tr><td style="background-color: lightgrey;">到職日期</td><td>{{ ly.enabledate|date:"Y-m-d" }}</td>
+		<tr><td style="background-color: lightgrey;">法條修正草案數</td><td>{{ ly.npribill }} 個</td></tr>
+		<tr><td style="background-color: lightgrey;">附帶決議、臨時提案數</td><td>{{ ly.npriproposer }} 個</td></tr>
+		<tr><td style="background-color: lightgrey;">沒投票表決(次)</td><td>{{ly.notvote}} 次</td></tr>
+		<tr><td style="background-color: lightgrey;">脫黨表決(次)</td><td>{{ly.nconsciencevote}} 次</td></tr>
+		<tr><td colspan=2></td></tr>
+		<tr><td style="background-color: lightgrey;" rowspan=3>外部連結</td>
+		{% if ly.facebook %}<td><a href={{ ly.facebook }} target="_blank">{{ ly.name }}的 Facebook</a></td></tr>{% endif %}
+		{% if ly.wiki %}<td><a href={{ ly.wiki }} target="_blank">{{ ly.name }}的維基百科</a></td></tr>{% endif %}
+		{% if ly.officialsite %}<td><a href={{ ly.officialsite }} target="_blank">{{ ly.name }}的立院官網</a></td></tr>{% endif %}
+		</tr>
+		</table>
+		{% endif %}	
+	</div>	
+	<div class="span9">
+	<br>
+	<div class="row-fluid">
+		<div class="span12">
+			<ul class="nav nav-pills">
+			<li><b>{{ ly.name }}</b>的&nbsp;</li>
+			<li><a class="btn" id='url_bill' href="{% url 'legislator:biller_detail' ly.id %}">法條修正草案</a></li>
+			<li><a class="btn" id='url_proposal' href="{% url 'legislator:proposer_detail' ly.id %}">附帶決議、臨時提案</a></li>
+			<li class="dropdown">
+				<a id='url_vote' class="btn dropdown-toggle" href="{% url 'legislator:voter_detail' ly.id %}">投票紀錄 <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="{% url 'legislator:voter_detail' legislator_id=ly.id index='' %}" >全投票表決紀錄</a></li>
+					<li><a href="{% url 'legislator:voter_detail' legislator_id=ly.id index='conscience' %}" >脫黨投票表決紀錄</a></li>
+				</ul>				
+			</li>	
+			<li><a class="btn" id='url_pchart' href="{% url 'legislator:chart_personal_report' legislator_id=ly.id index='ly' %}">圖表</a></li>
+			<li><a class="btn" id='url_politics' href="{% url 'legislator:ly_politics' ly.id %}">競選政見</a></li>
+			</ul>
+		</div>
+	</div>
+	<br>	
+	<div class="page-header">
+		<form action="" method="get" class="form-search" id="form">
+		{% csrf_token %}
+		<fieldset>
+		<input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:核四 國教...空格有交集效果">
+		<button type="submit" class="btn">Go!</button>
+		<label class="checkbox">
+		{% if index != 'conscience' %}<input type="checkbox" name="notvote" id="notvote" {% if notvote %} checked{% endif %}>{{ ly.name }}沒投票的表決也搜尋
+		{% endif %}
+		</label>	
+		{% if error %}
+			<span class="help-inline"><a class="text-error">請輸入關鍵字!!</a></span>
+		{% endif %}
+		</fieldset>
+		</form>	
+{% if keyword_obj and index != 'conscience'%}
+	<h4>熱門：
+		{% for keyword in keyword_obj %}	
+			<a href="{% url 'legislator:voter_detail' legislator_id=ly.id keyword_url=keyword.content %}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword.content}}&nbsp;</font></a>
+		{% endfor %}	
+	</h4>
+{% endif %}	
+		<div class="well well-small">
+		<p class="lead">{{ly.name}}的{% if index == 'conscience' %}<b>脫黨</b>{% endif %}表決紀錄：
+		{% if keyword %}
+			包含<font style="color: red;">"{{keyword}}"</font>的表決&nbsp;
+		{% endif %}
+			{% if notvote_votelist %}
+				{{notvote_votelist|length}}次<font color="#996600">沒有投票</font>&nbsp;,&nbsp;
+			{% endif %}
+			{% for decision in vote_addup %}
+				{{decision.totalNum}}次
+				{% if decision.decision == 1 %}<font color="#66CC66">贊成</font>&nbsp;,&nbsp;
+				{% elif decision.decision == 0 %}<font color="#999999">棄權</font>&nbsp;,&nbsp;
+				{% else %}<font color="#FF66CC">反對</font>
+				{% endif %}
+			{% empty %}
+				{% if index == 'conscience' %}<p class="text-error">沒有任何脫黨投票紀錄</p>
+				{% else %}<p class="text-error">沒有參加任何表決</p>
+				{% endif %}					
+			{% endfor %}
+		</p>
+		</div>
+		{% if votes or notvote_votelist %}
+			{% load pagination_tags %}
+			{% autopaginate votes 10 %}
+			{% paginate %}
+			<table class="table table-bordered" >
+			<thead>
+			<tr style="text-align:center; font-weight:bold;background-color: #FFFFCC;">
+			<th style="width: 10%">個人投票</th><th style="width: 15%">日期</th><th style="width: 65%">表決內容</th><th style="width: 10%">表決結果</th>
+			</thead>
+			<tbody>				
+			{% for fragment in notvote_votelist %}
+				<tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+				<td style="background-color: #FFFF99;">沒有投票</td>
+				<td>{{ fragment.date|date:"Y-m-d" }}</td>
+				<td><a href="{% url 'legislator:vote_detail' fragment.id %}" rel="tooltip" title="查看投票名單">
+				{% if keyword %}
+					{{fragment.content|linebreaksbr|replace:keyword|safe}}
+				{% else %}
+					{{fragment.content|linebreaksbr|truncatechars:100}}
+				{% endif %}</a></td>
+				<td>
+				{% if fragment.disapprove %}不通過
+				{% else %}通過
+				{% endif %}		
+				</td>			
+				</tr>			
+			{% endfor %}		
+			{% for vote in votes %}
+				<tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+				{% ifequal vote.decision -1 %}
+					<td style="text-align:center; vertical-align:middle; background-color: #FF99CC;">反對
+				{% endifequal %}
+				{% ifequal vote.decision 1 %}
+					<td style="text-align:center; vertical-align:middle; background-color: #CCFF99;">贊成
+				{% endifequal %}
+				{% ifequal vote.decision 0 %}
+					<td style="text-align:center; vertical-align:middle; background-color: #CCCCCC;">棄權
+				{% endifequal %}	
+				</td>
+				<td style="text-align:center; vertical-align:middle;">{{ vote.vote.date|date:"Y-m-d" }}</td>
+				<td><a href="{% url 'legislator:vote_detail' vote.vote.id %}" rel="tooltip" title="查看投票名單">
+				{% if keyword %}
+					{{vote.vote.content|linebreaksbr|replace:keyword|safe}}
+				{% else %}
+					{{vote.vote.content|linebreaksbr|truncatechars:100}}
+				{% endif %}</a></td>
+				<td style="text-align:center; vertical-align:middle;">
+				{% if vote.vote.disapprove %}不通過
+				{% else %}通過
+				{% endif %}		
+				</td>			
+				</tr>		
+			{% endfor %}	
+			</tr>
+			</tbody>
+			</table>	
+			{% paginate %}
+		{% endif %}
+		<hr>
+		<div class="fb-comments" data-width="480" data-num-posts="3" data-href={{current_url}}></div>	
+	</div>
+</div>	
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready( function() {
+	$('#vote').addClass('active');
+	$('#url_vote').removeAttr('href').addClass("btn-success");
+	$('.dropdown-toggle').dropdown();	
+	$('#notvote').change(function() {
+		$("#form").trigger('submit');
+	});	
+	$("[rel='tooltip']").tooltip();
+});
+</script>
+{% endblock %}

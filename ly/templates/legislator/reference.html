@@ -1,0 +1,29 @@
+﻿<!--[if lt IE 10]>
+<!DOCTYPE html>
+<![endif]-->
+{% extends "legislator/nav_base.html" %}
+{% block title %}
+	<title>立委投票指南:資料來源</title>
+	<meta property="og:title" content="立委投票指南:資料來源"/>
+	<meta itemprop="name" content="立委投票指南:資料來源">		
+{% endblock %}
+{% block right %}
+<br>
+<div class="hero-unit">
+	<div class="fb-like pull-right" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="http://twly.herokuapp.com/"></div>
+	<ul class="lead">
+	<li><a href="http://www.ly.gov.tw/" target="_blank">立法院全球資訊網</a></li><br>
+	<li><a href="http://lci.ly.gov.tw" target="_blank">議事暨公報管理系統</a></li><br>
+	<li><a href="http://bulletin.cec.gov.tw/" target="_blank">中央選舉委員會</a></li><br>
+	<li><a href="http://misq.ly.gov.tw/" target="_blank" >議案整合暨綜合查詢系統</a></li><br>
+	<li><a href="http://lis.ly.gov.tw/lgcgi/ttsweb?@0:0:1:lgmempropg08@@0.9566586897708476" target="_blank">立法院法律提案審議進度系統</a></li>	
+	</ul>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready( function() {
+	$('#reference').addClass('active');
+});
+</script>
+{% endblock %}

@@ -1,0 +1,104 @@
+﻿<!--[if lt IE 10]>
+<!DOCTYPE html>
+<![endif]-->
+{% extends "legislator/nav_base.html" %}
+{% block title %}
+	<title>立委投票指南:{{issue.title}}</title>
+	<meta property="og:title" content="立委投票指南:{{issue.title}}"/>
+	<meta itemprop="name" content="立委投票指南:{{issue.title}}">		
+{% endblock %}
+{% block right %}
+<div class="page-header" style="background-color: #EEEEEE;">
+	<br>
+	<ul class="inline">
+		{% for fragment in issues %}
+		<li>
+		{% if fragment.reference %}
+			<a class="btn lead" href="{% url 'legislator:issue' fragment.id %}" >{{fragment.title}}</a>
+		{% else %}
+			{{fragment.title}}
+		{% endif %}
+		</li>
+	{% endfor %}		
+	</ul>
+	<h4>&nbsp;{{issue.title}}<small>--{{issue.content}}</small></h4>
+</div>
+<div class="row-fluid">
+{% if issue.issue_proposal_set.count or issue.issue_bill_set.count %}
+<div class="span7">
+	<iframe src={{issue.reference}} width='100%' height='500' frameborder='0'></iframe>
+</div>
+<div class="span5">
+	<table class="table table-bordered">
+	{% if issue.issue_bill_set.count %}
+	<tr><td colspan=2 style="text-align:center; font-weight:bold;background-color: #FFCCFF;"><a class="btn" href="{% url 'legislator:bills_related_to_issue' issue.id  %}" ><font class="lead"><b>查看草案內容</b></font></a></td></tr>	
+	{% for fragment in issue.issue_bill_set.all %}
+		<tr style="background-color: {% cycle 'white' '#EEEEEE' %};">
+		{% with ly=fragment.bill.primary_proposer.0 %}
+		<td><a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="{{ly.name}}的所有法條修正草案">
+			{% if ly.party == "中國國民黨" %}
+			<font color=blue>
+			{% elif ly.party == "民主進步黨" %}
+			<font color=green>
+			{% elif ly.party == "親民黨" %}
+			<font color=orange>
+			{% elif ly.party == "台灣團結聯盟" %}
+			<font color=brown>
+			{% elif ly.party == "無" %}
+			<font color=gray>
+			{% endif %}	
+		{{ly.name}}</font></a></td>
+		{% endwith %}
+		<td><a href="{% url 'legislator:bill_detail' bill_id=fragment.bill.billid proposal_id=fragment.bill.proposalid %}" >{{fragment.bill.title}}</a></td>
+		</tr>
+	{% endfor %}
+	{% endif %}
+	{% if issue.issue_proposal_set.count %}
+	<tr><td colspan=2 style="text-align:center; font-weight:bold;background-color: #CCFF99;"><a class="btn" href="{% url 'legislator:proposals_related_to_issue' issue.id %}" ><font class="lead"><b>查看提案內容</b></font></a></td></tr>
+	{% for fragment in issue.issue_proposal_set.all %}
+		<tr style="background-color: {% cycle 'white' '#EEEEEE' %};">
+		{% with ly=fragment.proposal.primary_proposer.0 %}
+		<td width="15%"><a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="{{ly.name}}的所有法條修正草案">
+			{% if ly.party == "中國國民黨" %}
+			<font color=blue>
+			{% elif ly.party == "民主進步黨" %}
+			<font color=green>
+			{% elif ly.party == "親民黨" %}
+			<font color=orange>
+			{% elif ly.party == "台灣團結聯盟" %}
+			<font color=brown>
+			{% elif ly.party == "無" %}
+			<font color=gray>
+			{% endif %}	
+		{{ly.name}}</font></a></td>
+		{% endwith %}
+		<td width="85%"><a href="{% url 'legislator:proposal' fragment.proposal.id %}" >{{fragment.proposal.content|truncatechars:29}}</a></td>
+		</tr>
+	{% endfor %}
+	{% endif %}
+	</table>
+</div>
+{% else %}
+<div class="span12">
+	<iframe src={{issue.reference}} width='100%' height='500' frameborder='0'></iframe>
+</div>
+{% endif %}
+<div class="span12">
+<div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}"></div>
+<hr>	
+<div class="fb-comments" data-width="480" data-num-posts="3" data-href={{current_url}}></div>
+</div>
+{% endblock %}
+{% block backtotop %}	
+	<div align="center">
+	<a href="#top" class="lead"><i class="icon-arrow-up"></i>回頭</a>
+	</div>	  
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready( function() {
+	$('#issues').addClass('active');
+	$("[rel='tooltip']").tooltip();
+});
+</script>
+{% endblock %}

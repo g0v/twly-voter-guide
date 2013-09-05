@@ -1,0 +1,76 @@
+﻿{% extends "legislator/nav_base.html" %}
+{% block title %}
+	<title>立委投票指南</title>	
+	<meta property="og:title" content="立委投票指南"/>
+	<meta itemprop="name" content="立委投票指南">
+{% endblock %}
+{% block right %}
+<form action="" method="get" class="form-search" id="form">
+	{% csrf_token %}
+<div class="page-header text-center">
+	<h3>台灣第八屆立委<small>(2012~2016)</small></h3>	
+	<fieldset>		
+		<input type="text" name="lyname" id="lyname" class="span2" maxlength="4" placeholder="請輸入立委姓名">
+		<button type="submit" class="btn">Go!</button>
+		{% if error %}
+			<span class="help-inline"><a class="text-error">請輸入立委姓名!!</a></span>
+		{% endif %}
+	</fieldset>
+</div>
+</form>
+{% block ly_table %}
+{% endblock %}
+	<hr>
+	{% if outof_ly_list %}
+	<table class="table table-bordered table-condensed">
+		{% for ly in outof_ly_list %}
+			<tr><td>
+				<div class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+				{% if ly.party == "中國國民黨" %}
+					<font color=0066FF>
+				{% elif ly.party == "民主進步黨" %}
+					<font color=009900>
+				{% elif ly.party == "親民黨" %}
+					<font color=orange>
+				{% elif ly.party == "台灣團結聯盟" %}
+					<font color=brown>
+				{% elif ly.party == "無" %}
+					<font color=777777>
+				{% endif %}	
+				{{ ly.name }}</font>				
+				</a>
+				<ul class="dropdown-menu">
+					<li class="dropdown-submenu">
+						<a data-toggle="dropdown" href="#" >{{ly.name}}的提案</a>
+						<ul class="dropdown-menu">
+							<li><a href="{% url 'legislator:biller_detail' ly.id %}" >法條修正草案</a></li>
+							<li><a href="{% url 'legislator:proposer_detail' ly.id %}">附帶決議、臨時提案</a></li>
+						</ul>
+					</li>	
+					<li><a href="{% url 'legislator:voter_detail' ly.id %}">{{ly.name}}的投票紀錄</a></li>					
+					<li><a href="{% url 'legislator:chart_personal_report' legislator_id=ly.id index='ly' %}">{{ly.name}}的圖表</a></li>
+					<li><a href="{% url 'legislator:ly_politics' ly.id %}">{{ly.name}}的競選政見</a></li>
+				</ul>
+				</div>				
+				</td>			
+			<td>{{ly.disableReason}}</td></tr>
+		{% endfor %}
+	</table>	
+	{% endif %}
+	<hr>
+<div class="fb-like pull-right" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="http://twly.herokuapp.com/"></div>	
+<div class="fb-comments" data-width="480" data-num-posts="3" href={{current_url}}></div>
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready( function() {
+	$('#ly').addClass('active');
+	$('.dropdown-toggle').dropdown();
+	$("[rel='tooltip']").tooltip();
+	$('#proposertype').change(function() {
+		$("#form_bill").trigger('submit');
+	});	
+});
+</script>
+{% endblock %}
