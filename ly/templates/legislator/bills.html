@@ -57,7 +57,23 @@
 	{% for fragment in bills %}
 		<tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
 		<td><a href="{% url 'legislator:bill_detail' bill_id=fragment.billid proposal_id=fragment.proposalid %}" rel="tooltip" title="法條修正對照表">{{ fragment.title }}</a></td>
-		<td>{{ fragment.primary_proposer.0.name }}</td>
+		{% with ly=fragment.primary_proposer.0 %}
+		<td>			
+			<a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="{{ ly.name }}的所有法條修正草案">
+						{% if ly.party == "中國國民黨" %}
+						<font color=blue>
+						{% elif ly.party == "民主進步黨" %}
+						<font color=green>
+						{% elif ly.party == "親民黨" %}
+						<font color=orange>
+						{% elif ly.party == "台灣團結聯盟" %}
+						<font color=brown>
+						{% elif ly.party == "無" %}
+						<font color=gray>
+						{% endif %}	
+						{{ ly.name }}</font></a>		
+		</td>
+		{% endwith %}
 		<td>
 			{% if keyword %}				
 				{{ fragment.motivation|replace:keyword|safe|linebreaksbr }}

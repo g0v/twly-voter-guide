@@ -7,10 +7,10 @@ import operator,re
 from itertools import chain
 
 def last_update_time():
-    return '2013-08-14'
+    return '2013-10-04'
 def district_list():
     return ["山地原住民","台中市","台北市","台東縣","台南市","平地原住民","全國不分區","宜蘭縣","花蓮縣","金門縣","南投縣","屏東縣","苗栗縣","桃園縣","高雄市","基隆市","連江縣","雲林縣","新北市","新竹市","新竹縣","僑居國外國民","嘉義市","嘉義縣","彰化縣","澎湖縣"]
-def committee_list():    
+def committee_list():
     return [u'\u5167\u653f', u'\u53f8\u6cd5\u53ca\u6cd5\u5236', u'\u5916\u4ea4\u53ca\u570b\u9632', u'\u4ea4\u901a', u'\u793e\u6703\u798f\u5229\u53ca\u885b\u751f\u74b0\u5883', u'\u8ca1\u653f', u'\u6559\u80b2\u53ca\u6587\u5316', u'\ufeff\u7d93\u6fdf']
 
 def index(request,index):
@@ -30,35 +30,35 @@ def index(request,index):
                 query = query & Q(legislator_bill__priproposer=True)
                 no_count_list = Legislator.objects.filter(name_query).exclude(id__in=ly_list.values_list('id', flat=True))
         else:
-            query = query & Q(legislator_bill__priproposer=True)            
+            query = query & Q(legislator_bill__priproposer=True)
         ly_list = Legislator.objects.filter(query).annotate(totalNum=Count('legislator_bill__id')).exclude(totalNum=0).order_by('-totalNum')
         no_count_list = Legislator.objects.filter(name_query).exclude(id__in=ly_list.values_list('id', flat=True))
         #ly_list = list(chain(ly_list, no_count_list))
-        return render(request,'legislator/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})      
+        return render(request,'legislator/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
     elif index == 'conscience_vote':
         ly_list = Legislator.objects.filter(query,legislator_vote__conflict=True).annotate(totalNum=Count('legislator_vote__id')).order_by('-totalNum','party')
         no_count_list = Legislator.objects.filter(name_query).exclude(id__in=ly_list.values_list('id', flat=True)).order_by('party')
         #ly_list = list(chain(ly_list, no_count_list))
-        return render(request,'legislator/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})      
+        return render(request,'legislator/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
     elif index == 'notvote':
-        ly_obj = Legislator.objects.filter(query).defer('enableSession','disableReason')  
+        ly_obj = Legislator.objects.filter(query).defer('enableSession','disableReason')
         ly_list = sorted(ly_obj, key=lambda a: a.notvote)
-        return render(request,'legislator/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})                      
+        return render(request,'legislator/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
     elif index == 'committee':
-        ly_list = Legislator.objects.filter(query).order_by('committee').defer('enableSession','disableReason') 
-        return render(request,'legislator/index_committee.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})              
+        ly_list = Legislator.objects.filter(query).order_by('committee').defer('enableSession','disableReason')
+        return render(request,'legislator/index_committee.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
     elif index == 'district':
-        ly_list = Legislator.objects.filter(query).order_by('district').defer('enableSession','disableReason')        
-        return render(request,'legislator/index_district.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})      
+        ly_list = Legislator.objects.filter(query).order_by('district').defer('enableSession','disableReason')
+        return render(request,'legislator/index_district.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
     else:
         return HttpResponseRedirect('/legislator/biller/')
-        
+
 def index_district(request,index):
-    ly_list = Legislator.objects.filter(enable=True,district=index).order_by('eleDistrict').defer('enableSession','disableReason')  
+    ly_list = Legislator.objects.filter(enable=True,district=index).order_by('eleDistrict').defer('enableSession','disableReason')
     return render(request,'legislator/index_filter.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'type':'district','index':index,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
 
 def index_committee(request,index):
-    ly_list = Legislator.objects.filter(enable=True,committee=index).order_by('district').defer('enableSession','disableReason')  
+    ly_list = Legislator.objects.filter(enable=True,committee=index).order_by('district').defer('enableSession','disableReason')
     return render(request,'legislator/index_filter.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'type':'committee','index':index,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
 
 def proposer_detail(request,legislator_id,keyword_url):
@@ -79,11 +79,11 @@ def proposer_detail(request,legislator_id,keyword_url):
         keyword = re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['keyword']).strip()
     elif keyword_url:
         keyword = keyword_url.strip()
-    if keyword:   
+    if keyword:
         proposal = Proposal.objects.filter(query & reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-date').defer('sessionPrd','session')
         if proposal:
             proposal.filter(hits__isnull=False).update(hits=F('hits')+1)
-            proposal.filter(hits__isnull=True).update(hits=1)                
+            proposal.filter(hits__isnull=True).update(hits=1)
             keyword_obj = Keyword.objects.filter(category=1,content=keyword.strip())
             if keyword_obj:
                 keyword_obj.update(hits=F('hits')+1)
@@ -92,7 +92,7 @@ def proposer_detail(request,legislator_id,keyword_url):
                 k.save()
     else:
         proposal = Proposal.objects.filter(query).order_by('-date').defer('sessionPrd','session')
-    keyword_obj = Keyword.objects.filter(category=1,valid=True).order_by('-hits')[:5]        
+    keyword_obj = Keyword.objects.filter(category=1,valid=True).order_by('-hits')[:5]
     return render(request,'legislator/proposer_detail.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'keyword_obj':keyword_obj,'proposal':proposal,'ly':ly,'keyword':keyword,'error':error,'proposertype':proposertype,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
 
 def proposal(request,proposal_id):
@@ -109,7 +109,7 @@ def proposals(request,keyword_url):
         proposal = Proposal.objects.filter(reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-date','-pk').defer('sessionPrd','session')
         if proposal:
             proposal.filter(hits__isnull=False).update(hits=F('hits')+1)
-            proposal.filter(hits__isnull=True).update(hits=1)                
+            proposal.filter(hits__isnull=True).update(hits=1)
             keyword_obj = Keyword.objects.filter(category=1,content=keyword)
             if keyword_obj:
                 keyword_obj.update(hits=F('hits')+1)
@@ -117,7 +117,7 @@ def proposals(request,keyword_url):
                 k = Keyword(content=keyword,category=1,valid=True,hits=1)
                 k.save()
     else:
-        proposal = Proposal.objects.all().order_by('-date','-pk')[:5]
+        proposal = Proposal.objects.all().order_by('-date','-pk')[:10]
     keyword_obj = Keyword.objects.filter(category=1,valid=True).order_by('-hits')[:5]
     return render(request,'legislator/proposals.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'proposal':proposal,'keyword':keyword,'error':error,'keyword_obj':keyword_obj,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
 
@@ -134,7 +134,7 @@ def votes(request,keyword_url,index='normal'):
     if index == 'conscience':
         query = Q(conflict=True)
     else:
-        query = Q()   
+        query = Q()
     if 'keyword' in request.GET:
         keyword = re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['keyword']).strip()
     elif keyword_url:
@@ -143,18 +143,27 @@ def votes(request,keyword_url,index='normal'):
         votes = Vote.objects.filter(query & reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-date','-pk')
         if votes:
             #votes.filter(hits__isnull=False).update(hits=F('hits')+1)
-            #votes.filter(hits__isnull=True).update(hits=1)                
+            #votes.filter(hits__isnull=True).update(hits=1)
             keyword_obj = Keyword.objects.filter(category=2,content=keyword)
             if keyword_obj:
                 keyword_obj.update(hits=F('hits')+1)
             elif not keyword_url:
                 k = Keyword(content=keyword,category=2,valid=True,hits=1)
-                k.save() 
+                k.save()
     else:
         votes = Vote.objects.filter(query).order_by('-date','-pk')
     keyword_obj = Keyword.objects.filter(category=2,valid=True).order_by('-hits')[:5]
     date_list = votes.values('date').distinct().order_by('-date')
     return render(request,'legislator/votes.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'votes': votes,'index':index,'keyword':keyword,'error':error,'keyword_obj':keyword_obj,'date_list':date_list,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
+
+def votes_related_to_issue(request,issue_id):
+    keyword, votes, index = None, None, 'normal'
+    keyword = Issue.objects.values_list('title', flat=True).get(pk=issue_id)
+    if issue_id:
+        votes = Vote.objects.filter(issue_vote__issue_id=issue_id).order_by('date','-pk')
+    keyword_obj = Keyword.objects.filter(category=2,valid=True).order_by('-hits')[:5]
+    date_list = votes.values('date').distinct().order_by('-date')
+    return render(request,'legislator/votes.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'votes': votes,'index':index,'keyword':keyword,'keyword_obj':keyword_obj,'date_list':date_list,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
 
 def votes_date(request,date_url):
     keyword,votes,error = None,None,False
@@ -198,10 +207,10 @@ def voter_detail(request,legislator_id,index,keyword_url):
         keyword = re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['keyword']).strip()
     elif keyword_url:
         keyword = keyword_url.strip()
-    if keyword:        
+    if keyword:
         keyword_valid = True
         votes = Legislator_Vote.objects.select_related().filter(query & reduce(operator.and_, (Q(vote__content__icontains=x) for x in keyword.split()))).order_by('-vote__date','-pk')
-        if votes:                 
+        if votes:
             keyword_obj = Keyword.objects.filter(category=2,content=keyword.strip())
             if keyword_obj:
                 keyword_obj.update(hits=F('hits')+1)
@@ -301,7 +310,7 @@ def list_union(month_list,obj_q):
     return obj
 
 def chart_personal_report(request,legislator_id,index='proposal'):
-    ly = Legislator.objects.get(pk=legislator_id)   
+    ly = Legislator.objects.get(pk=legislator_id)
     query_c = Q(legislator_id=legislator_id,category=1,unpresentNum=1)
     if index == 'proposal':
         query_p = Q(legislator_proposal__legislator_id=legislator_id,legislator_proposal__priproposer=True)
@@ -335,7 +344,7 @@ def issue(request,issue_id):
     issue = issues.get(pk=issue_id)
     if issue:
         issue.hits = F('hits') + 1
-        issue.save(update_fields=['hits'])    
+        issue.save(update_fields=['hits'])
     return render(request,'legislator/issue.html', {'current_url':'http://twly.herokuapp.com'+request.get_full_path(),'issues':issues,'issue':issue,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
 
 def bills(request,keyword_url):
@@ -361,7 +370,7 @@ def bills(request,keyword_url):
                 k.save()
     else:
         bills = bills.filter(query).order_by('-proposalid')
-    keyword_obj = Keyword.objects.filter(category=3,valid=True).order_by('-hits')[:5]   
+    keyword_obj = Keyword.objects.filter(category=3,valid=True).order_by('-hits')[:5]
     return render(request,'legislator/bills.html', {'current_url':'http://twly.herokuapp.com'+request.get_full_path(),'keyword_obj':keyword_obj,'laws':laws,'law':law,'keyword':keyword,'bills':bills,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})
 
 def bills_related_to_issue(request,issue_id):
@@ -397,16 +406,16 @@ def biller_detail(request,legislator_id,keyword_url):
     if 'law' in request.GET:
         law = request.GET['law']
         if law:
-            query = query & Q(law=law)            
+            query = query & Q(law=law)
     if 'keyword' in request.GET:
         keyword = re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['keyword']).strip()
     elif keyword_url:
         keyword = keyword_url.strip()
-    if keyword:          
+    if keyword:
         bills = bills.filter(query & reduce(operator.or_, (Q(motivation__icontains=x) for x in keyword.split()))).order_by('-proposalid')
         if bills:
             bills.update(hits=F('hits')+1)
     else:
         bills = bills.filter(query).order_by('-proposalid')
-    keyword_obj = Keyword.objects.filter(category=3,valid=True).order_by('-hits')[:5]    
+    keyword_obj = Keyword.objects.filter(category=3,valid=True).order_by('-hits')[:5]
     return render(request,'legislator/biller_detail.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'laws':laws,'keyword_obj':keyword_obj,'bills':bills,'ly':ly,'keyword':keyword,'error':error,'proposertype':proposertype,'district':district_list(),'committee':committee_list(),'last_update':last_update_time()})

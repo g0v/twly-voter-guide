@@ -17,7 +17,9 @@ urlpatterns = patterns('',
     # ex: /legislator/about
     url(r'^about/$', views.about, name='about'),
     # ex: /legislator/votes/date/yyyy-mm-dd
-    url(r'^votes/date/(?P<date_url>.+)?$', views.votes_date, name='votes_date'),                      
+    url(r'^votes/date/(?P<date_url>.+)?$', views.votes_date, name='votes_date'),
+    # ex: /legislator/votes/related_to_issue/xxx
+    url(r'^votes/related_to_issue/(?P<issue_id>\d+)/$', views.votes_related_to_issue, name='votes_related_to_issue'),                       
     # ex: /legislator/votes
     url(r'^votes/(?P<index>normal|conscience)?/(?P<keyword_url>.+)?$', views.votes, name='votes'),                       
     # ex: /legislator/vote/123

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
-from api.serializers import LegislatorSerializer,AttendanceSerializer,BillSerializer,BillDetailSerializer,Legislator_BillSerializer,ProposalSerializer,Legislator_ProposalSerializer,VoteSerializer,Legislator_VoteSerializer
-from legislator.models import Legislator,Attendance,Bill,Legislator_Bill,BillDetail,Proposal,Legislator_Proposal,Vote,Legislator_Vote
+from api.serializers import LegislatorSerializer,AttendanceSerializer,PoliticsSerializer,IssueSerializer,BillSerializer,BillDetailSerializer,Legislator_BillSerializer,ProposalSerializer,Legislator_ProposalSerializer,VoteSerializer,Legislator_VoteSerializer
+from legislator.models import Legislator,Attendance,Politics,Issue,Bill,Legislator_Bill,BillDetail,Proposal,Legislator_Proposal,Vote,Legislator_Vote
 
 class LegislatorViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -37,3 +37,20 @@ class BillDetailViewSet(viewsets.ReadOnlyModelViewSet):
 class AttendanceViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
+
+class PoliticsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Politics.objects.all()
+    serializer_class = PoliticsSerializer
+
+class IssueViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Issue.objects.all()
+    serializer_class = IssueSerializer
+##class Issue_ProposalViewSet(viewsets.ReadOnlyModelViewSet):
+##    queryset = Issue_Proposal.objects.all()
+##    serializer_class = Issue_ProposalSerializer
+##class Issue_VoteViewSet(viewsets.ReadOnlyModelViewSet):
+##    queryset = Issue_Vote.objects.all()
+##    serializer_class = Issue_VoteSerializer
+##class Issue_BillViewSet(viewsets.ReadOnlyModelViewSet):
+##    queryset = Issue_Bill.objects.all()
+##    serializer_class = Issue_BillSerializer

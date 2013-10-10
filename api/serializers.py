@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from legislator.models import Legislator,Attendance,Bill,Legislator_Bill,BillDetail,Proposal,Legislator_Proposal,Vote,Legislator_Vote
+from legislator.models import Legislator,Attendance,Politics,Issue,Bill,Legislator_Bill,BillDetail,Proposal,Legislator_Proposal,Vote,Legislator_Vote
 
 class LegislatorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -9,7 +9,7 @@ class LegislatorSerializer(serializers.HyperlinkedModelSerializer):
         #fields = ('url', 'name', 'party', 'committee')
 class Legislator_ProposalSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Legislator_Proposal        
+        model = Legislator_Proposal
 class ProposalSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Proposal
@@ -17,7 +17,7 @@ class ProposalSerializer(serializers.HyperlinkedModelSerializer):
 
 class Legislator_VoteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Legislator_Vote        
+        model = Legislator_Vote
 class VoteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Vote
@@ -25,7 +25,7 @@ class VoteSerializer(serializers.HyperlinkedModelSerializer):
 
 class Legislator_BillSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Legislator_Bill        
+        model = Legislator_Bill
 class BillSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Bill
@@ -36,4 +36,21 @@ class BillDetailSerializer(serializers.HyperlinkedModelSerializer):
 
 class AttendanceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Attendance     
+        model = Attendance
+
+class PoliticsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Politics
+
+class IssueSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Issue
+##class Issue_ProposalSerializer(serializers.HyperlinkedModelSerializer):
+##    class Meta:
+##        model = Issue_Proposal
+##class Issue_VoteSerializer(serializers.HyperlinkedModelSerializer):
+##    class Meta:
+##        model = Issue_Vote
+##class Issue_BillSerializer(serializers.HyperlinkedModelSerializer):
+##    class Meta:
+##        model = Issue_Bill

@@ -16,6 +16,8 @@ router.register(r'bill', views.BillViewSet)
 router.register(r'legislator_bill', views.Legislator_BillViewSet)
 router.register(r'bill_detail', views.BillDetailViewSet)
 router.register(r'attendance', views.AttendanceViewSet)
+router.register(r'politics', views.PoliticsViewSet)
+router.register(r'issue', views.IssueViewSet)
 
 urlpatterns = patterns('',
     url(r'^legislator/', include('legislator.urls', namespace="legislator")),

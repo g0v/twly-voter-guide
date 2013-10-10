@@ -48,7 +48,23 @@
 	{% for fragment in proposal %}
 		<tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
 		<td>{{ fragment.date|date:"Y-m-d" }}</td>
-		<td><a href="{% url 'legislator:proposer_detail' fragment.primary_proposer.0.id %}" rel="tooltip" title="這個立委的提案">{{ fragment.primary_proposer.0.name }}</a></td>
+		{% with ly=fragment.primary_proposer.0 %}
+		<td>			
+			<a href="{% url 'legislator:proposer_detail' ly.id %}" rel="tooltip" title="{{ ly.name }}的所有臨時提案、附帶決議">
+						{% if ly.party == "中國國民黨" %}
+						<font color=blue>
+						{% elif ly.party == "民主進步黨" %}
+						<font color=green>
+						{% elif ly.party == "親民黨" %}
+						<font color=orange>
+						{% elif ly.party == "台灣團結聯盟" %}
+						<font color=brown>
+						{% elif ly.party == "無" %}
+						<font color=gray>
+						{% endif %}	
+						{{ ly.name }}</font></a>		
+		</td>
+		{% endwith %}		
 		<td><a href="{% url 'legislator:proposal' fragment.id %}" rel="tooltip" title="查看詳細資訊">
 		{% if keyword %}
 			{{fragment.content|linebreaksbr|replace:keyword|safe}}
