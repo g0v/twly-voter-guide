@@ -9,7 +9,7 @@
 {% elif index == 'conscience_vote' %}脫黨投票表決數(多&rarr;少)
 {% else %}投票表決次數(多&rarr;少)
 {% endif %}</h3>
-	{% if ly_list %}
+	
 		{% if index == 'biller' %}
 			<form action="" method="get" class="form-search text-center" id="form_bill">
 				{% csrf_token %}
@@ -21,6 +21,7 @@
 			</form>
 		{% endif %}
 		<table class="table table-bordered table-condensed">
+		{% if ly_list %}
 			{% for ly in ly_list %}
 				{% if forloop.counter0|divisibleby:20 %}
 					</tr><tr style="background-color: {% cycle 'EEEEEE' 'white' %};"><td>{{forloop.counter}}~{{forloop.counter|add:19}}名</td>
@@ -46,14 +47,8 @@
 				{% endif %}	
 				{{ ly.name }}</font>				
 				</a>
-
-
 				</td>	
 			{% endfor %}
-				
-
-	{% else %}
-		<p class="text-error">沒有立委</p>
 	{% endif %}
 	{% if no_count_list %}
 			</tr><tr style="background-color: #FFFFCC;"><td rowspan="6" style="text-align:center; font-weight:bold;">0次</td>
