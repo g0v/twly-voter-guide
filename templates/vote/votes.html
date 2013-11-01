@@ -1,0 +1,119 @@
+﻿<!--[if lt IE 10]>
+<!DOCTYPE html>
+<![endif]-->
+{% extends "legislator/nav_base.html" %}
+{% load ly_extras %}
+{% block title %}
+	{% if index == 'conscience' %}
+		<title>立委投票指南:脫黨表決檢索</title>
+		<meta property="og:title" content="立委投票指南:脫黨表決檢索"/>
+		<meta itemprop="name" content="立委投票指南:脫黨表決檢索">			
+	{% else %}
+		<title>立委投票指南:全表決檢索</title>
+		<meta property="og:title" content="立委投票指南:全表決檢索"/>
+		<meta itemprop="name" content="立委投票指南:全表決檢索">		
+	{% endif %}
+{% endblock %}
+{% block right %} 
+<div class="span10">	
+<br>
+<form action="" method="get" class="form-search" id="form">
+{% csrf_token %}
+<br>
+<fieldset>
+	<input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:核四 國教...空格有交集效果">
+	<button type="submit" class="btn">Go!</button>
+	{% if error %}
+		<span class="help-inline"><a class="text-error">請輸入關鍵字!!</a></span>
+	{% endif %}
+</fieldset>
+</form>
+{% if keyword_obj %}
+	<h4>熱門：
+	{% for keyword in keyword_obj %}
+		{% if forloop.counter0 < 5 %}
+			<a href="{% url 'vote:votes' keyword_url=keyword index=index %}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
+		{% endif %}		
+	{% endfor %}
+	</h4>
+{% endif %}
+<div class="well well-small">	
+<p class="lead">
+立法院至今有 {{ votes|length }} 個
+{% if keyword %}
+	包含<font style="color: red;">"{{keyword}}"</font>的
+{% endif %}
+{% if index == 'conscience' %}<b>脫黨</b>
+{% endif %}表決
+</p>
+</div>
+{% if votes %}
+	{% load pagination_tags %}
+	{% autopaginate votes 10 %}
+	{% paginate %}
+	<table class="table table-bordered" >
+	<thead>
+	<tr style="text-align:center; font-weight:bold;background-color: #FFFFCC;">
+	<th style="width: 18%">日期</th>
+	<th style="width: 64%">表決內容</th><th style="width: 18%">表決結果</th>
+	</thead>
+	<tbody>	
+	{% for fragment in votes %}
+		<tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
+		<td>{{ fragment.date|date:"Y-m-d" }}</td>
+		<td><a href="{% url 'vote:vote_detail' fragment.id %}" rel="tooltip" title="查看投票名單">
+		{% if keyword %}
+			{{fragment.content|linebreaksbr|replace:keyword|safe}}
+		{% else %}
+			{{fragment.content|linebreaksbr|truncatechars:100}}
+		{% endif %}
+		</a></td>
+		<td>
+		{% if fragment.disapprove %}
+			不通過
+		{% else %}
+			通過
+		{% endif %}		
+		</td>
+		</tr>
+	{% empty %}
+		<p>完全沒有表決</p>
+	{% endfor %}
+	</tbody>	
+	</table>
+	{% paginate %}
+{% endif %}
+</div>
+{% endblock %}
+{% block backtotop %}	
+	<div align="center">
+	<a href="#top" class="lead"><i class="icon-arrow-up"></i>回頭</a>
+	</div>	  
+{% endblock %}
+{% block script %}
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>	
+<script>
+  $(function() {
+    var availableTags = [
+		{% for keyword in keyword_obj %}
+			"{{keyword}}",
+		{% endfor %}
+    ];
+    $( "#keyword" ).autocomplete({
+		source: availableTags,
+		select: function(event, ui) {
+			$(event.target).val(ui.item.value);
+			$('#form').submit();
+			return false;
+		}	  
+    });
+  });
+</script>
+<script>
+$(document).ready( function() {
+	$('#vote').addClass('active');
+	$("[rel='tooltip']").tooltip();
+});
+</script>
+{% endblock %}

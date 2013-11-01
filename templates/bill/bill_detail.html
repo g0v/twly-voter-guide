@@ -1,0 +1,92 @@
+﻿<!--[if lt IE 10]>
+<!DOCTYPE html>
+<![endif]-->
+{% extends "legislator/nav_base.html" %}
+{% block title %}
+	{% if bill %}
+		<title>立委投票指南:{{ bill.title }}</title>
+		<meta property="og:title" content="立委投票指南:{{ bill.title }}"/>
+		<meta itemprop="name" content="立委投票指南:{{ bill.title }}">	
+	{% else %}
+		<title>立委投票指南:法條修正對照表</title>
+		<meta property="og:title" content="立委投票指南:法條修正對照表"/>
+		<meta itemprop="name" content="立委投票指南:法條修正對照表">	
+	{% endif %}	
+{% endblock %}
+{% block left %} 
+
+{% endblock %}
+{% block right %}
+<div class="page-header">
+	<h3>
+	{% if bill %}{{bill.title}}{% endif %}
+	</h3>
+</div>
+<div class="row-fluid">
+<div class="span7">
+<br>
+	{% if bill %}	
+		<table class="table table-bordered">
+		<thead>
+		<tr style="text-align:center; font-weight:bold;background-color: #FFCCFF;">
+		<th style="width: 10%">法條</th><th style="width: 30%">修正(增訂)條文</th><th style="width: 30%">現行條文</th><th style="width: 30%">說明</th>
+		</thead>		
+		{% for fragment in bill.billdetail_set.all %}
+			<tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+			<td>{{ fragment.article }}</td>
+			<td>{{fragment.after|safe|linebreaksbr}}</td>
+			<td>{% if fragment.before %}{{fragment.before|safe|linebreaksbr}}{% endif %}</td>
+			<td>{{ fragment.description|linebreaksbr }}</td>		
+			</tr>
+		{% endfor %}		
+		</table>		
+	{% endif %}
+</div>
+<div class="span5">
+	<br>
+	{% if bill %}
+		<table class="table table-bordered">
+		<tr style="text-align:center; font-weight:bold;background-color: #FFFFCC;"><td>共同提案人</td><td>法條修正草案數</td><td>縣市</td><td>行政區</td><td>委員會</td></tr>
+		{% for ly in bill.sorted_proposer_set %}
+			<tr><td><a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="{{ly.name}}的所有法條修正草案">
+			{% if ly.party == "中國國民黨" %}
+			<font color=blue>
+			{% elif ly.party == "民主進步黨" %}
+			<font color=green>
+			{% elif ly.party == "親民黨" %}
+			<font color=orange>
+			{% elif ly.party == "台灣團結聯盟" %}
+			<font color=brown>
+			{% elif ly.party == "無黨團結聯盟" %}
+			<font color=FF00FF>				
+			{% elif ly.party == "無" %}
+			<font color=gray>
+			{% endif %}	
+			{{ ly.name }}</font></a></td><td>{{ly.npribill}}</td><td>{{ly.district}}</td>
+			<td>{% if ly.districtDetail %}{{ly.districtDetail}}{% endif %}</td><td>{{ly.committee}}</td></tr>
+		{% endfor %}
+		<tr class="info" ><td colspan=5 style="text-align:center;">#註：
+		<font color=blue>中國國民黨</font>&nbsp;-&nbsp;<font color=green>民主進步黨</font>&nbsp;-&nbsp;
+		<font color=orange>親民黨</font>&nbsp;-&nbsp;<font color=brown>台灣團結聯盟</font>&nbsp;-&nbsp;
+		<font color=FF00FF>無黨團結聯盟</font>&nbsp;-&nbsp;<font color=gray>無黨籍</font></td>
+		</tr>			
+		</table>
+	{% endif %}		
+	<div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}"></div>
+	<hr>	
+	<div class="fb-comments" data-width="400" data-num-posts="5" href={{current_url}}></div>
+</div>
+{% endblock %}
+{% block backtotop %}	
+	<div align="center">
+	<a href="#top" class="lead"><i class="icon-arrow-up"></i>回頭</a>
+	</div>	  
+{% endblock %}
+{% block script %}
+	<script>
+	$(document).ready( function() {
+		$('#psearch').addClass('active');
+		$("[rel='tooltip']").tooltip();
+	});
+	</script>
+{% endblock %}

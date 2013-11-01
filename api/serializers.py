@@ -1,6 +1,11 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from legislator.models import Legislator,Attendance,Politics,Issue,Bill,Legislator_Bill,BillDetail,Proposal,Legislator_Proposal,Vote,Legislator_Vote
+from legislator.models import Legislator,Attendance,Politics
+from vote.models import Vote,Legislator_Vote
+from proposal.models import Proposal,Legislator_Proposal
+from bill.models import Bill,Legislator_Bill,BillDetail
+from issue.models import Issue
+
 
 class LegislatorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

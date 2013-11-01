@@ -1,7 +1,12 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from api.serializers import LegislatorSerializer,AttendanceSerializer,PoliticsSerializer,IssueSerializer,BillSerializer,BillDetailSerializer,Legislator_BillSerializer,ProposalSerializer,Legislator_ProposalSerializer,VoteSerializer,Legislator_VoteSerializer
-from legislator.models import Legislator,Attendance,Politics,Issue,Bill,Legislator_Bill,BillDetail,Proposal,Legislator_Proposal,Vote,Legislator_Vote
+from legislator.models import Legislator,Attendance,Politics
+from vote.models import Vote,Legislator_Vote
+from proposal.models import Proposal,Legislator_Proposal
+from bill.models import Bill,Legislator_Bill,BillDetail
+from issue.models import Issue
+
 
 class LegislatorViewSet(viewsets.ReadOnlyModelViewSet):
     """

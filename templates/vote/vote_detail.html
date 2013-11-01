@@ -1,0 +1,155 @@
+﻿<!--[if lt IE 10]>
+<!DOCTYPE html>
+<![endif]-->
+{% extends "legislator/nav_base.html" %}
+{% load staticfiles %}
+{% block title %}
+	{% if vote %}
+		<title>立委投票指南:{{ vote.date|date:"Y-m-d" }}單一表決名單</title>	
+		<meta property="og:title" content="立委投票指南:{{ vote.date|date:"Y-m-d" }}單一表決名單"/>
+		<meta itemprop="name" content="立委投票指南:{{ vote.date|date:"Y-m-d" }}單一表決名單">	
+	{% else %}
+		<title>立委投票指南:單一表決名單</title>
+		<meta property="og:title" content="立委投票指南:單一表決名單"/>
+		<meta itemprop="name" content="立委投票指南:單一表決名單">	
+	{% endif %}		
+{% endblock %}
+{% block left %}
+
+{% endblock %}
+{% block right %}
+<div class="row-fluid">
+<div class="span6">
+<br>
+	{% if vote %}
+	<div align="center">
+		<canvas id="canvas" height="150" width="200" ></canvas><br><br>
+		<p class="lead"><font style="color: #FF66CC;"><b>反對</b></font> <font style="color: #66CC66;"><b>贊成</b></font> <font style="color: #999999;"><b>棄權</b></font></p>
+		<hr><div>
+		<ul class="pager">
+			{% if vote.id != 1 %}
+			<li class="previous">
+				<a href="{% url 'vote:vote_detail' vote.id|add:-1 %}" ><b>&larr; 前一個表決</b></a>
+			</li>
+			{% endif %}
+			{% if vote.id != nvotes %}
+			<li class="next">
+				<a href="{% url 'vote:vote_detail' vote.id|add:1 %}" ><b>下一個表決 &rarr;</b></a>
+			</li>
+			{% endif %}
+		</ul>
+		</div>
+	</div>
+	<div class="hero-unit">
+		<p class="text-success">表決日期：{{ vote.date|date:"Y-m-d" }}</p>
+		<p class="lead">{{vote.content|linebreaksbr }}</p>
+	</div>	
+</div>	
+<div class="span6">	
+<br>
+	{% regroup vote.legislator_vote_set.all by decision as ly_list %}
+	<table class="table table-bordered table-condensed">
+	{% with col=20 %}
+	<caption style="text-align: left;font-size: 40px;margin-bottom: 20px;"><strong>記名表決名單</strong></caption>
+		{% if ly_notvote %}
+		</tr><tr><td colspan={{col}} style="background-color: #FFFF99;"><strong>沒有投票
+			{% for ly in ly_notvote %}
+				{% if forloop.counter0|divisibleby:col %}
+					</tr><tr>
+				{% endif %}				
+				<td><a href="{% url 'legislator:voter_detail' ly.id %}" rel="tooltip" title="這位立委的表決投票紀錄">
+				{% if ly.party == "中國國民黨" %}
+				<font color=blue>
+				{% elif ly.party == "民主進步黨" %}
+				<font color=green>
+				{% elif ly.party == "親民黨" %}
+				<font color=orange>
+				{% elif ly.party == "台灣團結聯盟" %}
+				<font color=brown>
+				{% elif ly.party == "無黨團結聯盟" %}
+				<font color=FF00FF>				
+				{% elif ly.party == "無" %}
+				<font color=gray>
+				{% endif %}	
+				{{ ly.name }}</font></a></td>		
+			{% endfor %}
+		{% endif %}	
+		{% for decision in ly_list %}		
+			
+			{% ifequal decision.grouper -1 %}
+				<tr><td colspan={{col}} style="background-color: #FF99CC;"><strong>反對票
+			{% endifequal %}
+			{% ifequal decision.grouper 1 %}
+				<tr><td colspan={{col}} style="background-color: #CCFF99;"><strong>贊成票
+			{% endifequal %}
+			{% ifequal decision.grouper 0 %}
+				<tr><td colspan={{col}} style="background-color: #CCCCCC;"><strong>棄權票
+			{% endifequal %}
+			</strong></td>
+			{% for fragment in decision.list %}
+				{% if forloop.counter0|divisibleby:col %}
+					</tr><tr>
+				{% endif %}				
+				<td><a href="{% url 'legislator:voter_detail' fragment.legislator.id %}" rel="tooltip" title="這位立委的表決投票紀錄">
+				{% if fragment.legislator.party == "中國國民黨" %}
+				<font color=blue>
+				{% elif fragment.legislator.party == "民主進步黨" %}
+				<font color=green>
+				{% elif fragment.legislator.party == "親民黨" %}
+				<font color=orange>
+				{% elif fragment.legislator.party == "台灣團結聯盟" %}
+				<font color=brown>
+				{% elif fragment.legislator.party == "無" %}
+				<font color=gray>
+				{% endif %}	
+				{{ fragment.legislator.name }}</font></a></td>
+			{% endfor %}		
+		{% endfor %}
+	
+	<tr class="info" ><td colspan={{col}} style="text-align:center;">#註：
+	<font color=blue>中國國民黨</font>&nbsp;-&nbsp;<font color=green>民主進步黨</font>&nbsp;-&nbsp;
+	<font color=orange>親民黨</font>&nbsp;-&nbsp;<font color=brown>台灣團結聯盟</font>&nbsp;-&nbsp;
+	<font color=FF00FF>無黨團結聯盟</font>&nbsp;-&nbsp;<font color=gray>無黨籍</font></td>
+	</tr>	
+	{% endwith %}
+	</table>
+	<hr>
+	<div class="fb-comments" data-width="600" data-num-posts="3" href={{current_url}}></div>
+	{% endif %}	
+</div>	
+</div>	
+{% endblock %}
+{% block backtotop %}	
+	<div align="center">
+	<a href="#top" class="lead"><i class="icon-arrow-up"></i>回頭</a>
+	</div>	  
+{% endblock %}
+{% block script %}
+<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/Chart.js"></script>
+<script>
+
+var data = [
+	{% for decision in vote_addup %}
+		{
+			value: {{decision.legislator__count}},
+			{% ifequal decision.decision -1 %}
+				color:"#FF99CC",
+			{% endifequal %}
+			{% ifequal decision.decision 1 %}
+				color:"#CCFF99",
+			{% endifequal %}
+			{% ifequal decision.decision 0 %}
+				color:"#999999"
+			{% endifequal %}
+		},
+	{% endfor %}			
+]
+var options = {
+    animation: false,
+};
+var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Pie(data,options);
+$(document).ready( function() {
+	$("[rel='tooltip']").tooltip();
+});	
+</script>
+{% endblock %}

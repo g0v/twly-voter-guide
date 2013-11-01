@@ -1,0 +1,53 @@
+﻿<!--[if lt IE 10]>
+<!DOCTYPE html>
+<![endif]-->
+{% extends "legislator/index.html" %}
+{% block ly_table %}
+	{% if ly_list %}
+	<table class="table table-bordered table-condensed">
+		{% for ly in ly_list %}
+			{% ifchanged ly.committee %}
+				</tr><tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+				<td><a href="{% url 'legislator:index_committee' ly.committee %}" class="btn btn-info btn-mini" rel="tooltip" title="{{ ly.committee }}委員會的所有立委詳細資料"><b>{{ ly.committee }}</b></a></td>	
+			{% endifchanged %}
+			<td><div class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+			{% if ly.party == "中國國民黨" %}
+			<font color=0066FF>
+			{% elif ly.party == "民主進步黨" %}
+			<font color=009900>
+			{% elif ly.party == "親民黨" %}
+			<font color=orange>
+			{% elif ly.party == "台灣團結聯盟" %}
+			<font color=brown>
+			{% elif ly.party == "無黨團結聯盟" %}
+			<font color=FF00FF>				
+			{% elif ly.party == "無" %}
+			<font color=777777>
+			{% endif %}	
+			{{ ly.name }}</font>				
+			</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<li class="dropdown-submenu">
+					<a data-toggle="dropdown" href="#" >{{ly.name}}的提案</a>
+					<ul class="dropdown-menu">
+						<li><a href="{% url 'legislator:biller_detail' ly.id %}" >法條修正草案</a></li>
+						<li><a href="{% url 'legislator:proposer_detail' ly.id %}">附帶決議、臨時提案</a></li>
+					</ul>
+				</li>	
+				<li><a href="{% url 'legislator:voter_detail' ly.id %}">{{ly.name}}的投票紀錄</a></li>
+				<li><a href="{% url 'legislator:chart_personal_report' legislator_id=ly.id index='vote' %}">{{ly.name}}的圖表</a></li>
+				<li><a href="{% url 'legislator:ly_politics' ly.id %}">{{ly.name}}的競選政見</a></li>
+			</ul>
+			</div>				
+			</td>				
+		{% endfor %}
+		<tr class="info" ><td colspan=20 style="text-align:center;">#註：
+		<font color=blue>中國國民黨</font>&nbsp;-&nbsp;<font color=#009900>民主進步黨</font>&nbsp;-&nbsp;
+		<font color=orange>親民黨</font>&nbsp;-&nbsp;<font color=brown>台灣團結聯盟</font>&nbsp;-&nbsp;
+		<font color=FF00FF>無黨團結聯盟</font>&nbsp;-&nbsp;<font color=#777777>無黨籍</font></td></tr>							
+	</table>
+	{% else %}
+		<p class="text-error">沒有立委</p>
+	{% endif %}
+{% endblock %}

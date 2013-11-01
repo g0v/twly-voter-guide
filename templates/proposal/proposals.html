@@ -1,0 +1,118 @@
+﻿<!--[if lt IE 10]>
+<!DOCTYPE html>
+<![endif]-->
+{% extends "legislator/nav_base.html" %}
+{% load ly_extras %}
+{% block title %}
+	<title>立委投票指南:全提案檢索</title>
+	<meta property="og:title" content="立委投票指南:全提案檢索"/>
+	<meta itemprop="name" content="立委投票指南:全提案檢索">		
+{% endblock %}
+{% block right %} 
+<div class="span10">	
+<br>
+<form action="" method="get" class="form-search" id="form">
+{% csrf_token %}
+<br>
+<fieldset>
+	<input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:核四 國教...空格有交集效果">
+	<button type="submit" class="btn">Go!</button>
+	{% if error %}
+		<span class="help-inline"><a class="text-error">請輸入關鍵字!!</a></span>
+	{% endif %}
+</fieldset>
+</form>
+{% if keyword_obj %}
+	<h4>熱門：
+	{% for keyword in keyword_obj %}
+		{% if forloop.counter0 < 5 %}
+			<a href="{% url 'proposal:proposals' keyword %}" rel="tooltip" title="包含此關鍵字的立委提案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
+		{% endif %}	
+	{% endfor %}
+	</h4>
+{% endif %}	
+<div class="well well-small">
+{% if keyword %}
+	<p class="lead">有 {{ proposal|length }} 個包含<font style="color: red;">"{{keyword}}"</font>的附帶決議、臨時提案</p>
+{% else %}
+	<p class="lead">最近的 {{ proposal|length }} 個附帶決議、臨時提案</p>	
+{% endif %}
+</div>
+{% if proposal %}
+	{% load pagination_tags %}
+	{% autopaginate proposal 10 %}
+	{% paginate %}
+	<table class="table table-bordered" >
+	<thead>
+	<tr style="text-align:center; font-weight:bold;background-color: #CCFF99;"><th style="width: 12%">日期</th><th style="width: 12%">主提案人</th><th style="width: 56%">提案內容</th><th style="width: 20%">委員會</th>
+	</thead>
+	<tbody>
+	{% for fragment in proposal %}
+		<tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
+		<td>{{ fragment.date|date:"Y-m-d" }}</td>
+		{% with ly=fragment.primary_proposer.0 %}
+		<td>			
+			<a href="{% url 'legislator:proposer_detail' ly.id %}" rel="tooltip" title="{{ ly.name }}的所有臨時提案、附帶決議">
+						{% if ly.party == "中國國民黨" %}
+						<font color=blue>
+						{% elif ly.party == "民主進步黨" %}
+						<font color=green>
+						{% elif ly.party == "親民黨" %}
+						<font color=orange>
+						{% elif ly.party == "台灣團結聯盟" %}
+						<font color=brown>
+						{% elif ly.party == "無黨團結聯盟" %}
+						<font color=FF00FF>				
+						{% elif ly.party == "無" %}
+						<font color=gray>
+						{% endif %}	
+						{{ ly.name }}</font></a>		
+		</td>
+		{% endwith %}		
+		<td><a href="{% url 'proposal:proposal' fragment.id %}" rel="tooltip" title="查看詳細資訊">
+		{% if keyword %}
+			{{fragment.content|linebreaksbr|replace:keyword|safe}}
+		{% else %}
+			{{fragment.content|linebreaksbr|truncatechars:100}}
+		{% endif %}</a></td>
+		<td>{{ fragment.committee }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+	</table>
+	{% paginate %}
+{% endif %}
+</div>
+{% endblock %}
+{% block backtotop %}	
+	<div align="center">
+	<a href="#top" class="lead"><i class="icon-arrow-up"></i>回頭</a>
+	</div>	  
+{% endblock %}
+{% block script %}
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>	
+<script>
+  $(function() {
+    var availableTags = [
+		{% for keyword in keyword_obj %}
+			"{{keyword}}",
+		{% endfor %}
+    ];
+    $( "#keyword" ).autocomplete({
+		source: availableTags,
+		select: function(event, ui) {
+			$(event.target).val(ui.item.value);
+			$('#form').submit();
+			return false;
+		}	  
+    });
+  });
+</script>
+<script>
+$(document).ready( function() {
+	$('#psearch').addClass('active');
+	$("[rel='tooltip']").tooltip();
+});
+</script>
+{% endblock %}

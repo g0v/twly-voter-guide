@@ -7,45 +7,17 @@ urlpatterns = patterns('',
     # ex: /legislator/district/
     url(r'^district/(?P<index>.+)$', views.index_district, name='index_district'),
     # ex: /legislator/committee/
-    url(r'^committee/(?P<index>.+)$', views.index_committee, name='index_committee'),                     
+    url(r'^committee/(?P<index>.+)$', views.index_committee, name='index_committee'),
     # ex: /legislator/5/
-    url(r'^(?P<legislator_id>\d+)/(?P<keyword_url>.+)?$', views.proposer_detail, name='proposer_detail'),                  
-    # ex: /legislator/proposal/12
-    url(r'^proposal/(?P<proposal_id>\d+)/$', views.proposal, name='proposal'),
-    # ex: /legislator/reference
-    url(r'^reference/$', views.reference, name='reference'),
-    # ex: /legislator/about
-    url(r'^about/$', views.about, name='about'),
-    # ex: /legislator/votes/date/yyyy-mm-dd
-    url(r'^votes/date/(?P<date_url>.+)?$', views.votes_date, name='votes_date'),
-    # ex: /legislator/votes/related_to_issue/xxx
-    url(r'^votes/related_to_issue/(?P<issue_id>\d+)/$', views.votes_related_to_issue, name='votes_related_to_issue'),                       
-    # ex: /legislator/votes
-    url(r'^votes/(?P<index>normal|conscience)?/(?P<keyword_url>.+)?$', views.votes, name='votes'),                       
-    # ex: /legislator/vote/123
-    url(r'^vote/(?P<vote_id>\d+)/$', views.vote_detail, name='vote_detail'),
+    url(r'^(?P<legislator_id>\d+)/(?P<keyword_url>.+)?$', views.proposer_detail, name='proposer_detail'),
     # ex: /legislator/voter/13
-    url(r'^voter/(?P<legislator_id>\d+)/(?P<index>conscience)?/?(?P<keyword_url>.+)?$', views.voter_detail, name='voter_detail'),                     
+    url(r'^voter/(?P<legislator_id>\d+)/(?P<index>conscience)?/?(?P<keyword_url>.+)?$', views.voter_detail, name='voter_detail'),   
+    # ex: /legislator/biller/113
+    url(r'^biller/(?P<legislator_id>\d+)/?(?P<keyword_url>.+)?$', views.biller_detail, name='biller_detail'),
     # ex: /legislator/politics/113
     url(r'^politics/(?P<legislator_id>\d+)/$', views.ly_politics, name='ly_politics'),
     # ex: /legislator/report/
     url(r'^report/(?P<index>biller|conscience_vote|vote|proposal|ly|committee|ly_hit|nvote_gbdate|nvote_gbmonth)?/?$', views.chart_report, name='chart_report'),
-    # ex: /legislator/proposals/related_to_issue/xxx
-    url(r'^proposals/related_to_issue/(?P<issue_id>\d+)/$', views.proposals_related_to_issue, name='proposals_related_to_issue'),
-    # ex: /legislator/proposals/
-    url(r'^proposals/(?P<keyword_url>.+)?$', views.proposals, name='proposals'),
     # ex: /legislator/personal_report/
     url(r'^personal_report/(?P<legislator_id>\d+)/(?P<index>proposal|ly|vote)?/?$', views.chart_personal_report, name='chart_personal_report'),
-    # ex: /legislator/issues/
-    url(r'^issues/$', views.issues, name='issues'),
-    # ex: /legislator/issue/xxx
-    url(r'^issue/(?P<issue_id>\d+)/$', views.issue, name='issue'),
-    # ex: /legislator/bills/related_to_issue/xxx
-    url(r'^bills/related_to_issue/(?P<issue_id>\d+)/$', views.bills_related_to_issue, name='bills_related_to_issue'),                       
-    # ex: /legislator/bills
-    url(r'^bills/(?P<keyword_url>.+)?$', views.bills, name='bills'),
-    # ex: /legislator/bill/xxx/yyyyy
-    url(r'^bill/(?P<bill_id>\d+)/(?P<proposal_id>\d+)/$', views.bill_detail, name='bill_detail'),
-    # ex: /legislator/biller/xxx
-    url(r'^biller/(?P<legislator_id>\d+)/?(?P<keyword_url>.+)?$', views.biller_detail, name='biller_detail'),                        
 )

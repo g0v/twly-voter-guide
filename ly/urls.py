@@ -1,11 +1,12 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
+from django.contrib import admin
 from rest_framework import routers
 from api import views
-# Uncomment the next two lines to enable the admin:
-from django.contrib import admin
-admin.autodiscover()
 
+
+admin.autodiscover()
+# rest framework url
 router = routers.DefaultRouter()
 router.register(r'legislator', views.LegislatorViewSet)
 router.register(r'proposal', views.ProposalViewSet)
@@ -21,6 +22,12 @@ router.register(r'issue', views.IssueViewSet)
 
 urlpatterns = patterns('',
     url(r'^legislator/', include('legislator.urls', namespace="legislator")),
+    url(r'^vote/', include('vote.urls', namespace="vote")),
+    url(r'^proposal/', include('proposal.urls', namespace="proposal")),
+    url(r'^bill/', include('bill.urls', namespace="bill")),
+    url(r'^issue/', include('issue.urls', namespace="issue")),
+    url(r'^about/', include('about.urls', namespace="about")),
+    url(r'^reference/', include('reference.urls', namespace="reference")),
     url(r'', include('legislator.urls', namespace="legislator")),
     url(r'^api/', include(router.urls)),
     #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
