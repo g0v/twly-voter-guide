@@ -4,10 +4,10 @@
 {% extends "legislator/nav_base.html" %}
 {% load ly_extras %}
 {% block title %}
-	<title>立委投票指南:法條修正草案檢索</title>
-	<meta property="og:title" content="立委投票指南:法條修正草案檢索"/>
-	<meta itemprop="name" content="立委投票指南:法條修正草案檢索">		
-{% endblock %}
+    <title>立委投票指南:法條修正草案檢索</title>
+    <meta property="og:title" content="立委投票指南:法條修正草案檢索"/>
+    <meta itemprop="name" content="立委投票指南:法條修正草案檢索">		
+{% endblock title %}
 {% block right %} 
 <div class="span10">	
 <br>
@@ -60,23 +60,7 @@
 		<tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
 		<td><a href="{% url 'bill:bill_detail' bill_id=fragment.billid proposal_id=fragment.proposalid %}" rel="tooltip" title="法條修正對照表">{{ fragment.title }}</a></td>
 		{% with ly=fragment.primary_proposer.0 %}
-		<td>			
-			<a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="{{ ly.name }}的所有法條修正草案">
-						{% if ly.party == "中國國民黨" %}
-						<font color=blue>
-						{% elif ly.party == "民主進步黨" %}
-						<font color=green>
-						{% elif ly.party == "親民黨" %}
-						<font color=orange>
-						{% elif ly.party == "台灣團結聯盟" %}
-						<font color=brown>
-						{% elif ly.party == "無黨團結聯盟" %}
-						<font color=FF00FF>				
-						{% elif ly.party == "無" %}
-						<font color=gray>
-						{% endif %}	
-						{{ ly.name }}</font></a>		
-		</td>
+		<td><a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="{{ ly.name }}的所有法條修正草案">{% include "common/ly_color_by_party.html" %}</a></td>
 		{% endwith %}
 		<td>
 			{% if keyword %}				
@@ -102,39 +86,19 @@
 	{% paginate %}
 {% endif %}
 </div>
-{% endblock %}
+{% endblock right %}
 {% block backtotop %}	
-	<div align="center">
-	<a href="#top" class="lead">回頭</a>
-	</div>	  
-{% endblock %}
+    {{ block.super }}  
+{% endblock backtotop %}
 {% block script %}
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>	
-<script>
-  $(function() {
-    var availableTags = [
-		{% for keyword in keyword_obj %}
-			"{{keyword}}",
-		{% endfor %}
-    ];
-    $( "#keyword" ).autocomplete({
-		source: availableTags,
-		select: function(event, ui) {
-			$(event.target).val(ui.item.value);
-			$('#form').submit();
-			return false;
-		}	  
-    });
-  });
-</script>
-<script>
-$(document).ready( function() {
-	$('#psearch').addClass('active');
-	$('#law').change(function() {
-		$("#form").trigger('submit');
-	});		
-	$("[rel='tooltip']").tooltip();
-});
-</script>
-{% endblock %}
+    {% include "common/keyword_auto_complete.html" %}
+    <script>
+        $(document).ready( function() {
+	    $('#psearch').addClass('active');
+	    $('#law').change(function() {
+	        $("#form").trigger('submit');
+	    });		
+	    $("[rel='tooltip']").tooltip();
+        });
+    </script>
+{% endblock script %}

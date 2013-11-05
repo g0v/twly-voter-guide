@@ -105,11 +105,7 @@
 		<td>{% if ly.districtDetail %}{{ly.districtDetail}}{% endif %}</td>
 		<td><a href="{% url 'legislator:index_committee' ly.committee %}" rel="tooltip" title="{{ly.committee}}委員會的立委詳細資料">{{ ly.committee|truncatechars:7 }}</a></td></tr>
 		{% endfor %}
-		<tr class="info" ><td colspan=6 style="text-align:center;">#註：
-		<font color=blue>中國國民黨</font>&nbsp;-&nbsp;<font color=green>民主進步黨</font>&nbsp;-&nbsp;
-		<font color=orange>親民黨</font>&nbsp;-&nbsp;<font color=brown>台灣團結聯盟</font>&nbsp;-&nbsp;
-		<font color=FF00FF>無黨團結聯盟</font>&nbsp;-&nbsp;<<font color=gray>無黨籍</font></td>
-		</tr>
+		{% include "common/color_info_of_party.html" with column=6 %}
 	</tbody>
 	</table>
 	{% elif vote_obj %}
@@ -141,10 +137,8 @@
 </div>
 {% endblock %}
 {% block backtotop %}	
-	<div align="center">
-	<a href="#top" class="lead"><i class="icon-arrow-up"></i>回頭</a>
-	</div>	  
-{% endblock %}
+    {{ block.super }}  
+{% endblock backtotop %}
 {% block script %}
 <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/Chart.js"></script>
 <script>

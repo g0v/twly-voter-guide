@@ -33,23 +33,21 @@ def index(request,index):
             query = query & Q(legislator_bill__priproposer=True)
         ly_list = Legislator.objects.filter(query).annotate(totalNum=Count('legislator_bill__id')).exclude(totalNum=0).order_by('-totalNum')
         no_count_list = Legislator.objects.filter(name_query).exclude(id__in=ly_list.values_list('id', flat=True))
-        #ly_list = list(chain(ly_list, no_count_list))
-        return render(request,'legislator/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'conscience_vote':
         ly_list = Legislator.objects.filter(query,legislator_vote__conflict=True).annotate(totalNum=Count('legislator_vote__id')).order_by('-totalNum','party')
         no_count_list = Legislator.objects.filter(name_query).exclude(id__in=ly_list.values_list('id', flat=True)).order_by('party')
-        #ly_list = list(chain(ly_list, no_count_list))
-        return render(request,'legislator/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'notvote':
         ly_obj = Legislator.objects.filter(query).defer('enableSession','disableReason')
         ly_list = sorted(ly_obj, key=lambda a: a.notvote)
-        return render(request,'legislator/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'committee':
-        ly_list = Legislator.objects.filter(query).order_by('committee').defer('enableSession','disableReason')
-        return render(request,'legislator/index_committee.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        ly_list = Legislator.objects.filter(query).order_by('committee','party').defer('enableSession','disableReason')
+        return render(request,'legislator/index/index_committee.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'district':
-        ly_list = Legislator.objects.filter(query).order_by('district').defer('enableSession','disableReason')
-        return render(request,'legislator/index_district.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        ly_list = Legislator.objects.filter(query).order_by('district','party').defer('enableSession','disableReason')
+        return render(request,'legislator/index/index_district.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     else:
         return HttpResponseRedirect('/legislator/biller/')
 
@@ -137,11 +135,9 @@ def ly_politics(request, legislator_id):
     ly = Legislator.objects.get(pk=legislator_id)
     if ly.eleDistrict == u'全國不分區':
         politics = Politics.objects.filter(party=ly.party).order_by('id')
-        nodistrict = True
     else:
         politics = Politics.objects.filter(legislator_id=legislator_id).order_by('id')
-        nodistrict = False
-    return render(request,'legislator/ly_politics.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly':ly,'politics':politics,'nodistrict':nodistrict})
+    return render(request,'legislator/ly_politics.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly':ly,'politics':politics})
 
 def chart_report(request,index='ly_hit'):
     ly_obj, ly_name, vote_obj,title,content,compare = [], [], [], None, None, None
