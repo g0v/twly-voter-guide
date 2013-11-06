@@ -31,18 +31,18 @@ def bills(request,keyword_url):
                 k.save()
     else:
         bills = bills.filter(query).order_by('-id')
-    return render(request,'bill/bills.html', {'current_url':'http://twly.herokuapp.com'+request.get_full_path(),'keyword_obj':keyword_list(3),'laws':laws,'law':law,'keyword':keyword,'bills':bills})
+    return render(request,'bill/bills.html', {'keyword_obj':keyword_list(3),'laws':laws,'law':law,'keyword':keyword,'bills':bills})
 
 def bills_related_to_issue(request,issue_id):
     keyword, bills = None, None
     keyword = Issue.objects.values_list('title', flat=True).get(pk=issue_id)
     if issue_id:
         bills = Bill.objects.filter(issue_bill__issue_id=issue_id).order_by('date','-pk')
-    return render(request,'bill/bills.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'keyword':keyword,'bills':bills,'keyword_obj':keyword_list(3)})
+    return render(request,'bill/bills.html', {'keyword':keyword,'bills':bills,'keyword_obj':keyword_list(3)})
 
 def bill_detail(request,bill_id,proposal_id):
     bill = Bill.objects.filter(billid=bill_id,proposalid=proposal_id)[0]
     if bill:
         bill.hits = F('hits') + 1
-    return render(request,'bill/bill_detail.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'bill': bill})
+    return render(request,'bill/bill_detail.html', {'bill': bill})
 

@@ -58,16 +58,24 @@
         {% paginate %}
         <table class="table table-bordered" >
             <thead>
-                <tr style="text-align:center; font-weight:bold;background-color: #FFCCFF;">
-                <th style="width: 18%">法案</th><th style="width: 10%">主提案人</th><th style="width: 36%">案由</th><th style="width: 36%">說明</th>
+                <tr style="font-weight:bold;background-color: #FFCCFF;">
+                    <th style="text-align:center; vertical-align:middle; width: 18%">法案</th>
+                    <th style="text-align:center; vertical-align:middle; width: 10%">主提案人</th>
+                    <th style="text-align:center; vertical-align:middle; width: 36%">案由</th>
+                    <th style="text-align:center; vertical-align:middle; width: 36%">說明</th>
             </thead>
             <tbody>	
             {% for fragment in bills %}
                 <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
-                <td><a href="{% url 'bill:bill_detail' bill_id=fragment.billid proposal_id=fragment.proposalid %}" rel="tooltip" title="法條對照表">{{ fragment.title }}</a></td>
-                <td>{{ fragment.primary_proposer.0.name }}</td>
-                <td>{{ fragment.motivation|replace:keyword|safe }}</td>
-                <td>{% if fragment.description %}{{ fragment.description|linebreaksbr|replace:keyword|safe }}{% endif %}</td>		
+                    <td style="vertical-align:middle;"><a href="{% url 'bill:bill_detail' bill_id=fragment.billid proposal_id=fragment.proposalid %}" rel="tooltip" title="法條對照表">{{ fragment.title }}</a></td>
+                    <td style="text-align:center; vertical-align:middle;">{{ fragment.primary_proposer.0.name }}</td>
+                    {% if keyword %}
+                        <td>{{fragment.motivation|linebreaksbr|replace:keyword|safe}}</td>
+                        <td>{{fragment.description|linebreaksbr|replace:keyword|safe}}</td>
+                    {% else %}
+                        <td><abbr title="{{ fragment.motivation }}">{{fragment.motivation|linebreaksbr|truncatechars:80}}</td></abbr>
+                        <td><abbr title="{{ fragment.description }}">{{fragment.description|linebreaksbr|truncatechars:80}}</td></abbr>
+                    {% endif %}
                 </tr>
             {% empty %}
                 <p>完全沒有法案</p>

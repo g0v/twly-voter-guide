@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 
 
+def current_url(request):
+        return {'current_url': settings.SITE_DOMAIN+request.get_full_path()}
 def last_update_time(request):
         return {'last_update_time':'2013-11-01'}
 def district_list(request):

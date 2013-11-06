@@ -17,10 +17,10 @@ class Vote(models.Model):
 
     def _vote_result(self):
         vote = Legislator_Vote.objects.filter(vote_id=self.id)
-        if vote.filter(decision=1).count() < vote.filter(decision=-1).count():
-            return True
-        else:
+        if vote.filter(decision=1).count() > vote.filter(decision=-1).count():
             return False
+        else:
+            return True
     disapprove = property(_vote_result)
 
 class Legislator_Vote(models.Model):

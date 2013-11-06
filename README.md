@@ -19,4 +19,4 @@ djangorestframework==2.3.7
 
 授權
 ======
-http://twly.herokuapp.com/legislator/about/
+http://twly.herokuapp.com/about/

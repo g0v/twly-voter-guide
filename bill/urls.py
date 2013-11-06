@@ -8,4 +8,5 @@ urlpatterns = patterns('',
     url(r'^(?P<bill_id>\d+)/(?P<proposal_id>\d+)/$', views.bill_detail, name='bill_detail'),
     # ex: /bill
     url(r'^(?P<keyword_url>.+)?$', views.bills, name='bills'),
+
 )

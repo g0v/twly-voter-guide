@@ -22,8 +22,6 @@ def votes(request,keyword_url,index='normal'):
     if keyword:
         votes = Vote.objects.filter(query & reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-date','-pk')
         if votes:
-            #votes.filter(hits__isnull=False).update(hits=F('hits')+1)
-            #votes.filter(hits__isnull=True).update(hits=1)
             keyword_obj = Keyword.objects.filter(category=2,content=keyword)
             if keyword_obj:
                 keyword_obj.update(hits=F('hits')+1)
@@ -33,7 +31,7 @@ def votes(request,keyword_url,index='normal'):
     else:
         votes = Vote.objects.filter(query).order_by('-date','-pk')
     date_list = votes.values('date').distinct().order_by('-date')
-    return render(request,'vote/votes.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'votes': votes,'index':index,'keyword':keyword,'error':error,'keyword_obj':keyword_list(2),'date_list':date_list})
+    return render(request,'vote/votes.html', {'votes': votes,'index':index,'keyword':keyword,'error':error,'keyword_obj':keyword_list(2),'date_list':date_list})
 
 def votes_related_to_issue(request,issue_id):
     keyword, votes, index = None, None, 'normal'
@@ -41,7 +39,7 @@ def votes_related_to_issue(request,issue_id):
     if issue_id:
         votes = Vote.objects.filter(issue_vote__issue_id=issue_id).order_by('date','-pk')
     date_list = votes.values('date').distinct().order_by('-date')
-    return render(request,'vote/votes.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'votes': votes,'index':index,'keyword':keyword,'keyword_obj':keyword_list(2),'date_list':date_list})
+    return render(request,'vote/votes.html', {'votes': votes,'index':index,'keyword':keyword,'keyword_obj':keyword_list(2),'date_list':date_list})
 
 def vote_detail(request,vote_id):
     nvotes = Vote.objects.count()
@@ -54,4 +52,4 @@ def vote_detail(request,vote_id):
         vote.save(update_fields=['hits'])
         ly_notvote = Legislator.objects.exclude(id__in = vote.voter.values_list('id', flat=True)).filter(enable=True,enabledate__lt=vote.date).order_by('party')
         vote_addup = Legislator_Vote.objects.filter(vote_id=vote_id).values('decision').annotate(Count('legislator', distinct=True))
-    return render(request,'vote/vote_detail.html', {'current_url':'http://twly.herokuapp.com'+request.get_full_path(),'vote':vote,'nvotes':nvotes,'ly_notvote':ly_notvote,'vote_addup': vote_addup})
+    return render(request,'vote/vote_detail.html', {'vote':vote,'nvotes':nvotes,'ly_notvote':ly_notvote,'vote_addup': vote_addup})

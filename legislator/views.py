@@ -33,31 +33,31 @@ def index(request,index):
             query = query & Q(legislator_bill__priproposer=True)
         ly_list = Legislator.objects.filter(query).annotate(totalNum=Count('legislator_bill__id')).exclude(totalNum=0).order_by('-totalNum')
         no_count_list = Legislator.objects.filter(name_query).exclude(id__in=ly_list.values_list('id', flat=True))
-        return render(request,'legislator/index/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_ordered.html', {'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'conscience_vote':
         ly_list = Legislator.objects.filter(query,legislator_vote__conflict=True).annotate(totalNum=Count('legislator_vote__id')).order_by('-totalNum','party')
         no_count_list = Legislator.objects.filter(name_query).exclude(id__in=ly_list.values_list('id', flat=True)).order_by('party')
-        return render(request,'legislator/index/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_ordered.html', {'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'notvote':
         ly_obj = Legislator.objects.filter(query).defer('enableSession','disableReason')
         ly_list = sorted(ly_obj, key=lambda a: a.notvote)
-        return render(request,'legislator/index/index_ordered.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_ordered.html', {'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'committee':
         ly_list = Legislator.objects.filter(query).order_by('committee','party').defer('enableSession','disableReason')
-        return render(request,'legislator/index/index_committee.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_committee.html', {'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'district':
         ly_list = Legislator.objects.filter(query).order_by('district','party').defer('enableSession','disableReason')
-        return render(request,'legislator/index/index_district.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_district.html', {'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     else:
         return HttpResponseRedirect('/legislator/biller/')
 
 def index_district(request,index):
     ly_list = Legislator.objects.filter(enable=True,district=index).order_by('eleDistrict').defer('enableSession','disableReason')
-    return render(request,'legislator/index_filter.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'type':'district','index':index})
+    return render(request,'legislator/index_filter.html', {'ly_list': ly_list,'type':'district','index':index})
 
 def index_committee(request,index):
     ly_list = Legislator.objects.filter(enable=True,committee=index).order_by('district').defer('enableSession','disableReason')
-    return render(request,'legislator/index_filter.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly_list': ly_list,'type':'committee','index':index})
+    return render(request,'legislator/index_filter.html', {'ly_list': ly_list,'type':'committee','index':index})
 
 def proposer_detail(request,legislator_id,keyword_url):
     error,keyword,proposertype = False,None,False
@@ -90,7 +90,7 @@ def proposer_detail(request,legislator_id,keyword_url):
                 k.save()
     else:
         proposal = Proposal.objects.filter(query).order_by('-date').defer('sessionPrd','session')
-    return render(request,'legislator/proposer_detail.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'keyword_obj':keyword_list(1),'proposal':proposal,'ly':ly,'keyword':keyword,'error':error,'proposertype':proposertype})
+    return render(request,'legislator/proposer_detail.html', {'keyword_obj':keyword_list(1),'proposal':proposal,'ly':ly,'keyword':keyword,'error':error,'proposertype':proposertype})
 
 def voter_detail(request,legislator_id,index,keyword_url):
     keyword,keyword_valid,votes,error,notvote,notvote_votelist = None,False,None,False,False,None
@@ -129,7 +129,7 @@ def voter_detail(request,legislator_id,index,keyword_url):
             else:
                 notvote_votelist = Vote.objects.exclude(id__in = votes.values_list('vote_id', flat=True)).filter(reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-date','-pk')
     vote_addup = votes.values('decision').annotate(totalNum=Count('vote', distinct=True)).order_by('-decision')
-    return render(request,'legislator/voter_detail.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'keyword_obj':keyword_list(2),'ly':ly,'index':index,'votes':votes,'keyword':keyword,'error':error,'vote_addup':vote_addup,'notvote':notvote,'notvote_votelist':notvote_votelist})
+    return render(request,'legislator/voter_detail.html', {'keyword_obj':keyword_list(2),'ly':ly,'index':index,'votes':votes,'keyword':keyword,'error':error,'vote_addup':vote_addup,'notvote':notvote,'notvote_votelist':notvote_votelist})
 
 def ly_politics(request, legislator_id):
     ly = Legislator.objects.get(pk=legislator_id)
@@ -137,7 +137,7 @@ def ly_politics(request, legislator_id):
         politics = Politics.objects.filter(party=ly.party).order_by('id')
     else:
         politics = Politics.objects.filter(legislator_id=legislator_id).order_by('id')
-    return render(request,'legislator/ly_politics.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'ly':ly,'politics':politics})
+    return render(request,'legislator/ly_politics.html', {'ly':ly,'politics':politics})
 
 def chart_report(request,index='ly_hit'):
     ly_obj, ly_name, vote_obj,title,content,compare = [], [], [], None, None, None
@@ -185,7 +185,7 @@ def chart_report(request,index='ly_hit'):
         ly_obj = Legislator.objects.filter(enable=True,hits__isnull=False).order_by('-hits')[:10]
         ly_name = ly_obj.values_list('name', flat=True)
         title, content = u'立委點閱次數前十名', u'各立委在本站點閱次數排行'
-    return render(request,'legislator/chart_report.html', {'current_url':'http://twly.herokuapp.com'+request.get_full_path(),'compare':compare,'title':title,'content':content,'index':index,'vote_obj':vote_obj,'ly_name': list(ly_name),'ly_obj':ly_obj} )
+    return render(request,'legislator/chart_report.html', {'compare':compare,'title':title,'content':content,'index':index,'vote_obj':vote_obj,'ly_name': list(ly_name),'ly_obj':ly_obj} )
 
 def list_union(month_list,obj_q):
     obj = []
@@ -223,7 +223,7 @@ def chart_personal_report(request,legislator_id,index='proposal'):
         #query_c = Q(legislator_id=legislator_id,category=1,unpresentNum=1)
         #compare_obj = Attendance.objects.filter(legislator_id=legislator_id,category=1).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
         #obj = Attendance.objects.filter(query_c).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(n=Count('id', distinct=True)).order_by('year','month')
-    return render(request,'legislator/chart_personal_report.html', {'current_url':'http://twly.herokuapp.com'+request.get_full_path(),'index':index,'ly':ly,'obj':obj,'compare_obj':compare_obj} )
+    return render(request,'legislator/chart_personal_report.html', {'index':index,'ly':ly,'obj':obj,'compare_obj':compare_obj} )
 
 def biller_detail(request,legislator_id,keyword_url):
     law,error,keyword,proposertype = None,False,None,False
@@ -255,4 +255,4 @@ def biller_detail(request,legislator_id,keyword_url):
             bills.update(hits=F('hits')+1)
     else:
         bills = bills.filter(query).order_by('-proposalid')
-    return render(request,'legislator/biller_detail.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path(),'laws':laws,'keyword_obj':keyword_list(3),'bills':bills,'ly':ly,'keyword':keyword,'error':error,'proposertype':proposertype})
+    return render(request,'legislator/biller_detail.html', {'laws':laws,'keyword_obj':keyword_list(3),'bills':bills,'ly':ly,'keyword':keyword,'error':error,'proposertype':proposertype})

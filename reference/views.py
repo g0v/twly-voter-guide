@@ -6,4 +6,4 @@ from bill.models import Bill
 
 
 def reference(request):
-    return render(request,'reference/reference.html', {'current_url': 'http://twly.herokuapp.com'+request.get_full_path()})
+    return render(request,'reference/reference.html', {})

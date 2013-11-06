@@ -20,8 +20,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'ly',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'postgres',
-        'PASSWORD': 'P@ssw0rd',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': 'localhost',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
     }
@@ -29,7 +29,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -117,6 +117,7 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'ly.urls'
@@ -152,6 +153,7 @@ INSTALLED_APPS = (
     'pagination',
     'rest_framework',
     #'south',
+    #'debug_toolbar',
 )
 
 REST_FRAMEWORK = {
@@ -195,7 +197,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     #"django.core.context_processors.static",
     #"django.contrib.messages.context_processors.messages")
     "django.core.context_processors.request",
+    "legislator.context_processor.current_url",
     "legislator.context_processor.last_update_time",
     "legislator.context_processor.district_list",
     "legislator.context_processor.committee_list",
 )
+
+SITE_DOMAIN = 'http://twly.herokuapp.com'

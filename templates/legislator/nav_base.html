@@ -94,7 +94,7 @@
 					<li><a href="{% url 'vote:votes' keyword_url='' index='conscience' %}" >有立委<b>脫黨</b>投票的表決</a></li>
 				</ul>
 			</li>						
-			<li id="issues"><a href="{% url 'issue:issues' %}"><font size=3>重大議題</font></a></li>
+                        <li class="divider-vertical"></li>
 			<li id="chart_report" class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size=3>圖表</font><b class="caret"></b>
 				</a>
@@ -113,10 +113,12 @@
 					<li><a href="{% url 'legislator:chart_report' 'nvote_gbmonth' %}" >表決依<b>月份</b>分組</a></li>						
 				</ul>
 			</li>
-			<li id="reference"><a href="{% url 'reference:reference' %}"><font size=3>資料來源</font></a></li>
-			<li id="about"><a href="{% url 'about:about' %}"><font size=3>關於</font></a></li>
+			<li id="issues"><a href="{% url 'issue:issues' %}"><font size=3>重大議題</font></a></li>
 		</ul>
 		<ul class="nav pull-right">		
+			<li id="reference"><a href="{% url 'reference:reference' %}"><font size=3>資料來源</font></a></li>
+			<li id="about"><a href="{% url 'about:about' %}"><font size=3>關於</font></a></li>
+			<li class="divider-vertical"></li>
 			<li><a class="btn btn-inverse btn-small" href="#searchModal" data-toggle="modal"><font size=3><b>全站搜尋</b></font></a></li>	
 			<li class="divider-vertical"></li>
 			<li><p class="text-warning">資料更新時間&nbsp;<br>{{last_update_time}}&nbsp;</p></li>	

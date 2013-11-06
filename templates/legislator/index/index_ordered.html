@@ -19,20 +19,21 @@
     {% endif %}
     </h3>               
     <table class="table table-bordered table-condensed">
+        {% with col=20 %}
 	{% if ly_list %}
 	    {% for ly in ly_list %}
     		{% if forloop.counter0|divisibleby:20 %}
-                    </tr><tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
+                    {% if forloop.counter0 != 0 %}</tr>{% endif %}                
+                    <tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
                         <td>{{forloop.counter}}~{{forloop.counter|add:19}}名</td>
 		{% endif %}				
 		<td>
                     {% if index == 'biller' %}
-                        <a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="草案
-		        {% if proposertype %}{{ly.nbill}}		
-			{% else %}{{ly.npribill}}
-			{% endif %}個">
-		    {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.id index='conscience' %}" rel="tooltip" title="脫黨投票{{ly.nconsciencevote}}次">
-		    {% else %}<a href="{% url 'legislator:voter_detail' ly.id %}" rel="tooltip" title="沒投票{{ly.notvote}}次">
+                        <a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="草案{{ly.totalNum}}個">
+                    {% elif index == 'conscience_vote' %}
+                        <a href="{% url 'legislator:voter_detail' legislator_id=ly.id index='conscience' %}" rel="tooltip" title="脫黨投票{{ly.totalNum}}次">
+                    {% else %}
+                        <a href="{% url 'legislator:voter_detail' ly.id %}" rel="tooltip" title="沒投票{{ly.notvote}}次">
 	    	    {% endif %}
                     {% include "common/ly_color_by_party.html" %}
 		    </a>
@@ -40,12 +41,12 @@
 	    {% endfor %}
 	{% endif %}
 	{% if no_count_list %}
-            </tr><tr style="background-color: #FFFFCC;"><td rowspan="7" style="text-align:center; font-weight:bold;">0次</td>
+            <tr><td rowspan="{% widthratio no_count_list|length|add:9 col 1 %}" style="background-color: #FF99FF; text-align:center; vertical-align:middle; font-weight:bold;">0次</td>
             {% for ly in no_count_list %}
-                {% if forloop.counter0|divisibleby:20 %}
+            {% if forloop.counter0|divisibleby:col and forloop.counter0 != 0 %} 
                     </tr>
-                {% endif %}				
-                <td>
+                {% endif %}             
+                <td style="background-color: #FFCCFF;">
                 {% if index == 'biller' %}<a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="草案0個">
                 {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.id index='conscience' %}" rel="tooltip" title="脫黨投票0次">
                 {% else %}<a href="{% url 'legislator:voter_detail' ly.id %}" rel="tooltip" title="沒投票0次">
@@ -56,5 +57,6 @@
             {% endfor %}					
 	{% endif %}
         {% include "common/color_info_of_party.html" with column=21 %}
+        {% endwith %}
     </table>
 {% endblock ly_table %}
