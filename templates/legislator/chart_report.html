@@ -25,11 +25,18 @@
     <div class="row-fluid">
         <div class="span6">
 	    <div class="hero-unit">
-	        <div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}"></div>
-	        {% if index == 'biller' or index == 'proposal' %}
-                <p class="lead text-center">	
-	            </font> <font style="color: #6699FF;"><b>個人</b><font style="color: #FF9999;"><b>平均</b>
-    	        </p>
+                <div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}">
+                </div>
+		{% if compare %}
+                    <p class="lead text-center">	
+	            {% if index == 'biller' or index == 'proposal' %}
+	                <font style="color: #6699FF;"><b>個人</b</font> <font style="color: #FF9999;"><b>平均</b></font>
+ 	            {% elif index == 'vote' or index == 'ly' %}
+	                <font style="color: #6699FF;"><b>缺席</b></font> <font style="color: #FF9999;"><b>應到</b></font>
+	            {% else %}
+	                <font style="color: #6699FF;"><b>脫黨投票次數</b></font> <font style="color: #FF9999;"><b>投票次數</b></font>
+	            {% endif %}
+    	            </p>
 	        {% endif %}
                 <canvas id="canvas" width="400" height="300" ></canvas>
 	    </div>
@@ -132,72 +139,54 @@
     {{ block.super }}  
 {% endblock backtotop %}
 {% block script %}
-<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/Chart.js"></script>
-<script>
-$(document).ready( function() {
-	$('#chart_report').addClass('active');
-	$('.dropdown-toggle').dropdown();
-	$("[rel='tooltip']").tooltip();
-});
-var data = {
-	{% if ly_obj %}
+    <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/Chart.js"></script>
+    <script>
+        $(document).ready( function() {
+	    $('#chart_report').addClass('active');
+    	    $('.dropdown-toggle').dropdown();
+            $("[rel='tooltip']").tooltip();
+        });
+        var data = {
+	    {% if ly_obj %}
 		labels : {{ ly_name|as_json }},
-	{% elif vote_obj %}
+	    {% elif vote_obj %}
 		labels : [
-			{% for vote in vote_obj %}
+		    {% for vote in vote_obj %}
 			{% if index == 'nvote_gbdate' %}
-				"{{ vote.date|date:"Y-m-d" }}",
+			    "{{ vote.date|date:"Y-m-d" }}",
 			{% elif index == 'nvote_gbmonth' %}
-				"{{vote.year|floatformat:"0"}}/{{vote.month|floatformat:"0"}}",
+			    "{{vote.year|floatformat:"0"}}/{{vote.month|floatformat:"0"}}",
 			{% endif %}			
-
-			{% endfor %}
-			],
-	{% endif %}
-	datasets : [
+		    {% endfor %}
+		],
+	    {% endif %}
+	    datasets : [
 		{
-			fillColor : "rgba(151,187,205,0.5)",
-			strokeColor : "rgba(151,187,205,1)",
-			data : [
-				{% if ly_obj %}
-					{% for ly in ly_obj %}
-						{% if index == 'vote' %}					
-							{{ly.notvote}},					
-						{% elif index == 'ly_hit'%}
-							{{ly.hits}},						
-						{% else %}
-							{{ly.totalNum}},
-						{% endif %}
-					{% endfor %}
-				{% elif vote_obj %}
-					{% for vote in vote_obj %}
-						{{vote.totalNum}},
-					{% endfor %}				
-				{% endif %}
-			]
+		    fillColor : "rgba(151,187,205,0.5)",
+		    strokeColor : "rgba(151,187,205,1)",
+		    data : {{chart_data}}
 		},
-		{% if index == 'biller' or index == 'proposal' %}
+		{% if compare %}
 		{
-			fillColor : "rgba(255,204,204,0.5)",
-			strokeColor : "rgba(255,204,204,1)",
-			data : [
-				{% for ly in ly_obj %}
-						{{ compare }},			
-				{% endfor %}
-			]
+		    fillColor : "rgba(255,204,204,0.5)",
+		    strokeColor : "rgba(255,204,204,1)",
+		    data : [
+			{% for ly in ly_obj %}
+			    {{ compare }},			
+			{% endfor %}
+		    ]
 		},
 		{% endif %}
-	]			
-}
-{% if ly_obj %}
-	var options = {
-			scaleFontFamily : "'標楷體'",
-			scaleFontSize   : 18,
-	};
-	var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Bar(data,options);
-{% elif vote_obj %}
-	var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);
-{% endif %}
-
-</script>
+	    ]			
+        }
+        {% if ly_obj %}
+	    var options = {
+		scaleFontFamily : "'標楷體'",
+		scaleFontSize   : 18,
+	    };
+	    var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Bar(data,options);
+        {% elif vote_obj %}
+	    var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);
+        {% endif %}
+    </script>
 {% endblock script %}

@@ -145,35 +145,35 @@ def chart_report(request,index='ly_hit'):
         compare = Vote.objects.count()
         ly_obj = Legislator.objects.filter(enable=True)
         ly_obj = sorted(ly_obj, key=lambda a: a.notvote, reverse=True)[:10]
-        ly_name = [ly.name for ly in ly_obj]
+        chart_data = [ly.notvote for ly in ly_obj]
         title, content = u'立法院表決缺席前十名', u'每一次會議的最後會進行表決，可和立法院開會缺席交叉比較，為何開會有出席但沒有參加表決？(點選立委名字可看立委個人圖表)'
     elif index == 'conscience_vote':
         compare = Vote.objects.count()
         ly_obj = Legislator.objects.filter(enable=True,legislator_vote__conflict=True).annotate(totalNum=Count('legislator_vote__id')).order_by('-totalNum','party')[:10]
-        ly_name = [ly.name for ly in ly_obj]
+        chart_data = [ly.totalNum for ly in ly_obj]
         title, content = u'脫黨投票次數前十名', u'點選立委名字可看立委脫黨投票的表決內容'
     elif index == 'biller':
         compare = "{0:.2f}".format(Bill.objects.count()/113.0)
         ly_obj = Legislator.objects.filter(enable=True,legislator_bill__priproposer=True).annotate(totalNum=Count('legislator_bill__id')).order_by('-totalNum','party')[:10]
-        ly_name = [ly.name for ly in ly_obj]
+        chart_data = [ly.totalNum for ly in ly_obj]
         title, content = u'法條修正草案數前十名', u'立委在委員會中通過的法條修正草案數(點選立委名字可看立委個人提出的法案條修正草案)'
     elif index == 'proposal':
         compare = "{0:.2f}".format(Proposal.objects.count()/113.0)
         ly_obj = Legislator.objects.filter(enable=True,legislator_proposal__priproposer=True).annotate(totalNum=Count('legislator_proposal__id')).order_by('-totalNum','party')[:10]
-        ly_name = [ly.name for ly in ly_obj]
+        chart_data = [ly.totalNum for ly in ly_obj]
         title, content = u'附帶決議、臨時提案數前十名', u'立委在委員會中提出的法案數，此處只有主提案人才會記數(點選立委名字可看立委個人圖表)'
     elif index == 'committee':
         ly_obj = Legislator.objects.filter(enable=True,attendance__category=1).annotate(totalNum=Sum('attendance__unpresentNum')).order_by('-totalNum','party')[:10]
-        ly_name = [ly.name for ly in ly_obj]
+        chart_data = [ly.totalNum for ly in ly_obj]
         title, content = u'委員會開會缺席前十名', u'委員會是法案推行的第一關卡，立委需在委員會提出法案的增修(點選立委名字可看立委個人圖表)'
     elif index == 'ly':
         compare = Attendance.objects.values('session').filter(category=0).distinct().count()
         ly_obj = Legislator.objects.filter(enable=True,attendance__category=0).annotate(totalNum=Sum('attendance__unpresentNum')).order_by('-totalNum','party')[:10]
-        ly_name = [ly.name for ly in ly_obj]
+        chart_data = [ly.totalNum for ly in ly_obj]
         title, content = u'立法院開會缺席前十名', u'立委須參加立法院例行會議，在會議中進行質詢、法案討論表決、人事表決等重要工作(點選立委名字可看立委個人圖表)'
     elif index == 'ly_hit':
         ly_obj = Legislator.objects.filter(enable=True,hits__isnull=False).order_by('-hits','party')[:10]
-        ly_name = ly_obj.values_list('name', flat=True)
+        chart_data = [ly.hits for ly in ly_obj]
         title, content = u'點閱次數前十名', u'各立委在本站點閱次數排行'
     elif index == 'nvote_gbdate':
         vote_obj = Vote.objects.values('date','session').annotate(totalNum=Count('id', distinct=True)).order_by('date')
@@ -185,7 +185,7 @@ def chart_report(request,index='ly_hit'):
         ly_obj = Legislator.objects.filter(enable=True,hits__isnull=False).order_by('-hits')[:10]
         ly_name = ly_obj.values_list('name', flat=True)
         title, content = u'立委點閱次數前十名', u'各立委在本站點閱次數排行'
-    return render(request,'legislator/chart_report.html', {'compare':compare,'title':title,'content':content,'index':index,'vote_obj':vote_obj,'ly_name': list(ly_name),'ly_obj':ly_obj} )
+    return render(request,'legislator/chart_report.html', {'compare':compare,'title':title,'content':content,'index':index,'vote_obj':vote_obj,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj, 'chart_data':chart_data} )
 
 def list_union(month_list,obj_q):
     obj = []
@@ -202,27 +202,22 @@ def list_union(month_list,obj_q):
 
 def chart_personal_report(request,legislator_id,index='proposal'):
     ly = Legislator.objects.get(pk=legislator_id)
-    query_c = Q(legislator_id=legislator_id,category=1,unpresentNum=1)
     if index == 'proposal':
-        query_p = Q(legislator_proposal__legislator_id=legislator_id,legislator_proposal__priproposer=True)
-        compare_obj = Proposal.objects.filter(legislator_proposal__priproposer=True,proposer__enable=True).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        obj_q = Proposal.objects.filter(query_p).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        month_list = Proposal.objects.dates('date','month')
+        query_p = Q(date__gte=ly.enabledate,legislator_proposal__priproposer=True)
+        compare_obj = Proposal.objects.filter(query_p & Q(proposer__enable=True)).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
+        obj_q = Proposal.objects.filter(query_p & Q(proposer__id=legislator_id)).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
+        month_list = Proposal.objects.filter(date__gte=ly.enabledate).dates('date','month')
         obj = list_union(month_list,obj_q)
     elif index == 'vote':
-        compare_obj = Vote.objects.extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        obj_q = Vote.objects.filter(voter__id=legislator_id).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        month_list = Vote.objects.dates('date','month')
+        compare_obj = Vote.objects.filter(date__gte=ly.enabledate).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
+        obj_q = Vote.objects.filter(date__gte=ly.enabledate,voter__id=legislator_id).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
+        month_list = Vote.objects.filter(date__gte=ly.enabledate).dates('date','month')
         obj = list_union(month_list,obj_q)
     elif index == 'ly':
         compare_obj = Attendance.objects.filter(legislator_id=legislator_id,category=0).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
         obj_q = Attendance.objects.filter(legislator_id=legislator_id,category=0,presentNum=1).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        month_list = Attendance.objects.filter(category=0).dates('date','month')
+        month_list = Attendance.objects.filter(date__gte=ly.enabledate,category=0).dates('date','month')
         obj = list_union(month_list,obj_q)
-    #elif index == 'committee':
-        #query_c = Q(legislator_id=legislator_id,category=1,unpresentNum=1)
-        #compare_obj = Attendance.objects.filter(legislator_id=legislator_id,category=1).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        #obj = Attendance.objects.filter(query_c).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(n=Count('id', distinct=True)).order_by('year','month')
     return render(request,'legislator/chart_personal_report.html', {'index':index,'ly':ly,'obj':obj,'compare_obj':compare_obj} )
 
 def biller_detail(request,legislator_id,keyword_url):
