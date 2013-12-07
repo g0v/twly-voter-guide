@@ -15,7 +15,7 @@
             </fieldset>
         </form>
     {% elif index == 'conscience_vote' %}脫黨投票表決數(多&rarr;少)
-    {% else %}投票表決次數(多&rarr;少)
+    {% else %}投票表決缺席次數(多&rarr;少)
     {% endif %}
     </h3>               
     <table class="table table-bordered table-condensed">
@@ -33,7 +33,7 @@
                     {% elif index == 'conscience_vote' %}
                         <a href="{% url 'legislator:voter_detail' legislator_id=ly.id index='conscience' %}" rel="tooltip" title="脫黨投票{{ly.totalNum}}次">
                     {% else %}
-                        <a href="{% url 'legislator:voter_detail' ly.id %}" rel="tooltip" title="沒投票{{ly.notvote}}次">
+                        <a href="{% url 'legislator:voter_detail' ly.id %}" rel="tooltip" title="沒投票{{ly.totalNum}}次">
 	    	    {% endif %}
                     {% include "common/ly_color_by_party.html" %}
 		    </a>
@@ -41,7 +41,7 @@
 	    {% endfor %}
 	{% endif %}
 	{% if no_count_list %}
-            <tr><td rowspan="{% widthratio no_count_list|length|add:9 col 1 %}" style="background-color: #FF99FF; text-align:center; vertical-align:middle; font-weight:bold;">0次</td>
+            <tr><td rowspan="{% widthratio no_count_list|length|add:10 col 1 %}" style="background-color: #FF99FF; text-align:center; vertical-align:middle; font-weight:bold;">0次</td>
             {% for ly in no_count_list %}
             {% if forloop.counter0|divisibleby:col and forloop.counter0 != 0 %} 
                     </tr>

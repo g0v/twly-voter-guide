@@ -1,4 +1,4 @@
-﻿{% extends "legislator/nav_base.html" %}
+﻿{% extends "base.html" %}
 {% block right %} 
 <div class="row-fluid">
     <div class="span3">
@@ -25,7 +25,7 @@
                 </tr>
                 <tr>
                     <td style="background-color: lightgrey;">到職日期</td>
-                    <td>{{ ly.enabledate|date:"Y-m-d" }}</td>
+                    <td>{{ ly.term_start|date:"Y-m-d" }}</td>
                 </tr>
                 <tr>
                     <td style="background-color: lightgrey;">法條修正草案數</td>

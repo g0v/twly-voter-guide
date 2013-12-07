@@ -6,7 +6,7 @@ here = lambda *x: join(abspath(dirname(__file__)), *x)
 PROJECT_ROOT = here("..")
 root = lambda *x: join(abspath(PROJECT_ROOT), *x)
 #DEBUG = bool(os.environ.get('DJANGO_DEBUG', ''))
-DEBUG = True
+DEBUG = True 
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -18,10 +18,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'ly',                      # Or path to database file if using sqlite3.
+        'NAME': 'ly_dev',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': '',
-        'PASSWORD': '',
+        'USER': 'postgres',
+        'PASSWORD': 'P@ssw0rd',
         'HOST': 'localhost',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
     }
@@ -90,7 +90,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'PUT_YOUR_SECRET_KEY'
+SECRET_KEY = '(w4dkgr1d)*@)+z-j8_*v-s+un$y8#wees8%=!cq+is$3tv+&_'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -99,15 +99,18 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'cache_table',
-    }
-}
+##CACHES = {
+##    'default': {
+##        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+##        'LOCATION': 'cache_table',
+##    }
+##}
+
+# for django-debug-toolbar
+INTERNAL_IPS = ('127.0.0.1',)
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.cache.UpdateCacheMiddleware',
+##    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -116,8 +119,8 @@ MIDDLEWARE_CLASSES = (
     'pagination.middleware.PaginationMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
-    #'debug_toolbar.middleware.DebugToolbarMiddleware',
+##    'django.middleware.cache.FetchFromCacheMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'ly.urls'
@@ -143,6 +146,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'json_field',
     'legislator',
     'vote',
     'proposal',
@@ -152,12 +156,13 @@ INSTALLED_APPS = (
     'commontag',
     'pagination',
     'rest_framework',
-    #'south',
-    #'debug_toolbar',
+    'south',
+    'debug_toolbar',
 )
 
 REST_FRAMEWORK = {
     #'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
     'PAGINATE_BY': 10
 }
 
@@ -192,7 +197,7 @@ LOGGING = {
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
-    #"django.core.context_processors.i18n",
+    "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     #"django.core.context_processors.static",
     #"django.contrib.messages.context_processors.messages")
@@ -201,6 +206,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "legislator.context_processor.last_update_time",
     "legislator.context_processor.district_list",
     "legislator.context_processor.committee_list",
+
 )
 
 SITE_DOMAIN = 'http://twly.herokuapp.com'

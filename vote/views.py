@@ -43,13 +43,12 @@ def votes_related_to_issue(request,issue_id):
 
 def vote_detail(request,vote_id):
     nvotes = Vote.objects.count()
-    vote = Vote.objects.select_related().get(pk=vote_id)
+    vote = Vote.objects.get(pk=vote_id)
     if vote:
         if vote.hits:
             vote.hits = F('hits') + 1
         else:
             vote.hits = 1
         vote.save(update_fields=['hits'])
-        ly_notvote = Legislator.objects.exclude(id__in = vote.voter.values_list('id', flat=True)).filter(enable=True,enabledate__lt=vote.date).order_by('party')
-        vote_addup = Legislator_Vote.objects.filter(vote_id=vote_id).values('decision').annotate(Count('legislator', distinct=True))
-    return render(request,'vote/vote_detail.html', {'vote':vote,'nvotes':nvotes,'ly_notvote':ly_notvote,'vote_addup': vote_addup})
+        vote_addup = Legislator_Vote.objects.filter(vote_id=vote_id,decision__isnull=False).values('decision').annotate(Count('legislator', distinct=True))
+    return render(request,'vote/vote_detail.html', {'vote':vote,'nvotes':nvotes,'vote_addup': vote_addup})

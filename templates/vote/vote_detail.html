@@ -1,7 +1,7 @@
 ﻿<!--[if lt IE 10]>
 <!DOCTYPE html>
 <![endif]-->
-{% extends "legislator/nav_base.html" %}
+{% extends "base.html" %}
 {% load staticfiles %}
 {% block title %}
     {% if vote %}
@@ -51,18 +51,11 @@
 	    <table class="table table-bordered table-condensed">
 	        {% with col=20 %}
 	        <caption style="text-align: left;font-size: 40px;margin-bottom: 20px;"><strong>記名表決名單</strong></caption>
-		{% if ly_notvote %}
-                    </tr><tr>
-                        <td colspan={{col}} style="background-color: #FFFF99;"><strong>沒有投票
-			{% for ly in ly_notvote %}
-			    {% if forloop.counter0|divisibleby:col %}
-				</tr><tr>
-			    {% endif %}				
-			    <td><a href="{% url 'legislator:voter_detail' ly.id %}" rel="tooltip" title="這位立委的表決投票紀錄">{% include "common/ly_color_by_party.html" %}</a></td>		
-			{% endfor %}
-		{% endif %}	
 		{% for decision in ly_list %}					
                     {% with decision=decision.grouper %}
+ 		        {% ifequal decision null %}
+			    <tr><td colspan={{col}} style="background-color: #FFFF99;"><strong>沒有投票
+		        {% endifequal %}                   
 		        {% ifequal decision -1 %}
 			    <tr><td colspan={{col}} style="background-color: #FF99CC;"><strong>反對票
 		        {% endifequal %}
@@ -103,13 +96,13 @@
 	    {
                 value: {{decision.legislator__count}},
                 {% ifequal decision.decision -1 %}
-                        color:"#FF99CC",
+                    color:"#FF99CC",
                 {% endifequal %}
                 {% ifequal decision.decision 1 %}
-                        color:"#CCFF99",
+                    color:"#CCFF99",
                 {% endifequal %}
                 {% ifequal decision.decision 0 %}
-                        color:"#999999"
+                    color:"#999999"
                 {% endifequal %}
 	    },
 	    {% endfor %}			

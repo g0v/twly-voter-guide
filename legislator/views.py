@@ -10,7 +10,6 @@ from proposal.models import Proposal
 from bill.models import Bill
 from search.models import Keyword
 from search.views import keyword_list
-from issue.models import Issue
 
 
 def index(request,index):
@@ -37,11 +36,11 @@ def index(request,index):
     elif index == 'conscience_vote':
         ly_list = Legislator.objects.filter(query,legislator_vote__conflict=True).annotate(totalNum=Count('legislator_vote__id')).order_by('-totalNum','party')
         no_count_list = Legislator.objects.filter(name_query).exclude(id__in=ly_list.values_list('id', flat=True)).order_by('party')
-        return render(request,'legislator/index/index_ordered.html', {'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_ordered.html', {'no_count_list':no_count_list,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'notvote':
-        ly_obj = Legislator.objects.filter(query).defer('enableSession','disableReason')
-        ly_list = sorted(ly_obj, key=lambda a: a.notvote)
-        return render(request,'legislator/index/index_ordered.html', {'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        ly_list = Legislator.objects.filter(query,legislator_vote__decision__isnull=True).annotate(totalNum=Count('legislator_vote__id')).order_by('-totalNum','party')
+        no_count_list = Legislator.objects.filter(name_query).exclude(id__in=ly_list.values_list('id', flat=True))
+        return render(request,'legislator/index/index_ordered.html', {'no_count_list':no_count_list,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'committee':
         ly_list = Legislator.objects.filter(query).order_by('committee','party').defer('enableSession','disableReason')
         return render(request,'legislator/index/index_committee.html', {'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
@@ -143,9 +142,8 @@ def chart_report(request,index='ly_hit'):
     ly_obj, ly_name, vote_obj,title,content,compare = [], [], [], None, None, None
     if index == 'vote':
         compare = Vote.objects.count()
-        ly_obj = Legislator.objects.filter(enable=True)
-        ly_obj = sorted(ly_obj, key=lambda a: a.notvote, reverse=True)[:10]
-        chart_data = [ly.notvote for ly in ly_obj]
+        ly_obj = Legislator.objects.filter(enable=True,legislator_vote__decision__isnull=True).annotate(totalNum=Count('legislator_vote__id')).order_by('-totalNum','party')[:10]
+        chart_data = [ly.totalNum for ly in ly_obj]
         title, content = u'立法院表決缺席前十名', u'每一次會議的最後會進行表決，可和立法院開會缺席交叉比較，為何開會有出席但沒有參加表決？(點選立委名字可看立委個人圖表)'
     elif index == 'conscience_vote':
         compare = Vote.objects.count()
@@ -203,20 +201,20 @@ def list_union(month_list,obj_q):
 def chart_personal_report(request,legislator_id,index='proposal'):
     ly = Legislator.objects.get(pk=legislator_id)
     if index == 'proposal':
-        query_p = Q(date__gte=ly.enabledate,legislator_proposal__priproposer=True)
+        query_p = Q(date__gte=ly.term_start,legislator_proposal__priproposer=True)
         compare_obj = Proposal.objects.filter(query_p & Q(proposer__enable=True)).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
         obj_q = Proposal.objects.filter(query_p & Q(proposer__id=legislator_id)).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        month_list = Proposal.objects.filter(date__gte=ly.enabledate).dates('date','month')
+        month_list = Proposal.objects.filter(date__gte=ly.term_start).dates('date','month')
         obj = list_union(month_list,obj_q)
     elif index == 'vote':
-        compare_obj = Vote.objects.filter(date__gte=ly.enabledate).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        obj_q = Vote.objects.filter(date__gte=ly.enabledate,voter__id=legislator_id).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        month_list = Vote.objects.filter(date__gte=ly.enabledate).dates('date','month')
+        compare_obj = Vote.objects.filter(date__gte=ly.term_start).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
+        obj_q = Vote.objects.filter(date__gte=ly.term_start,voter__id=legislator_id,legislator_vote__decision__isnull=False).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
+        month_list = Vote.objects.filter(date__gte=ly.term_start).dates('date','month')
         obj = list_union(month_list,obj_q)
     elif index == 'ly':
         compare_obj = Attendance.objects.filter(legislator_id=legislator_id,category=0).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
         obj_q = Attendance.objects.filter(legislator_id=legislator_id,category=0,presentNum=1).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        month_list = Attendance.objects.filter(date__gte=ly.enabledate,category=0).dates('date','month')
+        month_list = Attendance.objects.filter(date__gte=ly.term_start,category=0).dates('date','month')
         obj = list_union(month_list,obj_q)
     return render(request,'legislator/chart_personal_report.html', {'index':index,'ly':ly,'obj':obj,'compare_obj':compare_obj} )
 

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from json_field import JSONField
 
 
 class Vote(models.Model):
@@ -12,6 +13,7 @@ class Vote(models.Model):
     likes = models.IntegerField(null=True)
     dislikes = models.IntegerField(null=True)
     conflict = models.NullBooleanField()
+    results = JSONField(null=True)
     def __unicode__(self):
         return self.content
 
