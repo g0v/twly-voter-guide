@@ -54,6 +54,18 @@ class LegislatorDetail(models.Model):
         return Legislator_Vote.objects.filter(legislator_id=self.id,conflict=True).count()
     nconsciencevote = property(_conscience_vote_count)
 
+class Legislator_Committees(models.Model):
+    legislator = models.ForeignKey(Legislator, to_field="uid")
+    committee = models.ForeignKey(Committees)
+    ad = models.IntegerField()
+    session = models.IntegerField()
+    chair = models.BooleanField()
+
+class Committees(models.Model):
+    members = models.ManyToManyField(Legislator, through='Legislator_Committees')
+    name = models.CharField(max_length=100)
+    category = models.CharField(max_length=100)
+
 class Politics(models.Model):
     legislator = models.ForeignKey(Legislator,null=True)
     politic = models.TextField(max_length=1000)
