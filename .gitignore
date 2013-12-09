@@ -2,6 +2,7 @@
 ## Eclipse
 #################
 
+local_settings.py
 *.pydevproject
 .project
 .metadata

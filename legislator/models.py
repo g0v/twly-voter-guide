@@ -11,8 +11,7 @@ from bill.models import Legislator_Bill
 class Legislator(models.Model):
     uid = models.IntegerField(unique=True)
     name = models.CharField(max_length=50)
-    former_names = models.CharField(max_length=200, blank=True)
-
+    former_names = models.CharField(max_length=200, blank=True, null=True)
     def __unicode__(self):
         return self.name   
 
@@ -53,18 +52,6 @@ class LegislatorDetail(models.Model):
     def _conscience_vote_count(self):
         return Legislator_Vote.objects.filter(legislator_id=self.id,conflict=True).count()
     nconsciencevote = property(_conscience_vote_count)
-
-class Legislator_Committees(models.Model):
-    legislator = models.ForeignKey(Legislator, to_field="uid")
-    committee = models.ForeignKey(Committees)
-    ad = models.IntegerField()
-    session = models.IntegerField()
-    chair = models.BooleanField()
-
-class Committees(models.Model):
-    members = models.ManyToManyField(Legislator, through='Legislator_Committees')
-    name = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)
 
 class Politics(models.Model):
     legislator = models.ForeignKey(Legislator,null=True)
