@@ -69,11 +69,8 @@ class FileLog(models.Model):
 
 class Attendance(models.Model):
     legislator = models.ForeignKey(Legislator, to_field="uid")
-    date = models.DateField(null=True)
-    ad = models.IntegerField()
-    session = models.IntegerField()
-    sitting = models.CharField(max_length=200)
-    category = models.PositiveIntegerField(null=True)
+    sitting = models.ForeignKey('sittings.Sittings', to_field="uid")
+    category = models.IntegerField()
     status = models.CharField(max_length=50)
     def __unicode__(self):
         return self.sitting

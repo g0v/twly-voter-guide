@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 
 
 class Committees(models.Model):
     members = models.ManyToManyField('legislator.Legislator', through='Legislator_Committees')
-    name = models.CharField(max_length=100)
+    name = models.CharField(unique=True, max_length=100)
     category = models.CharField(max_length=100, blank=True, null=True)
 
 class Legislator_Committees(models.Model):

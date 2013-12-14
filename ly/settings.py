@@ -138,6 +138,7 @@ INSTALLED_APPS = (
     'json_field',
     'legislator',
     'committees',
+    'sittings',
     'vote',
     'proposal',
     'bill',
