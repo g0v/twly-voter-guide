@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'json_field',
     'legislator',
+    'committees',
     'vote',
     'proposal',
     'bill',
