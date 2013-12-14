@@ -6,15 +6,15 @@ class Bill(models.Model):
     proposer = models.ManyToManyField('legislator.Legislator', null=True, through='Legislator_Bill')
     billid = models.IntegerField()
     proposalid = models.IntegerField()
-    law = models.CharField(max_length=50,null=True)
-    title = models.CharField(max_length=100,null=True)
-    motivation = models.TextField(max_length=500,null=True)
-    description = models.TextField(max_length=1000,null=True)
-    date = models.DateField(null=True)
-    committee = models.CharField(max_length=50,null=True)
-    sessionPrd = models.PositiveIntegerField(null=True)
-    progress = models.CharField(max_length=50,null=True)
-    hits = models.IntegerField(null=True,default=0)
+    law = models.CharField(max_length=100, blank=True, null=True)
+    title = models.CharField(max_length=200, blank=True, null=True)
+    motivation = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
+    committee = models.CharField(max_length=100, blank=True, null=True)
+    sessionPrd = models.PositiveIntegerField(blank=True, null=True)
+    progress = models.CharField(max_length=100, blank=True, null=True)
+    hits = models.IntegerField(blank=True, null=True, default=0)
     def __unicode__(self):
         return self.title
 
@@ -33,9 +33,9 @@ class Legislator_Bill(models.Model):
 
 class BillDetail(models.Model):    
     bill = models.ForeignKey(Bill)
-    article = models.CharField(max_length=100,null=True)
-    before = models.TextField(max_length=3000,null=True)
-    after = models.TextField(max_length=3000,null=True)
-    description = models.TextField(max_length=1000,null=True)
+    article = models.CharField(max_length=100, null=True)
+    before = models.TextField(null=True)
+    after = models.TextField(null=True)
+    description = models.TextField(null=True)
     class Meta:
         ordering = ['id'] 

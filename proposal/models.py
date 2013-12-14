@@ -4,11 +4,11 @@ from django.db import models
 
 class Proposal(models.Model):    
     proposer = models.ManyToManyField('legislator.Legislator', through='Legislator_Proposal')
-    committee = models.CharField(max_length=200)
-    content = models.TextField(max_length=1000)
+    committee = models.CharField(max_length=100)
+    content = models.TextField()
     date = models.DateField(null=True)
     sessionPrd = models.PositiveIntegerField(null=True)
-    session = models.CharField(max_length=200)
+    session = models.CharField(max_length=100)
     approve = models.IntegerField(null=True)
     hits = models.IntegerField(null=True)
     likes = models.IntegerField(null=True)

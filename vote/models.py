@@ -5,17 +5,17 @@ from json_field import JSONField
 
 class Vote(models.Model):
     sitting = models.ForeignKey('sittings.Sittings', to_field="uid")
-    uid = models.CharField(unique=True, max_length=200)
+    vote_seq = models.CharField(max_length=100)
     voter = models.ManyToManyField('legislator.Legislator', through='Legislator_Vote')
-    content = models.TextField(max_length=1000)
-    date = models.DateField(null=True)
-    ad = models.IntegerField()
-    session = models.IntegerField()
-    hits = models.IntegerField(null=True)
-    likes = models.IntegerField(null=True)
-    dislikes = models.IntegerField(null=True)
+    content = models.TextField()
+    hits = models.IntegerField(default=0)
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
     conflict = models.NullBooleanField()
     results = JSONField(null=True)
+    class Meta:
+        unique_together = ("sitting", "vote_seq")
+
     def __unicode__(self):
         return self.content
 

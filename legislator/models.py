@@ -11,25 +11,25 @@ from bill.models import Legislator_Bill
 class Legislator(models.Model):
     uid = models.IntegerField(unique=True)
     name = models.CharField(max_length=50)
-    former_names = models.CharField(max_length=200, blank=True, null=True)
+    former_names = models.CharField(max_length=100, blank=True, null=True)
     def __unicode__(self):
         return self.name   
 
 class LegislatorDetail(models.Model):
     legislator = models.ForeignKey(Legislator, to_field="uid")
     ad = models.IntegerField()
-    name = models.CharField(max_length=50)
-    gender = models.CharField(max_length=50, blank=True, null=True)
-    party = models.CharField(max_length=50, blank=True, null=True)
-    caucus = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=100)
+    gender = models.CharField(max_length=100, blank=True, null=True)
+    party = models.CharField(max_length=100, blank=True, null=True)
+    caucus = models.CharField(max_length=100, blank=True, null=True)
     constituency = models.CharField(max_length=100)
     in_office = models.BooleanField()
     contacts = JSONField(null=True)
     term_start = models.DateField(blank=True, null=True)
     term_end = JSONField(null=True)
-    education = models.TextField(max_length=1000, blank=True, null=True)
-    experience = models.TextField(max_length=1000, blank=True, null=True)
-    remark = models.TextField(max_length=200, blank=True, null=True)
+    education = models.TextField(blank=True, null=True)
+    experience = models.TextField(blank=True, null=True)
+    remark = models.TextField(blank=True, null=True)
     image = models.URLField(blank=True, null=True)
     links = JSONField(null=True)
     social_media = JSONField(null=True)
@@ -54,15 +54,15 @@ class LegislatorDetail(models.Model):
     nconsciencevote = property(_conscience_vote_count)
 
 class Politics(models.Model):
-    legislator = models.ForeignKey(Legislator, to_field="uid", null=True)
-    politic = models.TextField(max_length=1000)
-    category = models.IntegerField(null=True)
-    party = models.CharField(max_length=200,null=True)
+    legislator = models.ForeignKey(Legislator, to_field="uid", blank=True, null=True)
+    politic = models.TextField()
+    category = models.IntegerField(blank=True, null=True)
+    party = models.CharField(max_length=100, blank=True, null=True)
     def __unicode__(self):
         return self.politic
     
 class FileLog(models.Model):
-    sitting = models.CharField(max_length=200)
+    sitting = models.CharField(unique=True, max_length=100)
     date = models.DateTimeField()
     def __unicode__(self):
         return self.session
@@ -71,6 +71,6 @@ class Attendance(models.Model):
     legislator = models.ForeignKey(Legislator, to_field="uid")
     sitting = models.ForeignKey('sittings.Sittings', to_field="uid")
     category = models.IntegerField()
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=100)
     def __unicode__(self):
         return self.sitting
