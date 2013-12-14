@@ -25,7 +25,7 @@ class Proposal(models.Model):
         return self.proposer.filter(legislator_proposal__proposal_id=self.id,legislator_proposal__priproposer=True)
     
 class Legislator_Proposal(models.Model):    
-    legislator = models.ForeignKey('legislator.Legislator')
+    legislator = models.ForeignKey('legislator.Legislator', to_field="uid")
     proposal = models.ForeignKey(Proposal)
     priproposer = models.NullBooleanField()
 

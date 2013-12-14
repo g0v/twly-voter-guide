@@ -54,7 +54,7 @@ class LegislatorDetail(models.Model):
     nconsciencevote = property(_conscience_vote_count)
 
 class Politics(models.Model):
-    legislator = models.ForeignKey(Legislator,null=True)
+    legislator = models.ForeignKey(Legislator, to_field="uid", null=True)
     politic = models.TextField(max_length=1000)
     category = models.IntegerField(null=True)
     party = models.CharField(max_length=200,null=True)
@@ -62,18 +62,18 @@ class Politics(models.Model):
         return self.politic
     
 class FileLog(models.Model):
-    session = models.CharField(max_length=200)
+    sitting = models.CharField(max_length=200)
     date = models.DateTimeField()
     def __unicode__(self):
         return self.session
 
 class Attendance(models.Model):
-    legislator = models.ForeignKey(Legislator)
+    legislator = models.ForeignKey(Legislator, to_field="uid")
     date = models.DateField(null=True)
-    sessionPrd = models.PositiveIntegerField(null=True)
-    session = models.CharField(max_length=200)
+    ad = models.IntegerField()
+    session = models.IntegerField()
+    sitting = models.CharField(max_length=200)
     category = models.PositiveIntegerField(null=True)
-    presentNum = models.IntegerField()
-    unpresentNum = models.IntegerField()
+    status = models.CharField(max_length=50)
     def __unicode__(self):
-        return self.session
+        return self.sitting

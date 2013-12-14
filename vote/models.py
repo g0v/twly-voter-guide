@@ -26,7 +26,7 @@ class Vote(models.Model):
     disapprove = property(_vote_result)
 
 class Legislator_Vote(models.Model):
-    legislator = models.ForeignKey('legislator.Legislator')
+    legislator = models.ForeignKey('legislator.Legislator', to_field="uid")
     vote = models.ForeignKey(Vote)
     decision = models.IntegerField(null=True)
     conflict = models.NullBooleanField()

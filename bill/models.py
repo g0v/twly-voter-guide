@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Bill(models.Model):    
-    proposer = models.ManyToManyField('legislator.Legislator',null=True, through='Legislator_Bill')
+    proposer = models.ManyToManyField('legislator.Legislator', null=True, through='Legislator_Bill')
     billid = models.IntegerField()
     proposalid = models.IntegerField()
     law = models.CharField(max_length=50,null=True)
@@ -27,7 +27,7 @@ class Bill(models.Model):
         return self.proposer.filter(legislator_bill__bill_id=self.id,legislator_bill__priproposer=True)    
 
 class Legislator_Bill(models.Model):    
-    legislator = models.ForeignKey('legislator.Legislator')
+    legislator = models.ForeignKey('legislator.Legislator', to_field="uid")
     bill = models.ForeignKey(Bill)
     priproposer = models.NullBooleanField()
 
