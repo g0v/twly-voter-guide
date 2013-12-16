@@ -26,7 +26,7 @@
         {% for ly in outof_ly_list %}
             <tr>
                 {% include "common/ly_dropdown.html" with color=True %}			
-                <td>{{ly.disableReason}}</td>
+                <td>{{ly.term_end.reason}}</td>
             </tr>
 	{% endfor %}
         </table>	

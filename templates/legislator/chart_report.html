@@ -97,7 +97,7 @@
 					<td>{{ ly.totalNum|divide:compare }}%</td>
 				    {% endif %}
 			        {% endif %}
-		                <td><a href="{% url 'legislator:index_district' ly.district %}" rel="tooltip" title="{{ly.district}}的立委詳細資料">{{ly.district}}</a></td>
+		                <td><a href="{% url 'legislator:index_district' ly.constituency %}" rel="tooltip" title="{{ly.constituency }}的立委詳細資料">{{ly.district}}</a></td>
 		                <td>{% if ly.districtDetail %}{{ly.districtDetail}}{% endif %}</td>
                                 <td><a href="{% url 'legislator:index_committee' ly.committee %}" rel="tooltip" title="{{ly.committee}}委員會的立委詳細資料">{{ ly.committee|truncatechars:7 }}</a></td>
                             </tr>
