@@ -16,6 +16,8 @@ class Legislator(models.Model):
     enable = models.NullBooleanField()
     enableSession = models.CharField(max_length=200)
     enabledate = models.DateField(null=True)
+    term_start = models.DateField(null=True)
+    term_end = models.DateField(null=True)
     disableReason = models.CharField(max_length=200,null=True)
     hits = models.IntegerField(null=True)
     facebook = models.URLField(max_length=200,null=True)
@@ -24,9 +26,7 @@ class Legislator(models.Model):
     def __unicode__(self):
         return self.name   
     def _not_vote_count(self):
-        ideal_vote_count = Vote.objects.filter(date__gte=self.enabledate).count()
-        vote_count = Vote.objects.filter(voter__id=self.id).count()
-        return ideal_vote_count - vote_count
+        return Legislator_Vote.objects.filter(legislator_id=self.id, decision__isnull=True).count()
     notvote = property(_not_vote_count)
     def _priproposer_count(self):
         return Legislator_Proposal.objects.filter(legislator_id=self.id,priproposer=True).count()

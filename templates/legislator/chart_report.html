@@ -87,8 +87,8 @@
 			        {% if index == 'ly_hit' %}
 				    <td>{{ly.hits}}</td>
 			        {% elif index == 'vote' %}			
-                                    <td>{{ly.notvote}}</td>
-                                    <td>{{ compare|subtract:ly.notvote|divide:compare }}%</td>
+                                    <td>{{ly.totalNum}}</td>
+                                    <td>{{ compare|subtract:ly.totalNum|divide:compare }}%</td>
 			        {% else %}
 				    <td>{{ly.totalNum}}</td>
 				    {% if index == 'biller' or index == 'proposal' %}

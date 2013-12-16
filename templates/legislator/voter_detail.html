@@ -27,7 +27,7 @@
             <input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:核四 國教...空格有交集效果">
             <button type="submit" class="btn">Go!</button>
             <label class="checkbox">
-            {% if index != 'conscience' %}<input type="checkbox" name="notvote" id="notvote" {% if notvote %} checked{% endif %}>{{ ly.name }}沒投票的表決也搜尋
+            {% if index != 'conscience' %}<input type="checkbox" name="notvote" id="notvote" {% if notvote %} checked{% endif %}>{{ ly.name }}沒投票的表決不要搜尋
             {% endif %}
             </label>	
             {% if error %}
@@ -49,14 +49,12 @@
         {% if keyword %}
             包含<font style="color: red;">"{{keyword}}"</font>的表決&nbsp;
         {% endif %}
-        {% if notvote_votelist %}
-            {{notvote_votelist|length}}次<font color="#996600">沒有投票</font>&nbsp;,&nbsp;
-        {% endif %}
         {% for decision in vote_addup %}
             {{decision.totalNum}}次
             {% if decision.decision == 1 %}<font color="#66CC66">贊成</font>&nbsp;,&nbsp;
             {% elif decision.decision == 0 %}<font color="#999999">棄權</font>&nbsp;,&nbsp;
-            {% else %}<font color="#FF66CC">反對</font>
+            {% elif decision.decision == -1 %}<font color="#FF66CC">反對</font>
+			{% else %}<font color="#996600">沒有投票</font>&nbsp;,&nbsp;
             {% endif %}
         {% empty %}
             {% if index == 'conscience' %}<p class="text-error">沒有任何脫黨投票紀錄</p>
@@ -65,7 +63,7 @@
         {% endfor %}
         </p>
     </div>
-    {% if votes or notvote_votelist %}
+    {% if votes %}
         {% load pagination_tags %}
         {% autopaginate votes 10 %}
         {% paginate %}
@@ -79,24 +77,6 @@
                 </tr>
             </thead>
             <tbody>				
-            {% for fragment in notvote_votelist %}
-                <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
-                    <td style="background-color: #FFFF99;">沒有投票</td>
-                    <td>{{ fragment.date|date:"Y-m-d" }}</td>
-                    <td><a href="{% url 'vote:vote_detail' fragment.id %}" rel="tooltip" title="查看投票名單">
-                        {% if keyword %}
-                            {{fragment.content|linebreaksbr|replace:keyword|safe}}
-                        {% else %}
-                            {{fragment.content|linebreaksbr|truncatechars:100}}
-                        {% endif %}</a>
-                    </td>
-                    <td>
-                        {% if fragment.disapprove %}不通過
-                        {% else %}通過
-                        {% endif %}		
-                    </td>			
-                </tr>			
-            {% endfor %}		
             {% for vote in votes %}
                 <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
                 {% with decision=vote.decision %}
@@ -106,6 +86,8 @@
                         <td style="text-align:center; vertical-align:middle; background-color: #CCFF66;">贊成
                     {% elif decision == 0 %}
                         <td style="text-align:center; vertical-align:middle; background-color: #CCCCCC;">棄權
+					{% else %}
+						<td style="text-align:center; vertical-align:middle; background-color: #996600;">沒有投票
                     {% endif %}
                 {% endwith %}        
                     </td>
