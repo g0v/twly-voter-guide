@@ -1,0 +1,41 @@
+{
+  "author": "thewayiam",
+  "status": "alpha",
+  "name": "twly-voter-guide",
+  "description": "Taiwan Legislators Voter Guide",
+  "description_zh": "立委投票指南",
+  "homepage": "http://twly.herokuapp.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/g0v/twly-voter-guide"
+  },
+  "licenses": [
+    {
+      "type": "CC0 1.0 Universal"
+    }
+  ],
+  "keywords": [
+    "twly",
+	"legislator",
+	"Django",
+    "python"
+  ],
+  "audience": [
+    "public"
+  ],
+  "products": [
+    "website", "api" 
+  ],
+  "projects": [
+    "twly-voter-guide",
+    "twly_crawler"
+  ],
+  "contributors": [
+    "thewayiam"
+  ],
+  "needs": [
+    "writer",
+    "programmer",
+    "designer"
+  ]
+}
