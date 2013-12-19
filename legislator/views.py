@@ -151,12 +151,12 @@ def chart_report(request,index='ly_hit'):
         compare = Vote.objects.count()
         ly_obj = Legislator.objects.filter(enable=True,legislator_vote__conflict=True).annotate(totalNum=Count('legislator_vote__id')).order_by('-totalNum','party')[:10]
         chart_data = [ly.totalNum for ly in ly_obj]
-        title, content = u'脫黨投票次數前十名', u'點選立委名字可看立委脫黨投票的表決內容'
+        title, content = u'脫黨投票次數前十名', u'脫黨投票不一定較好，可能該立委是憑良心投票，也可能是受財團、企業影響所致，還請點選該立委觀看其脫黨投票的表決內容再作論定。'
     elif index == 'biller':
         compare = "{0:.2f}".format(Bill.objects.count()/113.0)
         ly_obj = Legislator.objects.filter(enable=True,legislator_bill__priproposer=True).annotate(totalNum=Count('legislator_bill__id')).order_by('-totalNum','party')[:10]
         chart_data = [ly.totalNum for ly in ly_obj]
-        title, content = u'法條修正草案數前十名', u'立委在委員會中通過的法條修正草案數(點選立委名字可看立委個人提出的法案條修正草案)'
+        title, content = u'法條修正草案數前十名', u'量化數據不能代表好壞只能參考，修正草案數多不一定較好，還請點選該立委觀看其修正草案的內容再作論定。'
     elif index == 'proposal':
         compare = "{0:.2f}".format(Proposal.objects.count()/113.0)
         ly_obj = Legislator.objects.filter(enable=True,legislator_proposal__priproposer=True).annotate(totalNum=Count('legislator_proposal__id')).order_by('-totalNum','party')[:10]

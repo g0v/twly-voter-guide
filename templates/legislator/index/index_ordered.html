@@ -14,18 +14,21 @@
                 </label>
             </fieldset>
         </form>
-    {% elif index == 'conscience_vote' %}脫黨投票表決數(多&rarr;少)
-    {% else %}沒投票表決次數(多&rarr;少)
+        <h4 class="text-center"><p>量化數據不能代表好壞只能參考，修正草案數多不一定較好，還請點選該立委觀看其修正草案的內容再作論定。</p></h4>
+    {% elif index == 'conscience_vote' %}
+		脫黨投票決數(多&rarr;少)<h4 class="text-center"><p>脫黨投票：立委表決的決定與所屬政黨多數意見不同。</p><p>脫黨投票不一定較好，可能該立委是憑良心投票，也可能是受財團、企業影響所致，還請點選該立委觀看其脫黨投票的表決內容再作論定。</p></h4>
+    {% else %}
+        投票表決缺席次數(多&rarr;少)
     {% endif %}
     </h3>               
     <table class="table table-bordered table-condensed">
-        {% with col=20 %}
+        {% with col=15 %}
 	{% if ly_list %}
 	    {% for ly in ly_list %}
-    		{% if forloop.counter0|divisibleby:20 %}
+    		{% if forloop.counter0|divisibleby:col %}
                     {% if forloop.counter0 != 0 %}</tr>{% endif %}                
                     <tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
-                        <td>{{forloop.counter}}~{{forloop.counter|add:19}}名</td>
+                        <td></td>
 		{% endif %}				
 		<td>
                     {% if index == 'biller' %}
