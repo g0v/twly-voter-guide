@@ -1,7 +1,7 @@
 ﻿<!--[if lt IE 10]>
 <!DOCTYPE html>
 <![endif]-->
-{% extends "legislator/nav_base.html" %}
+{% extends "base.html" %}
 {% load ly_extras %}
 {% block title %}
     <title>立委投票指南:全提案檢索</title>
@@ -35,7 +35,7 @@
             {% if keyword %}
                 <p class="lead">有 {{ proposal|length }} 個包含<font style="color: red;">"{{keyword}}"</font>的附帶決議、臨時提案</p>
             {% else %}
-                <p class="lead">最近的 {{ proposal|length }} 個附帶決議、臨時提案</p>	
+                <p class="lead">本周共有 {{ proposal|length }} 個附帶決議、臨時提案</p>	
             {% endif %}
         </div>
         {% if proposal %}

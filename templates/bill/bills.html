@@ -1,7 +1,7 @@
 ﻿<!--[if lt IE 10]>
 <!DOCTYPE html>
 <![endif]-->
-{% extends "legislator/nav_base.html" %}
+{% extends "base.html" %}
 {% load ly_extras %}
 {% block title %}
     <title>立委投票指南:法條修正草案檢索</title>
@@ -36,7 +36,8 @@
         {% endif %}
         <div class="well well-small">	
             <p class="lead">
-            共 {{ bills|length }} 個
+			{% if not keyword and not law%}本周{% endif %}
+            共有 {{ bills|length }} 個
             {% if keyword %}
                 與<font style="color: red;">"{{keyword}}"</font>相關的
             {% endif %}
@@ -53,15 +54,15 @@
 	    <table class="table table-bordered" >
 	        <thead>
 	            <tr style="text-align:center; font-weight:bold;background-color: #FFCCFF;">
-                            <th style="text-align:center; vertical-align:middle; width: 20%">法案</th>
+                            <th style="text-align:center; vertical-align:middle; width: 24%">法案</th>
                             <th style="text-align:center; vertical-align:middle; width: 8%">主提案人</th>
-                            <th style="text-align:center; vertical-align:middle; width: 36%">案由</th>
-                            <th style="text-align:center; vertical-align:middle; width: 36%">說明</th>
+                            <th style="text-align:center; vertical-align:middle; width: 34%">案由</th>
+                            <th style="text-align:center; vertical-align:middle; width: 34%">說明</th>
 	            </tr>
                 </thead>
 	        <tbody>	
 	            {% for fragment in bills %}
-		        <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+		        <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
                             <td style="vertical-align:middle;"><a href="{% url 'bill:bill_detail' bill_id=fragment.billid proposal_id=fragment.proposalid %}" rel="tooltip" title="法條修正對照表">{{ fragment.title }}</a></td>
 		            {% with ly=fragment.primary_proposer.0 %}
 		            <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="{{ ly.name }}的所有法條修正草案">{% include "common/ly_color_by_party.html" %}</a></td>
@@ -70,7 +71,7 @@
 			        {% if keyword %}				
 				    {{ fragment.motivation|replace:keyword|safe|linebreaksbr }}
 			        {% else %}
-				    {{fragment.motivation|linebreaksbr}}				
+				    <abbr title="{{ fragment.motivation }}">{{fragment.motivation|linebreaksbr|truncatechars:200}}</abbr>			
 			        {% endif %}		
 		            </td>
                             <td>

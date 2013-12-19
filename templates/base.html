@@ -71,7 +71,7 @@
 							{% endfor %}
 						</ul>
 					</li>						
-					<li><a href="{% url 'legislator:index' 'notvote' %}" >投票<b>表決次數</b>(多&rarr;少)</a></li>
+					<li><a href="{% url 'legislator:index' 'notvote' %}" >投票<b>表決缺席次數</b>(多&rarr;少)</a></li>
 					<li><a href="{% url 'legislator:index' 'conscience_vote' %}" >脫黨投票<b>表決數</b>(多&rarr;少)</a></li>
 					<li><a href="{% url 'legislator:index' 'biller' %}" >法條修正<b>草案數</b>(多&rarr;少)</a></li>
 				</ul>
@@ -107,7 +107,6 @@
 					<li><a href="{% url 'legislator:chart_report' 'proposal' %}" ><b>臨時提案數</b><small>前十名</small></a></li>					
 					<li class="divider"></li>
 					<li><a href="{% url 'legislator:chart_report' 'conscience_vote' %}" ><b>脫黨表決次數</b><small>前十名</small></a></li>					
-					<li><a href="{% url 'legislator:chart_report' 'ly_hit' %}" ><b>點閱次數</b><small>前十名</small></a></li>
 					<li class="divider"></li>
 					<li><a href="{% url 'legislator:chart_report' 'nvote_gbdate' %}" >表決依<b>日期</b>分組</a></li>
 					<li><a href="{% url 'legislator:chart_report' 'nvote_gbmonth' %}" >表決依<b>月份</b>分組</a></li>						

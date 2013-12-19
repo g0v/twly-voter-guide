@@ -1,7 +1,7 @@
 ﻿<!--[if lt IE 10]>
 <!DOCTYPE html>
 <![endif]-->
-{% extends "legislator/nav_base.html" %}
+{% extends "base.html" %}
 {% load staticfiles %}
 {% block title %}
     {% if vote %}
@@ -55,7 +55,7 @@
                     {% with decision=decision.grouper %}
 		        {% if not decision %}
 			    <tr><td colspan={{col}} style="background-color: #FFFF99;"><strong>沒有投票
-		        {% endif %}					
+		        {% endif %}						
 		        {% ifequal decision -1 %}
 			    <tr><td colspan={{col}} style="background-color: #FF99CC;"><strong>反對票
 		        {% endifequal %}
