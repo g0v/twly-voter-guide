@@ -29,7 +29,7 @@ pip install -r requirements.txt
 ```
 
 3. restore data into database
-new an database, ex: ly
+Please new a database, ex: ly, below will use ly for example
 ```
 pg_restore --verbose --clean --no-acl --no-owner -h localhost -U postgres -d ly local_db.dump
 ```
@@ -56,6 +56,6 @@ SECRET_KEY = '' #<-random string and don't share it with anybody.
 
 CC0 1.0 Universal
 =================
-CC0 1.0 Universal
-This work is published from Taiwan.
+CC0 1.0 Universal       
+This work is published from Taiwan.     
 http://twly.herokuapp.com/about/
