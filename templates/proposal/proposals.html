@@ -54,9 +54,10 @@
                 <tbody>
                     {% for fragment in proposal %}
                         <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
-                            <td>{{ fragment.date|date:"Y-m-d" }}</td>
+                            <td>{{ fragment.sitting.date|date:"Y-m-d" }}</td>
                             {% with ly=fragment.primary_proposer.0 %}
-                            <td><a href="{% url 'legislator:proposer_detail' ly.id %}" rel="tooltip" title="{{ ly.name }}的所有臨時提案、附帶決議">{% include "common/ly_color_by_party.html" %}</a></td>
+{{ly}}
+                            <td><a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="{{ ly.name }}的所有臨時提案、附帶決議">{% include "common/ly_color_by_party.html" %}</a></td>
                             {% endwith %}		
                             <td><a href="{% url 'proposal:proposal' fragment.id %}" rel="tooltip" title="查看詳細資訊">
                             {% if keyword %}
@@ -64,7 +65,7 @@
                             {% else %}
                                 {{fragment.content|linebreaksbr|truncatechars:100}}
                             {% endif %}</a></td>
-                            <td>{{ fragment.committee }}</td>
+                            <td>{{ fragment.sitting.committee }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

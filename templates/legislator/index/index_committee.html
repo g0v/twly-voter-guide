@@ -6,9 +6,9 @@
     {% if ly_list %}
         <table class="table table-bordered table-condensed">
     	{% for ly in ly_list %}
-	    {% ifchanged ly.committee %}
+	    {% ifchanged ly.current_committee %}
 	    	</tr><tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
-		    <td><a href="{% url 'legislator:index_committee' ly.committee %}" class="btn btn-info pull-right" rel="tooltip" title="{{ ly.committee }}委員會的所有立委詳細資料"><b>{{ ly.committee }}</b></a></td>	
+		    <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" class="btn btn-info pull-right" rel="tooltip" title="{{ ly.current_committee }}委員會的所有立委詳細資料"><b>{{ ly.current_committee }}</b></a></td>	
 	    {% endifchanged %}
             {% include "common/ly_dropdown.html" with color=True %}
         {% endfor %}

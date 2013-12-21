@@ -10,7 +10,7 @@ from issue.models import Issue
 
 
 def votes(request,keyword_url,index='normal'):
-    keyword,votes,error = None,None,False
+    keyword, votes, error = None, None, False
     if index == 'conscience':
         query = Q(conflict=True)
     else:
@@ -20,7 +20,7 @@ def votes(request,keyword_url,index='normal'):
     elif keyword_url:
         keyword = keyword_url.strip()
     if keyword:
-        votes = Vote.objects.filter(query & reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-date','-pk')
+        votes = Vote.objects.filter(query & reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-sitting__date','-pk')
         if votes:
             keyword_obj = Keyword.objects.filter(category=2,content=keyword)
             if keyword_obj:
@@ -29,9 +29,8 @@ def votes(request,keyword_url,index='normal'):
                 k = Keyword(content=keyword,category=2,valid=True,hits=1)
                 k.save()
     else:
-        votes = Vote.objects.filter(query).order_by('-date','-pk')
-    date_list = votes.values('date').distinct().order_by('-date')
-    return render(request,'vote/votes.html', {'votes': votes,'index':index,'keyword':keyword,'error':error,'keyword_obj':keyword_list(2),'date_list':date_list})
+        votes = Vote.objects.filter(query).order_by('-sitting__date','-pk')
+    return render(request,'vote/votes.html', {'votes': votes,'index':index,'keyword':keyword,'error':error,'keyword_obj':keyword_list(2)})
 
 def votes_related_to_issue(request,issue_id):
     keyword, votes, index = None, None, 'normal'
@@ -43,12 +42,9 @@ def votes_related_to_issue(request,issue_id):
 
 def vote_detail(request,vote_id):
     nvotes = Vote.objects.count()
-    vote = Vote.objects.get(pk=vote_id)
+    vote = Vote.objects.get(uid=vote_id)
     if vote:
-        if vote.hits:
-            vote.hits = F('hits') + 1
-        else:
-            vote.hits = 1
+        vote.hits = F('hits') + 1
         vote.save(update_fields=['hits'])
         vote_addup = Legislator_Vote.objects.filter(vote_id=vote_id,decision__isnull=False).values('decision').annotate(Count('legislator', distinct=True))
     return render(request,'vote/vote_detail.html', {'vote':vote,'nvotes':nvotes,'vote_addup': vote_addup})

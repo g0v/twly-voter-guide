@@ -52,8 +52,12 @@
             <table class="table table-bordered" >
                 <thead>
                     <tr style="font-weight:bold; background-color: #FFFFCC;">
-                        <th style="text-align:center; vertical-align:middle; width: 18%">表決結果</th>
-                        <th style="text-align:center; vertical-align:middle; width: 18%">日期</th>
+                        <th style="text-align:center; vertical-align:middle; width: 12%">表決結果</th>
+                        <th style="text-align:center; vertical-align:middle; width: 3%">贊成票</th>
+                        <th style="text-align:center; vertical-align:middle; width: 3%">反對票</th>
+                        <th style="text-align:center; vertical-align:middle; width: 3%">棄權票</th>
+                        <th style="text-align:center; vertical-align:middle; width: 3%">沒投票</th>
+                        <th style="text-align:center; vertical-align:middle; width: 12%">日期</th>
                         <th style="text-align:center; vertical-align:middle; width: 64%">表決內容</th>
                     </tr>
                 </thead>
@@ -64,9 +68,10 @@
                         {% else %}<td style="text-align:center; vertical-align:middle; background-color: #CCFF99;">通過
                         {% endif %}		
                         </td>                       
-                        <td style="text-align:center; vertical-align:middle;">{{ fragment.date|date:"Y-m-d" }}</td>
+                        <td style="text-align:center; vertical-align:middle; background-color: #66CC66;">{{fragment.results.agree}}</td><td style="text-align:center; vertical-align:middle; background-color: #FF66CC;">{{fragment.results.disagree}}</td><td style="text-align:center; vertical-align:middle; background-color: #999999;">{{fragment.results.abstain}}</td><td style="text-align:center; vertical-align:middle; background-color: #FFFF99;">{{fragment.results.not_voting}}</td>
+                        <td style="text-align:center; vertical-align:middle;">{{ fragment.sitting.date|date:"Y-m-d" }}</td>
                         <td>
-                            <a href="{% url 'vote:vote_detail' fragment.id %}" rel="tooltip" title="查看投票名單">
+                            <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看投票名單">
                             {% if keyword %}
                                 {{fragment.content|linebreaksbr|replace:keyword|safe}}
                             {% else %}

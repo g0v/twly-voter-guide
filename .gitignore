@@ -2,6 +2,7 @@
 ## Eclipse
 #################
 
+migrations
 local_settings.py
 *.pydevproject
 .project

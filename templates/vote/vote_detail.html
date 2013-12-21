@@ -21,7 +21,7 @@
 	{% if vote %}
 	    <div align="center">
 		<canvas id="canvas" height="150" width="200" ></canvas><br><br>
-		<p class="lead"><font style="color: #FF66CC;"><b>反對</b></font> <font style="color: #66CC66;"><b>贊成</b></font> <font style="color: #999999;"><b>棄權</b></font></p>
+		<p class="lead"><font style="color: #FF66CC;"><b>反對</b></font> <font style="color: #66CC66;"><b>贊成</b></font> <font style="color: #999999;"><b>棄權</b></font> <b>沒有投票</b></p>
                 <hr>
                 <div>
                     <ul class="pager">
@@ -52,10 +52,10 @@
 	        {% with col=20 %}
 	        <caption style="text-align: left;font-size: 40px;margin-bottom: 20px;"><strong>記名表決名單</strong></caption>
 		{% for decision in ly_list %}					
-                    {% with decision=decision.grouper %}
- 		        {% ifequal decision null %}
+            {% with decision=decision.grouper %}
+		        {% ifequal decision null %}
 			    <tr><td colspan={{col}} style="background-color: #FFFF99;"><strong>沒有投票
-		        {% endifequal %}                   
+		        {% endifequal %}					
 		        {% ifequal decision -1 %}
 			    <tr><td colspan={{col}} style="background-color: #FF99CC;"><strong>反對票
 		        {% endifequal %}
@@ -65,15 +65,15 @@
 		        {% ifequal decision 0 %}
 			    <tr><td colspan={{col}} style="background-color: #CCCCCC;"><strong>棄權票
 		        {% endifequal %}
-                    {% endwith %}
+            {% endwith %}
 		    </strong></td>
 		    {% for fragment in decision.list %}
 			{% if forloop.counter0|divisibleby:col %}
 			    </tr><tr>
 			{% endif %}				
-                        {% with ly=fragment.legislator %}
-			<td><a href="{% url 'legislator:voter_detail' ly.id %}" rel="tooltip" title="這位立委的表決投票紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
-                        {% endwith %}
+            {% with ly=fragment.legislator %}
+			<td><a href="{% url 'legislator:voter_detail' ly.legislator_id %}" rel="tooltip" title="這位立委的表決投票紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
+            {% endwith %}
 		    {% endfor %}		
 		{% endfor %}	
 	        {% include "common/color_info_of_party.html" with column=col %}	
@@ -96,13 +96,13 @@
 	    {
                 value: {{decision.legislator__count}},
                 {% ifequal decision.decision -1 %}
-                    color:"#FF99CC",
+                        color:"#FF99CC",
                 {% endifequal %}
                 {% ifequal decision.decision 1 %}
-                    color:"#CCFF99",
+                        color:"#CCFF99",
                 {% endifequal %}
                 {% ifequal decision.decision 0 %}
-                    color:"#999999"
+                        color:"#999999"
                 {% endifequal %}
 	    },
 	    {% endfor %}			

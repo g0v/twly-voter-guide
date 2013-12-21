@@ -24,19 +24,19 @@
 	    {% for ly in ly_list %}
 		<tr style="background-color: {% cycle 'gainsboro' 'white' %};">
 		    {% include "common/ly_dropdown.html" with color=True %}
-                    <td>{{ly.eleDistrict}}</td>
+                    <td>{{ly.constituency}}</td>
                     <td>
-                        {% ifnotequal type "district" %}<a href="{% url 'legislator:index_district' ly.district %}" >{{ly.district}}</a>
-                        {% else %}{{ly.district}}
+                        {% ifnotequal type "district" %}<a href="{% url 'legislator:index_district' ly.county %}" >{{ly.district}}</a>
+                        {% else %}{{ly.county}}
                         {% endifnotequal %}
                     </td>
-                    <td>{% if ly.districtDetail %}<abbr title="{{ ly.districtDetail }}">{{ ly.districtDetail|truncatechars:20 }}</abbr>{% endif %}</td>
+                    <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
                     <td>
-                        {% ifnotequal type "committee" %}<a href="{% url 'legislator:index_committee' ly.committee %}" >{{ ly.committee }}</a>
-                        {% else %}{{ly.committee}}
+                        {% ifnotequal type "committee" %}<a href="{% url 'legislator:index_committee' ly.current_committee %}" >{{ ly.current_committee }}</a>
+                        {% else %}{{ly.current_committee}}
                         {% endifnotequal %}
                     </td>                       
-                    <td>{{ly.enabledate|date:"Y-m-d"}}</td>
+                    <td>{{ly.start_date|date:"Y-m-d"}}</td>
                     <td><div class="text-center">{{ly.npribill}}</div></td>
                     <td><div class="text-center">{{ly.npriproposer}}</div></td>
                     <td><div class="text-center">{{ly.notvote}}</div></td>
