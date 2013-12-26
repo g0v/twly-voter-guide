@@ -46,5 +46,4 @@ def vote_detail(request,vote_id):
     if vote:
         vote.hits = F('hits') + 1
         vote.save(update_fields=['hits'])
-        vote_addup = Legislator_Vote.objects.filter(vote_id=vote_id,decision__isnull=False).values('decision').annotate(Count('legislator', distinct=True))
-    return render(request,'vote/vote_detail.html', {'vote':vote,'nvotes':nvotes,'vote_addup': vote_addup})
+    return render(request,'vote/vote_detail.html', {'vote':vote,'nvotes':nvotes})

@@ -6,7 +6,7 @@ from json_field import JSONField
 from vote.models import Vote, Legislator_Vote
 from proposal.models import Legislator_Proposal
 from bill.models import Legislator_Bill
-from committees.models import Committees
+from committees.models import Legislator_Committees
 
 
 class Legislator(models.Model):
@@ -61,7 +61,7 @@ class LegislatorDetail(models.Model):
     npribill = property(_pribiller_count) 
 
     def _current_committee(self):
-        return Committees.objects.filter(legislator_committees__legislator_id=self.id).order_by('legislator_committees__session')[0].name
+        return Legislator_Committees.objects.filter(legislator_id=self.id).order_by('-session')[0].committee
     current_committee = property(_current_committee) 
 
 class Politics(models.Model):

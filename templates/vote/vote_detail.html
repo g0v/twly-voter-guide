@@ -92,20 +92,10 @@
     <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/Chart.js"></script>
     <script>
         var data = [
-	    {% for decision in vote_addup %}
-	    {
-                value: {{decision.legislator__count}},
-                {% ifequal decision.decision -1 %}
-                        color:"#FF99CC",
-                {% endifequal %}
-                {% ifequal decision.decision 1 %}
-                        color:"#CCFF99",
-                {% endifequal %}
-                {% ifequal decision.decision 0 %}
-                        color:"#999999"
-                {% endifequal %}
-	    },
-	    {% endfor %}			
+                {value: {{vote.results.not_voting}}, color:"#000000"},
+                {value: {{vote.results.agree}}, color:"#CCFF99"},
+                {value: {{vote.results.abstain}}, color:"#999999"},
+                {value: {{vote.results.disagree}}, color:"#FF99CC"},
         ]
         var options = {
             animation: false,

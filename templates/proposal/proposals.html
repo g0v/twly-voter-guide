@@ -59,7 +59,7 @@
 {{ly}}
                             <td><a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="{{ ly.name }}的所有臨時提案、附帶決議">{% include "common/ly_color_by_party.html" %}</a></td>
                             {% endwith %}		
-                            <td><a href="{% url 'proposal:proposal' fragment.id %}" rel="tooltip" title="查看詳細資訊">
+                            <td><a href="{% url 'proposal:proposal' fragment.uid %}" rel="tooltip" title="查看詳細資訊">
                             {% if keyword %}
                                 {{fragment.content|linebreaksbr|replace:keyword|safe}}
                             {% else %}

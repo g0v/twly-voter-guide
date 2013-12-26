@@ -9,7 +9,7 @@ from issue.models import Issue
 
 
 def proposal(request,proposal_id):
-    proposal = Proposal.objects.select_related().get(pk=proposal_id)
+    proposal = Proposal.objects.select_related().get(uid=proposal_id)
     return render(request,'proposal/proposal.html', {'proposal': proposal})
 
 def proposals(request,keyword_url):

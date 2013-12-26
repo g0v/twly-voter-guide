@@ -20,29 +20,28 @@
     <h4 class="text-center text-warning">{{index}}</h4>
     {% if ly_list %}
 	<table class="table table-bordered table-condensed" >
-		<tr style="font-weight:bold;background-color: #CCFF99;"><td>立委</td><td>選區</td><td>縣市</td><td>行政區</td><td>委員會</td><td>到職日期</td><td>法條修正草案數</td><td>附帶決議、臨時提案數</td><td>沒投票表決(次)</td></tr>
-	    {% for ly in ly_list %}
-		<tr style="background-color: {% cycle 'gainsboro' 'white' %};">
-		    {% include "common/ly_dropdown.html" with color=True %}
+		<tr style="font-weight:bold;background-color: #CCFF99;"><td>會期</td><td>立委</td><td>選區</td><td>縣市</td><td>行政區</td><td>委員會</td><td>到職日期</td><td>法條修正草案數</td><td>附帶決議、臨時提案數</td><td>沒投票表決(次)</td></tr>
+        {% regroup ly_list by session as session_list %}
+        {% for session in session_list %}
+            {% for fragment in session.list %}
+                <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
+                    <td><div class="text-center">{{session.grouper}}</div></td>
+                    {% with ly=fragment.legislator %}
+                    {% include "common/ly_dropdown.html" with color=True %}
                     <td>{{ly.constituency}}</td>
-                    <td>
-                        {% ifnotequal type "district" %}<a href="{% url 'legislator:index_district' ly.county %}" >{{ly.district}}</a>
-                        {% else %}{{ly.county}}
-                        {% endifnotequal %}
-                    </td>
+                    <td><a href="{% url 'legislator:index_district' ly.county %}" >{{ly.county}}</a></td>
                     <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
-                    <td>
-                        {% ifnotequal type "committee" %}<a href="{% url 'legislator:index_committee' ly.current_committee %}" >{{ ly.current_committee }}</a>
-                        {% else %}{{ly.current_committee}}
-                        {% endifnotequal %}
-                    </td>                       
-                    <td>{{ly.start_date|date:"Y-m-d"}}</td>
+                    <td>{{index}}</td>                       
+                    <td>{{ly.term_start|date:"Y-m-d"}}</td>
                     <td><div class="text-center">{{ly.npribill}}</div></td>
                     <td><div class="text-center">{{ly.npriproposer}}</div></td>
                     <td><div class="text-center">{{ly.notvote}}</div></td>
+                    {% endwith %}
                 </tr>
-	    {% endfor %}
-            {% include "common/color_info_of_party.html" with column=21 %}
+            {% endfor %}
+        {% endfor %}
+
+        {% include "common/color_info_of_party.html" with column=21 %}
 	</table>
     {% else %}
     	<p class="text-error">沒有立委</p>
