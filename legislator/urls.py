@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     # ex: /legislator/politics/113
     url(r'^platform/(?P<legislator_id>\d+)/$', views.ly_politics, name='ly_politics'),
     # ex: /legislator/report/
-    url(r'^report/(?P<index>biller|conscience_vote|vote|proposal|ly|committee|ly_hit|nvote_gbdate|nvote_gbmonth)?/?$', views.chart_report, name='chart_report'),
+    url(r'^report/(?P<index>biller|conscience_vote|vote|proposal|ly|committee|ly_hit|nvote_gbdate)/$', views.chart_report, name='chart_report'),
     # ex: /legislator/personal_report/
-    url(r'^personal_report/(?P<legislator_id>\d+)/(?P<index>proposal|ly|vote)?/?$', views.chart_personal_report, name='chart_personal_report'),
+    #url(r'^personal_report/(?P<legislator_id>\d+)/(?P<index>proposal|ly|vote)?/?$', views.chart_personal_report, name='chart_personal_report'),
 )

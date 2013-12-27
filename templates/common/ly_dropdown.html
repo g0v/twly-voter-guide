@@ -10,7 +10,6 @@
             </ul>
         </li>	
         <li><a href="{% url 'legislator:voter_detail' ly.legislator_id %}">{{ly.name}}的投票紀錄</a></li>					
-        <li><a href="{% url 'legislator:chart_personal_report' legislator_id=ly.legislator_id index='ly' %}">{{ly.name}}的圖表</a></li>
         <li><a href="{% url 'legislator:ly_politics' ly.legislator_id %}">{{ly.name}}的競選政見</a></li>
     </ul>
 </div>

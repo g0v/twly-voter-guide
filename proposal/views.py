@@ -19,7 +19,7 @@ def proposals(request,keyword_url):
     elif keyword_url:
         keyword = keyword_url.strip()
     if keyword:
-        proposal = Proposal.objects.filter(reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-sitting__date','-pk')
+        proposal = Proposal.objects.filter(reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-sitting__date')
         if proposal:
             keyword_obj = Keyword.objects.filter(category=1, content=keyword)
             if keyword_obj:
@@ -28,7 +28,7 @@ def proposals(request,keyword_url):
                 k = Keyword(content=keyword, category=1, valid=True, hits=1)
                 k.save()
     else:
-        proposal = Proposal.objects.all().order_by('-sitting__date','-pk')[:100]
+        proposal = Proposal.objects.all().order_by('-sitting__date')[:100]
     return render(request,'proposal/proposals.html', {'proposal':proposal,'keyword':keyword,'error':error,'keyword_obj':keyword_list(1)})
 
 def proposals_related_to_issue(request,issue_id):

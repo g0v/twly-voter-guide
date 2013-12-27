@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from legislator.models import Legislator,Attendance,Politics
+from legislator.models import Legislator,Attendance,Platform
 from vote.models import Vote,Legislator_Vote
 from proposal.models import Proposal,Legislator_Proposal
 from bill.models import Bill,Legislator_Bill,BillDetail
@@ -45,7 +45,7 @@ class AttendanceSerializer(serializers.HyperlinkedModelSerializer):
 
 class PoliticsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Politics
+        model = Platform
 
 class IssueSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

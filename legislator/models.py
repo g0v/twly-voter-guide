@@ -45,11 +45,11 @@ class LegislatorDetail(models.Model):
     notvote = property(_not_vote_count)
 
     def _conscience_vote_count(self):
-        return Legislator_Vote.objects.filter(legislator_id=self.id,conflict=True).count()
+        return Legislator_Vote.objects.filter(legislator_id=self.id, conflict=True).count()
     nconsciencevote = property(_conscience_vote_count)
 
     def _priproposer_count(self):
-        return Legislator_Proposal.objects.filter(legislator_id=self.id,priproposer=True).count()
+        return Legislator_Proposal.objects.filter(legislator_id=self.id, priproposer=True).count()
     npriproposer = property(_priproposer_count)
 
     def _biller_count(self):
@@ -57,20 +57,20 @@ class LegislatorDetail(models.Model):
     nbill = property(_biller_count)
 
     def _pribiller_count(self):
-        return Legislator_Bill.objects.filter(legislator_id=self.id,priproposer=True).count()
+        return Legislator_Bill.objects.filter(legislator_id=self.id, priproposer=True).count()
     npribill = property(_pribiller_count) 
 
     def _current_committee(self):
         return Legislator_Committees.objects.filter(legislator_id=self.id).order_by('-session')[0].committee
     current_committee = property(_current_committee) 
 
-class Politics(models.Model):
-    legislator = models.ForeignKey(Legislator, to_field="uid", blank=True, null=True)
-    politic = models.TextField()
+class Platform(models.Model):
+    legislator = models.ForeignKey(LegislatorDetail, blank=True, null=True)
+    content = models.TextField()
     category = models.IntegerField(blank=True, null=True)
     party = models.CharField(max_length=100, blank=True, null=True)
     def __unicode__(self):
-        return self.politic
+        return self.content
     
 class FileLog(models.Model):
     sitting = models.CharField(unique=True, max_length=100)

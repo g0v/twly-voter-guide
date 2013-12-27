@@ -56,7 +56,6 @@
                         <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
                             <td>{{ fragment.sitting.date|date:"Y-m-d" }}</td>
                             {% with ly=fragment.primary_proposer.0 %}
-{{ly}}
                             <td><a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="{{ ly.name }}的所有臨時提案、附帶決議">{% include "common/ly_color_by_party.html" %}</a></td>
                             {% endwith %}		
                             <td><a href="{% url 'proposal:proposal' fragment.uid %}" rel="tooltip" title="查看詳細資訊">

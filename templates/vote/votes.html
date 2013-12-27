@@ -58,7 +58,8 @@
                         <th style="text-align:center; vertical-align:middle; width: 3%">棄權票</th>
                         <th style="text-align:center; vertical-align:middle; width: 3%">沒投票</th>
                         <th style="text-align:center; vertical-align:middle; width: 12%">日期</th>
-                        <th style="text-align:center; vertical-align:middle; width: 64%">表決內容</th>
+                        <th style="text-align:center; vertical-align:middle; width: 56%">表決內容</th>
+                        <th style="text-align:center; vertical-align:middle; width: 8%">備註</th>
                     </tr>
                 </thead>
                 <tbody>	
@@ -71,13 +72,16 @@
                         <td style="text-align:center; vertical-align:middle; background-color: #66CC66;">{{fragment.results.agree}}</td><td style="text-align:center; vertical-align:middle; background-color: #FF66CC;">{{fragment.results.disagree}}</td><td style="text-align:center; vertical-align:middle; background-color: #999999;">{{fragment.results.abstain}}</td><td style="text-align:center; vertical-align:middle; background-color: #FFFF99;">{{fragment.results.not_voting}}</td>
                         <td style="text-align:center; vertical-align:middle;">{{ fragment.sitting.date|date:"Y-m-d" }}</td>
                         <td>
-                            <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看投票名單">
+                            <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單</a><br>
                             {% if keyword %}
                                 {{fragment.content|linebreaksbr|replace:keyword|safe}}
                             {% else %}
-                                {{fragment.content|linebreaksbr|truncatechars:100}}
+                                {{fragment.content|linebreaksbr|truncatechars:120}}
                             {% endif %}
-                            </a>
+                        </td>
+                        <td style="text-align:center; vertical-align:middle;">
+                            {% if fragment.conflict %}脫黨表決
+                            {% endif %}		
                         </td>
                     </tr>
                 {% empty %}

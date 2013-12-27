@@ -29,7 +29,7 @@ def votes(request,keyword_url,index='normal'):
                 k = Keyword(content=keyword,category=2,valid=True,hits=1)
                 k.save()
     else:
-        votes = Vote.objects.filter(query).order_by('-sitting__date','-pk')
+        votes = Vote.objects.filter(query).order_by('-uid')
     return render(request,'vote/votes.html', {'votes': votes,'index':index,'keyword':keyword,'error':error,'keyword_obj':keyword_list(2)})
 
 def votes_related_to_issue(request,issue_id):
