@@ -22,9 +22,9 @@
         {% for fragment in politics %}
             <tr>
             {% if fragment.category == 0 %}
-                <td style="background-color: #CCFF99;">{{ fragment.politic|linebreaksbr }}</td>
+                <td style="background-color: #CCFF99;">{{ fragment.content|linebreaksbr }}</td>
             {% else %}
-                <td>{{ fragment.politic|linebreaksbr }}</td>
+                <td>{{ fragment.content|linebreaksbr }}</td>
             {% endif %}
             </tr>		
         {% endfor %}		

@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from json_field import JSONField
 
 
 class Bill(models.Model):    
-    proposer = models.ManyToManyField('legislator.Legislator',null=True, through='Legislator_Bill')
-    billid = models.IntegerField()
-    proposalid = models.IntegerField()
-    law = models.CharField(max_length=50,null=True)
-    title = models.CharField(max_length=100,null=True)
-    motivation = models.TextField(max_length=500,null=True)
-    description = models.TextField(max_length=1000,null=True)
-    date = models.DateField(null=True)
-    committee = models.CharField(max_length=50,null=True)
-    sessionPrd = models.PositiveIntegerField(null=True)
-    progress = models.CharField(max_length=50,null=True)
-    hits = models.IntegerField(null=True,default=0)
+    proposer = models.ManyToManyField('legislator.LegislatorDetail', blank=True, null=True, through='Legislator_Bill')
+    uid = models.CharField(max_length=200, unique=True)
+    api_bill_id = models.CharField(max_length=200, unique=True)
+    abstract = models.TextField(blank=True, null=True)
+    summary = models.TextField(blank=True, null=True)
+    bill_type = models.CharField(max_length=100, blank=True, null=True)
+    doc = JSONField(null=True)
+    proposed_by = models.CharField(max_length=100, blank=True, null=True)
+    sitting_introduced = models.CharField(max_length=100, blank=True, null=True)
     def __unicode__(self):
         return self.title
 
@@ -24,18 +22,29 @@ class Bill(models.Model):
 
     @property
     def primary_proposer(self):
-        return self.proposer.filter(legislator_bill__bill_id=self.id,legislator_bill__priproposer=True)    
+        return self.proposer.filter(legislator_bill__bill_id=self.uid, legislator_bill__priproposer=True)    
 
 class Legislator_Bill(models.Model):    
-    legislator = models.ForeignKey('legislator.Legislator')
-    bill = models.ForeignKey(Bill)
+    legislator = models.ForeignKey('legislator.LegislatorDetail', blank=True, null=True)
+    bill = models.ForeignKey(Bill, to_field='uid')
     priproposer = models.NullBooleanField()
+    petition = models.NullBooleanField()
+
+class BillMotions(models.Model):    
+    bill = models.ForeignKey(Bill, to_field='uid')
+    sitting = models.ForeignKey('sittings.Sittings', to_field="uid")
+    agenda_item = models.IntegerField(blank=True, null=True)
+    committee = models.CharField(max_length=100, blank=True, null=True)
+    item = models.CharField(max_length=100, blank=True, null=True)
+    motion_class = models.CharField(max_length=100, blank=True, null=True)
+    resolution = models.CharField(max_length=100, blank=True, null=True)
+    status = models.CharField(max_length=100, blank=True, null=True)
 
 class BillDetail(models.Model):    
-    bill = models.ForeignKey(Bill)
-    article = models.CharField(max_length=100,null=True)
-    before = models.TextField(max_length=3000,null=True)
-    after = models.TextField(max_length=3000,null=True)
-    description = models.TextField(max_length=1000,null=True)
+    bill = models.ForeignKey(Bill, to_field='uid')
+    article = models.CharField(max_length=100, blank=True, null=True)
+    before = models.TextField(blank=True, null=True)
+    after = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     class Meta:
         ordering = ['id'] 

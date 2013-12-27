@@ -41,10 +41,10 @@
                     </tr>
 		    {% for ly in proposal.sorted_proposer_set %}
                         <tr>
-                            <td><a href="{% url 'legislator:proposer_detail' ly.id %}" rel="tooltip" title="這個立委的提案">{% include "common/ly_color_by_party.html" %}</a></td>
+                            <td><a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="這個立委的提案">{% include "common/ly_color_by_party.html" %}</a></td>
                             <td>{{ly.npriproposer}}</td>
-                            <td>{{ly.district}}</td>
-                            <td>{% if ly.districtDetail %}{{ly.districtDetail}}{% endif %}</td>
+                            <td>{{ly.county}}</td>
+                            <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
                             <td>{{ly.committee}}</td>
                         </tr>
 		    {% endfor %}

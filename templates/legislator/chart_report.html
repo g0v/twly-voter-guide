@@ -73,33 +73,32 @@
 	            </thead>
 	            <tbody>	
 		        {% for ly in ly_obj %}
-                            <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
-                                <td>
-			            {% if index == 'vote' %}<a href="{% url 'legislator:chart_personal_report' legislator_id=ly.id index='vote' %}" rel="tooltip" title="{{ly.name}}的表決出缺席圖表">
-			            {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.id index='conscience' %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">			
+                    <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+                        <td>
+			            {% if index == 'vote' or index = 'ly' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">
+			            {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">
 			            {% else %}
-				        {% if index == 'ly' %}<a href="{% url 'legislator:chart_personal_report' legislator_id=ly.id index='ly' %}" rel="tooltip" title="{{ly.name}}的圖表">
-				        {% elif index == 'biller' %}<a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="{{ly.name}}的法條修正草案">			
-				        {% else %}<a href="{% url 'legislator:proposer_detail' ly.id %}" rel="tooltip" title="{{ly.name}}的提案">				
-				        {% endif %}
+                            {% if index == 'biller' %}<a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的法條修正草案">
+                            {% else %}<a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的提案">
+                            {% endif %}
 			            {% endif %}
 			        {% include "common/ly_color_by_party.html" %}</a></td>
 			        {% if index == 'ly_hit' %}
-				    <td>{{ly.hits}}</td>
+				        <td>{{ly.hits}}</td>
 			        {% elif index == 'vote' %}			
-                                    <td>{{ly.totalNum}}</td>
-                                    <td>{{ compare|subtract:ly.totalNum|divide:compare }}%</td>
+                        <td>{{ly.totalNum}}</td>
+                        <td>{{ compare|subtract:ly.totalNum|divide:compare }}%</td>
 			        {% else %}
-				    <td>{{ly.totalNum}}</td>
-				    {% if index == 'biller' or index == 'proposal' %}
-					<td>{{ compare }}</td>
-				    {% elif index == 'conscience_vote' or index == 'ly'%}
-					<td>{{ ly.totalNum|divide:compare }}%</td>
-				    {% endif %}
+				        <td>{{ly.totalNum}}</td>
+                        {% if index == 'biller' or index == 'proposal' %}
+                            <td>{{ compare }}</td>
+                        {% elif index == 'conscience_vote' or index == 'ly'%}
+                            <td>{{ ly.totalNum|divide:compare }}%</td>
+                        {% endif %}
 			        {% endif %}
-		                <td><a href="{% url 'legislator:index_district' ly.district %}" rel="tooltip" title="{{ly.district}}的立委詳細資料">{{ly.district}}</a></td>
-		                <td>{% if ly.districtDetail %}{{ly.districtDetail}}{% endif %}</td>
-                                <td><a href="{% url 'legislator:index_committee' ly.committee %}" rel="tooltip" title="{{ly.committee}}委員會的立委詳細資料">{{ ly.committee|truncatechars:7 }}</a></td>
+		                <td><a href="{% url 'legislator:index_district' ly.county %}" rel="tooltip" title="{{ly.constituency }}的立委詳細資料">{{ly.county}}</a></td>
+		                <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
+                                <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" rel="tooltip" title="{{ly.current_committee}}委員會的立委詳細資料">{{ ly.current_committee|truncatechars:7 }}</a></td>
                             </tr>
 		        {% endfor %}
 		        {% include "common/color_info_of_party.html" with column=6 %}
@@ -120,9 +119,9 @@
                         {% for vote in vote_obj reversed %}
                             <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
                                 {% if index == 'nvote_gbdate' %}
-                                    <td>{{vote.date|date:"Y-m-d"}}</td>
+                                    <td>{{vote.sitting__date|date:"Y-m-d"}}</td>
                                     <td>{{vote.totalNum}}</td>
-                                    <td>{{vote.session}}</td>
+                                    <td>{{vote.sitting__name}}</td>
                                 {% elif index == 'nvote_gbmonth' %}
                                     <td>{{vote.year|floatformat:"0"}} / {{vote.month|floatformat:"0"}}</td>
                                     <td>{{vote.totalNum}}</td>	
@@ -153,7 +152,7 @@
 		labels : [
 		    {% for vote in vote_obj %}
 			{% if index == 'nvote_gbdate' %}
-			    "{{ vote.date|date:"Y-m-d" }}",
+			    "{{ vote.sitting__date|date:"Y-m-d" }}",
 			{% elif index == 'nvote_gbmonth' %}
 			    "{{vote.year|floatformat:"0"}}/{{vote.month|floatformat:"0"}}",
 			{% endif %}			

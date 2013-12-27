@@ -65,12 +65,12 @@
 					<li class="dropdown-submenu">
 						<a data-toggle="dropdown" href="#" >依<b>委員會</b>分組</a>
 						<ul class="dropdown-menu">
-							<li><a href="{% url 'legislator:index' 'committee' %}" >全部</a></li>
 							{% for fragment in committee_list %}
 								<li style="background-color: {% cycle '#DDDDDD' 'white' %};"><a href="{% url 'legislator:index_committee' fragment %}" >{{fragment}}</a></li>
 							{% endfor %}
 						</ul>
 					</li>						
+					<li class="divider"></li>
 					<li><a href="{% url 'legislator:index' 'notvote' %}" >投票<b>表決缺席次數</b>(多&rarr;少)</a></li>
 					<li><a href="{% url 'legislator:index' 'conscience_vote' %}" >脫黨投票<b>表決數</b>(多&rarr;少)</a></li>
 					<li><a href="{% url 'legislator:index' 'biller' %}" >法條修正<b>草案數</b>(多&rarr;少)</a></li>
@@ -82,6 +82,7 @@
 				</a>
 				<ul class="dropdown-menu">
 					<li><a href="{% url 'bill:bills' %}">法條修正草案</a></li>
+					<li class="divider"></li>
 					<li><a href="{% url 'proposal:proposals' '' %}">附帶決議、臨時提案</a></li>
 				</ul>
 			</li>			
@@ -109,10 +110,8 @@
 					<li><a href="{% url 'legislator:chart_report' 'conscience_vote' %}" ><b>脫黨表決次數</b><small>前十名</small></a></li>					
 					<li class="divider"></li>
 					<li><a href="{% url 'legislator:chart_report' 'nvote_gbdate' %}" >表決依<b>日期</b>分組</a></li>
-					<li><a href="{% url 'legislator:chart_report' 'nvote_gbmonth' %}" >表決依<b>月份</b>分組</a></li>						
 				</ul>
 			</li>
-			<li id="issues"><a href="{% url 'issue:issues' %}"><font size=3>重大議題</font></a></li>
 		</ul>
 		<ul class="nav pull-right">		
 			<li id="reference"><a href="{% url 'reference' %}"><font size=3>資料來源</font></a></li>

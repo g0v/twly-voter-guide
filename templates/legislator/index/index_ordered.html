@@ -7,10 +7,9 @@
     <h3 class="text-center text-warning">
     {% if index == 'biller' %}
         <form action="" method="get" class="form-inline text-center" id="form_bill">
-            <fieldset>法條修正草案數(多&rarr;少)
-            {% csrf_token %}
+            <fieldset>法條修正草案數(多&rarr;少)            {% csrf_token %}
                 <label class="checkbox">
-                <input type="checkbox" name="proposertype" id="proposertype" {% if proposertype %} checked{% endif %} rel="tooltip" title="計算草案數時，不是草案的主提案人也算嗎?(主提案人貢獻較高，其他人貢獻較低或只是掛名)">
+                <input type="checkbox" name="proposertype" id="proposertype" {% if proposertype %} checked{% endif %} rel="tooltip" title="計算草案數時，不是第一提案人也要計數嗎?(主提案人貢獻較高，其他人貢獻較低或只是掛名)">
                 </label>
             </fieldset>
         </form>
@@ -32,11 +31,11 @@
 		{% endif %}				
 		<td>
                     {% if index == 'biller' %}
-                        <a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="草案{{ly.totalNum}}個">
+                        <a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="草案{{ly.totalNum}}個">
                     {% elif index == 'conscience_vote' %}
-                        <a href="{% url 'legislator:voter_detail' legislator_id=ly.id index='conscience' %}" rel="tooltip" title="脫黨投票{{ly.totalNum}}次">
+                        <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" rel="tooltip" title="脫黨投票{{ly.totalNum}}次">
                     {% else %}
-                        <a href="{% url 'legislator:voter_detail' ly.id %}" rel="tooltip" title="表決缺席{{ly.totalNum}}次">
+                        <a href="{% url 'legislator:voter_detail' ly.legislator_id %}" rel="tooltip" title="投票缺席{{ly.totalNum}}次">
 	    	    {% endif %}
                     {% include "common/ly_color_by_party.html" %}
 		    </a>
@@ -50,9 +49,9 @@
                     </tr>
                 {% endif %}             
                 <td style="background-color: #FFCCFF;">
-                {% if index == 'biller' %}<a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="草案0個">
-                {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.id index='conscience' %}" rel="tooltip" title="脫黨投票0次">
-                {% else %}<a href="{% url 'legislator:voter_detail' ly.id %}" rel="tooltip" title="沒投票0次">
+                {% if index == 'biller' %}<a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="草案0個">
+                {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" rel="tooltip" title="脫黨投票0次">
+                {% else %}<a href="{% url 'legislator:voter_detail' ly.legislator_id %}" rel="tooltip" title="沒投票0次">
                 {% endif %}
                 {% include "common/ly_color_by_party.html" %}
                 </a>
