@@ -7,7 +7,7 @@ here = lambda *x: join(abspath(dirname(__file__)), *x)
 PROJECT_ROOT = here("..")
 root = lambda *x: join(abspath(PROJECT_ROOT), *x)
 #DEBUG = bool(os.environ.get('DJANGO_DEBUG', ''))
-DEBUG = True
+DEBUG = True 
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -79,8 +79,6 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-
-
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -96,6 +94,9 @@ if not DEBUG:
         }
     }
 
+# for django-debug-toolbar
+INTERNAL_IPS = ('127.0.0.1',)
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -107,7 +108,7 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
-    #'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'ly.urls'
@@ -133,7 +134,10 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'json_field',
     'legislator',
+    'committees',
+    'sittings',
     'vote',
     'proposal',
     'bill',
@@ -142,12 +146,13 @@ INSTALLED_APPS = (
     'commontag',
     'pagination',
     'rest_framework',
-    #'south',
-    #'debug_toolbar',
+    'south',
+    'debug_toolbar',
 )
 
 REST_FRAMEWORK = {
     #'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
     'PAGINATE_BY': 10
 }
 
@@ -182,7 +187,7 @@ LOGGING = {
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
-    #"django.core.context_processors.i18n",
+    "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     #"django.core.context_processors.static",
     #"django.contrib.messages.context_processors.messages")
@@ -191,6 +196,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "legislator.context_processor.last_update_time",
     "legislator.context_processor.district_list",
     "legislator.context_processor.committee_list",
+
 )
 
 SITE_DOMAIN = 'http://twly.herokuapp.com'
