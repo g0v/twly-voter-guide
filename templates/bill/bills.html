@@ -15,12 +15,6 @@
             {% csrf_token %}
             <br>
             <fieldset>
-                <select name="law" id="law">
-                    <option selected="selected" disabled>選擇法案</option>
-                {% for fragment in laws %}
-                    <option style="background-color: {% cycle '#EEEEEE' 'white' %};">{{fragment.law}}</option>
-                {% endfor %}
-                </select>
                 <input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:軍事審判 土地徵收 會計法">
                 <button type="submit" class="btn">Go!</button>
             </fieldset>
@@ -29,67 +23,31 @@
 	    <h4>熱門：
 	    {% for keyword in keyword_obj %}
 		{% if forloop.counter0 < 5 %}
-		    <a href="{% url 'bill:bills' keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的修正草案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
+		    <a href="{% url 'bill:bills' index=index keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的修正草案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
 		{% endif %}
 	    {% endfor %}
 	    </h4>
         {% endif %}
         <div class="well well-small">	
             <p class="lead">
-			{% if not keyword and not law%}本周{% endif %}
-            共有 {{ bills|length }} 個
-            {% if keyword %}
-                與<font style="color: red;">"{{keyword}}"</font>相關的
-            {% endif %}
-            {% if law %}
-                屬於<font style="color: red;">"{{law}}"</font>的
-            {% endif %}
-            法條修正<small> 草案</small>
+                {% if index == 'normal' %}
+                    立委提出 
+                {% elif index == 'rejected' %}
+                    被封殺（退回程序委員會)的
+                {% endif %}
+                {% if keyword %}
+                    共{{ bills|length }} 個與<font style="color: red;">"{{keyword}}"</font>相關的草案
+                {% else %}
+                    {{ bills|length }} 個法條修正草案    
+                {% endif %}
             </p>
         </div>
         {% if bills %}
-	    {% load pagination_tags %}
-	    {% autopaginate bills 10 %}
-	    {% paginate %}
-	    <table class="table table-bordered" >
-	        <thead>
-	            <tr style="text-align:center; font-weight:bold;background-color: #FFCCFF;">
-                            <th style="text-align:center; vertical-align:middle; width: 24%">法案</th>
-                            <th style="text-align:center; vertical-align:middle; width: 8%">主提案人</th>
-                            <th style="text-align:center; vertical-align:middle; width: 34%">案由</th>
-                            <th style="text-align:center; vertical-align:middle; width: 34%">說明</th>
-	            </tr>
-                </thead>
-	        <tbody>	
-	            {% for fragment in bills %}
-		        <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
-                            <td style="vertical-align:middle;"><a href="{% url 'bill:bill_detail' bill_id=fragment.billid proposal_id=fragment.proposalid %}" rel="tooltip" title="法條修正對照表">{{ fragment.title }}</a></td>
-		            {% with ly=fragment.primary_proposer.0 %}
-		            <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:biller_detail' ly.id %}" rel="tooltip" title="{{ ly.name }}的所有法條修正草案">{% include "common/ly_color_by_party.html" %}</a></td>
-		            {% endwith %}
-		            <td>
-			        {% if keyword %}				
-				    {{ fragment.motivation|replace:keyword|safe|linebreaksbr }}
-			        {% else %}
-				    <abbr title="{{ fragment.motivation }}">{{fragment.motivation|linebreaksbr|truncatechars:200}}</abbr>			
-			        {% endif %}		
-		            </td>
-                            <td>
-                                {% if fragment.description %}
-				    {% if keyword %}				
-					{{ fragment.description|replace:keyword|safe|linebreaksbr }}
-				    {% else %}
-					<abbr title="{{ fragment.description }}">{{fragment.description|linebreaksbr|truncatechars:200}}</abbr>
-				    {% endif %}
-			        {% endif %}
-		            </td>		
-	    	        </tr>
-	            {% empty %}
-		        <p>完全沒有法案</p>
-	            {% endfor %}
-	        </tbody>	
-	    </table>
-	    {% paginate %}
+            {% load pagination_tags %}
+            {% autopaginate bills 10 %}
+            {% paginate %}
+                {% include "common/bills.html" %}
+            {% paginate %}
         {% endif %}
     </div>
 {% endblock right %}
@@ -100,11 +58,8 @@
     {% include "common/keyword_auto_complete.html" %}
     <script>
         $(document).ready( function() {
-	    $('#psearch').addClass('active');
-	    $('#law').change(function() {
-	        $("#form").trigger('submit');
-	    });		
-	    $("[rel='tooltip']").tooltip();
+            $('#psearch').addClass('active');
+            $("[rel='tooltip']").tooltip();
         });
     </script>
 {% endblock script %}

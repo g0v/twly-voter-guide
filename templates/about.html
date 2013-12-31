@@ -8,49 +8,46 @@
 	<meta itemprop="name" content="立委投票指南:關於&授權">
 {% endblock %}
 {% block right %}
-<div class="row-fluid">
-<div class="span7">
-<br>
-	<div class="fb-like pull-right" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="https://www.facebook.com/TW.Voter.Guide"></div>
-
-<div class="hero-unit">
-	<dl>
-		<dt>減少盲目投票，讓民主社會的台灣更進步</dt>
-		<p><dd>你的第一次投票經驗如何?<br>我的第一次投票是聽從大人的意見投票，投完票後我覺得不舒服，候選人我不認識，也不知道他做了什麼?
-			立場是什麼?是否有為民發聲?<br>我覺得得來不易的民主被我這種不懂的老百姓浪費了，如果民主制度是好的制度的話，它一定還少了什麼。</dd></p>
-		<dt>輸入關鍵字，關心你關心的議題</dt>
-		<p><dd>此網頁提供台灣第八屆(2012~2016)立委的資訊，分為<a href="{% url 'bill:bills' %}">「法條修正草案」</a>、<a href="{% url 'proposal:proposals' '' %}">「附帶決議、臨時提案」</a>、<a href="{% url 'vote:votes' keyword_url='' index='normal' %}">「立法院的投票表決」</a>等部分。<br>資訊也許不足以完全斷定一個立委的表現，但已足夠我們了解他的立場。</dd></p>
-		<dt>拋磚引玉</dt>
-		<p><dd>希望吸引更多個人、團體自發性投入，發揮各自擅長的事讓台灣更好。希望有一天台灣政府能主動提供此類資訊給人民。</dd></p>
-		<dt>公信力?</dt>
-		<p><dd>除<a href="{% url 'issue:issues' %}">重大議題</a>採用眾多媒體外，本站資訊皆由政府所提供的資料經由電腦程式運算產生，以維持資訊之客觀，程式開源以供檢驗。<br>
-		目前共包含「<span class="badge badge-success">{{nbills}}</span>個法條修正草案」、「<span class="badge badge-warning">{{nproposals}}</span>個附帶決議、臨時提案」以及「<span class="badge badge-important">{{nvotes}}</span>個立法院表決」。<br>
-		本站非營利性質，只期許在此站孱弱的監督之下，能多喚醒立委諸公1～2%的良知。</dd></p>
-		
-	</dl>
-	<button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#nonresponse">免責聲明</button> 
-	<div id="nonresponse" class="collapse in">
-		<small>本網站所提供之網頁或資料，均為被連結網站所提供，相關權利為該等網站或合法權利人所有，本網站不擔保其正確性、即時性或完整性。<br>
-		本網站不提供任何種類的明示或暗示的保證，您於使用本網站資訊和服務時應自行評估及判斷。</small>
-	</div>
-</div>
-</div>
-<div class="span5">	
-<br>
-<div class="hero-unit">	
-	<dl>
-		<dt>CC0 1.0 公眾領域貢獻宣告</dt>
-		<p><dd>作者在法律許可的範圍內，拋棄此著作依著作權法所享有之權利，包括所有相關與鄰接的法律權利，並宣告將該著作貢獻至公眾領域。<br>
-		為避免斷章取義，片段使用本站資訊請附上本站連結，讓每個人都有機會以自己的觀點關心台灣。</dd></p>
-		<dt>程式原始碼</dt>
-		<p><dd><a href="https://github.com/g0v/twly_crawler" target="_blank">資料抓取程式</a></dd></p>
-		<p><dd><a href="https://github.com/thewayiam/twly_fileHandler" target="_blank">資料處理程式</a></dd></p>
-		<p><dd><a href="https://github.com/g0v/twly-voter-guide" target="_blank">網站程式</a></dd></p>
-		<dt>APIs</dt>
-		<p><dd><a href="https://twly.herokuapp.com/api/" target="_blank">APIs</a>和<a href="https://docs.google.com/spreadsheet/ccc?key=0Am6gVfTCSAPLdHlVQjdNUWVvc1o5Qjc4Z1NudHo1RVE&usp=sharing" target="_blank">說明文件</a></dd></p>
-	</dl>
-</div>
-</div>
+    <div class="row-fluid">
+        <div class="span7">
+            <br>
+	        <div class="fb-like pull-right" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="https://www.facebook.com/TW.Voter.Guide"></div>
+            <div class="hero-unit">
+	            <dl>
+		            <dt>減少盲目投票，讓民主社會的台灣更進步</dt>
+                    <p><dd>你的第一次投票經驗如何?<br>我的第一次投票是聽從大人的意見投票，投完票後我覺得不舒服，候選人我不認識，也不知道他做了什麼?
+                        立場是什麼?是否有為民發聲?<br>我覺得得來不易的民主被我這種不懂的老百姓浪費了，如果民主制度是好的制度的話，它一定還少了什麼。</dd></p>
+                    <dt>輸入關鍵字，關心你關心的議題</dt>
+                    <p><dd>此網頁提供台灣第八屆(2012~2016)立委的資訊，分為<a href="{% url 'bill:bills' index='normal' %}">「法條修正草案」</a>、<a href="{% url 'proposal:proposals' '' %}">「附帶決議、臨時提案」</a>、<a href="{% url 'vote:votes' keyword_url='' index='normal' %}">「立法院的投票表決」</a>等部分。<br>資訊也許不足以完全斷定一個立委的表現，但已足夠我們了解他的立場。</dd></p>
+                    <dt>拋磚引玉</dt>
+                    <p><dd>希望吸引更多個人、團體自發性投入，發揮各自擅長的事讓台灣更好。希望有一天台灣政府能主動提供此類資訊給人民。</dd></p>
+                    <dt>公信力?</dt>
+                    <p><dd>除<a href="{% url 'issue:issues' %}">重大議題</a>採用眾多媒體外，本站資訊皆由政府所提供的資料經由電腦程式運算產生，以維持資訊之客觀，程式開源以供檢驗。<br>
+                    目前共包含「<span class="badge badge-success">{{nbills}}</span>個法條修正草案」、「<span class="badge badge-warning">{{nproposals}}</span>個附帶決議、臨時提案」以及「<span class="badge badge-important">{{nvotes}}</span>個立法院表決」。<br>本站非營利性質，只期許在此站孱弱的監督之下，能多喚醒立委諸公1～2%的良知。</dd></p>
+                </dl>
+                <button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#nonresponse">免責聲明</button> 
+                <div id="nonresponse" class="collapse in">
+                    <small>本網站所提供之網頁或資料，均為被連結網站所提供，相關權利為該等網站或合法權利人所有，本網站不擔保其正確性、即時性或完整性。<br>
+                    本網站不提供任何種類的明示或暗示的保證，您於使用本網站資訊和服務時應自行評估及判斷。</small>
+                </div>
+            </div>
+        </div>
+        <div class="span5">	
+            <br>
+            <div class="hero-unit">	
+                <dl>
+                    <dt>CC0 1.0 公眾領域貢獻宣告</dt>
+                        <p><dd>作者在法律許可的範圍內，拋棄此著作依著作權法所享有之權利，包括所有相關與鄰接的法律權利，並宣告將該著作貢獻至公眾領域。<br>為避免斷章取義，片段使用本站資訊請附上本站連結，讓每個人都有機會以自己的觀點關心台灣。</dd></p>
+                    <dt>程式原始碼</dt>
+                        <p><dd><a href="https://github.com/g0v/twly_crawler" target="_blank">資料抓取程式</a></dd></p>
+                        <p><dd><a href="https://github.com/thewayiam/twly_fileHandler" target="_blank">資料處理程式</a></dd></p>
+                        <p><dd><a href="https://github.com/g0v/twly-voter-guide" target="_blank">網站程式</a></dd></p>
+                    <dt>APIs</dt>
+                    <p><dd><a href="https://twly.herokuapp.com/api/" target="_blank">APIs</a>和<a href="https://docs.google.com/spreadsheet/ccc?key=0Am6gVfTCSAPLdHlVQjdNUWVvc1o5Qjc4Z1NudHo1RVE&usp=sharing" target="_blank">說明文件</a></dd></p>
+                </dl>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block script %}
 <script>

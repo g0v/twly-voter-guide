@@ -1,0 +1,32 @@
+﻿<!--[if lt IE 10]>
+<!DOCTYPE html>
+<![endif]-->
+{% extends "legislator/index/index.html" %}
+{% block ly_table %}
+    {% if ly_list %}
+        <table class="table table-bordered table-condensed">
+	    {% regroup ly_list by committee as committee_list %}
+        {% for committee in committee_list %}
+            <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+                <td><a href="{% url 'legislator:index_committee' committee.grouper %}" class="btn btn-info pull-right" rel="tooltip" title="{{ committee.grouper }}委員會的所有立委詳細資料"><b>{{ committee.grouper }}</b></a>
+                </td>				
+            </tr>
+	        {% regroup committee.list by session as session_list %}
+		    {% for session in session_list %}
+                <tr>
+                    <td>{{session.grouper}}
+                    </td>
+		        {% for fragment in session.list %}
+                    {% with ly=fragment.legislator %}
+                    {% include "common/ly_dropdown.html" with color=True %}
+                    {% endwith %}
+                {% endfor %}
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        {% include "common/color_info_of_party.html" with column=16 %}
+        </table>
+    {% else %}
+            <p class="text-error">沒有立委</p>
+    {% endif %}
+{% endblock ly_table %}

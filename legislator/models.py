@@ -1,67 +1,87 @@
 # -*- coding: utf-8 -*-
+import datetime
 from django.db import models
 from django.utils import timezone
-from vote.models import Vote,Legislator_Vote
+from json_field import JSONField
+from vote.models import Vote, Legislator_Vote
 from proposal.models import Legislator_Proposal
 from bill.models import Legislator_Bill
+from committees.models import Legislator_Committees
 
 
 class Legislator(models.Model):
-    name = models.CharField(max_length=200)
-    party = models.CharField(max_length=200,null=True)
-    eleDistrict = models.CharField(max_length=200,null=True)
-    district = models.CharField(max_length=200,null=True)
-    districtDetail = models.CharField(max_length=200,null=True)
-    committee = models.CharField(max_length=200,null=True)
-    enable = models.NullBooleanField()
-    enableSession = models.CharField(max_length=200)
-    enabledate = models.DateField(null=True)
-    term_start = models.DateField(null=True)
-    term_end = models.DateField(null=True)
-    disableReason = models.CharField(max_length=200,null=True)
-    hits = models.IntegerField(null=True)
-    facebook = models.URLField(max_length=200,null=True)
-    wiki = models.URLField(max_length=200,null=True)
-    officialsite = models.URLField(max_length=200,null=True)
+    uid = models.IntegerField(unique=True)
+    name = models.CharField(max_length=50)
+    former_names = models.CharField(max_length=100, blank=True, null=True)
     def __unicode__(self):
         return self.name   
+
+class LegislatorDetail(models.Model):
+    legislator = models.ForeignKey(Legislator, to_field="uid")
+    ad = models.IntegerField()
+    name = models.CharField(max_length=100)
+    gender = models.CharField(max_length=100, blank=True, null=True)
+    party = models.CharField(max_length=100, blank=True, null=True)
+    caucus = models.CharField(max_length=100, blank=True, null=True)
+    constituency = models.CharField(max_length=100)
+    county = models.CharField(max_length=100, blank=True, null=True)
+    district = models.CharField(max_length=100, blank=True, null=True)
+    in_office = models.BooleanField()
+    contacts = JSONField(null=True)
+    term_start = models.DateField(blank=True, null=True)
+    term_end = JSONField(null=True)
+    education = models.TextField(blank=True, null=True)
+    experience = models.TextField(blank=True, null=True)
+    remark = models.TextField(blank=True, null=True)
+    image = models.URLField(blank=True, null=True)
+    links = JSONField(null=True)
+    social_media = JSONField(null=True)
+    hits = models.IntegerField()
+    def __unicode__(self):
+        return self.name
+
     def _not_vote_count(self):
-        return Legislator_Vote.objects.filter(legislator_id=self.id, decision__isnull=True).count()
+        return Legislator_Vote.objects.filter(decision__isnull=True, legislator_id=self.id).count()
     notvote = property(_not_vote_count)
+
+    def _conscience_vote_count(self):
+        return Legislator_Vote.objects.filter(legislator_id=self.id, conflict=True).count()
+    nconsciencevote = property(_conscience_vote_count)
+
     def _priproposer_count(self):
-        return Legislator_Proposal.objects.filter(legislator_id=self.id,priproposer=True).count()
+        return Legislator_Proposal.objects.filter(legislator_id=self.id, priproposer=True).count()
     npriproposer = property(_priproposer_count)
+
     def _biller_count(self):
         return Legislator_Bill.objects.filter(legislator_id=self.id).count()
     nbill = property(_biller_count)
+
     def _pribiller_count(self):
-            return Legislator_Bill.objects.filter(legislator_id=self.id,priproposer=True).count()
+        return Legislator_Bill.objects.filter(legislator_id=self.id, priproposer=True).count()
     npribill = property(_pribiller_count) 
-    def _conscience_vote_count(self):
-        return Legislator_Vote.objects.filter(legislator_id=self.id,conflict=True).count()
-    nconsciencevote = property(_conscience_vote_count)
-    
-class Politics(models.Model):
-    legislator = models.ForeignKey(Legislator,null=True)
-    politic = models.TextField(max_length=1000)
-    category = models.IntegerField(null=True)
-    party = models.CharField(max_length=200,null=True)
+
+    def _current_committee(self):
+        return Legislator_Committees.objects.filter(legislator_id=self.id).order_by('-session')[0].committee
+    current_committee = property(_current_committee) 
+
+class Platform(models.Model):
+    legislator = models.ForeignKey(LegislatorDetail, blank=True, null=True)
+    content = models.TextField()
+    category = models.IntegerField(blank=True, null=True)
+    party = models.CharField(max_length=100, blank=True, null=True)
     def __unicode__(self):
-        return self.politic
+        return self.content
     
 class FileLog(models.Model):
-    session = models.CharField(max_length=200)
+    sitting = models.CharField(unique=True, max_length=100)
     date = models.DateTimeField()
     def __unicode__(self):
         return self.session
 
 class Attendance(models.Model):
-    legislator = models.ForeignKey(Legislator)
-    date = models.DateField(null=True)
-    sessionPrd = models.PositiveIntegerField(null=True)
-    session = models.CharField(max_length=200)
-    category = models.PositiveIntegerField(null=True)
-    presentNum = models.IntegerField()
-    unpresentNum = models.IntegerField()
+    legislator = models.ForeignKey(LegislatorDetail)
+    sitting = models.ForeignKey('sittings.Sittings', to_field="uid")
+    category = models.CharField(max_length=100)
+    status = models.CharField(max_length=100)
     def __unicode__(self):
-        return self.session
+        return self.sitting

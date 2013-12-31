@@ -30,15 +30,8 @@ class KeywordAdmin(admin.ModelAdmin):
 class LegislatorAdmin(admin.ModelAdmin):
     fieldsets = [
           ('name', {'fields':['name']}),
-          ('party', {'fields':['party']}),
-          ('enable', {'fields':['enable']}),
-          ('disableReason', {'fields':['disableReason']}),
-          ('hits', {'fields':['hits']}),
-          ('facebook', {'fields':['facebook']}),
-          ('wiki', {'fields':['wiki']})
     ]
-    list_display = ('name','party','hits','enable')
-    list_filter = ['enable']
+    list_display = ('name',)
     search_fields = ['name']
 
 admin.site.register(Issue, IssueAdmin)

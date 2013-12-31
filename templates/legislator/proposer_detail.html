@@ -33,7 +33,7 @@
 	<h4>熱門：
 	{% for keyword in keyword_obj %}
 	    {% if forloop.counter0 < 5 %}
-		<a href="{% url 'legislator:proposer_detail' legislator_id=ly.id keyword_url=keyword%}" rel="tooltip" title="包含此關鍵字的立委提案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
+		<a href="{% url 'legislator:proposer_detail' legislator_id=ly.legislator_id keyword_url=keyword%}" rel="tooltip" title="包含此關鍵字的立委提案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
 	    {% endif %}	
 	{% endfor %}
 	</h4>
@@ -61,17 +61,17 @@
         </thead>
             <tbody>
             {% for fragment in proposal %}
-                <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
-                    <td style="text-align:center; vertical-align:middle;">{{ fragment.date|date:"Y-m-d" }}</td>
+                <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
+                    <td style="text-align:center; vertical-align:middle;">{{ fragment.sitting.date|date:"Y-m-d" }}</td>
                     <td style="text-align:center; vertical-align:middle;">{{ fragment.primary_proposer.0.name }}</td>
-                    <td><a href="{% url 'proposal:proposal' fragment.id %}" rel="tooltip" title="查看詳細資訊">
+                    <td><a href="{% url 'proposal:proposal' fragment.uid %}" rel="tooltip" title="查看詳細資訊">
                     {% if keyword %}
                         {{fragment.content|linebreaksbr|replace:keyword|safe}}
                     {% else %}
                         {{fragment.content|linebreaksbr|truncatechars:80}}
                     {% endif %}</a>
                     </td>
-                    <td style="text-align:center; vertical-align:middle;">{{ fragment.committee }}</td>
+                    <td style="text-align:center; vertical-align:middle;">{{ fragment.sitting.committee }}</td>
                 </tr>
             </tbody>	
             {% endfor %}

@@ -6,11 +6,11 @@
     {% if ly_list %}
         <table class="table table-bordered table-condensed">
 	{% for ly in ly_list %}
-            {% if forloop.counter|divisibleby:29 %}
+            {% if forloop.counter|divisibleby:26 %}
 		</tr><tr>
 	    {% endif %}			
-	    {% ifchanged ly.district %}
-            <td><a href="{% url 'legislator:index_district' ly.district %}" class="btn btn-info btn-mini" rel="tooltip" title="{{ly.district}}的所有立委詳細資料"><b>{{ly.district}}</b></a></td>
+	    {% ifchanged ly.county %}
+            <td><a href="{% url 'legislator:index_district' ly.county %}" class="btn btn-info btn-mini" rel="tooltip" title="{{ly.county}}的所有立委詳細資料"><b>{{ly.county}}</b></a></td>
 	    {% endifchanged %}
             {% include "common/ly_dropdown.html" with color=True %}				
 	{% endfor %}				
