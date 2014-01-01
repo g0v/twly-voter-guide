@@ -1,37 +1,33 @@
 # -*- coding: utf-8 -*-
 import operator,re
 from django.shortcuts import render
-from django.db.models import F,Q
-from bill.models import Bill, BillMotions
+from django.db.models import Count, F, Q
+from bill.models import Bill
 from search.models import Keyword
 from search.views import keyword_list
 from issue.models import Issue
 
 
-def bills(request, keyword_url):
-    law, keyword, query = None, None, Q()
-    bills = Bill.objects.all()
-    #laws = bills.values('law').distinct().order_by('law')
-    #if 'law' in request.GET:
-    #    law = request.GET['law']
-    #    if law:
-    #        query = Q(law=law)
+def bills(request, keyword_url, index):
+    keyword, query = None, Q()
     if 'keyword' in request.GET:
         keyword = re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['keyword']).strip()
     elif keyword_url:
         keyword = keyword_url.strip()
     if keyword:
-        bills = bills.filter(reduce(operator.or_, (Q(abstract__icontains=x) for x in keyword.split())))
+        bills = Bill.objects.filter(reduce(operator.or_, (Q(abstract__icontains=x) for x in keyword.split())))
+        query = Q(reduce(operator.or_, (Q(abstract__icontains=x) for x in keyword.split())))
         if bills:
             keyword_obj = Keyword.objects.filter(category=3,content=keyword.strip())
             if keyword_obj:
                 keyword_obj.update(hits=F('hits')+1)
             else:
                 k = Keyword(content=keyword.strip(),category=3,valid=True,hits=1)
-                k.save()
-    else:
-        bills = bills.order_by('-api_bill_id')[:100]
-    return render(request,'bill/bills.html', {'keyword_obj':keyword_list(3),'keyword':keyword,'bills':bills})
+    if index == 'normal':
+        bills = Bill.objects.filter(query, last_action__isnull=False, abstract__isnull=False).order_by('-last_action_at')[:100]
+    elif index == 'rejected':
+        bills = Bill.objects.filter(query & Q(ttsmotions__progress='退回程序')).annotate(totalNum=Count('ttsmotions__id')).order_by('-totalNum')
+    return render(request,'bill/bills.html', {'index':index, 'keyword_obj':keyword_list(3), 'keyword':keyword, 'bills':bills})
 
 def bills_related_to_issue(request,issue_id):
     keyword, bills = None, None

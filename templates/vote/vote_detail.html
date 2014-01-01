@@ -5,9 +5,9 @@
 {% load staticfiles %}
 {% block title %}
     {% if vote %}
-        <title>立委投票指南:{{ vote.date|date:"Y-m-d" }}單一表決名單</title>	
-        <meta property="og:title" content="立委投票指南:{{ vote.date|date:"Y-m-d" }}單一表決名單"/>
-        <meta itemprop="name" content="立委投票指南:{{ vote.date|date:"Y-m-d" }}單一表決名單">	
+        <title>立委投票指南:{{ vote.sitting.name }}({{ vote.sitting.date|date:"Y-m-d" }})第{{vote.vote_seq}}個表決</title>	
+        <meta property="og:title" content="立委投票指南:{{ vote.sitting.name }}({{ vote.sitting.date|date:"Y-m-d" }})第{{vote.vote_seq}}個表決"/>
+        <meta itemprop="name" content="立委投票指南:{{ vote.sitting.name }}({{ vote.sitting.date|date:"Y-m-d" }})第{{vote.vote_seq}}個表決">	
     {% else %}
         <title>立委投票指南:單一表決名單</title>
         <meta property="og:title" content="立委投票指南:單一表決名單"/>

@@ -13,6 +13,8 @@ class Bill(models.Model):
     doc = JSONField(null=True)
     proposed_by = models.CharField(max_length=100, blank=True, null=True)
     sitting_introduced = models.CharField(max_length=100, blank=True, null=True)
+    last_action_at = models.DateField(blank=True, null=True)
+    last_action = models.CharField(max_length=100, blank=True, null=True)
     def __unicode__(self):
         return self.title
 
@@ -29,6 +31,24 @@ class Legislator_Bill(models.Model):
     bill = models.ForeignKey(Bill, to_field='uid')
     priproposer = models.NullBooleanField()
     petition = models.NullBooleanField()
+
+class ttsMotions(models.Model):    
+    bill = models.ForeignKey(Bill, to_field='uid')
+    sitting_id = models.CharField(max_length=100, blank=True, null=True)
+    agencies = models.TextField(blank=True, null=True)
+    category = models.CharField(max_length=100, blank=True, null=True)
+    chair = models.CharField(max_length=100, blank=True, null=True)
+    date = models.DateField()
+    memo = models.TextField(blank=True, null=True)
+    motion_type = models.CharField(max_length=100, blank=True, null=True)
+    progress = models.CharField(max_length=100, blank=True, null=True)
+    resolution = models.TextField(blank=True, null=True)
+    source = JSONField(null=True)
+    speakers = JSONField(null=True)
+    summary = models.TextField(blank=True, null=True)
+    tags = models.CharField(max_length=100, blank=True, null=True)
+    topic = models.CharField(max_length=100, blank=True, null=True)
+    tts_key = models.CharField(max_length=100, blank=True, null=True)
 
 class BillMotions(models.Model):    
     bill = models.ForeignKey(Bill, to_field='uid')

@@ -10,7 +10,7 @@ from issue.models import Issue
 
 
 def votes(request,keyword_url,index='normal'):
-    keyword, votes, error = None, None, False
+    keyword = None
     if index == 'conscience':
         query = Q(conflict=True)
     else:
@@ -30,7 +30,7 @@ def votes(request,keyword_url,index='normal'):
                 k.save()
     else:
         votes = Vote.objects.filter(query).order_by('-uid')
-    return render(request,'vote/votes.html', {'votes': votes,'index':index,'keyword':keyword,'error':error,'keyword_obj':keyword_list(2)})
+    return render(request,'vote/votes.html', {'votes': votes,'index':index,'keyword':keyword,'keyword_obj':keyword_list(2)})
 
 def votes_related_to_issue(request,issue_id):
     keyword, votes, index = None, None, 'normal'
