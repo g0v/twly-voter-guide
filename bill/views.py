@@ -23,6 +23,7 @@ def bills(request, keyword_url, index):
                 keyword_obj.update(hits=F('hits')+1)
             else:
                 k = Keyword(content=keyword.strip(),category=3,valid=True,hits=1)
+                k.save()
     if index == 'normal':
         bills = Bill.objects.filter(query, last_action__isnull=False, abstract__isnull=False).order_by('-last_action_at')[:100]
     elif index == 'rejected':
