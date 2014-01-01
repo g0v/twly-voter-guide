@@ -9,6 +9,10 @@ admin.autodiscover()
 #--> rest framework url
 router = routers.DefaultRouter()
 router.register(r'legislator', views.LegislatorViewSet)
+router.register(r'legislator_terms', views.LegislatorDetailViewSet)
+router.register(r'committees', views.CommitteesViewSet)
+router.register(r'legislator_committees', views.Legislator_CommitteesViewSet)
+router.register(r'sittings', views.SittingsViewSet)
 router.register(r'proposal', views.ProposalViewSet)
 router.register(r'legislator_proposal', views.Legislator_ProposalViewSet)
 router.register(r'vote', views.VoteViewSet)
@@ -16,7 +20,7 @@ router.register(r'legislator_vote', views.Legislator_VoteViewSet)
 router.register(r'bill', views.BillViewSet)
 router.register(r'legislator_bill', views.Legislator_BillViewSet)
 router.register(r'attendance', views.AttendanceViewSet)
-router.register(r'platform', views.PoliticsViewSet)
+router.register(r'platform', views.PlatformViewSet)
 #<--
 urlpatterns = patterns('',
     url(r'^legislator/', include('legislator.urls', namespace="legislator")),

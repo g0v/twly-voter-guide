@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.db.models import F
-from issue.models import Issue
+from .models import Issue
 
 def issues(request):
     issues = Issue.objects.select_related().order_by('-hits')

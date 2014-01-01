@@ -4,7 +4,7 @@ from itertools import chain
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
-from legislator.models import Legislator, LegislatorDetail, Platform, Attendance
+from .models import Legislator, LegislatorDetail, Platform, Attendance
 from vote.models import Vote,Legislator_Vote
 from proposal.models import Proposal
 from bill.models import Bill 

@@ -2,7 +2,7 @@
 import operator,re
 from django.shortcuts import render
 from django.db.models import F,Q
-from proposal.models import Proposal
+from .models import Proposal
 from search.models import Keyword
 from search.views import keyword_list
 from issue.models import Issue

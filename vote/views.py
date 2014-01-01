@@ -3,7 +3,7 @@ import operator,re
 from django.shortcuts import render
 from django.db.models import Count,F,Q
 from legislator.models import Legislator
-from vote.models import Vote,Legislator_Vote
+from .models import Vote,Legislator_Vote
 from search.models import Keyword
 from search.views import keyword_list
 from issue.models import Issue
