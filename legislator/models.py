@@ -17,7 +17,7 @@ class Legislator(models.Model):
         return self.name   
 
 class LegislatorDetail(models.Model):
-    legislator = models.ForeignKey(Legislator, to_field="uid")
+    legislator = models.ForeignKey(Legislator, to_field="uid", related_name='each_terms')
     ad = models.IntegerField()
     name = models.CharField(max_length=100)
     gender = models.CharField(max_length=100, blank=True, null=True)
@@ -51,10 +51,6 @@ class LegislatorDetail(models.Model):
     def _priproposer_count(self):
         return Legislator_Proposal.objects.filter(legislator_id=self.id, priproposer=True).count()
     npriproposer = property(_priproposer_count)
-
-    def _biller_count(self):
-        return Legislator_Bill.objects.filter(legislator_id=self.id).count()
-    nbill = property(_biller_count)
 
     def _pribiller_count(self):
         return Legislator_Bill.objects.filter(legislator_id=self.id, priproposer=True).count()
