@@ -65,8 +65,8 @@
                 <tbody>	
                 {% for fragment in votes %}
                     <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
-                        {% if fragment.disapprove %}<td style="text-align:center; vertical-align:middle; background-color: #FF99CC;">不通過
-                        {% else %}<td style="text-align:center; vertical-align:middle; background-color: #CCFF99;">通過
+                        {% if fragment.passed %}<td style="text-align:center; vertical-align:middle; background-color: #CCFF99;">通過
+                        {% else %}<td style="text-align:center; vertical-align:middle; background-color: #FF99CC;">不通過
                         {% endif %}		
                         </td>                       
                         <td style="text-align:center; vertical-align:middle; background-color: #66CC66;">{{fragment.results.agree}}</td><td style="text-align:center; vertical-align:middle; background-color: #FF66CC;">{{fragment.results.disagree}}</td><td style="text-align:center; vertical-align:middle; background-color: #999999;">{{fragment.results.abstain}}</td><td style="text-align:center; vertical-align:middle; background-color: #FFFF99;">{{fragment.results.not_voting}}</td>

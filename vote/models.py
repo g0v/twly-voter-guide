@@ -18,8 +18,8 @@ class Vote(models.Model):
         return self.content
 
     def _vote_result(self):
-        return self.results.get('agree') <= self.results.get('disagree')
-    disapprove = property(_vote_result)
+        return self.results.get('agree') > self.results.get('disagree')
+    passed = property(_vote_result)
 
 class Legislator_Vote(models.Model):
     legislator = models.ForeignKey('legislator.LegislatorDetail', related_name='votes')

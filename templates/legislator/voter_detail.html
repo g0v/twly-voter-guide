@@ -92,8 +92,8 @@
                 {% endwith %}        
                     </td>
                 {% with vote=vote.vote %}
-                    {% if vote.disapprove %}<td style="text-align:center; vertical-align:middle; background-color: #FF99CC;">不通過
-                    {% else %}<td style="text-align:center; vertical-align:middle; background-color: #CCFF99;">通過
+                    {% if vote.passed %}<td style="text-align:center; vertical-align:middle; background-color: #CCFF99;">通過
+                    {% else %}<td style="text-align:center; vertical-align:middle; background-color: #FF99CC;">不通過
                     {% endif %}		
                     </td>			
                     <td style="text-align:center; vertical-align:middle;">{{ vote.sitting.date|date:"Y-m-d" }}</td>
