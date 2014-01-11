@@ -23,9 +23,21 @@
     <hr>
     {% if outof_ly_list %}
         <table class="table table-bordered table-condensed">
+            <tr style="font-weight:bold; background-color: #FFFFCC;">
+                <td style="text-align:center; vertical-align:middle; width: 15%">離職立委</td>
+                <td style="text-align:center; vertical-align:middle; width: 15%">遞補立委</td>
+                <td style="text-align:center; vertical-align:middle; width: 15%">離職日期</td>
+                <td style="text-align:center; vertical-align:middle; width: 55%">離職原因</td>
+            </tr>
         {% for ly in outof_ly_list %}
-            <tr>
+            <tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
                 {% include "common/ly_dropdown.html" with color=True %}			
+                {% if ly.term_end.replacement %}
+                    <td style="text-align:center; vertical-align:middle;">{{ly.term_end.replacement}}</td>
+                {% else %}
+                    <td></td> 
+                {% endif %}
+                <td>{{ly.term_end.date|date:"Y-m-d"}}</td>
                 <td>{{ly.term_end.reason}}</td>
             </tr>
 	{% endfor %}
