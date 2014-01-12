@@ -25,22 +25,23 @@
     <div class="row-fluid">
         <div class="span6">
 	        <div class="hero-unit">
-                <div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}"></div>
+                <div id="d3" align="center">
+	            {% if title %}<h4>{{title}}</h4>{% endif %}
                 {% if compare %}
                     <p class="lead text-center">	
                     {% if index == 'biller' or index == 'proposal' %}
-                        <font style="color: #6699FF;"><b>個人</b</font> <font style="color: #FF9999;"><b>平均</b></font>
+                        <font style="color: red;"><b>個人</b></font> <font style="color: orange;"><b>平均</b></font>
                     {% elif index == 'vote' or index == 'ly' %}
-                        <font style="color: #6699FF;"><b>缺席</b></font> <font style="color: #FF9999;"><b>應到</b></font>
+                        <font style="color: red;"><b>缺席</b></font> <font style="color: orange;"><b>實到</b></font>
                     {% else %}
-                        <font style="color: #6699FF;"><b>脫黨投票次數</b></font> <font style="color: #FF9999;"><b>投票次數</b></font>
+                        <font style="color: red;"><b>脫黨投票</b></font> <font style="color: orange;"><b>隨黨投票</b></font>
                     {% endif %}
                     </p>
                 {% endif %}
-                <canvas id="canvas" width="400" height="300" ></canvas>
-                <div id="d3"></div>
+                </div>
             </div>
             <hr>		
+            <div class="fb-like pull-right" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}"></div>
             <div class="fb-comments" data-width="400" data-num-posts="3" href={{current_url}}></div>
         </div>
         <div class="span6">
@@ -139,54 +140,4 @@
 {% endblock backtotop %}
 {% block script %}
     {% include "common/d3_chart.html" %}
-    <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/Chart.js"></script>
-    <script>
-        $(document).ready( function() {
-	    $('#chart_report').addClass('active');
-    	    $('.dropdown-toggle').dropdown();
-            $("[rel='tooltip']").tooltip();
-        });
-        var data = {
-	    {% if ly_obj %}
-		labels : {{ ly_name|as_json }},
-	    {% elif vote_obj %}
-		labels : [
-		    {% for vote in vote_obj %}
-			{% if index == 'nvote_gbdate' %}
-			    "{{ vote.sitting__date|date:"Y-m-d" }}",
-			{% elif index == 'nvote_gbmonth' %}
-			    "{{vote.year|floatformat:"0"}}/{{vote.month|floatformat:"0"}}",
-			{% endif %}			
-		    {% endfor %}
-		],
-	    {% endif %}
-	    datasets : [
-		{
-		    fillColor : "rgba(151,187,205,0.5)",
-		    strokeColor : "rgba(151,187,205,1)",
-		    data : {{chart_data}}
-		},
-		{% if compare %}
-		{
-		    fillColor : "rgba(255,204,204,0.5)",
-		    strokeColor : "rgba(255,204,204,1)",
-		    data : [
-			{% for ly in ly_obj %}
-			    {{ compare }},			
-			{% endfor %}
-		    ]
-		},
-		{% endif %}
-	    ]			
-        }
-        {% if ly_obj %}
-	    var options = {
-		scaleFontFamily : "'標楷體'",
-		scaleFontSize   : 18,
-	    };
-	    var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Bar(data,options);
-        {% elif vote_obj %}
-	    var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);
-        {% endif %}
-    </script>
 {% endblock script %}

@@ -94,21 +94,17 @@
 					<li><a href="{% url 'vote:votes' keyword_url='' index='conscience' %}" >有立委<b>脫黨</b>投票的表決</a></li>
 				</ul>
 			</li>						
-                        <li class="divider-vertical"></li>
 			<li id="chart_report" class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size=3>圖表</font><b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu">
 					<li><a href="{% url 'legislator:chart_report' 'vote' %}" ><b>立法院表決缺席</b><small>前十名</small></a></li>
+					<li><a href="{% url 'legislator:chart_report' 'conscience_vote' %}" ><b>脫黨表決次數</b><small>前十名</small></a></li>					
 					<li><a href="{% url 'legislator:chart_report' 'ly' %}" ><b>立法院開會缺席</b><small>前十名</small></a></li>
 					<li><a href="{% url 'legislator:chart_report' 'committee' %}" ><b>委員會開會缺席</b><small>前十名</small></a></li>
 					<li class="divider"></li>
 					<li><a href="{% url 'legislator:chart_report' 'biller' %}" ><b>法條修正草案數</b><small>前十名</small></a></li>
 					<li><a href="{% url 'legislator:chart_report' 'proposal' %}" ><b>臨時提案數</b><small>前十名</small></a></li>					
-					<li class="divider"></li>
-					<li><a href="{% url 'legislator:chart_report' 'conscience_vote' %}" ><b>脫黨表決次數</b><small>前十名</small></a></li>					
-					<li class="divider"></li>
-					<li><a href="{% url 'legislator:chart_report' 'nvote_gbdate' %}" >表決依<b>日期</b>分組</a></li>
 				</ul>
 			</li>
 		</ul>

@@ -9,11 +9,24 @@
 }
 
 .bar {
-  fill: orange;
+  fill: red;
 }
 
 .bar:hover {
   fill: orangered ;
+}
+.bar_compare {
+  fill: orange;
+}
+
+.bar_compare:hover {
+  fill: orangered ;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
 }
 
 .x.axis path {
@@ -49,15 +62,19 @@
   left: 0;
 }
 </style>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/d3.min.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
 <script> 
 
 var data = {{data|as_json}}
 
-var margin = {top: 40, right: 20, bottom: 90, left: 80},
-    width = 400 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+{% if compare %}
+var compare = {{compare}}
+{% endif %}
+
+var margin = {top: 20, right: 80, bottom: 120, left: 80},
+    width = 480 - margin.left - margin.right,
+    height = 360 - margin.top - margin.bottom;
 
 var formatPercent = d3.format(".0%");
 
@@ -65,6 +82,10 @@ var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1);
 
 var y = d3.scale.linear()
+    .range([height, 0]);
+
+var yRight = d3.scale.linear()
+    .domain([0, 1])
     .range([height, 0]);
 
 var xAxis = d3.svg.axis()
@@ -75,58 +96,121 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
 
+var yAxisRight = d3.svg.axis()
+    .scale(yRight)
+    .ticks(10)
+    .orient("right")
+    .tickFormat(d3.format("%"));
+
+var tip_compare = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+{% if compare %}
+    {% if index == 'biller' or index == 'proposal' %}
+        return "<strong>平均</strong> ：<span style='color:red'>" + compare + "</span>次提案";
+    {% elif index == 'vote' or index == 'ly' %}
+        return "<strong>" + d.name +  "</strong> ：實到<span style='color:red'>" + (compare-d.totalNum) + "</span>次";
+    {% else %}
+        return "<strong>" + d.name +  "</strong> ：隨黨投票<span style='color:red'>" + (compare-d.totalNum) + "</span>次";
+    {% endif %}
+{% endif %}
+  });
+
 var tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
   .html(function(d) {
-    return "<strong>" + d.name +  "</strong> ：沒投票<span style='color:red'>" + d.totalNum + "</span>次";
-  })
+{% if index == 'biller' or index == 'proposal' %}
+    return "<strong>" + d.name +  "</strong> ：<span style='color:red'>" + d.totalNum + "</span>次提案";
+{% elif index == 'vote' or index == 'ly' or index == 'committee' %}
+    return "<strong>" + d.name +  "</strong> ：缺席<span style='color:red'>" + d.totalNum + "</span>次";
+{% else %}
+    return "<strong>" + d.name +  "</strong> ：脫黨投票<span style='color:red'>" + d.totalNum + "</span>次";
+{% endif %}
+  });
 
 var svg = d3.select("#d3").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.call(tip);
+svg.call(tip_compare);
 
-  x.domain(data.map(function(d) { return d.name; }));
-  y.domain([0, d3.max(data, function(d) { return d.totalNum; })]);
+x.domain(data.map(function(d) { return d.name; }));
+{% if index == 'biller' or index == 'proposal' or index == 'committee' %}
+    y.domain([0, d3.max(data, function(d) { return d.totalNum; })]);
+{% else %}
+    y.domain([0, compare]);
+{% endif %}
 
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis)
-      .selectAll("text")  
-          .style("text-anchor", "end")
-          .attr("transform", function(d) {
-              return "rotate(-45)" 
-              });
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+    .selectAll("text")  
+        .style("text-anchor", "end")
+        .attr("transform", function(d) {
+            return "rotate(-45)" 
+            });
 
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
     .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("dy", "-3em")
-      .style("text-anchor", "end")
-      .text("沒投票（次）");
+    .attr("transform", "rotate(-90)")
+    .attr("dy", "-3em")
+    .style("text-anchor", "end")
+    .text("(次)");
 
-  svg.selectAll(".bar")
-      .data(data)
-    .enter().append("rect")
-      .attr("class", "bar")
-      .attr("x", function(d) { return x(d.name); })
-      .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.totalNum); })
-      .attr("height", function(d) { return height - y(d.totalNum); })
-      .on('mouseover', tip.show)
-      .on('mouseout', tip.hide)
+svg.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + (width) + ",0)")
+    .call(yAxisRight);
 
+var legislator = svg.selectAll(".legislator")
+    .data(data);
 
-function type(d) {
-  d.totalNum = +d.totalNum;
-  return d;
-}
+var barGroup = legislator.enter().append("g")
+    .attr("class", "g")
+    .attr("transform", function(d) { return "translate(" + x(d.name) + ",0)"; });
+
+barGroup.append("rect")
+    .attr("class", "bar")
+    .attr("width", x.rangeBand())
+    .attr("y", function(d) { return y(d.totalNum); })
+    .attr("height", function(d) { return height - y(d.totalNum); })
+    .on('mouseover', tip.show)
+    .on('mouseout', tip.hide);
+
+{% if compare %}
+    barGroup.append("rect")
+        .attr("class", "bar_compare")
+        .attr("width", x.rangeBand())
+    {% if index == 'biller' or index == 'proposal' %}
+        .attr("y", function(d) { return y(compare); })
+        .attr("height", function(d) { return height - y(compare); })
+    {% else %}
+        .attr("y", function(d) { return 0; })
+        .attr("height", function(d) { return y(d.totalNum); })
+    {% endif %}
+        .on('mouseover', tip_compare.show)
+        .on('mouseout', tip_compare.hide);
+{% endif %}
+
+var legend = svg.select(".barGroup:last-child").selectAll(".legend")
+    .enter().append("g")
+    .attr("class", "g")
+    .attr("transform", function(d) { return "translate(" + x.rangeBand() / 2 + "," + y(d.totalNum / 2) + ")"; });
+
+legend.append("line")
+    .attr("x2", 10);
+
+legend.append("text")
+    .attr("x", 13)
+    .attr("dy", ".35em")
+    .text(function(d) { return d.name; });
 
 </script>
