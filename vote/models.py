@@ -26,5 +26,3 @@ class Legislator_Vote(models.Model):
     vote = models.ForeignKey(Vote, to_field="uid")
     decision = models.IntegerField(blank=True, null=True)
     conflict = models.NullBooleanField()
-    class Meta:
-        ordering = ['-decision']

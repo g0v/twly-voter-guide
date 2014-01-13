@@ -2,14 +2,13 @@
 import operator,re
 from django.shortcuts import render
 from django.db.models import Count,F,Q
-from legislator.models import Legislator
-from .models import Vote,Legislator_Vote
+from .models import Vote, Legislator_Vote
 from search.models import Keyword
 from search.views import keyword_list
 from issue.models import Issue
 
 
-def votes(request,keyword_url,index='normal'):
+def votes(request, keyword_url, index='normal'):
     keyword = None
     if index == 'conscience':
         query = Q(conflict=True)
@@ -40,10 +39,6 @@ def votes_related_to_issue(request,issue_id):
     date_list = votes.values('date').distinct().order_by('-date')
     return render(request,'vote/votes.html', {'votes': votes,'index':index,'keyword':keyword,'keyword_obj':keyword_list(2),'date_list':date_list})
 
-def vote_detail(request,vote_id):
-    nvotes = Vote.objects.count()
-    vote = Vote.objects.get(uid=vote_id)
-    if vote:
-        vote.hits = F('hits') + 1
-        vote.save(update_fields=['hits'])
-    return render(request,'vote/vote_detail.html', {'vote':vote,'nvotes':nvotes})
+def vote(request, vote_id):
+    vote = Legislator_Vote.objects.select_related().filter(vote_id=vote_id).order_by('-decision', 'legislator__party')
+    return render(request,'vote/vote.html', {'vote':vote})

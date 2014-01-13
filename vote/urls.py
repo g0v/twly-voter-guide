@@ -7,5 +7,5 @@ urlpatterns = patterns('',
     # ex: /vote
     url(r'^(?P<index>normal|conscience)/(?P<keyword_url>.+)?$', views.votes, name='votes'),
     # ex: /vote/123
-    url(r'^(?P<vote_id>\S+)/$', views.vote_detail, name='vote_detail'),
+    url(r'^(?P<vote_id>\S+)/$', views.vote, name='vote_detail'),
 )

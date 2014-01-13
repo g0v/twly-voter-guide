@@ -32,21 +32,21 @@
 	    <br>
 	    {% if proposal %}
 		<table class="table table-bordered">
-                    <tr style="text-align:center; font-weight:bold;background-color: #FFFFCC;">
-                        <td>共同提案人</td>
-                        <td>主提案數</td>
-                        <td>縣市</td>
-                        <td>行政區</td>
-                        <td>委員會</td>
-                    </tr>
+            <tr style="text-align:center; font-weight:bold;background-color: #FFFFCC;">
+                <td>共同提案人</td>
+                <td>主提案數</td>
+                <td>縣市</td>
+                <td>行政區</td>
+                <td>委員會</td>
+            </tr>
 		    {% for ly in proposal.sorted_proposer_set %}
-                        <tr>
-                            <td><a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="這個立委的提案">{% include "common/ly_color_by_party.html" %}</a></td>
-                            <td>{{ly.npriproposer}}</td>
-                            <td>{{ly.county}}</td>
-                            <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
-                            <td>{{ly.committee}}</td>
-                        </tr>
+                <tr>
+                    <td><a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="這個立委的提案">{% include "common/ly_color_by_party.html" %}</a></td>
+                    <td>{{ly.npriproposer}}</td>
+                    <td>{{ly.county}}</td>
+                    <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
+                    <td>{{ly.committee}}</td>
+                </tr>
 		    {% endfor %}
                     {% include "common/color_info_of_party.html" with column=5 %}
                 </table>	
