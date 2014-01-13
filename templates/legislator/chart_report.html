@@ -29,12 +29,14 @@
 	            {% if title %}<h4>{{title}}</h4>{% endif %}
                 {% if compare %}
                     <p class="lead text-center">	
-                    {% if index == 'biller' or index == 'proposal' %}
+                    {% if index == 'biller' or index == 'proposal' or index == 'attend_committee' %}
                         <font style="color: red;"><b>個人</b></font> <font style="color: orange;"><b>平均</b></font>
                     {% elif index == 'vote' or index == 'ly' %}
                         <font style="color: red;"><b>缺席</b></font> <font style="color: orange;"><b>實到</b></font>
                     {% else %}
-                        <font style="color: red;"><b>脫黨投票</b></font> <font style="color: orange;"><b>隨黨投票</b></font>
+                        {% if index == 'conscience_vote' %}
+                            <font style="color: red;"><b>脫黨投票</b></font> <font style="color: orange;"><b>隨黨投票</b></font>
+                        {% endif %}
                     {% endif %}
                     </p>
                 {% endif %}
@@ -57,8 +59,8 @@
 	                    {% else %}
 		                {% if index == 'vote' %}
 			            <th style="text-align:center; vertical-align:middle; width: 10%">沒投票表決(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">投票率</th>
-		                {% elif index == 'ly_hit' %}
-			            <th style="text-align:center; vertical-align:middle; width: 20%">點閱(次)
+		                {% elif index == 'attend_committee' %}
+			            <th style="text-align:center; vertical-align:middle; width: 10%">列席(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">平均列席(次)</th>
 		                {% else %}
 			            {% if index == 'ly' %}
 				        <th style="text-align:center; vertical-align:middle; width: 10%">缺席開會(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">缺席率</th>	
@@ -91,7 +93,7 @@
                         <td>{{ compare|subtract:ly.totalNum|divide:compare }}%</td>
 			        {% else %}
 				        <td>{{ly.totalNum}}</td>
-                        {% if index == 'biller' or index == 'proposal' %}
+                        {% if index == 'biller' or index == 'proposal' or index == 'attend_committee' %}
                             <td>{{ compare }}</td>
                         {% elif index == 'conscience_vote' or index == 'ly'%}
                             <td>{{ ly.totalNum|divide:compare }}%</td>

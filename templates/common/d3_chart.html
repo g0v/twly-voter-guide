@@ -110,9 +110,13 @@ var tip_compare = d3.tip()
     {% if index == 'biller' or index == 'proposal' %}
         return "<strong>平均</strong> ：<span style='color:red'>" + compare + "</span>次提案";
     {% elif index == 'vote' or index == 'ly' %}
-        return "<strong>" + d.name +  "</strong> ：實到<span style='color:red'>" + (compare-d.totalNum) + "</span>次";
+        return "<strong>" + d.name + "</strong> ：實到<span style='color:red'>" + (compare-d.totalNum) + "</span>次";
     {% else %}
-        return "<strong>" + d.name +  "</strong> ：隨黨投票<span style='color:red'>" + (compare-d.totalNum) + "</span>次";
+        {% if index == 'conscience_vote' %}
+            return "<strong>" + d.name + "</strong> ：隨黨投票<span style='color:red'>" + (compare-d.totalNum) + "</span>次";
+        {% elif index == 'attend_committee' %}
+            return "<strong>平均</strong> ：<span style='color:red'>" + compare + "</span>次列席";
+        {% endif %}
     {% endif %}
 {% endif %}
   });
@@ -122,11 +126,15 @@ var tip = d3.tip()
   .offset([-10, 0])
   .html(function(d) {
 {% if index == 'biller' or index == 'proposal' %}
-    return "<strong>" + d.name +  "</strong> ：<span style='color:red'>" + d.totalNum + "</span>次提案";
+    return "<strong>" + d.name + "</strong> ：<span style='color:red'>" + d.totalNum + "</span>次提案";
 {% elif index == 'vote' or index == 'ly' or index == 'committee' %}
-    return "<strong>" + d.name +  "</strong> ：缺席<span style='color:red'>" + d.totalNum + "</span>次";
+    return "<strong>" + d.name + "</strong> ：缺席<span style='color:red'>" + d.totalNum + "</span>次";
 {% else %}
-    return "<strong>" + d.name +  "</strong> ：脫黨投票<span style='color:red'>" + d.totalNum + "</span>次";
+    {% if index == 'conscience_vote' %}
+        return "<strong>" + d.name + "</strong> ：脫黨投票<span style='color:red'>" + d.totalNum + "</span>次";
+    {% elif index == 'attend_committee' %}
+        return "<strong>" + d.name + "</strong> ：<span style='color:red'>" + d.totalNum + "</span>次列席";
+    {% endif %}
 {% endif %}
   });
 
@@ -140,7 +148,7 @@ svg.call(tip);
 svg.call(tip_compare);
 
 x.domain(data.map(function(d) { return d.name; }));
-{% if index == 'biller' or index == 'proposal' or index == 'committee' %}
+{% if index == 'biller' or index == 'proposal' or index == 'committee' or index == 'attend_committee' %}
     y.domain([0, d3.max(data, function(d) { return d.totalNum; })]);
 {% else %}
     y.domain([0, compare]);
@@ -189,7 +197,7 @@ barGroup.append("rect")
     barGroup.append("rect")
         .attr("class", "bar_compare")
         .attr("width", x.rangeBand())
-    {% if index == 'biller' or index == 'proposal' %}
+    {% if index == 'biller' or index == 'proposal' or index == 'attend_committee' %}
         .attr("y", function(d) { return y(compare); })
         .attr("height", function(d) { return height - y(compare); })
     {% else %}
