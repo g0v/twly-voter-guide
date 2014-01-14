@@ -27,7 +27,7 @@ def bills(request, keyword_url, index):
     if index == 'normal':
         bills = Bill.objects.filter(query, last_action__isnull=False, abstract__isnull=False).order_by('-last_action_at')[:100]
     elif index == 'rejected':
-        bills = Bill.objects.filter(query & Q(ttsmotions__progress='退回程序')).annotate(totalNum=Count('ttsmotions__id')).order_by('-totalNum')
+        bills = Bill.objects.filter(query & Q(ttsmotions__progress='退回程序')).annotate(totalNum=Count('ttsmotions__id')).filter(totalNum__gt=1).order_by('-totalNum')
     return render(request,'bill/bills.html', {'index':index, 'keyword_obj':keyword_list(3), 'keyword':keyword, 'bills':bills})
 
 def bills_related_to_issue(request,issue_id):

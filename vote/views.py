@@ -41,4 +41,6 @@ def votes_related_to_issue(request,issue_id):
 
 def vote(request, vote_id):
     vote = Legislator_Vote.objects.select_related().filter(vote_id=vote_id).order_by('-decision', 'legislator__party')
-    return render(request,'vote/vote.html', {'vote':vote})
+    data = dict(vote[0].vote.results)
+    data.pop('total')
+    return render(request,'vote/vote.html', {'vote':vote, 'data':data})
