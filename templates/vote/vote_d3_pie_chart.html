@@ -21,7 +21,7 @@ var width = 480,
     labelr = radius + 10; // radius for label anchor
 
 var color = d3.scale.ordinal()
-    .range(["#FF66CC", "#999999", "#66CC66", "#FFFF99"])
+    .range(["#FF66CC", "#999999", "#66CC66", "#FFCC33"])
     .domain(['disagree', 'abstain', 'agree', 'not_voting']);
 
 var legend = d3.scale.ordinal()
@@ -69,6 +69,7 @@ g.append("text")
     .text(function(d) { 
         if (d.value != 0)
             return legend(d.data.key) + '：' + d.value; 
-    });
+    })
+    .style("fill", function(d) { return color(d.data.key); });
 
 </script>

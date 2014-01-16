@@ -38,7 +38,7 @@
 		{% for decision in ly_list %}					
             {% with decision=decision.grouper %}
 		        {% ifequal decision null %}
-			    <tr><td colspan={{col}} style="background-color: #FFFF99;"><strong>沒投票
+			    <tr><td colspan={{col}} style="background-color: #FFCC33;"><strong>沒投票
 		        {% endifequal %}					
 		        {% ifequal decision -1 %}
 			    <tr><td colspan={{col}} style="background-color: #FF99CC;"><strong>反對票
