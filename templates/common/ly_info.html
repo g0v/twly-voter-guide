@@ -5,6 +5,16 @@
         <br>
         {% if ly %}
             <table class="table table-bordered">
+                <thead>
+                    <th style="width: 40%"></th>
+                    <th style="width: 60%"></th>
+                </thead>
+                <tbody>	
+                {% if ly.image %}
+                <tr>
+                    <td colspan=2><div align="center"><img src={{ly.image}} width="80%"></img></div></td>
+                </tr>
+                {% endif %}
                 <tr>
                     <td style="background-color: lightgrey;">立委</td>
                     <td><b>{{ ly.name }}</b></td>
@@ -43,15 +53,59 @@
                     <td style="background-color: lightgrey;">脫黨表決(次)</td>
                     <td>{{ly.nconsciencevote}} 次</td>
                 </tr>
-                <tr>
-                    <td colspan=2></td>
-                </tr>
-                <tr><td style="background-color: lightgrey;" rowspan=3>外部連結</td>
-                {% if ly.facebook %}<td><a href={{ ly.facebook }} target="_blank">{{ ly.name }}的 Facebook</a></td></tr>{% endif %}
-                {% if ly.wiki %}<td><a href={{ ly.wiki }} target="_blank">{{ ly.name }}的維基百科</a></td></tr>{% endif %}
-                {% if ly.links.ly %}<td><a href={{ ly.links.ly }} target="_blank">{{ ly.name }}的立院官網</a></td></tr>{% endif %}
-                </tr>
-        </table>
+                {% for contact in ly.contacts %}
+                    <tr>
+                        <td colspan=2></td>
+                    </tr>
+                    <tr style="background-color: {% cycle '#CCFF99' '#CCFFCC' '#FFFF99' %};">
+                        <td colspan=2 style="text-align:center; vertical-align:middle;">{{contact.name}}</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">地址</td>
+                        <td>{{contact.address}}</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">電話</td>
+                        <td>{{contact.phone}}</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">傳真</td>
+                        <td>{{contact.fax}}</td>
+                    </tr>
+                {% endfor %}    
+                {% if ly.education %}
+                    <tr>
+                        <td colspan=2></td>
+                    </tr>
+                    <tr style="background-color: #CCCC66 ;">
+                        <td colspan=2 style="text-align:center; vertical-align:middle;">學歷</td>
+                    </tr>
+                    <tr>
+                        <td colspan=2>{{ly.education|linebreaksbr}}</td>
+                    </tr>
+                {% endif %}
+                {% if ly.experience %}
+                    <tr>
+                        <td colspan=2></td>
+                    </tr>
+                    <tr style="background-color: #CCCC99;">
+                        <td colspan=2 style="text-align:center; vertical-align:middle;">經歷</td>
+                    </tr>
+                    <tr>
+                        <td colspan=2>{{ly.experience|linebreaksbr}}</td>
+                    </tr>
+                {% endif %}
+                {% if ly.links.ly %}
+                    <tr>
+                        <td colspan=2></td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: lightgrey;">外部連結</td>
+                        <td><a href={{ ly.links.ly }} target="_blank">{{ ly.name }}的立院官網</a></td>
+                    </tr>
+                {% endif %}
+                </tbody>	
+            </table>
         {% endif %}	
     </div>	
     <div class="span9">
