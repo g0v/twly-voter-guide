@@ -23,7 +23,7 @@
 	{% if proposal %}
 	    <div class="hero-unit">
 		<div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}"></div>
-		<p class="text-success">提案日期：{{ proposal.date|date:"Y-m-d" }}</p>
+		<p class="text-success">提案日期：{{ proposal.sitting.date|date:"Y-m-d" }}</p>
 		<p class="lead">{{proposal.content|linebreaksbr }}</p>
 	    </div>			
 	{% endif %}
@@ -45,7 +45,7 @@
                     <td>{{ly.npriproposer}}</td>
                     <td>{{ly.county}}</td>
                     <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
-                    <td>{{ly.committee}}</td>
+                    <td>{{ly.current_committee|truncatechars:7}}</td>
                 </tr>
 		    {% endfor %}
                     {% include "common/color_info_of_party.html" with column=5 %}
