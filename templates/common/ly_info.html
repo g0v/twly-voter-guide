@@ -12,7 +12,11 @@
                 <tbody>
                 {% if ly.image %}
                 <tr>
-                    <td colspan=2><div align="center"><img src={{ly.image}} width="80%"></img></div></td>
+                    <td colspan=2>
+                        <div align="center">
+                            <img src={{ly.image}} width="80%">
+                        </div>
+                    </td>
                 </tr>
                 {% endif %}
                 <tr>
@@ -21,7 +25,7 @@
                 </tr>
                 <tr>
                     <td style="background-color: lightgrey;">選區縣市</td>
-                    <td><a href="{% url 'legislator:index_district' ly.county %}" rel="tooltip" title="查看該選區的立委" >{{ly.county}}</a></td>
+                    <td><a href="{% url 'legislator:index_district' ly.county %}" rel="tooltip" title="查看該選區的立委">{{ly.county}}</a></td>
                 </tr>
                 {% if ly.district %}
                     <tr>
@@ -31,7 +35,15 @@
                 {% endif %}
                 <tr>
                     <td style="background-color: lightgrey;">現任委員會</td>
-                    <td>{% if ly.in_office %}<a href="{% url 'legislator:index_committee' ly.current_committee %}" rel="tooltip" title="查看該委員會的立委" >{{ ly.current_committee|truncatechars:7 }}</a>{% else %}已離職{% endif %}</td>
+                    <td>
+                        {% if ly.in_office %}
+                            <a href="{% url 'legislator:index_committee' ly.current_committee %}" rel="tooltip" title="查看該委員會的立委" >
+                                {{ ly.current_committee|truncatechars:7 }}
+                            </a>
+                        {% else %}
+                            已離職
+                        {% endif %}
+                    </td>
                 </tr>
                 <tr>
                     <td style="background-color: lightgrey;">到職日期</td>
@@ -138,10 +150,10 @@
 {% block script %}
     {% include "common/keyword_auto_complete.html" %}
     <script>
-    $(document).ready( function() {
-	$('#ly').addClass('active');
-	$('.dropdown-toggle').dropdown();
-	$("[rel='tooltip']").tooltip();
-    });
+        $(document).ready( function() {
+          	$('#ly').addClass('active');
+          	$('.dropdown-toggle').dropdown();
+          	$("[rel='tooltip']").tooltip();
+        });
     </script>
 {% endblock script %}
