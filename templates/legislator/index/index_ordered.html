@@ -1,13 +1,17 @@
-﻿<!--[if lt IE 10]>
-<!DOCTYPE html>
-<![endif]-->
-{% extends "legislator/index/index.html" %}
+﻿{% extends "legislator/index/index.html" %}
 {% load ly_extras %} 
 {% block ly_table %}
     <h3 class="text-center text-warning">
     {% if index == 'biller' %}
         <form action="" method="get" class="form-inline text-center" id="form_bill">
-            <fieldset>法條修正草案數(多&rarr;少)            {% csrf_token %}
+            <fieldset>法條修正草案數(多&rarr;少)
+            {% csrf_token %}
+                <select name="progress" id="progress">
+                    <option value="">全部</option>
+                {% for fragment in distinct_progress_of_bill %}
+                    <option value={{fragment}} style="background-color: {% cycle '#EEEEEE' 'white' %};">{{fragment}}</option>
+                {% endfor %}
+                </select>
                 <label class="checkbox">
                 <input type="checkbox" name="proposertype" id="proposertype" {% if proposertype %} checked{% endif %} rel="tooltip" title="計算草案數時，不是第一提案人也要計數嗎?(主提案人貢獻較高，其他人貢獻較低或只是掛名)">
                 </label>

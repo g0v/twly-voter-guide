@@ -2,12 +2,12 @@
 <table class="table table-bordered" >
     <thead>
         <tr style="font-weight:bold;background-color: #FFCCFF;">
-            <th style="text-align:center; vertical-align:middle; width: 16%">法案</th>
-            <th style="text-align:center; vertical-align:middle; width: 8%">最新進展</th>
+            <th style="text-align:center; vertical-align:middle; width: 12%">法案</th>
+            <th style="text-align:center; vertical-align:middle; width: 10%">最新進展</th>
             {% if index == 'rejected' %}
-            <th style="text-align:center; vertical-align:middle; width: 8%">被退回次數</th>
+            <th style="text-align:center; vertical-align:middle; width: 12%">被退回次數</th>
             {% endif %}
-            <th style="text-align:center; vertical-align:middle; width: 12%">提案人</th>
+            <th style="text-align:center; vertical-align:middle; width: 10%">提案人</th>
             <th style="text-align:center; vertical-align:middle; width: 20%">說明</th>
             <th style="text-align:center; vertical-align:middle; width: 36%">案由</th>
         </tr>
@@ -33,7 +33,12 @@
                     <td></td>
                 {% endif %}
                 {% endwith %}
-                <td style="vertical-align:middle;">{{fragment.proposed_by}}{{fragment.summary}}</td>
+                <td style="vertical-align:middle;">{{fragment.proposed_by}}
+                {% if keyword %}
+                    {{fragment.summary|replace:keyword|safe}}</td>
+                {% else %}
+                    {{fragment.summary}}</td>
+                {% endif %}
                 {% if fragment.abstract %}
                     {% if keyword %}
                         <td>{{fragment.abstract|linebreaksbr|replace:keyword|safe}}</td>

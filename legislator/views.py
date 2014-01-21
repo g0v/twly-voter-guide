@@ -15,7 +15,7 @@ from search.views import keyword_list
 
 
 def index(request, index):
-    error, proposertype, query = None, False, Q(ad=8, in_office=True)
+    error, proposertype, progress, query = None, False, "", Q(ad=8, in_office=True)
     outof_ly_list = LegislatorDetail.objects.filter(ad=8, in_office=False)
     if 'lyname' in request.GET:
         ly_name = re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['lyname']).strip()
@@ -32,9 +32,14 @@ def index(request, index):
                 query = query & Q(legislator_bill__priproposer=True)
         else: # no form submit
             query = query & Q(legislator_bill__priproposer=True)
+        if 'progress' in request.GET:
+            progress = request.GET['progress']
+            if progress:
+                print(progress)
+                query = query & Q(legislator_bill__bill__last_action=progress)
         ly_list = LegislatorDetail.objects.filter(query).annotate(totalNum=Count('legislator_bill__id')).exclude(totalNum=0).order_by('-totalNum')
         no_count_list = LegislatorDetail.objects.filter(name_query).exclude(legislator_id__in=ly_list.values_list('legislator_id', flat=True))
-        return render(request,'legislator/index/index_ordered.html', {'no_count_list':no_count_list,'proposertype':proposertype,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_ordered.html', {'no_count_list':no_count_list,'proposertype':proposertype,'progress':progress,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'conscience_vote':
         ly_list = LegislatorDetail.objects.filter(query, votes__conflict=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')
         no_count_list = LegislatorDetail.objects.filter(name_query).exclude(legislator_id__in=ly_list.values_list('legislator_id', flat=True)).order_by('party')

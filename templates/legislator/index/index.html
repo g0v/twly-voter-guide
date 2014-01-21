@@ -205,9 +205,13 @@ $(document).ready( function() {
 	$('#ly').addClass('active');
 	$('.dropdown-toggle').dropdown();
 	$("[rel='tooltip']").tooltip();	
+    $('#progress[value={{progress}}]').attr('selected','selected');
 	$('#proposertype').change(function() {
 		$("#form_bill").trigger('submit');
 	});	
+    $('#progress').change(function() {
+        $("#form_bill").trigger('submit');
+    }); 
 });
 </script>
 {% endblock script %}
