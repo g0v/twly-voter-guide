@@ -1,5 +1,5 @@
 ﻿{% extends "base.html" %}
-{% block right %} 
+{% block right %}
 <div class="row-fluid">
     <div class="span3">
         <br>
@@ -9,7 +9,7 @@
                     <th style="width: 40%"></th>
                     <th style="width: 60%"></th>
                 </thead>
-                <tbody>	
+                <tbody>
                 {% if ly.image %}
                 <tr>
                     <td colspan=2><div align="center"><img src={{ly.image}} width="80%"></img></div></td>
@@ -72,7 +72,7 @@
                         <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">傳真</td>
                         <td>{{contact.fax}}</td>
                     </tr>
-                {% endfor %}    
+                {% endfor %}
                 {% if ly.education %}
                     <tr>
                         <td colspan=2></td>
@@ -104,10 +104,10 @@
                         <td><a href={{ ly.links.ly }} target="_blank">{{ ly.name }}的立院官網</a></td>
                     </tr>
                 {% endif %}
-                </tbody>	
+                </tbody>
             </table>
-        {% endif %}	
-    </div>	
+        {% endif %}
+    </div>
     <div class="span9">
  	<br>
 	<div class="row-fluid">
@@ -121,19 +121,19 @@
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='' %}" >全投票表決紀錄</a></li>
                             <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" >脫黨投票表決紀錄</a></li>
-                        </ul>				
+                        </ul>
                     </li>
                     <li><a class="btn btn-primary btn-large" id='url_politics' href="{% url 'legislator:ly_politics' ly.legislator_id %}">競選政見</a></li>
                 </ul>
 	    </div>
 	</div>
-	<br>           
-        {% block ly_detail %} 
-        {% endblock ly_detail %}       
+	<br>
+        {% block ly_detail %}
+        {% endblock ly_detail %}
         <hr>
-        <div class="fb-comments" data-width="480" data-num-posts="3" data-href={{current_url}}></div>	       
+        <div class="fb-comments" data-width="480" data-num-posts="3" data-href={{current_url}}></div>
     </div>
-</div>	               
+</div>
 {% endblock right %}
 {% block script %}
     {% include "common/keyword_auto_complete.html" %}
