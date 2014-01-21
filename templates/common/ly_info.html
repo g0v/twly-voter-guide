@@ -121,9 +121,9 @@
         {% endif %}
     </div>
     <div class="span9">
- 	<br>
-	<div class="row-fluid">
-	    <div class="span12">
+   <br>
+  <div class="row-fluid">
+      <div class="span12">
                 <ul class="nav nav-pills">
                     <li class="active"><b>{{ ly.name }}</b>的&nbsp;</li>
                     <li><a class="btn btn-primary btn-large" id='url_bill' href="{% url 'legislator:biller_detail' ly.legislator_id %}">法條修正草案</a></li>
@@ -137,9 +137,9 @@
                     </li>
                     <li><a class="btn btn-primary btn-large" id='url_politics' href="{% url 'legislator:ly_politics' ly.legislator_id %}">競選政見</a></li>
                 </ul>
-	    </div>
-	</div>
-	<br>
+      </div>
+  </div>
+  <br>
         {% block ly_detail %}
         {% endblock ly_detail %}
         <hr>
@@ -151,9 +151,9 @@
     {% include "common/keyword_auto_complete.html" %}
     <script>
         $(document).ready( function() {
-          	$('#ly').addClass('active');
-          	$('.dropdown-toggle').dropdown();
-          	$("[rel='tooltip']").tooltip();
+            $('#ly').addClass('active');
+            $('.dropdown-toggle').dropdown();
+            $("[rel='tooltip']").tooltip();
         });
     </script>
 {% endblock script %}
