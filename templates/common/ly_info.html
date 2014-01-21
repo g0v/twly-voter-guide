@@ -124,19 +124,17 @@
         <br>
         <div class="row-fluid">
             <div class="span12">
-                <ul class="nav nav-pills">
-                    <li class="active"><b>{{ ly.name }}</b>的&nbsp;</li>
-                    <li><a class="btn btn-primary btn-large" id='url_bill' href="{% url 'legislator:biller_detail' ly.legislator_id %}">法條修正草案</a></li>
-                    <li><a class="btn btn-primary btn-large" id='url_proposal' href="{% url 'legislator:proposer_detail' ly.legislator_id %}">附帶決議、臨時提案</a></li>
-                    <li class="dropdown">
-                    <a id='url_vote' class="btn btn-primary btn-large dropdown-toggle" href="{% url 'legislator:voter_detail' ly.legislator_id %}">投票紀錄 <span class="caret"></span></a>
+                <b>{{ ly.name }}</b>的&nbsp;
+                <a class="btn btn-primary btn-large" id='url_bill' href="{% url 'legislator:biller_detail' ly.legislator_id %}">法條修正草案</a>
+                <a class="btn btn-primary btn-large" id='url_proposal' href="{% url 'legislator:proposer_detail' ly.legislator_id %}">附帶決議、臨時提案</a>
+                <div class="btn-group">
+                    <a id='url_vote' class="btn btn-primary btn-large dropdown-toggle" href="#" data-toggle="dropdown">投票紀錄 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='' %}" >全投票表決紀錄</a></li>
                         <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" >脫黨投票表決紀錄</a></li>
                     </ul>
-                    </li>
-                    <li><a class="btn btn-primary btn-large" id='url_politics' href="{% url 'legislator:ly_politics' ly.legislator_id %}">競選政見</a></li>
-                </ul>
+                </div>
+                <a class="btn btn-primary btn-large" id='url_politics' href="{% url 'legislator:ly_politics' ly.legislator_id %}">競選政見</a>
             </div>
         </div>
         <br>
