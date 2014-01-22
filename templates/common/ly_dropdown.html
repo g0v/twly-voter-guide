@@ -1,16 +1,16 @@
 ﻿<td>
     <div class="dropdown text-center">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% if color %}{% include "common/ly_color_by_party.html" %}{% else %}{{ly.name}}{% endif %}</a>
-    <ul class="dropdown-menu">
-        <li class="dropdown-submenu">
+        <ul class="dropdown-menu">
+            <li class="dropdown-submenu">
             <a data-toggle="dropdown" href="#" >{{ly.name}}的提案</a>
             <ul class="dropdown-menu">
                 <li><a href="{% url 'legislator:biller_detail' ly.legislator_id %}" >法條修正草案</a></li>
                 <li><a href="{% url 'legislator:proposer_detail' ly.legislator_id %}">附帶決議、臨時提案</a></li>
             </ul>
-        </li>	
-        <li><a href="{% url 'legislator:voter_detail' ly.legislator_id %}">{{ly.name}}的投票紀錄</a></li>					
-        <li><a href="{% url 'legislator:ly_politics' ly.legislator_id %}">{{ly.name}}的競選政見</a></li>
-    </ul>
-</div>
+            </li>
+            <li><a href="{% url 'legislator:voter_detail' ly.legislator_id %}">{{ly.name}}的投票紀錄</a></li>
+            <li><a href="{% url 'legislator:ly_politics' ly.legislator_id %}">{{ly.name}}的競選政見</a></li>
+        </ul>
+    </div>
 </td>

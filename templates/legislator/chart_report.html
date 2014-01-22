@@ -1,142 +1,142 @@
 ﻿{% extends "base.html" %}
 {% load staticfiles %}
-{% load ly_extras %} 
+{% load ly_extras %}
 {% block title %}
-    {% if title %}
-        <title>立委投票指南:{{title}}</title>
-        <meta property="og:title" content="立委投票指南:{{title}}"/>
-        <meta itemprop="name" content="立委投票指南:{{title}}">		
-    {% else %}
-        <title>立委投票指南:總圖表</title>
-        <meta property="og:title" content="立委投票指南:總圖表"/>
-        <meta itemprop="name" content="立委投票指南:總圖表">	
-    {% endif %}
+{% if title %}
+<title>立委投票指南:{{title}}</title>
+<meta property="og:title" content="立委投票指南:{{title}}"/>
+<meta itemprop="name" content="立委投票指南:{{title}}">
+{% else %}
+<title>立委投票指南:總圖表</title>
+<meta property="og:title" content="立委投票指南:總圖表"/>
+<meta itemprop="name" content="立委投票指南:總圖表">
+{% endif %}
 {% endblock %}
 {% block right %}
-    <div class="page-header">
-	<h3>
-	{% if title %}{{title}}{% endif %}
-	{% if content %}<h5> -- {{content}}</h5>{% endif %}
-	</h3>
-    </div>
-    <div class="row-fluid">
-        <div class="span6">
-	        <div class="hero-unit">
-                <div id="d3" align="center">
-	            {% if title %}<h4>{{title}}</h4>{% endif %}
+<div class="page-header">
+    <h3>
+        {% if title %}{{title}}{% endif %}
+        {% if content %}<h5> -- {{content}}</h5>{% endif %}
+    </h3>
+</div>
+<div class="row-fluid">
+    <div class="span6">
+        <div class="hero-unit">
+            <div id="d3" align="center">
+                {% if title %}<h4>{{title}}</h4>{% endif %}
                 {% if compare %}
-                    <p class="lead text-center">	
-                    {% if index == 'biller' or index == 'proposal' or index == 'attend_committee' %}
-                        <font style="color: red;"><b>個人</b></font> <font style="color: orange;"><b>平均</b></font>
-                    {% elif index == 'vote' or index == 'ly' %}
-                        <font style="color: red;"><b>缺席</b></font> <font style="color: orange;"><b>實到</b></font>
-                    {% else %}
-                        {% if index == 'conscience_vote' %}
-                            <font style="color: red;"><b>脫黨投票</b></font> <font style="color: orange;"><b>隨黨投票</b></font>
-                        {% endif %}
-                    {% endif %}
-                    </p>
+                <p class="lead text-center">
+                {% if index == 'biller' or index == 'proposal' or index == 'attend_committee' %}
+                <font style="color: red;"><b>個人</b></font> <font style="color: orange;"><b>平均</b></font>
+                {% elif index == 'vote' or index == 'ly' %}
+                <font style="color: red;"><b>缺席</b></font> <font style="color: orange;"><b>實到</b></font>
+                {% else %}
+                {% if index == 'conscience_vote' %}
+                <font style="color: red;"><b>脫黨投票</b></font> <font style="color: orange;"><b>隨黨投票</b></font>
                 {% endif %}
-                </div>
+                {% endif %}
+                </p>
+                {% endif %}
             </div>
-            <hr>		
-            <div class="fb-like pull-right" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}"></div>
-            <div class="fb-comments" data-width="400" data-num-posts="3" href={{current_url}}></div>
         </div>
-        <div class="span6">
-	    {% if ly_obj %}
-	        <table class="table table-bordered" >
-	            <thead>
-	                <tr style="font-weight:bold; background-color: #CCFF99;">
-	                    <th style="text-align:center; vertical-align:middle; width: 15%">立委</th>
-	                    {% if index == 'biller' or index == 'proposal' %}
-		                <th style="text-align:center; vertical-align:middle; width: 10%">提案數</th><th style="text-align:center; vertical-align:middle; width: 10%">平均提案數</th>
-	                    {% elif index == 'conscience_vote' %}
-		                <th style="text-align:center; vertical-align:middle; width: 10%">脫黨投票(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">脫黨投票率</th>
-	                    {% else %}
-		                {% if index == 'vote' %}
-			            <th style="text-align:center; vertical-align:middle; width: 10%">沒投票表決(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">投票率</th>
-		                {% elif index == 'attend_committee' %}
-			            <th style="text-align:center; vertical-align:middle; width: 10%">列席(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">平均列席(次)</th>
-		                {% else %}
-			            {% if index == 'ly' %}
-				        <th style="text-align:center; vertical-align:middle; width: 10%">缺席開會(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">缺席率</th>	
-			            {% else %}
-				        <th style="text-align:center; vertical-align:middle; width: 20%">缺席開會(次)</th>
-			            {% endif %}	
-		                {% endif %}	
-	                    {% endif %}	  
-	                    <th style="text-align:center; vertical-align:middle; width: 18%">選區</th>
-	                    <th style="text-align:center; vertical-align:middle; width: 31%">行政區</th>
-	                    <th style="text-align:center; vertical-align:middle; width: 20%">委員會</th>
-	                </tr>
-	            </thead>
-	            <tbody>	
-		        {% for ly in ly_obj %}
-                    <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
-                        <td>
-			            {% if index == 'vote' or index = 'ly' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">
-			            {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">
-			            {% else %}
-                            {% if index == 'biller' %}<a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的法條修正草案">
-                            {% else %}<a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的提案">
-                            {% endif %}
-			            {% endif %}
-			        {% include "common/ly_color_by_party.html" %}</a></td>
-			        {% if index == 'ly_hit' %}
-				        <td>{{ly.hits}}</td>
-			        {% elif index == 'vote' %}			
-                        <td>{{ly.totalNum}}</td>
-                        <td>{{ compare|subtract:ly.totalNum|divide:compare }}%</td>
-			        {% else %}
-				        <td>{{ly.totalNum}}</td>
-                        {% if index == 'biller' or index == 'proposal' or index == 'attend_committee' %}
-                            <td>{{ compare }}</td>
-                        {% elif index == 'conscience_vote' or index == 'ly'%}
-                            <td>{{ ly.totalNum|divide:compare }}%</td>
-                        {% endif %}
-			        {% endif %}
-		                <td><a href="{% url 'legislator:index_district' ly.county %}" rel="tooltip" title="{{ly.constituency }}的立委詳細資料">{{ly.county}}</a></td>
-		                <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
+        <hr>
+        <div class="fb-like pull-right" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}"></div>
+        <div class="fb-comments" data-width="400" data-num-posts="3" href={{current_url}}></div>
+    </div>
+    <div class="span6">
+        {% if ly_obj %}
+        <table class="table table-bordered" >
+            <thead>
+                <tr style="font-weight:bold; background-color: #CCFF99;">
+                    <th style="text-align:center; vertical-align:middle; width: 15%">立委</th>
+                    {% if index == 'biller' or index == 'proposal' %}
+                    <th style="text-align:center; vertical-align:middle; width: 10%">提案數</th><th style="text-align:center; vertical-align:middle; width: 10%">平均提案數</th>
+                    {% elif index == 'conscience_vote' %}
+                    <th style="text-align:center; vertical-align:middle; width: 10%">脫黨投票(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">脫黨投票率</th>
+                    {% else %}
+                    {% if index == 'vote' %}
+                    <th style="text-align:center; vertical-align:middle; width: 10%">沒投票表決(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">投票率</th>
+                    {% elif index == 'attend_committee' %}
+                    <th style="text-align:center; vertical-align:middle; width: 10%">列席(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">平均列席(次)</th>
+                    {% else %}
+                    {% if index == 'ly' %}
+                    <th style="text-align:center; vertical-align:middle; width: 10%">缺席開會(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">缺席率</th>
+                    {% else %}
+                    <th style="text-align:center; vertical-align:middle; width: 20%">缺席開會(次)</th>
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                    <th style="text-align:center; vertical-align:middle; width: 18%">選區</th>
+                    <th style="text-align:center; vertical-align:middle; width: 31%">行政區</th>
+                    <th style="text-align:center; vertical-align:middle; width: 20%">委員會</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ly in ly_obj %}
+                <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+                    <td>
+                        {% if index == 'vote' or index = 'ly' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">
+                            {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">
+                                {% else %}
+                                {% if index == 'biller' %}<a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的法條修正草案">
+                                    {% else %}<a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的提案">
+                                        {% endif %}
+                                        {% endif %}
+                                        {% include "common/ly_color_by_party.html" %}</a></td>
+                                {% if index == 'ly_hit' %}
+                                <td>{{ly.hits}}</td>
+                                {% elif index == 'vote' %}
+                                <td>{{ly.totalNum}}</td>
+                                <td>{{ compare|subtract:ly.totalNum|divide:compare }}%</td>
+                                {% else %}
+                                <td>{{ly.totalNum}}</td>
+                                {% if index == 'biller' or index == 'proposal' or index == 'attend_committee' %}
+                                <td>{{ compare }}</td>
+                                {% elif index == 'conscience_vote' or index == 'ly'%}
+                                <td>{{ ly.totalNum|divide:compare }}%</td>
+                                {% endif %}
+                                {% endif %}
+                                <td><a href="{% url 'legislator:index_district' ly.county %}" rel="tooltip" title="{{ly.constituency }}的立委詳細資料">{{ly.county}}</a></td>
+                                <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
                                 <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" rel="tooltip" title="{{ly.current_committee}}委員會的立委詳細資料">{{ ly.current_committee|truncatechars:7 }}</a></td>
                             </tr>
-		        {% endfor %}
-		        {% include "common/color_info_of_party.html" with column=6 %}
-	            </tbody>
-	        </table>
-	    {% elif vote_obj %}
-                <table class="table table-bordered" >
-                    <thead>
-                        <tr style="font-weight:bold;background-color: #CCFF99;">
-                            <th style="text-align:center; vertical-align:middle; width: 20%">表決日期</th>
-                            <th style="text-align:center; vertical-align:middle; width: 15%">表決(個)</th>
-                            {% if index == 'nvote_gbdate' %}
-                                <th style="text-align:center; vertical-align:middle; width: 65%">會期</th>
-                            {% endif %}
-                        </tr>
-                    </thead>
-                    <tbody>	
-                        {% for vote in vote_obj reversed %}
-                            <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+                            {% endfor %}
+                            {% include "common/color_info_of_party.html" with column=6 %}
+                        </tbody>
+                    </table>
+                    {% elif vote_obj %}
+                    <table class="table table-bordered" >
+                        <thead>
+                            <tr style="font-weight:bold;background-color: #CCFF99;">
+                                <th style="text-align:center; vertical-align:middle; width: 20%">表決日期</th>
+                                <th style="text-align:center; vertical-align:middle; width: 15%">表決(個)</th>
                                 {% if index == 'nvote_gbdate' %}
-                                    <td>{{vote.sitting__date|date:"Y-m-d"}}</td>
-                                    <td>{{vote.totalNum}}</td>
-                                    <td>{{vote.sitting__name}}</td>
-                                {% elif index == 'nvote_gbmonth' %}
-                                    <td>{{vote.year|floatformat:"0"}} / {{vote.month|floatformat:"0"}}</td>
-                                    <td>{{vote.totalNum}}</td>	
+                                <th style="text-align:center; vertical-align:middle; width: 65%">會期</th>
                                 {% endif %}
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-	    {% endif %}
-        </div>
-    </div>
-{% endblock %}
-{% block backtotop %}	
-    {{ block.super }}  
-{% endblock backtotop %}
-{% block script %}
-    {% include "legislator/report_d3_bar_chart.html" %}
-{% endblock script %}
+                        </thead>
+                        <tbody>
+                            {% for vote in vote_obj reversed %}
+                            <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+                                {% if index == 'nvote_gbdate' %}
+                                <td>{{vote.sitting__date|date:"Y-m-d"}}</td>
+                                <td>{{vote.totalNum}}</td>
+                                <td>{{vote.sitting__name}}</td>
+                                {% elif index == 'nvote_gbmonth' %}
+                                <td>{{vote.year|floatformat:"0"}} / {{vote.month|floatformat:"0"}}</td>
+                                <td>{{vote.totalNum}}</td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+            {% endblock %}
+            {% block backtotop %}
+            {{ block.super }}
+            {% endblock backtotop %}
+            {% block script %}
+            {% include "legislator/report_d3_bar_chart.html" %}
+            {% endblock script %}

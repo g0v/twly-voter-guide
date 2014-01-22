@@ -1,7 +1,9 @@
+import re
 from django.utils import simplejson
 from django import template
 from django.utils.safestring import mark_safe
-import re
+
+
 register = template.Library()
 
 @register.filter(name='mod')
@@ -22,10 +24,10 @@ def as_json(data):
 
 @register.filter(name='replace')
 def replace(value, arg):
-    if arg:   
+    if arg:
         for word in arg.split():
             pattern = re.compile(re.escape(word), re.IGNORECASE)
-            value = pattern.sub('<font style="background-color: #FFFF66;">'+word+'</font>', value)          
+            value = pattern.sub('<font style="background-color: #FFFF66;">'+word+'</font>', value)
         return value
     else:
         return value

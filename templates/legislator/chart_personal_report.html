@@ -1,127 +1,127 @@
 ﻿{% extends "common/ly_info.html" %}
 {% load staticfiles %}
-{% load ly_extras %} 
+{% load ly_extras %}
 {% block title %}
-    {% if ly %}
-        <title>立委投票指南:{{ly.name}}的個人圖表</title>
-        <meta property="og:title" content="立委投票指南:{{ly.name}}的個人圖表"/>
-        <meta itemprop="name" content="立委投票指南:{{ly.name}}的個人圖表">			
-    {% else %}
-        <title>立委投票指南:立委的個人圖表</title>
-        <meta property="og:title" content="立委投票指南:立委的個人圖表"/>
-        <meta itemprop="name" content="立委投票指南:立委的個人圖表">			
-    {% endif %}
+{% if ly %}
+<title>立委投票指南:{{ly.name}}的個人圖表</title>
+<meta property="og:title" content="立委投票指南:{{ly.name}}的個人圖表"/>
+<meta itemprop="name" content="立委投票指南:{{ly.name}}的個人圖表">
+{% else %}
+<title>立委投票指南:立委的個人圖表</title>
+<meta property="og:title" content="立委投票指南:立委的個人圖表"/>
+<meta itemprop="name" content="立委投票指南:立委的個人圖表">
+{% endif %}
 {% endblock %}
 {% block ly_detail %}
-    {% if ly %}
-        <a id='pchart_ly' href="{% url 'legislator:chart_personal_report' legislator_id=ly.id index='ly' %}" class="btn btn-large btn-info"><b>立法院開會</b><small>時間軸</small></a>
-        <a id='pchart_vote' href="{% url 'legislator:chart_personal_report' legislator_id=ly.id index='vote' %}" class="btn btn-large btn-info"><b>立法院表決</b><small>時間軸</small></a>
-        <a id='pchart_proposal' href="{% url 'legislator:chart_personal_report' legislator_id=ly.id index='proposal' %}" class="btn btn-large btn-info"><b>提案</b><small>時間軸</small></a>			
-    {% endif %}
-    <div class="row-fluid">
-        <div class="span9">
-            <div class="hero-unit">
-                <p class="lead text-center">
-                {% if index == 'proposal' %}
-                        <font style="color: #FF9999;"><b>平均</b></font> <font style="color: #6699FF;"><b>個人</b>
+{% if ly %}
+<a id='pchart_ly' href="{% url 'legislator:chart_personal_report' legislator_id=ly.id index='ly' %}" class="btn btn-large btn-info"><b>立法院開會</b><small>時間軸</small></a>
+<a id='pchart_vote' href="{% url 'legislator:chart_personal_report' legislator_id=ly.id index='vote' %}" class="btn btn-large btn-info"><b>立法院表決</b><small>時間軸</small></a>
+<a id='pchart_proposal' href="{% url 'legislator:chart_personal_report' legislator_id=ly.id index='proposal' %}" class="btn btn-large btn-info"><b>提案</b><small>時間軸</small></a>
+{% endif %}
+<div class="row-fluid">
+    <div class="span9">
+        <div class="hero-unit">
+            <p class="lead text-center">
+            {% if index == 'proposal' %}
+            <font style="color: #FF9999;"><b>平均</b></font> <font style="color: #6699FF;"><b>個人</b>
                 {% else %}
-                        <font style="color: #FF9999;"><b>應到</b></font> <font style="color: #6699FF;"><b>實到</b>
-                {% endif %}
-                </p>
-                <canvas id="canvas" width="500" height="400" ></canvas>
+                <font style="color: #FF9999;"><b>應到</b></font> <font style="color: #6699FF;"><b>實到</b>
+                    {% endif %}
+                    </p>
+                    <canvas id="canvas" width="500" height="400" ></canvas>
+                </div>
+                <hr>
             </div>
-            <hr>	
-        </div>
-        <div class="span3">
-            {% if obj %}
+            <div class="span3">
+                {% if obj %}
                 <table class="table table-bordered" >
                     <thead>
-                    <tr style="font-weight:bold;background-color: #CCFF99;">
-                        <th style="width: 50%">時間<br>(年 / 月)</th>
-                        <th style="width: 50%">
-                        {% if index == 'proposal' %}
-                            主提案<br>(個)
-                        {% elif index == 'ly' %}
-                            開會實到<br>(次)
-                        {% else %}
-                            {% if index == 'vote' %}
+                        <tr style="font-weight:bold;background-color: #CCFF99;">
+                            <th style="width: 50%">時間<br>(年 / 月)</th>
+                            <th style="width: 50%">
+                                {% if index == 'proposal' %}
+                                主提案<br>(個)
+                                {% elif index == 'ly' %}
+                                開會實到<br>(次)
+                                {% else %}
+                                {% if index == 'vote' %}
                                 表決實到<br>(次)
-                            {% endif %}
-                        {% endif %}		
-                        </th>
-                    </tr>
+                                {% endif %}
+                                {% endif %}
+                            </th>
+                        </tr>
                     </thead>
-                    <tbody>	
+                    <tbody>
                         {% for fragment in obj %}
-                            <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
-                                <td>{{fragment.year|floatformat:"0"}} / {{fragment.month|floatformat:"0"}}</td>
-                                <td>{{fragment.n}}</td>
-                            </tr>
+                        <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+                            <td>{{fragment.year|floatformat:"0"}} / {{fragment.month|floatformat:"0"}}</td>
+                            <td>{{fragment.n}}</td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-            {% else %}	
-                <p class="lead text-warning">無相關紀錄</p>	
-            {% endif %}
+                {% else %}
+                <p class="lead text-warning">無相關紀錄</p>
+                {% endif %}
+            </div>
         </div>
-    </div>
-{% endblock ly_detail %}
-{% block script %}
-    <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/Chart.js"></script>
-    <script>
-    $(document).ready( function() {
-	$('#ly').addClass('active');
-	$('#url_pchart').removeAttr('href').addClass("btn-inverse");	
-        {% if index == 'ly' %}
-            $('#pchart_ly').addClass("disabled");
-        {% elif index == 'vote' %}
-            $('#pchart_vote').addClass("disabled");
-        {% else %}
-            $('#pchart_proposal').addClass("disabled");
-        {% endif %}
-	$('.dropdown-toggle').dropdown();
-	$("[rel='tooltip']").tooltip();
+        {% endblock ly_detail %}
+        {% block script %}
+        <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/Chart.js"></script>
+        <script>
+            $(document).ready( function() {
+                $('#ly').addClass('active');
+                $('#url_pchart').removeAttr('href').addClass("btn-inverse");
+                {% if index == 'ly' %}
+                $('#pchart_ly').addClass("disabled");
+                {% elif index == 'vote' %}
+                $('#pchart_vote').addClass("disabled");
+                {% else %}
+                $('#pchart_proposal').addClass("disabled");
+                {% endif %}
+                $('.dropdown-toggle').dropdown();
+                $("[rel='tooltip']").tooltip();
 
-    });
-    var data = {
-	{% if obj %}
-            labels : [
+            });
+            var data = {
+                {% if obj %}
+                labels : [
                 {% for fragment in obj %}
-                    "{{fragment.year|floatformat:"0"}}/{{fragment.month|floatformat:"0"}}",
+                "{{fragment.year|floatformat:"0"}}/{{fragment.month|floatformat:"0"}}",
                 {% endfor %}
-            ],			
-	{% endif %}
-	datasets : [
-            {% if compare_obj %}
-            {
-                fillColor : "rgba(255,204,204,0.5)",
-                strokeColor : "rgba(255,204,204,1)",
-                data : [							
+                ],
+                {% endif %}
+                datasets : [
+                {% if compare_obj %}
+                {
+                    fillColor : "rgba(255,204,204,0.5)",
+                    strokeColor : "rgba(255,204,204,1)",
+                    data : [
                     {% for fragment in compare_obj %}
-                        {% if index == 'proposal' %}
-                            {{fragment.id__count}}/113,
-                        {% else %}
-                            {{fragment.id__count}},
-                        {% endif %}
-                    {% endfor %}									
-                ]
-            },
-            {% endif %}	
-            {
-                fillColor : "rgba(151,187,205,0.5)",
-                strokeColor : "rgba(151,187,205,1)",
-                data : [			
-                    {% if obj %}
-                        {% for fragment in obj %}
-                            {{fragment.n}},
-                        {% endfor %}					
+                    {% if index == 'proposal' %}
+                    {{fragment.id__count}}/113,
+                    {% else %}
+                    {{fragment.id__count}},
                     {% endif %}
+                    {% endfor %}
+                    ]
+                },
+                {% endif %}
+                {
+                    fillColor : "rgba(151,187,205,0.5)",
+                    strokeColor : "rgba(151,187,205,1)",
+                    data : [
+                    {% if obj %}
+                    {% for fragment in obj %}
+                    {{fragment.n}},
+                    {% endfor %}
+                    {% endif %}
+                    ]
+                },
                 ]
-            },
-	]			
-    }
-    {% if obj %}
-	var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);
-    {% endif %}
-    </script>
-{% endblock script %}
+            }
+            {% if obj %}
+            var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(data);
+            {% endif %}
+        </script>
+        {% endblock script %}

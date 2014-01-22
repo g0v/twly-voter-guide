@@ -1,4 +1,4 @@
-﻿{% load ly_extras %} 
+﻿{% load ly_extras %}
 <table class="table table-bordered" >
     <thead>
         <tr style="font-weight:bold;background-color: #FFCCFF;">
@@ -12,45 +12,45 @@
             <th style="text-align:center; vertical-align:middle; width: 36%">案由</th>
         </tr>
     </thead>
-    <tbody> 
+    <tbody>
         {% for fragment in bills %}
-            <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
-                <td style="text-align:center; vertical-align:middle;"><a href={{ "http://ly.g0v.tw/bills/"|add:fragment.uid }} target="_blank">法條修正對照表</a></td>
-                <td style="text-align:center; vertical-align:middle;">
+        <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
+            <td style="text-align:center; vertical-align:middle;"><a href={{ "http://ly.g0v.tw/bills/"|add:fragment.uid }} target="_blank">法條修正對照表</a></td>
+            <td style="text-align:center; vertical-align:middle;">
                 {% if fragment.last_action %}
-                    {{fragment.last_action}}（{{fragment.last_action_at|date:"Y-m-d"}}）
+                {{fragment.last_action}}（{{fragment.last_action_at|date:"Y-m-d"}}）
                 {% else %}
-                    尚無資料
+                尚無資料
                 {% endif %}
-                </td>
-                {% if index == 'rejected' %}
-                <td style="text-align:center; vertical-align:middle;"><b class="lead">{{fragment.totalNum}}</b></td>
-                {% endif %}
-                {% with ly=fragment.primary_proposer.0 %}
-                {% if ly %}
-                    <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="{{ ly.name }}的所有法條修正草案">{% include "common/ly_color_by_party.html" %}</a></td>
-                {% else %}
-                    <td></td>
-                {% endif %}
-                {% endwith %}
-                <td style="vertical-align:middle;">{{fragment.proposed_by}}
+            </td>
+            {% if index == 'rejected' %}
+            <td style="text-align:center; vertical-align:middle;"><b class="lead">{{fragment.totalNum}}</b></td>
+            {% endif %}
+            {% with ly=fragment.primary_proposer.0 %}
+            {% if ly %}
+            <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="{{ ly.name }}的所有法條修正草案">{% include "common/ly_color_by_party.html" %}</a></td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            {% endwith %}
+            <td style="vertical-align:middle;">{{fragment.proposed_by}}
                 {% if keyword %}
-                    {{fragment.summary|replace:keyword|safe}}</td>
-                {% else %}
-                    {{fragment.summary}}</td>
-                {% endif %}
-                {% if fragment.abstract %}
-                    {% if keyword %}
-                        <td>{{fragment.abstract|linebreaksbr|replace:keyword|safe}}</td>
-                    {% else %}
-                        <td>{{fragment.abstract}}</td>
-                    {% endif %}
-                {% else %}
-                    <td></td>
-                {% endif %}
-            </tr>
-        {% empty %}
-            <p>完全沒有法案</p>
-        {% endfor %}
-    </tbody>    
+                {{fragment.summary|replace:keyword|safe}}</td>
+            {% else %}
+            {{fragment.summary}}</td>
+        {% endif %}
+        {% if fragment.abstract %}
+        {% if keyword %}
+        <td>{{fragment.abstract|linebreaksbr|replace:keyword|safe}}</td>
+        {% else %}
+        <td>{{fragment.abstract}}</td>
+        {% endif %}
+        {% else %}
+        <td></td>
+        {% endif %}
+    </tr>
+    {% empty %}
+    <p>完全沒有法案</p>
+    {% endfor %}
+</tbody>
 </table>

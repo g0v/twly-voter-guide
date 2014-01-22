@@ -15,21 +15,21 @@ class Issue(models.Model):
     def __unicode__(self):
         return self.title
 
-class Issue_Vote(models.Model):    
+class Issue_Vote(models.Model):
     vote = models.ForeignKey('vote.Vote')
     issue = models.ForeignKey(Issue)
     weights = models.IntegerField(default=0)
     class Meta:
         ordering = ['-weights']
-   
-class Issue_Proposal(models.Model):    
+
+class Issue_Proposal(models.Model):
     proposal = models.ForeignKey('proposal.Proposal')
     issue = models.ForeignKey(Issue)
     weights = models.IntegerField(default=0)
     class Meta:
         ordering = ['-weights']
 
-class Issue_Bill(models.Model):    
+class Issue_Bill(models.Model):
     bill = models.ForeignKey('bill.Bill')
     issue = models.ForeignKey(Issue)
     weights = models.IntegerField(default=0)

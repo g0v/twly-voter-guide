@@ -1,91 +1,91 @@
 ﻿{% extends "common/ly_info.html" %}
-{% load ly_extras %} 
+{% load ly_extras %}
 {% block title %}
-    {% if ly %}
-        <title>立委投票指南:{{ly.name}}的提案</title>
-        <meta property="og:title" content="立委投票指南:{{ly.name}}的提案"/>
-        <meta itemprop="name" content="立委投票指南:{{ly.name}}的提案">			
-    {% else %}
-        <title>立委投票指南:立委的提案</title>
-        <meta property="og:title" content="立委投票指南:立委的提案"/>
-        <meta itemprop="name" content="立委投票指南:立委的提案">
-    {% endif %}
+{% if ly %}
+<title>立委投票指南:{{ly.name}}的提案</title>
+<meta property="og:title" content="立委投票指南:{{ly.name}}的提案"/>
+<meta itemprop="name" content="立委投票指南:{{ly.name}}的提案">
+{% else %}
+<title>立委投票指南:立委的提案</title>
+<meta property="og:title" content="立委投票指南:立委的提案"/>
+<meta itemprop="name" content="立委投票指南:立委的提案">
+{% endif %}
 {% endblock title %}
-{% block ly_detail %} 
-    <form action="" method="get" class="form-search" id="form">
-	{% csrf_token %}
-	<br>
-	<fieldset>
-	    <input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:勞工 居住...空格有交集效果">
-	    <button type="submit" class="btn">Go!</button>
-	    <label class="checkbox text-success">
-		<input type="checkbox" name="proposertype" id="proposertype" {% if proposertype %} checked{% endif %}>要包含<b class="text-info">{{ly.name}}</b>不是<b class="text-info">主</b>提案人的提案嗎?
-	    </label>
-	    {% if error %}
-	        <span class="help-inline"><a class="text-error">請輸入關鍵字!!</a></span>
-	    {% endif %}
-	</fieldset>
-    </form>
-    {% if keyword_obj %}
-	<h4>熱門：
-	{% for keyword in keyword_obj %}
-	    {% if forloop.counter0 < 5 %}
-		<a href="{% url 'legislator:proposer_detail' legislator_id=ly.legislator_id keyword_url=keyword%}" rel="tooltip" title="包含此關鍵字的立委提案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
-	    {% endif %}	
-	{% endfor %}
-	</h4>
-    {% endif %}		
-    <div class="well well-small">
-	<p class="lead">{{ly.name}}：
-	{{ proposal|length }}個
-	{% if keyword %}
-	    包含<font style="color: red;">"{{keyword}}"</font>的
-	{% endif %}臨時提案、附帶決議
-	</p>
-    </div>
-    {% if proposal %}
-        {% load pagination_tags %}
-        {% autopaginate proposal 10 %}
-        {% paginate %}
-        <table class="table table-bordered" >
-            <thead>
-                <tr style="text-align:center; font-weight:bold;background-color: #CCFF99;">
-                    <th style="text-align:center; vertical-align:middle; width: 12%">日期</th>
-                    <th style="text-align:center; vertical-align:middle; width: 12%">主提案人</th>
-                    <th style="text-align:center; vertical-align:middle; width: 56%">提案內容</th>
-                    <th style="text-align:center; vertical-align:middle; width: 20%">委員會</th>
-                </tr>
-        </thead>
-            <tbody>
-            {% for fragment in proposal %}
-                <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
-                    <td style="text-align:center; vertical-align:middle;">{{ fragment.sitting.date|date:"Y-m-d" }}</td>
-                    <td style="text-align:center; vertical-align:middle;">{{ fragment.primary_proposer.0.name }}</td>
-                    <td><a href="{% url 'proposal:proposal' fragment.uid %}" rel="tooltip" title="查看詳細資訊">
-                    {% if keyword %}
-                        {{fragment.content|linebreaksbr|replace:keyword|safe}}
-                    {% else %}
-                        {{fragment.content|linebreaksbr|truncatechars:80}}
-                    {% endif %}</a>
-                    </td>
-                    <td style="text-align:center; vertical-align:middle;">{{ fragment.sitting.committee }}</td>
-                </tr>
-            </tbody>	
-            {% endfor %}
-        </table>
-        {% paginate %}		
-    {% else %}
-        <p class="text-error">完全沒有提案</p>
+{% block ly_detail %}
+<form action="" method="get" class="form-search" id="form">
+    {% csrf_token %}
+    <br>
+    <fieldset>
+        <input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:勞工 居住...空格有交集效果">
+        <button type="submit" class="btn">Go!</button>
+        <label class="checkbox text-success">
+            <input type="checkbox" name="proposertype" id="proposertype" {% if proposertype %} checked{% endif %}>要包含<b class="text-info">{{ly.name}}</b>不是<b class="text-info">主</b>提案人的提案嗎?
+        </label>
+        {% if error %}
+        <span class="help-inline"><a class="text-error">請輸入關鍵字!!</a></span>
+        {% endif %}
+    </fieldset>
+</form>
+{% if keyword_obj %}
+<h4>熱門：
+    {% for keyword in keyword_obj %}
+    {% if forloop.counter0 < 5 %}
+    <a href="{% url 'legislator:proposer_detail' legislator_id=ly.legislator_id keyword_url=keyword%}" rel="tooltip" title="包含此關鍵字的立委提案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
     {% endif %}
+    {% endfor %}
+</h4>
+{% endif %}
+<div class="well well-small">
+    <p class="lead">{{ly.name}}：
+    {{ proposal|length }}個
+    {% if keyword %}
+    包含<font style="color: red;">"{{keyword}}"</font>的
+    {% endif %}臨時提案、附帶決議
+    </p>
+</div>
+{% if proposal %}
+{% load pagination_tags %}
+{% autopaginate proposal 10 %}
+{% paginate %}
+<table class="table table-bordered" >
+    <thead>
+        <tr style="text-align:center; font-weight:bold;background-color: #CCFF99;">
+            <th style="text-align:center; vertical-align:middle; width: 12%">日期</th>
+            <th style="text-align:center; vertical-align:middle; width: 12%">主提案人</th>
+            <th style="text-align:center; vertical-align:middle; width: 56%">提案內容</th>
+            <th style="text-align:center; vertical-align:middle; width: 20%">委員會</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fragment in proposal %}
+        <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
+            <td style="text-align:center; vertical-align:middle;">{{ fragment.sitting.date|date:"Y-m-d" }}</td>
+            <td style="text-align:center; vertical-align:middle;">{{ fragment.primary_proposer.0.name }}</td>
+            <td><a href="{% url 'proposal:proposal' fragment.uid %}" rel="tooltip" title="查看詳細資訊">
+                    {% if keyword %}
+                    {{fragment.content|linebreaksbr|replace:keyword|safe}}
+                    {% else %}
+                    {{fragment.content|linebreaksbr|truncatechars:80}}
+                    {% endif %}</a>
+            </td>
+            <td style="text-align:center; vertical-align:middle;">{{ fragment.sitting.committee }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+</table>
+{% paginate %}
+{% else %}
+<p class="text-error">完全沒有提案</p>
+{% endif %}
 {% endblock ly_detail %}
 {% block script %}
-    <script>
+<script>
     $(document).ready( function() {
-	$('#url_proposal').removeAttr('href').addClass("btn-inverse");
-	$('#proposertype').change(function() {
-	    $("#form").trigger('submit');
-	});
+        $('#url_proposal').removeAttr('href').addClass("btn-inverse");
+        $('#proposertype').change(function() {
+            $("#form").trigger('submit');
+        });
     });
-    </script>
-    {{ block.super }}
+</script>
+{{ block.super }}
 {% endblock script %}

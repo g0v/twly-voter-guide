@@ -3,7 +3,7 @@ from django.db import models
 from json_field import JSONField
 
 
-class Bill(models.Model):    
+class Bill(models.Model):
     proposer = models.ManyToManyField('legislator.LegislatorDetail', blank=True, null=True, through='Legislator_Bill')
     uid = models.CharField(max_length=200, unique=True)
     api_bill_id = models.CharField(max_length=200, unique=True)
@@ -24,15 +24,15 @@ class Bill(models.Model):
 
     @property
     def primary_proposer(self):
-        return self.proposer.filter(legislator_bill__bill_id=self.uid, legislator_bill__priproposer=True)    
+        return self.proposer.filter(legislator_bill__bill_id=self.uid, legislator_bill__priproposer=True)
 
-class Legislator_Bill(models.Model):    
+class Legislator_Bill(models.Model):
     legislator = models.ForeignKey('legislator.LegislatorDetail', blank=True, null=True)
     bill = models.ForeignKey(Bill, to_field='uid')
     priproposer = models.NullBooleanField()
     petition = models.NullBooleanField()
 
-class ttsMotions(models.Model):    
+class ttsMotions(models.Model):
     bill = models.ForeignKey(Bill, to_field='uid')
     sitting_id = models.CharField(max_length=200, blank=True, null=True)
     agencies = models.TextField(blank=True, null=True)
@@ -50,7 +50,7 @@ class ttsMotions(models.Model):
     topic = models.TextField(blank=True, null=True)
     tts_key = models.TextField(blank=True, null=True)
 
-class BillMotions(models.Model):    
+class BillMotions(models.Model):
     bill = models.ForeignKey(Bill, to_field='uid')
     sitting = models.ForeignKey('sittings.Sittings', to_field="uid")
     agenda_item = models.IntegerField(blank=True, null=True)
@@ -60,11 +60,11 @@ class BillMotions(models.Model):
     resolution = models.CharField(max_length=100, blank=True, null=True)
     status = models.CharField(max_length=100, blank=True, null=True)
 
-class BillDetail(models.Model):    
+class BillDetail(models.Model):
     bill = models.ForeignKey(Bill, to_field='uid')
     article = models.CharField(max_length=100, blank=True, null=True)
     before = models.TextField(blank=True, null=True)
     after = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     class Meta:
-        ordering = ['id'] 
+        ordering = ['id']

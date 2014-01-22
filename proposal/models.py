@@ -2,7 +2,7 @@
 from django.db import models
 
 
-class Proposal(models.Model):    
+class Proposal(models.Model):
     proposer = models.ManyToManyField('legislator.LegislatorDetail', through='Legislator_Proposal')
     uid = models.CharField(max_length=110, unique=True)
     sitting = models.ForeignKey('sittings.Sittings', to_field="uid")
@@ -22,8 +22,8 @@ class Proposal(models.Model):
     @property
     def primary_proposer(self):
         return self.proposer.filter(legislator_proposal__proposal_id=self.uid, legislator_proposal__priproposer=True)
-    
-class Legislator_Proposal(models.Model):    
+
+class Legislator_Proposal(models.Model):
     legislator = models.ForeignKey('legislator.LegislatorDetail')
     proposal = models.ForeignKey(Proposal, to_field="uid")
     priproposer = models.NullBooleanField()

@@ -1,170 +1,170 @@
-{% load ly_extras %} 
+{% load ly_extras %}
 <style>
 
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
 
-.bar {
-  fill: red;
-}
+    .bar {
+        fill: red;
+    }
 
-.bar:hover {
-  fill: orangered ;
-}
-.bar_compare {
-  fill: orange;
-}
+    .bar:hover {
+        fill: orangered ;
+    }
+    .bar_compare {
+        fill: orange;
+    }
 
-.bar_compare:hover {
-  fill: orangered ;
-}
+    .bar_compare:hover {
+        fill: orangered ;
+    }
 
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
-}
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
 
-.x.axis path {
-  display: none;
-}
+    .x.axis path {
+        display: none;
+    }
 
-.d3-tip {
-  line-height: 1;
-  font-weight: bold;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  border-radius: 2px;
-}
+    .d3-tip {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        border-radius: 2px;
+    }
 
-/* Creates a small triangle extender for the tooltip */
-.d3-tip:after {
-  box-sizing: border-box;
-  display: inline;
-  font-size: 10px;
-  width: 100%;
-  line-height: 1;
-  color: rgba(0, 0, 0, 0.8);
-  content: "\25BC";
-  position: absolute;
-  text-align: center;
-}
+    /* Creates a small triangle extender for the tooltip */
+    .d3-tip:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: rgba(0, 0, 0, 0.8);
+        content: "\25BC";
+        position: absolute;
+        text-align: center;
+    }
 
-/* Style northward tooltips differently */
-.d3-tip.n:after {
-  margin: -1px 0 0 0;
-  top: 100%;
-  left: 0;
-}
+    /* Style northward tooltips differently */
+    .d3-tip.n:after {
+        margin: -1px 0 0 0;
+        top: 100%;
+        left: 0;
+    }
 </style>
 <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/d3.min.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
-<script> 
+<script>
 
-var data = {{data|as_json}}
+    var data = {{data|as_json}}
 
-{% if compare %}
-var compare = {{compare}}
-{% endif %}
+    {% if compare %}
+    var compare = {{compare}}
+    {% endif %}
 
-var margin = {top: 20, right: 80, bottom: 120, left: 80},
+    var margin = {top: 20, right: 80, bottom: 120, left: 80},
     width = 480 - margin.left - margin.right,
     height = 360 - margin.top - margin.bottom;
 
-var formatPercent = d3.format(".0%");
+    var formatPercent = d3.format(".0%");
 
-var x = d3.scale.ordinal()
+    var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1);
 
-var y = d3.scale.linear()
+    var y = d3.scale.linear()
     .range([height, 0]);
 
-var yRight = d3.scale.linear()
+    var yRight = d3.scale.linear()
     .domain([0, 1])
     .range([height, 0]);
 
-var xAxis = d3.svg.axis()
+    var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");
 
-var yAxis = d3.svg.axis()
+    var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
 
-var yAxisRight = d3.svg.axis()
+    var yAxisRight = d3.svg.axis()
     .scale(yRight)
     .ticks(10)
     .orient("right")
     .tickFormat(d3.format("%"));
 
-var tip_compare = d3.tip()
-  .attr('class', 'd3-tip')
-  .offset([-10, 0])
-  .html(function(d) {
-{% if compare %}
-    {% if index == 'biller' or index == 'proposal' %}
+    var tip_compare = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function(d) {
+        {% if compare %}
+        {% if index == 'biller' or index == 'proposal' %}
         return "<strong>平均</strong> ：<span style='color:red'>" + compare + "</span>次提案";
-    {% elif index == 'vote' or index == 'ly' %}
+        {% elif index == 'vote' or index == 'ly' %}
         return "<strong>" + d.name + "</strong> ：實到<span style='color:red'>" + (compare-d.totalNum) + "</span>次";
-    {% else %}
+        {% else %}
         {% if index == 'conscience_vote' %}
-            return "<strong>" + d.name + "</strong> ：隨黨投票<span style='color:red'>" + (compare-d.totalNum) + "</span>次";
+        return "<strong>" + d.name + "</strong> ：隨黨投票<span style='color:red'>" + (compare-d.totalNum) + "</span>次";
         {% elif index == 'attend_committee' %}
-            return "<strong>平均</strong> ：<span style='color:red'>" + compare + "</span>次列席";
+        return "<strong>平均</strong> ：<span style='color:red'>" + compare + "</span>次列席";
         {% endif %}
-    {% endif %}
-{% endif %}
-  });
+        {% endif %}
+        {% endif %}
+    });
 
-var tip = d3.tip()
-  .attr('class', 'd3-tip')
-  .offset([-10, 0])
-  .html(function(d) {
-{% if index == 'biller' or index == 'proposal' %}
-    return "<strong>" + d.name + "</strong> ：<span style='color:red'>" + d.totalNum + "</span>次提案";
-{% elif index == 'vote' or index == 'ly' or index == 'committee' %}
-    return "<strong>" + d.name + "</strong> ：缺席<span style='color:red'>" + d.totalNum + "</span>次";
-{% else %}
-    {% if index == 'conscience_vote' %}
+    var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function(d) {
+        {% if index == 'biller' or index == 'proposal' %}
+        return "<strong>" + d.name + "</strong> ：<span style='color:red'>" + d.totalNum + "</span>次提案";
+        {% elif index == 'vote' or index == 'ly' or index == 'committee' %}
+        return "<strong>" + d.name + "</strong> ：缺席<span style='color:red'>" + d.totalNum + "</span>次";
+        {% else %}
+        {% if index == 'conscience_vote' %}
         return "<strong>" + d.name + "</strong> ：脫黨投票<span style='color:red'>" + d.totalNum + "</span>次";
-    {% elif index == 'attend_committee' %}
+        {% elif index == 'attend_committee' %}
         return "<strong>" + d.name + "</strong> ：<span style='color:red'>" + d.totalNum + "</span>次列席";
-    {% endif %}
-{% endif %}
-  });
+        {% endif %}
+        {% endif %}
+    });
 
-var svg = d3.select("#d3").append("svg")
+    var svg = d3.select("#d3").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-svg.call(tip);
-svg.call(tip_compare);
+    svg.call(tip);
+    svg.call(tip_compare);
 
-x.domain(data.map(function(d) { return d.name; }));
-{% if index == 'biller' or index == 'proposal' or index == 'committee' or index == 'attend_committee' %}
+    x.domain(data.map(function(d) { return d.name; }));
+    {% if index == 'biller' or index == 'proposal' or index == 'committee' or index == 'attend_committee' %}
     y.domain([0, d3.max(data, function(d) { return d.totalNum; })]);
-{% else %}
+    {% else %}
     y.domain([0, compare]);
-{% endif %}
+    {% endif %}
 
-svg.append("g")
+    svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis)
-    .selectAll("text")  
-        .style("text-anchor", "end")
-        .attr("transform", function(d) {
-            return "rotate(-45)" 
-        });
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("transform", function(d) {
+        return "rotate(-45)"
+    });
 
-svg.append("g")
+    svg.append("g")
     .attr("class", "y axis")
     .call(yAxis)
     .append("text")
@@ -173,19 +173,19 @@ svg.append("g")
     .style("text-anchor", "end")
     .text("(次)");
 
-svg.append("g")
+    svg.append("g")
     .attr("class", "y axis")
     .attr("transform", "translate(" + (width) + ",0)")
     .call(yAxisRight);
 
-var legislator = svg.selectAll(".legislator")
+    var legislator = svg.selectAll(".legislator")
     .data(data);
 
-var barGroup = legislator.enter().append("g")
+    var barGroup = legislator.enter().append("g")
     .attr("class", "g")
     .attr("transform", function(d) { return "translate(" + x(d.name) + ",0)"; });
 
-barGroup.append("rect")
+    barGroup.append("rect")
     .attr("class", "bar")
     .attr("width", x.rangeBand())
     .attr("y", function(d) { return y(d.totalNum); })
@@ -193,30 +193,30 @@ barGroup.append("rect")
     .on('mouseover', tip.show)
     .on('mouseout', tip.hide);
 
-{% if compare %}
+    {% if compare %}
     barGroup.append("rect")
-        .attr("class", "bar_compare")
-        .attr("width", x.rangeBand())
+    .attr("class", "bar_compare")
+    .attr("width", x.rangeBand())
     {% if index == 'biller' or index == 'proposal' or index == 'attend_committee' %}
-        .attr("y", function(d) { return y(compare); })
-        .attr("height", function(d) { return height - y(compare); })
+    .attr("y", function(d) { return y(compare); })
+    .attr("height", function(d) { return height - y(compare); })
     {% else %}
-        .attr("y", function(d) { return 0; })
-        .attr("height", function(d) { return y(d.totalNum); })
+    .attr("y", function(d) { return 0; })
+    .attr("height", function(d) { return y(d.totalNum); })
     {% endif %}
-        .on('mouseover', tip_compare.show)
-        .on('mouseout', tip_compare.hide);
-{% endif %}
+    .on('mouseover', tip_compare.show)
+    .on('mouseout', tip_compare.hide);
+    {% endif %}
 
-var legend = svg.select(".barGroup:last-child").selectAll(".legend")
+    var legend = svg.select(".barGroup:last-child").selectAll(".legend")
     .enter().append("g")
     .attr("class", "g")
     .attr("transform", function(d) { return "translate(" + x.rangeBand() / 2 + "," + y(d.totalNum / 2) + ")"; });
 
-legend.append("line")
+    legend.append("line")
     .attr("x2", 10);
 
-legend.append("text")
+    legend.append("text")
     .attr("x", 13)
     .attr("dy", ".35em")
     .text(function(d) { return d.name; });

@@ -1,65 +1,65 @@
 ﻿{% extends "common/ly_info.html" %}
 {% block title %}
-    {% if ly %}
-        <title>立委投票指南:{{ly.name}}的法條修正草案</title>
-        <meta property="og:title" content="立委投票指南:{{ly.name}}的法條修正草案"/>
-        <meta itemprop="name" content="立委投票指南:{{ly.name}}的法條修正草案">			
-    {% else %}
-        <title>立委投票指南:立委的法條修正草案</title>
-        <meta property="og:title" content="立委投票指南:立委的法條修正草案"/>
-        <meta itemprop="name" content="立委投票指南:立委的法條修正草案">
-    {% endif %}
+{% if ly %}
+<title>立委投票指南:{{ly.name}}的法條修正草案</title>
+<meta property="og:title" content="立委投票指南:{{ly.name}}的法條修正草案"/>
+<meta itemprop="name" content="立委投票指南:{{ly.name}}的法條修正草案">
+{% else %}
+<title>立委投票指南:立委的法條修正草案</title>
+<meta property="og:title" content="立委投票指南:立委的法條修正草案"/>
+<meta itemprop="name" content="立委投票指南:立委的法條修正草案">
+{% endif %}
 {% endblock title %}
-{% block ly_detail %} 
-    <form action="" method="get" class="form-search" id="form">
-        {% csrf_token %}
-        <br>
-        <fieldset>
-            <input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:勞工 居住...空格有交集效果">
-            <button type="submit" class="btn">Go!</button>
-            <label class="checkbox text-success" >
+{% block ly_detail %}
+<form action="" method="get" class="form-search" id="form">
+    {% csrf_token %}
+    <br>
+    <fieldset>
+        <input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:勞工 居住...空格有交集效果">
+        <button type="submit" class="btn">Go!</button>
+        <label class="checkbox text-success" >
             <input type="checkbox" name="proposertype" id="proposertype" {% if proposertype %} checked{% endif %}>要包含<b class="text-info">{{ly.name}}</b>不是<b class="text-info">主</b>提案人的草案嗎?
-            </label>
-            {% if error %}
-                <span class="help-inline"><a class="text-error">請輸入關鍵字!!</a></span>
-            {% endif %}
-        </fieldset>
-    </form>
-    {% if keyword_obj %}
-        <h4>熱門：
-        {% for keyword in keyword_obj %}
-            {% if forloop.counter0 < 5 %}
-            <a href="{% url 'legislator:biller_detail' legislator_id=ly.id keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的修正草案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
-            {% endif %}
-        {% endfor %}
-        </h4>
-    {% endif %}	
-    <div class="well well-small">
-        <p class="lead">
-        {{ly.name}}：{{ bills|length }}個
-        {% if keyword %}
-            包含<font style="color: red;">"{{keyword}}"</font>的
-        {% endif %}法條修正<small> 草案</small>
-        </p>
-    </div>
-    {% if bills %}
-        {% load pagination_tags %}
-        {% autopaginate bills 10 %}
-        {% paginate %}
-            {% include "common/bills.html" %}
-        {% paginate %}		
-    {% else %}
-        <p class="text-error">完全沒有草案</p>
+        </label>
+        {% if error %}
+        <span class="help-inline"><a class="text-error">請輸入關鍵字!!</a></span>
+        {% endif %}
+    </fieldset>
+</form>
+{% if keyword_obj %}
+<h4>熱門：
+    {% for keyword in keyword_obj %}
+    {% if forloop.counter0 < 5 %}
+    <a href="{% url 'legislator:biller_detail' legislator_id=ly.id keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的修正草案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
     {% endif %}
+    {% endfor %}
+</h4>
+{% endif %}
+<div class="well well-small">
+    <p class="lead">
+    {{ly.name}}：{{ bills|length }}個
+    {% if keyword %}
+    包含<font style="color: red;">"{{keyword}}"</font>的
+    {% endif %}法條修正<small> 草案</small>
+    </p>
+</div>
+{% if bills %}
+{% load pagination_tags %}
+{% autopaginate bills 10 %}
+{% paginate %}
+{% include "common/bills.html" %}
+{% paginate %}
+{% else %}
+<p class="text-error">完全沒有草案</p>
+{% endif %}
 {% endblock ly_detail %}
 {% block script %}
-    <script>
+<script>
     $(document).ready( function() {
         $('#url_bill').removeAttr('href').addClass("btn-inverse");
         $('#proposertype').change(function() {
             $("#form").trigger('submit');
-        });		
+        });
     });
-    </script>
-    {{ block.super }}
+</script>
+{{ block.super }}
 {% endblock script %}

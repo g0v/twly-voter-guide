@@ -1,217 +1,217 @@
 ﻿{% extends "base.html" %}
 {% block title %}
-	<title>立委投票指南</title>	
-	<meta property="og:title" content="立委投票指南"/>
-	<meta itemprop="name" content="立委投票指南"> 	
+<title>立委投票指南</title>
+<meta property="og:title" content="立委投票指南"/>
+<meta itemprop="name" content="立委投票指南">
 {% endblock title %}
 {% block right %}
-    <form action="" method="get" class="form-search" id="form">
-	{% csrf_token %}
-        <div class="page-header text-center">
-	<h3>台灣第八屆立委<small>(2012~2016)</small></h3>	
-	<fieldset>	
-	    <input type="text" name="lyname" id="lyname" class="span2" maxlength="4" placeholder="請輸入立委姓名" rel="tooltip" title="請輸入立委的姓或名">
-	    <button type="submit" class="btn">Go!</button>
-	    {% if error %}
-	    	<span class="help-inline"><a class="text-error">請輸入立委姓名!!</a></span>
-	    {% endif %}
-	</fieldset>
-        </div>
-    </form>
-    {% block ly_table %}
-    {% endblock ly_table %}
-    <hr>
-    {% if outof_ly_list %}
-        <table class="table table-bordered table-condensed">
-            <tr style="font-weight:bold; background-color: #FFFFCC;">
-                <td style="text-align:center; vertical-align:middle; width: 15%">離職立委</td>
-                <td style="text-align:center; vertical-align:middle; width: 15%">遞補立委</td>
-                <td style="text-align:center; vertical-align:middle; width: 15%">離職日期</td>
-                <td style="text-align:center; vertical-align:middle; width: 55%">離職原因</td>
-            </tr>
-        {% for ly in outof_ly_list %}
-            <tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
-                {% include "common/ly_dropdown.html" with color=True %}			
-                {% if ly.term_end.replacement %}
-                    <td style="text-align:center; vertical-align:middle;">{{ly.term_end.replacement}}</td>
-                {% else %}
-                    <td></td> 
-                {% endif %}
-                <td>{{ly.term_end.date|date:"Y-m-d"}}</td>
-                <td>{{ly.term_end.reason}}</td>
-            </tr>
-	{% endfor %}
-        </table>	
-    {% endif %}
-    <hr>
-    <div class="fb-like pull-right" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="https://www.facebook.com/TW.Voter.Guide"></div>	
-    <div class="fb-comments" data-width="480" data-num-posts="3" href={{current_url}}></div>
+<form action="" method="get" class="form-search" id="form">
+    {% csrf_token %}
+    <div class="page-header text-center">
+        <h3>台灣第八屆立委<small>(2012~2016)</small></h3>
+        <fieldset>
+            <input type="text" name="lyname" id="lyname" class="span2" maxlength="4" placeholder="請輸入立委姓名" rel="tooltip" title="請輸入立委的姓或名">
+            <button type="submit" class="btn">Go!</button>
+            {% if error %}
+            <span class="help-inline"><a class="text-error">請輸入立委姓名!!</a></span>
+            {% endif %}
+        </fieldset>
+    </div>
+</form>
+{% block ly_table %}
+{% endblock ly_table %}
+<hr>
+{% if outof_ly_list %}
+<table class="table table-bordered table-condensed">
+    <tr style="font-weight:bold; background-color: #FFFFCC;">
+        <td style="text-align:center; vertical-align:middle; width: 15%">離職立委</td>
+        <td style="text-align:center; vertical-align:middle; width: 15%">遞補立委</td>
+        <td style="text-align:center; vertical-align:middle; width: 15%">離職日期</td>
+        <td style="text-align:center; vertical-align:middle; width: 55%">離職原因</td>
+    </tr>
+    {% for ly in outof_ly_list %}
+    <tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
+        {% include "common/ly_dropdown.html" with color=True %}
+        {% if ly.term_end.replacement %}
+        <td style="text-align:center; vertical-align:middle;">{{ly.term_end.replacement}}</td>
+        {% else %}
+        <td></td>
+        {% endif %}
+        <td>{{ly.term_end.date|date:"Y-m-d"}}</td>
+        <td>{{ly.term_end.reason}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+<hr>
+<div class="fb-like pull-right" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="https://www.facebook.com/TW.Voter.Guide"></div>
+<div class="fb-comments" data-width="480" data-num-posts="3" href={{current_url}}></div>
 {% endblock right %}
 {% block script %}
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>		
-  <style>
-  .ui-autocomplete-category {
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<style>
+    .ui-autocomplete-category {
     font-weight: bold;
     padding: .2em .4em;
     margin: .8em 0 .2em;
     line-height: 1.5;
-  }
-  </style>
-  <script>
-  $.widget( "custom.catcomplete", $.ui.autocomplete, {
-    _renderMenu: function( ul, items ) {
-      var that = this,
-        currentCategory = "";
-      $.each( items, function( index, item ) {
-        if ( item.category != currentCategory ) {
-          ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-          currentCategory = item.category;
-        }
-        that._renderItemData( ul, item );
-      });
     }
-  });
-  </script>	
-  <script>
-  $(function() {
-    var data = [
-{ label: "孔文吉", category: "山地原住民" },
-{ label: "高金素梅", category: "山地原住民" },
-{ label: "簡東明", category: "山地原住民" },
-{ label: "江啟臣", category: "台中市" },
-{ label: "何欣純", category: "台中市" },
-{ label: "林佳龍", category: "台中市" },
-{ label: "楊瓊瓔", category: "台中市" },
-{ label: "蔡其昌", category: "台中市" },
-{ label: "蔡錦隆", category: "台中市" },
-{ label: "盧秀燕", category: "台中市" },
-{ label: "顏寬恒", category: "台中市" },
-{ label: "丁守中", category: "台北市" },
-{ label: "林郁方", category: "台北市" },
-{ label: "姚文智", category: "台北市" },
-{ label: "費鴻泰", category: "台北市" },
-{ label: "蔣乃辛", category: "台北市" },
-{ label: "蔡正元", category: "台北市" },
-{ label: "賴士葆", category: "台北市" },
-{ label: "羅淑蕾", category: "台北市" },
-{ label: "劉櫂豪", category: "台東縣" },
-{ label: "許添財", category: "台南市" },
-{ label: "陳亭妃", category: "台南市" },
-{ label: "陳唐山", category: "台南市" },
-{ label: "黃偉哲", category: "台南市" },
-{ label: "葉宜津", category: "台南市" },
-{ label: "廖國棟", category: "平地原住民" },
-{ label: "鄭天財", category: "平地原住民" },
-{ label: "尤美女", category: "全國不分區" },
-{ label: "王育敏", category: "全國不分區" },
-{ label: "王金平", category: "全國不分區" },
-{ label: "田秋堇", category: "全國不分區" },
-{ label: "吳育仁", category: "全國不分區" },
-{ label: "吳宜臻", category: "全國不分區" },
-{ label: "吳秉叡", category: "全國不分區" },
-{ label: "李桐豪", category: "全國不分區" },
-{ label: "李貴敏", category: "全國不分區" },
-{ label: "李應元", category: "全國不分區" },
-{ label: "邱文彥", category: "全國不分區" },
-{ label: "柯建銘", category: "全國不分區" },
-{ label: "段宜康", category: "全國不分區" },
-{ label: "洪秀柱", category: "全國不分區" },
-{ label: "紀國棟", category: "全國不分區" },
-{ label: "徐少萍", category: "全國不分區" },
-{ label: "許忠信", category: "全國不分區" },
-{ label: "陳其邁", category: "全國不分區" },
-{ label: "陳怡潔", category: "全國不分區" },
-{ label: "陳淑慧", category: "全國不分區" },
-{ label: "陳節如", category: "全國不分區" },
-{ label: "陳碧涵", category: "全國不分區" },
-{ label: "陳鎮湘", category: "全國不分區" },
-{ label: "曾巨威", category: "全國不分區" },
-{ label: "黃文玲", category: "全國不分區" },
-{ label: "楊玉欣", category: "全國不分區" },
-{ label: "葉津鈴", category: "全國不分區" },
-{ label: "潘維剛", category: "全國不分區" },
-{ label: "蔡煌瑯", category: "全國不分區" },
-{ label: "鄭麗君", category: "全國不分區" },
-{ label: "蕭美琴", category: "全國不分區" },
-{ label: "薛凌", category: "全國不分區" },
-{ label: "蘇清泉", category: "全國不分區" },
-{ label: "陳歐珀", category: "宜蘭縣" },
-{ label: "王廷升", category: "花蓮縣" },
-{ label: "楊應雄", category: "金門縣" },
-{ label: "林明溱", category: "南投縣" },
-{ label: "馬文君", category: "南投縣" },
-{ label: "王進士", category: "屏東縣" },
-{ label: "潘孟安", category: "屏東縣" },
-{ label: "蘇震清", category: "屏東縣" },
-{ label: "徐耀昌", category: "苗栗縣" },
-{ label: "陳超明", category: "苗栗縣" },
-{ label: "呂玉玲", category: "桃園縣" },
-{ label: "孫大千", category: "桃園縣" },
-{ label: "陳根德", category: "桃園縣" },
-{ label: "陳學聖", category: "桃園縣" },
-{ label: "楊麗環", category: "桃園縣" },
-{ label: "廖正井", category: "桃園縣" },
-{ label: "李昆澤", category: "高雄市" },
-{ label: "林岱樺", category: "高雄市" },
-{ label: "林國正", category: "高雄市" },
-{ label: "邱志偉", category: "高雄市" },
-{ label: "邱議瑩", category: "高雄市" },
-{ label: "許智傑", category: "高雄市" },
-{ label: "黃昭順", category: "高雄市" },
-{ label: "管碧玲", category: "高雄市" },
-{ label: "趙天麟", category: "高雄市" },
-{ label: "謝國樑", category: "基隆市" },
-{ label: "陳雪生", category: "連江縣" },
-{ label: "張嘉郡", category: "雲林縣" },
-{ label: "劉建國", category: "雲林縣" },
-{ label: "江惠貞", category: "新北市" },
-{ label: "吳育昇", category: "新北市" },
-{ label: "李慶華", category: "新北市" },
-{ label: "李鴻鈞", category: "新北市" },
-{ label: "林淑芬", category: "新北市" },
-{ label: "林德福", category: "新北市" },
-{ label: "林鴻池", category: "新北市" },
-{ label: "高志鵬", category: "新北市" },
-{ label: "張慶忠", category: "新北市" },
-{ label: "黃志雄", category: "新北市" },
-{ label: "盧嘉辰", category: "新北市" },
-{ label: "羅明才", category: "新北市" },
-{ label: "呂學樟", category: "新竹市" },
-{ label: "徐欣瑩", category: "新竹縣" },
-{ label: "詹凱臣", category: "僑居國外國民" },
-{ label: "李俊俋", category: "嘉義市" },
-{ label: "翁重鈞", category: "嘉義縣" },
-{ label: "陳明文", category: "嘉義縣" },
-{ label: "王惠美", category: "彰化縣" },
-{ label: "林滄敏", category: "彰化縣" },
-{ label: "鄭汝芬", category: "彰化縣" },
-{ label: "魏明谷", category: "彰化縣" },
-{ label: "楊曜", category: "澎湖縣" }
-    ];
-    $( "#lyname" ).catcomplete({
-		delay: 0,
-		source: data,
-		select: function(event, ui) {
-			$(event.target).val(ui.item.value);
-			$('#form').submit();
-			return false;
-		}	  
-    });	
-  }); 
-  </script>	
+</style>
 <script>
-$(document).ready( function() {
-	$('#ly').addClass('active');
-	$('.dropdown-toggle').dropdown();
-	$("[rel='tooltip']").tooltip();	
-    $('#progress[value={{progress}}]').attr('selected','selected');
-	$('#proposertype').change(function() {
-		$("#form_bill").trigger('submit');
-	});	
-    $('#progress').change(function() {
-        $("#form_bill").trigger('submit');
-    }); 
-});
+    $.widget( "custom.catcomplete", $.ui.autocomplete, {
+    _renderMenu: function( ul, items ) {
+    var that = this,
+    currentCategory = "";
+    $.each( items, function( index, item ) {
+    if ( item.category != currentCategory ) {
+    ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+    currentCategory = item.category;
+    }
+    that._renderItemData( ul, item );
+    });
+    }
+    });
+</script>
+<script>
+    $(function() {
+        var data = [
+        { label: "孔文吉", category: "山地原住民" },
+        { label: "高金素梅", category: "山地原住民" },
+        { label: "簡東明", category: "山地原住民" },
+        { label: "江啟臣", category: "台中市" },
+        { label: "何欣純", category: "台中市" },
+        { label: "林佳龍", category: "台中市" },
+        { label: "楊瓊瓔", category: "台中市" },
+        { label: "蔡其昌", category: "台中市" },
+        { label: "蔡錦隆", category: "台中市" },
+        { label: "盧秀燕", category: "台中市" },
+        { label: "顏寬恒", category: "台中市" },
+        { label: "丁守中", category: "台北市" },
+        { label: "林郁方", category: "台北市" },
+        { label: "姚文智", category: "台北市" },
+        { label: "費鴻泰", category: "台北市" },
+        { label: "蔣乃辛", category: "台北市" },
+        { label: "蔡正元", category: "台北市" },
+        { label: "賴士葆", category: "台北市" },
+        { label: "羅淑蕾", category: "台北市" },
+        { label: "劉櫂豪", category: "台東縣" },
+        { label: "許添財", category: "台南市" },
+        { label: "陳亭妃", category: "台南市" },
+        { label: "陳唐山", category: "台南市" },
+        { label: "黃偉哲", category: "台南市" },
+        { label: "葉宜津", category: "台南市" },
+        { label: "廖國棟", category: "平地原住民" },
+        { label: "鄭天財", category: "平地原住民" },
+        { label: "尤美女", category: "全國不分區" },
+        { label: "王育敏", category: "全國不分區" },
+        { label: "王金平", category: "全國不分區" },
+        { label: "田秋堇", category: "全國不分區" },
+        { label: "吳育仁", category: "全國不分區" },
+        { label: "吳宜臻", category: "全國不分區" },
+        { label: "吳秉叡", category: "全國不分區" },
+        { label: "李桐豪", category: "全國不分區" },
+        { label: "李貴敏", category: "全國不分區" },
+        { label: "李應元", category: "全國不分區" },
+        { label: "邱文彥", category: "全國不分區" },
+        { label: "柯建銘", category: "全國不分區" },
+        { label: "段宜康", category: "全國不分區" },
+        { label: "洪秀柱", category: "全國不分區" },
+        { label: "紀國棟", category: "全國不分區" },
+        { label: "徐少萍", category: "全國不分區" },
+        { label: "許忠信", category: "全國不分區" },
+        { label: "陳其邁", category: "全國不分區" },
+        { label: "陳怡潔", category: "全國不分區" },
+        { label: "陳淑慧", category: "全國不分區" },
+        { label: "陳節如", category: "全國不分區" },
+        { label: "陳碧涵", category: "全國不分區" },
+        { label: "陳鎮湘", category: "全國不分區" },
+        { label: "曾巨威", category: "全國不分區" },
+        { label: "黃文玲", category: "全國不分區" },
+        { label: "楊玉欣", category: "全國不分區" },
+        { label: "葉津鈴", category: "全國不分區" },
+        { label: "潘維剛", category: "全國不分區" },
+        { label: "蔡煌瑯", category: "全國不分區" },
+        { label: "鄭麗君", category: "全國不分區" },
+        { label: "蕭美琴", category: "全國不分區" },
+        { label: "薛凌", category: "全國不分區" },
+        { label: "蘇清泉", category: "全國不分區" },
+        { label: "陳歐珀", category: "宜蘭縣" },
+        { label: "王廷升", category: "花蓮縣" },
+        { label: "楊應雄", category: "金門縣" },
+        { label: "林明溱", category: "南投縣" },
+        { label: "馬文君", category: "南投縣" },
+        { label: "王進士", category: "屏東縣" },
+        { label: "潘孟安", category: "屏東縣" },
+        { label: "蘇震清", category: "屏東縣" },
+        { label: "徐耀昌", category: "苗栗縣" },
+        { label: "陳超明", category: "苗栗縣" },
+        { label: "呂玉玲", category: "桃園縣" },
+        { label: "孫大千", category: "桃園縣" },
+        { label: "陳根德", category: "桃園縣" },
+        { label: "陳學聖", category: "桃園縣" },
+        { label: "楊麗環", category: "桃園縣" },
+        { label: "廖正井", category: "桃園縣" },
+        { label: "李昆澤", category: "高雄市" },
+        { label: "林岱樺", category: "高雄市" },
+        { label: "林國正", category: "高雄市" },
+        { label: "邱志偉", category: "高雄市" },
+        { label: "邱議瑩", category: "高雄市" },
+        { label: "許智傑", category: "高雄市" },
+        { label: "黃昭順", category: "高雄市" },
+        { label: "管碧玲", category: "高雄市" },
+        { label: "趙天麟", category: "高雄市" },
+        { label: "謝國樑", category: "基隆市" },
+        { label: "陳雪生", category: "連江縣" },
+        { label: "張嘉郡", category: "雲林縣" },
+        { label: "劉建國", category: "雲林縣" },
+        { label: "江惠貞", category: "新北市" },
+        { label: "吳育昇", category: "新北市" },
+        { label: "李慶華", category: "新北市" },
+        { label: "李鴻鈞", category: "新北市" },
+        { label: "林淑芬", category: "新北市" },
+        { label: "林德福", category: "新北市" },
+        { label: "林鴻池", category: "新北市" },
+        { label: "高志鵬", category: "新北市" },
+        { label: "張慶忠", category: "新北市" },
+        { label: "黃志雄", category: "新北市" },
+        { label: "盧嘉辰", category: "新北市" },
+        { label: "羅明才", category: "新北市" },
+        { label: "呂學樟", category: "新竹市" },
+        { label: "徐欣瑩", category: "新竹縣" },
+        { label: "詹凱臣", category: "僑居國外國民" },
+        { label: "李俊俋", category: "嘉義市" },
+        { label: "翁重鈞", category: "嘉義縣" },
+        { label: "陳明文", category: "嘉義縣" },
+        { label: "王惠美", category: "彰化縣" },
+        { label: "林滄敏", category: "彰化縣" },
+        { label: "鄭汝芬", category: "彰化縣" },
+        { label: "魏明谷", category: "彰化縣" },
+        { label: "楊曜", category: "澎湖縣" }
+        ];
+        $( "#lyname" ).catcomplete({
+            delay: 0,
+            source: data,
+            select: function(event, ui) {
+                $(event.target).val(ui.item.value);
+                $('#form').submit();
+                return false;
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready( function() {
+        $('#ly').addClass('active');
+        $('.dropdown-toggle').dropdown();
+        $("[rel='tooltip']").tooltip();
+        $('#progress[value={{progress}}]').attr('selected','selected');
+        $('#proposertype').change(function() {
+            $("#form_bill").trigger('submit');
+        });
+        $('#progress').change(function() {
+            $("#form_bill").trigger('submit');
+        });
+    });
 </script>
 {% endblock script %}

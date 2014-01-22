@@ -14,7 +14,7 @@ class Legislator(models.Model):
     name = models.CharField(max_length=50)
     former_names = models.CharField(max_length=100, blank=True, null=True)
     def __unicode__(self):
-        return self.name   
+        return self.name
 
 class LegislatorDetail(models.Model):
     legislator = models.ForeignKey(Legislator, to_field="uid", related_name='each_terms')
@@ -54,11 +54,11 @@ class LegislatorDetail(models.Model):
 
     def _pribiller_count(self):
         return Legislator_Bill.objects.filter(legislator_id=self.id, priproposer=True).count()
-    npribill = property(_pribiller_count) 
+    npribill = property(_pribiller_count)
 
     def _current_committee(self):
         return Legislator_Committees.objects.filter(legislator_id=self.id).order_by('-session')[0].committee
-    current_committee = property(_current_committee) 
+    current_committee = property(_current_committee)
 
 class Platform(models.Model):
     legislator = models.ForeignKey(LegislatorDetail, blank=True, null=True)
@@ -67,7 +67,7 @@ class Platform(models.Model):
     party = models.CharField(max_length=100, blank=True, null=True)
     def __unicode__(self):
         return self.content
-    
+
 class FileLog(models.Model):
     sitting = models.CharField(unique=True, max_length=100)
     date = models.DateTimeField()

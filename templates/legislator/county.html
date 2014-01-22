@@ -1,47 +1,47 @@
 ﻿{% extends "base.html" %}
 {% block title %}
-    {% if index %}
-        <title>立委投票指南:{{index}}的立委</title>	
-        <meta property="og:title" content="立委投票指南:{{index}}的立委"/>
-        <meta itemprop="name" content="立委投票指南:{{index}}的立委">
-    {% else %}
-        <title>立委投票指南</title>	
-        <meta property="og:title" content="立委投票指南"/>
-        <meta itemprop="name" content="立委投票指南">
-    {% endif %}	
+{% if index %}
+<title>立委投票指南:{{index}}的立委</title>
+<meta property="og:title" content="立委投票指南:{{index}}的立委"/>
+<meta itemprop="name" content="立委投票指南:{{index}}的立委">
+{% else %}
+<title>立委投票指南</title>
+<meta property="og:title" content="立委投票指南"/>
+<meta itemprop="name" content="立委投票指南">
+{% endif %}
 {% endblock title %}
 {% block right %}
-    <div class="page-header text-center">
-	<h3>台灣第八屆立委<small>(2012~2016)</small></h3>	
-    </div>
-    <h4 class="text-center text-warning">{{index}}</h4>
-    {% if ly_list %}
-	<table class="table table-bordered table-condensed" >
-		<tr style="font-weight:bold;background-color: #CCFF99;"><td>立委</td><td>縣市</td><td>行政區</td><td>委員會</td><td>到職日期</td><td>法條修正草案數</td><td>附帶決議、臨時提案數</td><td>沒投票表決(次)</td><td>脫黨投票(次)</td></tr>
-	    {% for ly in ly_list %}
-		<tr style="background-color: {% cycle 'gainsboro' 'white' %};">
-		    {% include "common/ly_dropdown.html" with color=True %}
-                    <td>{{ly.county}}</td>
-                    <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
-                    <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" >{{ ly.current_committee }}</a></td>                       
-                    <td>{{ly.term_start|date:"Y-m-d"}}</td>
-                    <td><div class="text-center">{{ly.npribill}}</div></td>
-                    <td><div class="text-center">{{ly.npriproposer}}</div></td>
-                    <td><div class="text-center">{{ly.notvote}}</div></td>
-                    <td><div class="text-center">{{ly.nconsciencevote}}</div></td>
-                </tr>
-	    {% endfor %}
-            {% include "common/color_info_of_party.html" with column=21 %}
-	</table>
-    {% else %}
-    	<p class="text-error">沒有立委</p>
-    {% endif %}
+<div class="page-header text-center">
+    <h3>台灣第八屆立委<small>(2012~2016)</small></h3>
+</div>
+<h4 class="text-center text-warning">{{index}}</h4>
+{% if ly_list %}
+<table class="table table-bordered table-condensed" >
+    <tr style="font-weight:bold;background-color: #CCFF99;"><td>立委</td><td>縣市</td><td>行政區</td><td>委員會</td><td>到職日期</td><td>法條修正草案數</td><td>附帶決議、臨時提案數</td><td>沒投票表決(次)</td><td>脫黨投票(次)</td></tr>
+    {% for ly in ly_list %}
+    <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
+        {% include "common/ly_dropdown.html" with color=True %}
+        <td>{{ly.county}}</td>
+        <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
+        <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" >{{ ly.current_committee }}</a></td>
+        <td>{{ly.term_start|date:"Y-m-d"}}</td>
+        <td><div class="text-center">{{ly.npribill}}</div></td>
+        <td><div class="text-center">{{ly.npriproposer}}</div></td>
+        <td><div class="text-center">{{ly.notvote}}</div></td>
+        <td><div class="text-center">{{ly.nconsciencevote}}</div></td>
+    </tr>
+    {% endfor %}
+    {% include "common/color_info_of_party.html" with column=21 %}
+</table>
+{% else %}
+<p class="text-error">沒有立委</p>
+{% endif %}
 {% endblock right %}
 {% block script %}
-    <script>
-        $(document).ready( function() {
-            $('#ly').addClass('active');
-            $("[rel='tooltip']").tooltip();
-        });
-    </script>
+<script>
+    $(document).ready( function() {
+        $('#ly').addClass('active');
+        $("[rel='tooltip']").tooltip();
+    });
+</script>
 {% endblock script %}

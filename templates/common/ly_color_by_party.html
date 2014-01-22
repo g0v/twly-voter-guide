@@ -1,15 +1,15 @@
 ﻿{% spaceless %}
 {% if ly.party == "中國國民黨" %}
-    <font color=0033FF>{{ ly.name|truncatechars:6 }}</font>
+<font color=0033FF>{{ ly.name|truncatechars:6 }}</font>
 {% elif ly.party == "民主進步黨" %}
-    <font color=009900>{{ ly.name|truncatechars:6 }}</font>
+<font color=009900>{{ ly.name|truncatechars:6 }}</font>
 {% elif ly.party == "親民黨" %}
-    <font color=orange>{{ ly.name|truncatechars:6 }}</font>
+<font color=orange>{{ ly.name|truncatechars:6 }}</font>
 {% elif ly.party == "台灣團結聯盟" %}
-    <font color=brown>{{ ly.name|truncatechars:6 }}</font>
+<font color=brown>{{ ly.name|truncatechars:6 }}</font>
 {% elif ly.party == "無黨團結聯盟" %}
-    <font color=FF00FF>{{ ly.name|truncatechars:6 }}</font>
+<font color=FF00FF>{{ ly.name|truncatechars:6 }}</font>
 {% elif ly.party == "無黨籍" %}
-    <font color=777777>{{ ly.name|truncatechars:6 }}</font>
+<font color=777777>{{ ly.name|truncatechars:6 }}</font>
 {% endif %}
 {% endspaceless %}

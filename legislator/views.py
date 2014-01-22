@@ -7,7 +7,7 @@ from django.db.models import Count, Sum, F, Q
 from .models import Legislator, LegislatorDetail, Platform, Attendance
 from vote.models import Vote,Legislator_Vote
 from proposal.models import Proposal
-from bill.models import Bill 
+from bill.models import Bill
 from search.models import Keyword
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
