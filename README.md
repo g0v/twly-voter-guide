@@ -54,6 +54,46 @@ DATABASES = {
 SECRET_KEY = '' #<-random string and don't share it with anybody.
 ```
 
+For MAC
+=================
+0.1 install postgresql (use brew)
+```
+$ brew install postgresql
+```
+0.2 install pip
+```
+$ sudo install pip 
+```
+
+
+1. git clone
+```
+git clone https://github.com/g0v/twly-voter-guide.git       
+cd twly-voter-guide
+```
+2. install dependent module
+```
+$ sudo pip install -r requirement.txt
+```
+(or use virtualenv)
+
+3. create db (eg. ly)
+```
+$ createdb ly
+```
+
+4. restore data into database
+Please new a database, ex: ly, below will use ly for example
+```
+pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d ly local_db.dump
+```
+you can use `$ whoami` to check your username
+
+5. runserver
+```
+$ python manage.py runserver
+```
+
 CC0 1.0 Universal
 =================
 CC0 1.0 Universal       
