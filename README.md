@@ -31,10 +31,11 @@ pip install -r requirements.txt
 3. restore data into database
 Please new a database, ex: ly, below will use ly for example
 ```
+createdb -h localhost -U postgres ly
 pg_restore --verbose --clean --no-acl --no-owner -h localhost -U postgres -d ly local_db.dump
 ```
 
-3. setting.py
+3. setting.py       
 create `twly-voter-guide/ly/local_settings.py`      
 config your database parameter, and input secret key        
 Django tutorial: https://docs.djangoproject.com/en/dev/intro/tutorial01/					
