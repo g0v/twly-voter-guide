@@ -5,18 +5,19 @@ twly-voter-guide
 
 In Ubuntu
 =================
-0.1 install git python pip easy_install postgresql         
+0.1 install git python pip easy_install postgresql
 ```
-sudo apt-get install git python-pip python-dev python-setuptools postgresql     
+sudo apt-get install git python-pip python-dev python-setuptools postgresql
 easy_install virtualenv
 ```
 
 0.2 set a password in your database(If you already have one, just skip this step) 
-
 ```
 whoami
 ```
+
 (you can use `whoami` to check your username, notice <username> below, please replace with your own username)
+
 ```
 sudo -u <username> psql -c "ALTER USER <username> with encrypted PASSWORD 'put_your_password_here';"
 ```
@@ -34,8 +35,10 @@ cd twly-voter-guide
 ```
 pip install -r requirements.txt     
 ```
+
     choice B:       
         if you want to separate the environment:        
+
 ```
 virtualenv --no-site-packages venv      
 source venv/bin/activate        
@@ -51,9 +54,11 @@ pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d l
 
 4. setting.py  
     create `twly-voter-guide/ly/local_settings.py`, for example:
+
 ```
 touch ./ly/local_settings.py
 ```
+
     config your database parameter(notice USER, PASSWORD below), and input SECRET_KEY              
     Django tutorial: https://docs.djangoproject.com/en/dev/intro/tutorial01/        
     or maybe use http://www.miniwebtool.com/django-secret-key-generator/ to generate SECRET_KEY for convenience				
@@ -72,6 +77,12 @@ DATABASES = {
 }
 SECRET_KEY = '' # <- put random string inside and don't share it with anybody.
 ```
+
+5. runserver
+```
+$ python manage.py runserver
+```
+
 
 For MAC
 =================
@@ -101,7 +112,7 @@ $ sudo pip install -r requirement.txt
 $ createdb ly
 ```
 
-4. restore data into database
+4. restore data into database       
 Please new a database, ex: ly, below will use ly for example
 ```
 pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d ly local_db.dump
