@@ -15,9 +15,9 @@ easy_install virtualenv
 ```
 whoami
 ```
-(you can use `whoami` to check your username)
+(you can use `whoami` to check your username, notice <username> below, please replace with your own username)
 ```
-sudo -u <username> psql -c "ALTER USER postgres with encrypted PASSWORD 'put_your_password_here';"
+sudo -u <username> psql -c "ALTER USER <username> with encrypted PASSWORD 'put_your_password_here';"
 ```
 
 1. git clone
@@ -27,6 +27,14 @@ cd twly-voter-guide
 ```
 
 2. start virtualenv and install packages
+choice A:       
+if you don' mind packages installed into your local environment:        
+
+```
+pip install -r requirements.txt     
+```
+choice B:       
+if you want to separate the environment:        
 ```
 virtualenv --no-site-packages venv      
 source venv/bin/activate        
@@ -37,13 +45,17 @@ pip install -r requirements.txt
 Please new a database, ex: ly, below will use ly for example
 ```
 createdb -h localhost -U <username> ly
-pg_restore --verbose --clean --no-acl --no-owner -h localhost -U postgres -d ly local_db.dump
+pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d ly local_db.dump
 ```
 
-3. setting.py       
-create `twly-voter-guide/ly/local_settings.py`      
-config your database parameter, and input secret key        
-Django tutorial: https://docs.djangoproject.com/en/dev/intro/tutorial01/					
+4. setting.py       
+create `twly-voter-guide/ly/local_settings.py`, for example:
+```
+touch ./ly/local_settings.py
+```
+config your database parameter(notice USER, PASSWORD below), and input SECRET_KEY              
+Django tutorial: https://docs.djangoproject.com/en/dev/intro/tutorial01/        
+or maybe use http://www.miniwebtool.com/django-secret-key-generator/ to generate SECRET_KEY for convenience					
 
 ```
 DATABASES = {
@@ -57,7 +69,7 @@ DATABASES = {
         'PORT': '', # Set to empty string for default.
     }
 }
-SECRET_KEY = '' #<-random string and don't share it with anybody.
+SECRET_KEY = '' # <- put random string inside and don't share it with anybody.
 ```
 
 For MAC
