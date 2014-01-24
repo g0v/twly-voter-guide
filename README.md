@@ -29,15 +29,13 @@ cd twly-voter-guide
 ```
 
 2. start virtualenv and install packages        
-    choice A:       
-        if you don' mind packages installed into your local environment:        
+choice A: if you don' mind packages installed into your local environment:        
 
 ```
 pip install -r requirements.txt     
 ```
 
-    choice B:       
-        if you want to separate the environment:        
+choice B: if you want to separate the environment:        
 
 ```
 virtualenv --no-site-packages venv      
@@ -46,22 +44,22 @@ pip install -r requirements.txt
 ```
 
 3. restore data into database       
-    Please new a database, ex: ly, below will use ly for example
+Please new a database, ex: ly, below will use ly for example
 ```
 createdb -h localhost -U <username> ly
 pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d ly local_db.dump
 ```
 
 4. setting.py  
-    create `twly-voter-guide/ly/local_settings.py`, for example:
+create `twly-voter-guide/ly/local_settings.py`, for example:
 
 ```
 touch ./ly/local_settings.py
 ```
 
-    config your database parameter(notice USER, PASSWORD below), and input SECRET_KEY              
-    Django tutorial: https://docs.djangoproject.com/en/dev/intro/tutorial01/        
-    or maybe use http://www.miniwebtool.com/django-secret-key-generator/ to generate SECRET_KEY for convenience				
+config your database parameter(notice USER, PASSWORD below), and input SECRET_KEY              
+Django tutorial: https://docs.djangoproject.com/en/dev/intro/tutorial01/        
+or maybe use http://www.miniwebtool.com/django-secret-key-generator/ to generate SECRET_KEY for convenience				
 
 ```
 DATABASES = {
@@ -80,7 +78,7 @@ SECRET_KEY = '' # <- put random string inside and don't share it with anybody.
 
 5. runserver
 ```
-$ python manage.py runserver
+python manage.py runserver
 ```
 
 
