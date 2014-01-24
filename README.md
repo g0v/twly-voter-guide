@@ -16,7 +16,7 @@ easy_install virtualenv
 whoami
 ```
 
-(you can use `whoami` to check your username, notice <username> below, please replace with your own username)
+(you can use `whoami` to check your username, notice &lt;username&gt; below, please replace with your own username)
 
 ```
 sudo -u <username> psql -c "ALTER USER <username> with encrypted PASSWORD 'put_your_password_here';"
@@ -28,15 +28,8 @@ git clone https://github.com/g0v/twly-voter-guide.git
 cd twly-voter-guide
 ```
 
-2. start virtualenv and install packages        
-choice A: if you don' mind packages installed into your local environment:        
-
-```
-pip install -r requirements.txt     
-```
-
-choice B: if you want to separate the environment:        
-
+2. start virtualenv and install packages         
+(if you don' mind packages installed into your local environment, just 'pip install -r requirements.txt')
 ```
 virtualenv --no-site-packages venv      
 source venv/bin/activate        
@@ -50,7 +43,7 @@ createdb -h localhost -U <username> ly
 pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d ly local_db.dump
 ```
 
-4. setting.py  
+4. setting.py       
 create `twly-voter-guide/ly/local_settings.py`, for example:
 
 ```
