@@ -5,13 +5,13 @@ twly-voter-guide
 
 In Ubuntu
 =================
-0.1 install git python pip easy_install postgresql
+0.1 install basic tools
 ```
 sudo apt-get install git python-pip python-dev python-setuptools postgresql
 easy_install virtualenv
 ```
 
-0.2 set a password in your database(If you already have one, just skip this step) 
+0.2 set a password in your database(If you already have one, just skip this step)        
 (you can use `whoami` to check your username, notice **&lt;username&gt;**  below, please replace with your own)
 
 ```
@@ -40,8 +40,7 @@ pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d l
 ```
 
 4. setting.py          
-create file in twly-voter-guide/ly/local_settings.py, for example: `touch ./ly/local_settings.py`
-edit local_settings.py to configing your database parameter(notice **USER**, **PASSWORD** below) and **SECRET_KEY**       
+create file in twly-voter-guide/ly/local_settings.py, for example: `touch ./ly/local_settings.py`, edit local_settings.py to configing your database parameter(notice **USER**, **PASSWORD** below) and **SECRET_KEY**       
 See [Django tutorial](https://docs.djangoproject.com/en/dev/intro/tutorial01/) or maybe use [online generator](http://www.miniwebtool.com/django-secret-key-generator/) to get SECRET_KEY for convenience				
 ```
 DATABASES = {
