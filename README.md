@@ -1,7 +1,7 @@
 twly-voter-guide
 ================
 
-立委投票指南 http://twly.herokuapp.com/     
+[立委投票指南](http://twly.herokuapp.com/)     
 
 In Ubuntu
 =================
@@ -12,11 +12,7 @@ easy_install virtualenv
 ```
 
 0.2 set a password in your database(If you already have one, just skip this step) 
-```
-whoami
-```
-
-(you can use `whoami` to check your username, notice &lt;username&gt; below, please replace with your own username)
+(you can use `whoami` to check your username, notice **&lt;username&gt;**  below, please replace with your own)
 
 ```
 sudo -u <username> psql -c "ALTER USER <username> with encrypted PASSWORD 'put_your_password_here';"
@@ -37,19 +33,16 @@ pip install -r requirements.txt
 ```
 
 3. restore data into database       
-Please new a database, ex: ly, below will use ly for example
+Please new a database(eg. ly), below will use ly for example
 ```
 createdb -h localhost -U <username> ly
 pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d ly local_db.dump
 ```
 
-4. setting.py       
-create file twly-voter-guide/ly/local_settings.py, for example: `touch ./ly/local_settings.py`
-
-config in local_settings.py including your database parameter(notice USER, PASSWORD below) and SECRET_KEY.       
-Django tutorial: https://docs.djangoproject.com/en/dev/intro/tutorial01/ .       
-or maybe use http://www.miniwebtool.com/django-secret-key-generator/ to generate SECRET_KEY for convenience.				
-
+4. setting.py          
+create file in twly-voter-guide/ly/local_settings.py, for example: `touch ./ly/local_settings.py`
+edit local_settings.py to configing your database parameter(notice **USER**, **PASSWORD** below) and **SECRET_KEY**       
+See [Django tutorial](https://docs.djangoproject.com/en/dev/intro/tutorial01/) or maybe use [online generator](http://www.miniwebtool.com/django-secret-key-generator/) to get SECRET_KEY for convenience				
 ```
 DATABASES = {
     'default': {
@@ -115,4 +108,4 @@ CC0 1.0 Universal
 =================
 CC0 1.0 Universal       
 This work is published from Taiwan.     
-http://twly.herokuapp.com/about/
+[about](http://twly.herokuapp.com/about/)
