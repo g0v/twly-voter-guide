@@ -29,7 +29,7 @@ cd twly-voter-guide
 ```
 
 2. start virtualenv and install packages         
-(if you don' mind packages installed into your local environment, just 'pip install -r requirements.txt')
+(if you don' mind packages installed into your local environment, just `pip install -r requirements.txt`)
 ```
 virtualenv --no-site-packages venv      
 source venv/bin/activate        
@@ -44,15 +44,11 @@ pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d l
 ```
 
 4. setting.py       
-create `twly-voter-guide/ly/local_settings.py`, for example:
+create file twly-voter-guide/ly/local_settings.py, for example: `touch ./ly/local_settings.py`
 
-```
-touch ./ly/local_settings.py
-```
-
-config your database parameter(notice USER, PASSWORD below), and input SECRET_KEY              
-Django tutorial: https://docs.djangoproject.com/en/dev/intro/tutorial01/        
-or maybe use http://www.miniwebtool.com/django-secret-key-generator/ to generate SECRET_KEY for convenience				
+config in local_settings.py including your database parameter(notice USER, PASSWORD below) and SECRET_KEY.       
+Django tutorial: https://docs.djangoproject.com/en/dev/intro/tutorial01/ .       
+or maybe use http://www.miniwebtool.com/django-secret-key-generator/ to generate SECRET_KEY for convenience.				
 
 ```
 DATABASES = {
