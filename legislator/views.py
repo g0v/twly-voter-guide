@@ -14,6 +14,16 @@ from committees.models import Committees, Legislator_Committees
 from search.views import keyword_list
 
 
+def get_legislator(legislator_id):
+    try:
+        ly = LegislatorDetail.objects.get(ad=8, legislator_id=legislator_id)
+        if ly:
+            ly.hits = F('hits') + 1
+            ly.save(update_fields=['hits'])
+        return ly
+    except Exception, e:
+        print e
+
 def index(request, index):
     error, proposertype, progress, query = None, False, "", Q(ad=8, in_office=True)
     outof_ly_list = LegislatorDetail.objects.filter(ad=8, in_office=False)
@@ -67,10 +77,9 @@ def index_committee(request, index):
 
 def proposer_detail(request, legislator_id, keyword_url):
     error,keyword,proposertype = False,None,False
-    ly = LegislatorDetail.objects.get(ad=8, legislator_id=legislator_id)
-    if ly:
-        ly.hits = F('hits') + 1
-        ly.save(update_fields=['hits'])
+    ly = get_legislator(legislator_id)
+    if not ly:
+        return HttpResponseRedirect('/')
     query = Q(proposer__id=ly.id, legislator_proposal__priproposer=True)
     if 'proposertype' in request.GET:
         proposertype = request.GET['proposertype']
@@ -97,10 +106,9 @@ def proposer_detail(request, legislator_id, keyword_url):
 
 def voter_detail(request, legislator_id, index, keyword_url):
     keyword, keyword_valid, votes, error, notvote, query = None, False, None, False, False, Q()
-    ly = LegislatorDetail.objects.get(ad=8, legislator_id=legislator_id)
-    if ly:
-        ly.hits = F('hits') + 1
-        ly.save(update_fields=['hits'])
+    ly = get_legislator(legislator_id)
+    if not ly:
+        return HttpResponseRedirect('/')
     #--> 沒投票的表決是否搜尋
     if 'notvote' in request.GET:
         notvote = request.GET['notvote']
@@ -132,12 +140,11 @@ def voter_detail(request, legislator_id, index, keyword_url):
     vote_addup = votes.values('decision').annotate(totalNum=Count('vote', distinct=True)).order_by('-decision')
     return render(request,'legislator/voter_detail.html', {'keyword_obj':keyword_list(2),'ly':ly,'index':index,'votes':votes,'keyword':keyword,'error':error,'vote_addup':vote_addup,'notvote':notvote})
 
-def biller_detail(request,legislator_id,keyword_url):
+def biller_detail(request, legislator_id, keyword_url):
     law, error, keyword, proposertype = None, False, None, False
-    ly = LegislatorDetail.objects.get(ad=8, legislator_id=legislator_id)
-    if ly:
-        ly.hits = F('hits') + 1
-        ly.save(update_fields=['hits'])
+    ly = get_legislator(legislator_id)
+    if not ly:
+        return HttpResponseRedirect('/')
     query = Q(proposer__id=ly.id, legislator_bill__priproposer=True)
     if 'proposertype' in request.GET:
         proposertype = request.GET['proposertype']
@@ -160,7 +167,9 @@ def biller_detail(request,legislator_id,keyword_url):
     return render(request,'legislator/biller_detail.html', {'keyword_obj':keyword_list(3),'bills':bills,'ly':ly,'keyword':keyword,'error':error,'proposertype':proposertype})
 
 def ly_politics(request, legislator_id):
-    ly = LegislatorDetail.objects.get(ad=8, legislator_id=legislator_id)
+    ly = get_legislator(legislator_id)
+    if not ly:
+        return HttpResponseRedirect('/')
     if ly.constituency == u'全國不分區':
         politics = Platform.objects.filter(party=ly.party).order_by('id')
     else:
