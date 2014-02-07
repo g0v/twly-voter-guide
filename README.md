@@ -1,7 +1,7 @@
 twly-voter-guide
 ================
 
-[立委投票指南](http://twly.herokuapp.com/)     
+[立委投票指南](http://vote.ly.g0v.tw/)     
 
 In Ubuntu
 =================
@@ -18,13 +18,13 @@ easy_install virtualenv
 sudo -u <username> psql -c "ALTER USER <username> with encrypted PASSWORD 'put_your_password_here';"
 ```
 
-1. git clone
+1  git clone
 ```
 git clone https://github.com/g0v/twly-voter-guide.git       
 cd twly-voter-guide
 ```
 
-2. start virtualenv and install packages         
+2  start virtualenv and install packages         
 (if you don' mind packages installed into your local environment, just `pip install -r requirements.txt`)
 ```
 virtualenv --no-site-packages venv      
@@ -32,14 +32,14 @@ source venv/bin/activate
 pip install -r requirements.txt     
 ```
 
-3. restore data into database       
+3  restore data into database       
 Please new a database(eg. ly), below will use ly for example
 ```
 createdb -h localhost -U <username> ly
 pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d ly local_db.dump
 ```
 
-4. setting.py          
+4  setting.py          
 create file in twly-voter-guide/ly/local_settings.py, for example: `touch ./ly/local_settings.py`, edit local_settings.py to configing your database parameter(notice **USER**, **PASSWORD** below) and **SECRET_KEY**       
 See [Django tutorial](https://docs.djangoproject.com/en/dev/intro/tutorial01/) or maybe use [online generator](http://www.miniwebtool.com/django-secret-key-generator/) to get SECRET_KEY for convenience				
 ```
@@ -57,9 +57,14 @@ DATABASES = {
 SECRET_KEY = '' # <- put random string inside and don't share it with anybody.
 ```
 
-5. runserver
+5  runserver
 ```
 python manage.py runserver
+```
+
+6  tests
+```
+coverage run manage.py test --settings=ly.test
 ```
 
 
@@ -75,36 +80,41 @@ $ sudo install pip
 ```
 
 
-1. git clone
+1  git clone
 ```
 git clone https://github.com/g0v/twly-voter-guide.git       
 cd twly-voter-guide
 ```
-2. install dependent module
+2  install dependent module
 ```
 $ sudo pip install -r requirement.txt
 ```
 (or use virtualenv)
 
-3. create db (eg. ly)
+3  create db (eg. ly)
 ```
 $ createdb ly
 ```
 
-4. restore data into database       
+4  restore data into database       
 Please new a database, ex: ly, below will use ly for example
 ```
 pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d ly local_db.dump
 ```
 you can use `$ whoami` to check your username
 
-5. runserver
+5  runserver
 ```
 $ python manage.py runserver
+```
+
+6  tests
+```
+$ coverage run manage.py test --settings=ly.test
 ```
 
 CC0 1.0 Universal
 =================
 CC0 1.0 Universal       
 This work is published from Taiwan.     
-[about](http://twly.herokuapp.com/about/)
+[about](http://vote.ly.g0v.tw/about/)
