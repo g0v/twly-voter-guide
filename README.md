@@ -39,7 +39,7 @@ createdb -h localhost -U <username> ly
 pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d ly local_db.dump
 ```
 
-4  setting.py          
+4  settings.py          
 create file in twly-voter-guide/ly/local_settings.py, for example: `touch ./ly/local_settings.py`, edit local_settings.py to configing your database parameter(notice **USER**, **PASSWORD** below) and **SECRET_KEY**       
 See [Django tutorial](https://docs.djangoproject.com/en/dev/intro/tutorial01/) or maybe use [online generator](http://www.miniwebtool.com/django-secret-key-generator/) to get SECRET_KEY for convenience				
 ```

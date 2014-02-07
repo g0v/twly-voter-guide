@@ -21,15 +21,12 @@
 <form action="" method="get" class="form-search" id="form">
     {% csrf_token %}
     <fieldset>
-        <input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:核四 國教...空格有交集效果">
+        <input type="search" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:核四 食品安全...空格有交集效果" autofocus>
         <button type="submit" class="btn">Go!</button>
-        <label class="checkbox">
-            {% if index != 'conscience' %}<input type="checkbox" name="notvote" id="notvote" {% if notvote %} checked{% endif %}>{{ ly.name }}沒投票的表決不要搜尋
+        <label class="checkbox text-success">
+            {% if index != 'conscience' %}<input type="checkbox" name="notvote" id="notvote" {% if notvote %} checked{% endif %}>{{ ly.name }}<b class="text-info">沒投票</b>的表決不要搜尋
             {% endif %}
         </label>
-        {% if error %}
-        <span class="help-inline"><a class="text-error">請輸入關鍵字!!</a></span>
-        {% endif %}
     </fieldset>
 </form>
 {% if keyword_obj and index != 'conscience'%}

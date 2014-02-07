@@ -8,17 +8,7 @@
 {% block right %}
 <div class="span10">
     <br>
-    <form action="" method="get" class="form-search" id="form">
-        {% csrf_token %}
-        <br>
-        <fieldset>
-            <input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:核四 國教...空格有交集效果">
-            <button type="submit" class="btn">Go!</button>
-            {% if error %}
-            <span class="help-inline"><a class="text-error">請輸入關鍵字!!</a></span>
-            {% endif %}
-        </fieldset>
-    </form>
+    {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全...空格有交集效果" %}
     {% if keyword_obj %}
     <h4>熱門：
         {% for keyword in keyword_obj %}
@@ -39,33 +29,7 @@
     {% load pagination_tags %}
     {% autopaginate proposal 10 %}
     {% paginate %}
-    <table class="table table-bordered" >
-        <thead>
-            <tr style="text-align:center; font-weight:bold;background-color: #CCFF99;">
-                <th style="text-align:center; vertical-align:middle; width: 12%">日期</th>
-                <th style="text-align:center; vertical-align:middle; width: 12%">主提案人</th>
-                <th style="text-align:center; vertical-align:middle; width: 56%">提案內容</th>
-                <th style="text-align:center; vertical-align:middle; width: 20%">委員會</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for fragment in proposal %}
-            <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
-                <td>{{ fragment.sitting.date|date:"Y-m-d" }}</td>
-                {% with ly=fragment.primary_proposer.0 %}
-                <td><a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="{{ ly.name }}的所有臨時提案、附帶決議">{% include "common/ly_color_by_party.html" %}</a></td>
-                {% endwith %}
-                <td><a href="{% url 'proposal:proposal' fragment.uid %}" rel="tooltip" title="查看詳細資訊">
-                        {% if keyword %}
-                        {{fragment.content|linebreaksbr|replace:keyword|safe}}
-                        {% else %}
-                        {{fragment.content|linebreaksbr|truncatechars:100}}
-                        {% endif %}</a></td>
-                <td>{{ fragment.sitting.committee }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% include "common/proposals.html" %}
     {% paginate %}
     {% endif %}
 </div>
@@ -77,8 +41,8 @@
 {% include "common/keyword_auto_complete.html" %}
 <script>
     $(document).ready( function() {
-    $('#psearch').addClass('active');
-    $("[rel='tooltip']").tooltip();
+        $('#psearch').addClass('active');
+        $("[rel='tooltip']").tooltip();
     });
 </script>
 {% endblock script %}

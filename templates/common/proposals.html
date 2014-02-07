@@ -1,0 +1,30 @@
+{% load ly_extras %}
+<table class="table table-bordered" >
+    <thead>
+        <tr style="text-align:center; font-weight:bold;background-color: #CCFF99;">
+            <th style="text-align:center; vertical-align:middle; width: 12%">日期</th>
+            <th style="text-align:center; vertical-align:middle; width: 12%">第一提案人</th>
+            <th style="text-align:center; vertical-align:middle; width: 56%">提案內容</th>
+            <th style="text-align:center; vertical-align:middle; width: 20%">委員會</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fragment in proposal %}
+        <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
+            <td>{{ fragment.sitting.date|date:"Y-m-d" }}</td>
+            {% with ly=fragment.primary_proposer.0 %}
+            <td><a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="{{ ly.name }}的所有臨時提案、附帶決議">{% include "common/ly_color_by_party.html" %}</a></td>
+            {% endwith %}
+            <td>
+                <a href="{% url 'proposal:proposal' fragment.uid %}" rel="tooltip" title="查看詳細資訊">
+                    {% if keyword %}
+                    {{fragment.content|linebreaksbr|replace:keyword|safe}}
+                    {% else %}
+                    {{fragment.content|linebreaksbr|truncatechars:100}}
+                    {% endif %}</a>
+            </td>
+            <td>{{ fragment.sitting.committee }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

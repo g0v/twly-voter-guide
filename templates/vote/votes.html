@@ -14,17 +14,7 @@
 {% block right %}
 <div class="span10">
     <br>
-    <form action="" method="get" class="form-search" id="form">
-        {% csrf_token %}
-        <br>
-        <fieldset>
-            <input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:核四 國教...空格有交集效果">
-            <button type="submit" class="btn">Go!</button>
-            {% if error %}
-            <span class="help-inline"><a class="text-error">請輸入關鍵字!!</a></span>
-            {% endif %}
-        </fieldset>
-    </form>
+    {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全...空格有交集效果" %}
     {% if keyword_obj %}
     <h4>熱門：
         {% for keyword in keyword_obj %}

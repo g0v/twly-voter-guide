@@ -15,14 +15,11 @@
     {% csrf_token %}
     <br>
     <fieldset>
-        <input type="text" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:勞工 居住...空格有交集效果">
+        <input type="search" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:軍事審判 土地徵收 會計法...空格有交集效果" autofocus>
         <button type="submit" class="btn">Go!</button>
         <label class="checkbox text-success" >
-            <input type="checkbox" name="proposertype" id="proposertype" {% if proposertype %} checked{% endif %}>要包含<b class="text-info">{{ly.name}}</b>不是<b class="text-info">主</b>提案人的草案嗎?
+            <input type="checkbox" name="proposertype" id="proposertype" {% if proposertype %} checked{% endif %}>要包含<b class="text-info">{{ly.name}}</b>不是<b class="text-info">第一</b>提案人的草案嗎?
         </label>
-        {% if error %}
-        <span class="help-inline"><a class="text-error">請輸入關鍵字!!</a></span>
-        {% endif %}
     </fieldset>
 </form>
 {% if keyword_obj %}

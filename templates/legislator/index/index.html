@@ -5,19 +5,16 @@
 <meta itemprop="name" content="立委投票指南">
 {% endblock title %}
 {% block right %}
-<form action="" method="get" class="form-search" id="form">
-    {% csrf_token %}
-    <div class="page-header text-center">
-        <h3>台灣第八屆立委<small>(2012~2016)</small></h3>
+<div class="page-header text-center">
+    <h3>台灣第八屆立委<small>(2012~2016)</small></h3>
+    <form action="" method="get" class="form-search" id="form">
+        {% csrf_token %}
         <fieldset>
-            <input type="text" name="lyname" id="lyname" class="span2" maxlength="4" placeholder="請輸入立委姓名" rel="tooltip" title="請輸入立委的姓或名">
+            <input type="search" name="lyname" id="lyname" class="span2" maxlength="4" placeholder="請輸入立委的姓或名" autofocus rel="tooltip" title="請輸入立委的姓或名">
             <button type="submit" class="btn">Go!</button>
-            {% if error %}
-            <span class="help-inline"><a class="text-error">請輸入立委姓名!!</a></span>
-            {% endif %}
         </fieldset>
-    </div>
-</form>
+    </form>
+</div>
 {% block ly_table %}
 {% endblock ly_table %}
 <hr>
@@ -52,25 +49,25 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <style>
     .ui-autocomplete-category {
-    font-weight: bold;
-    padding: .2em .4em;
-    margin: .8em 0 .2em;
-    line-height: 1.5;
+        font-weight: bold;
+        padding: .2em .4em;
+        margin: .8em 0 .2em;
+        line-height: 1.5;
     }
 </style>
 <script>
     $.widget( "custom.catcomplete", $.ui.autocomplete, {
-    _renderMenu: function( ul, items ) {
-    var that = this,
-    currentCategory = "";
-    $.each( items, function( index, item ) {
-    if ( item.category != currentCategory ) {
-    ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-    currentCategory = item.category;
-    }
-    that._renderItemData( ul, item );
-    });
-    }
+        _renderMenu: function( ul, items ) {
+            var that = this,
+            currentCategory = "";
+            $.each( items, function( index, item ) {
+                if ( item.category != currentCategory ) {
+                    ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+                    currentCategory = item.category;
+                }
+                that._renderItemData( ul, item );
+            });
+        }
     });
 </script>
 <script>
