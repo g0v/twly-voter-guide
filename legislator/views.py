@@ -166,7 +166,7 @@ def biller_detail(request, legislator_id, keyword_url):
         bills = bills.filter(query)
     return render(request,'legislator/biller_detail.html', {'keyword_obj':keyword_list(3),'bills':bills,'ly':ly,'keyword':keyword,'error':error,'proposertype':proposertype})
 
-def ly_politics(request, legislator_id):
+def platformer_detail(request, legislator_id):
     ly = get_legislator(legislator_id)
     if not ly:
         return HttpResponseRedirect('/')

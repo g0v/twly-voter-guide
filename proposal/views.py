@@ -30,12 +30,3 @@ def proposals(request,keyword_url):
     else:
         proposal = Proposal.objects.all().order_by('-sitting__date')[:100]
     return render(request,'proposal/proposals.html', {'proposal':proposal,'keyword':keyword,'error':error,'keyword_obj':keyword_list(1)})
-
-def proposals_related_to_issue(request,issue_id):
-    keyword, proposal = None, None
-    keyword = Issue.objects.values_list('title', flat=True).get(pk=issue_id)
-    if issue_id:
-        proposal = Proposal.objects.filter(issue_proposal__issue_id=issue_id).order_by('date','-pk')
-    return render(request,'proposal/proposals.html', {'keyword':keyword,'proposal':proposal,'keyword_obj':keyword_list(1)})
-
-

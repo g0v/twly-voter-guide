@@ -57,7 +57,9 @@ class LegislatorDetail(models.Model):
     npribill = property(_pribiller_count)
 
     def _current_committee(self):
-        return Legislator_Committees.objects.filter(legislator_id=self.id).order_by('-session')[0].committee
+        committees = Legislator_Committees.objects.filter(legislator_id=self.id).order_by('-session')
+        if committees:
+            return committees[0].committee
     current_committee = property(_current_committee)
 
 class Platform(models.Model):

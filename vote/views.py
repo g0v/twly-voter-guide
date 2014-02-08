@@ -31,14 +31,6 @@ def votes(request, keyword_url, index='normal'):
         votes = Vote.objects.filter(query).order_by('-uid')
     return render(request,'vote/votes.html', {'votes': votes,'index':index,'keyword':keyword,'keyword_obj':keyword_list(2)})
 
-def votes_related_to_issue(request,issue_id):
-    keyword, votes, index = None, None, 'normal'
-    keyword = Issue.objects.values_list('title', flat=True).get(pk=issue_id)
-    if issue_id:
-        votes = Vote.objects.filter(issue_vote__issue_id=issue_id).order_by('date','-pk')
-    date_list = votes.values('date').distinct().order_by('-date')
-    return render(request,'vote/votes.html', {'votes': votes,'index':index,'keyword':keyword,'keyword_obj':keyword_list(2),'date_list':date_list})
-
 def vote(request, vote_id):
     vote = Legislator_Vote.objects.select_related().filter(vote_id=vote_id).order_by('-decision', 'legislator__party')
     data = dict(vote[0].vote.results)

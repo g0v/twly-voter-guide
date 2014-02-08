@@ -30,14 +30,6 @@ def bills(request, keyword_url, index):
         bills = Bill.objects.filter(query & Q(ttsmotions__progress='退回程序')).annotate(totalNum=Count('ttsmotions__id')).filter(totalNum__gt=1).order_by('-totalNum')
     return render(request,'bill/bills.html', {'index':index, 'keyword_obj':keyword_list(3), 'keyword':keyword, 'bills':bills})
 
-def bills_related_to_issue(request,issue_id):
-    keyword, bills = None, None
-    keyword = Issue.objects.values_list('title', flat=True).get(pk=issue_id)
-    if issue_id:
-        bills = Bill.objects.filter(issue_bill__issue_id=issue_id).order_by('date','-pk')
-    return render(request,'bill/bills.html', {'keyword':keyword,'bills':bills,'keyword_obj':keyword_list(3)})
-
 def bill_detail(request, bill_id, proposal_id):
     bill = Bill.objects.filter(billid=bill_id,proposalid=proposal_id)[0]
     return render(request,'bill/bill_detail.html', {'bill': bill})
-
