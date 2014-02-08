@@ -4,19 +4,15 @@ from django.shortcuts import render
 from django.db.models import Q
 from .models import Vote, Legislator_Vote
 from search.models import Keyword
-from search.views import keyword_list, keyword_been_searched
+from search.views import keyword_list, keyword_been_searched, keyword_normalize
 
 
 def votes(request, keyword_url, index='normal'):
-    keyword = None
     if index == 'conscience':
         query = Q(conflict=True)
     else:
         query = Q()
-    if 'keyword' in request.GET:
-        keyword = re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['keyword']).strip()
-    elif keyword_url:
-        keyword = keyword_url.strip()
+    keyword = keyword_normalize(request, keyword_url)
     if keyword:
         votes = Vote.objects.filter(query & reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-sitting__date','-pk')
         if votes:

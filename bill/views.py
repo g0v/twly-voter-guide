@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
-import operator,re
+import operator
 from django.shortcuts import render
 from django.db.models import Count, F, Q
 from .models import Bill
 from search.models import Keyword
-from search.views import keyword_list, keyword_been_searched
+from search.views import keyword_list, keyword_been_searched, keyword_normalize
 from issue.models import Issue
 
 
 def bills(request, keyword_url, index):
-    keyword, query = None, Q()
-    if 'keyword' in request.GET:
-        keyword = re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['keyword']).strip()
-    elif keyword_url:
-        keyword = keyword_url.strip()
+    query = Q()
+    keyword = keyword_normalize(request, keyword_url)
     if keyword:
         bills = Bill.objects.filter(reduce(operator.or_, (Q(abstract__icontains=x) | Q(summary__icontains=x) for x in keyword.split())))
         query = Q(reduce(operator.or_, (Q(abstract__icontains=x) | Q(summary__icontains=x) for x in keyword.split())))

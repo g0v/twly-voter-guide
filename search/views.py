@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from django.db.models import F
 from search.models import Keyword
 
@@ -14,3 +15,9 @@ def keyword_been_searched(keyword, category):
     else:
         k = Keyword(content=keyword, category=category, valid=True, hits=1)
         k.save()
+
+def keyword_normalize(request, keyword_url):
+    if 'keyword' in request.GET:
+        return re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['keyword']).strip()
+    elif keyword_url:
+        return keyword_url.strip()

@@ -11,7 +11,7 @@ from bill.models import Bill
 from search.models import Keyword
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
-from search.views import keyword_list, keyword_been_searched
+from search.views import keyword_list, keyword_been_searched, keyword_normalize
 
 
 def get_legislator(legislator_id):
@@ -76,7 +76,7 @@ def index_committee(request, index):
     return render(request,'legislator/committee.html', {'ly_list': ly_list,'index':index})
 
 def proposer_detail(request, legislator_id, keyword_url):
-    error,keyword,proposertype = False,None,False
+    proposertype = False
     ly = get_legislator(legislator_id)
     if not ly:
         return HttpResponseRedirect('/')
@@ -85,20 +85,17 @@ def proposer_detail(request, legislator_id, keyword_url):
         proposertype = request.GET['proposertype']
         if proposertype:
             query = Q(proposer__id=ly.id)
-    if 'keyword' in request.GET:
-        keyword = re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['keyword']).strip()
-    elif keyword_url:
-        keyword = keyword_url.strip()
+    keyword = keyword_normalize(request, keyword_url)
     if keyword:
         proposal = Proposal.objects.filter(query & reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-sitting__date')
         if proposal:
             keyword_been_searched(keyword, 1)
     else:
         proposal = Proposal.objects.filter(query).order_by('-sitting__date')
-    return render(request,'legislator/proposer_detail.html', {'keyword_obj':keyword_list(1),'proposal':proposal,'ly':ly,'keyword':keyword,'error':error,'proposertype':proposertype})
+    return render(request,'legislator/proposer_detail.html', {'keyword_obj':keyword_list(1),'proposal':proposal,'ly':ly,'keyword':keyword,'proposertype':proposertype})
 
 def voter_detail(request, legislator_id, index, keyword_url):
-    keyword, keyword_valid, votes, error, notvote, query = None, False, None, False, False, Q()
+    votes, notvote, query = None, False, Q()
     ly = get_legislator(legislator_id)
     if not ly:
         return HttpResponseRedirect('/')
@@ -114,22 +111,18 @@ def voter_detail(request, legislator_id, index, keyword_url):
     else:
         query = query & Q(legislator_id=ly.id)
     #<--
-    if 'keyword' in request.GET:
-        keyword = re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['keyword']).strip()
-    elif keyword_url:
-        keyword = keyword_url.strip()
+    keyword = keyword_normalize(request, keyword_url)
     if keyword:
-        keyword_valid = True
         votes = Legislator_Vote.objects.select_related().filter(query & reduce(operator.and_, (Q(vote__content__icontains=x) for x in keyword.split()))).order_by('-vote')
         if votes:
             keyword_been_searched(keyword, 2)
     else:
         votes = Legislator_Vote.objects.select_related().filter(query).order_by('-vote')
     vote_addup = votes.values('decision').annotate(totalNum=Count('vote', distinct=True)).order_by('-decision')
-    return render(request,'legislator/voter_detail.html', {'keyword_obj':keyword_list(2),'ly':ly,'index':index,'votes':votes,'keyword':keyword,'error':error,'vote_addup':vote_addup,'notvote':notvote})
+    return render(request,'legislator/voter_detail.html', {'keyword_obj':keyword_list(2),'ly':ly,'index':index,'votes':votes,'keyword':keyword,'vote_addup':vote_addup,'notvote':notvote})
 
 def biller_detail(request, legislator_id, keyword_url):
-    law, error, keyword, proposertype = None, False, None, False
+    proposertype = False
     ly = get_legislator(legislator_id)
     if not ly:
         return HttpResponseRedirect('/')
@@ -139,22 +132,14 @@ def biller_detail(request, legislator_id, keyword_url):
         if proposertype:
             query = Q(proposer__id=ly.id)
     bills = Bill.objects.filter(query)
-    #laws = bills.values('law').distinct().order_by('law')
-    #if 'law' in request.GET:
-    #    law = request.GET['law']
-    #    if law:
-    #        query = query & Q(law=law)
-    if 'keyword' in request.GET:
-        keyword = re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['keyword']).strip()
-    elif keyword_url:
-        keyword = keyword_url.strip()
+    keyword = keyword_normalize(request, keyword_url)
     if keyword:
         bills = bills.filter(query & reduce(operator.or_, (Q(abstract__icontains=x) for x in keyword.split())))
         if bills:
             keyword_been_searched(keyword, 3)
     else:
         bills = bills.filter(query)
-    return render(request,'legislator/biller_detail.html', {'keyword_obj':keyword_list(3),'bills':bills,'ly':ly,'keyword':keyword,'error':error,'proposertype':proposertype})
+    return render(request,'legislator/biller_detail.html', {'keyword_obj':keyword_list(3),'bills':bills,'ly':ly,'keyword':keyword,'proposertype':proposertype})
 
 def platformer_detail(request, legislator_id):
     ly = get_legislator(legislator_id)
