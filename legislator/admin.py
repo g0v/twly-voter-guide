@@ -1,20 +1,7 @@
 from django.contrib import admin
 from legislator.models import Legislator
 from search.models import Keyword
-from issue.models import Issue
 
-
-class IssueAdmin(admin.ModelAdmin):
-    fieldsets = [
-            ('title', {'fields':['title']}),
-            ('content', {'fields':['content']}),
-            ('date', {'fields':['date']}),
-            ('hits', {'fields':['hits']}),
-            ('reference', {'fields':['reference']})
-            ]
-    list_display = ('title','date','hits', 'reference')
-    list_filter = ['date']
-    search_fields = ['title']
 
 class KeywordAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -34,6 +21,5 @@ class LegislatorAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ['name']
 
-admin.site.register(Issue, IssueAdmin)
 admin.site.register(Keyword, KeywordAdmin)
 admin.site.register(Legislator, LegislatorAdmin)

@@ -5,7 +5,6 @@ from django.db.models import Count, F, Q
 from .models import Bill
 from search.models import Keyword
 from search.views import keyword_list, keyword_been_searched, keyword_normalize
-from issue.models import Issue
 
 
 def bills(request, keyword_url, index):

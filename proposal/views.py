@@ -5,7 +5,6 @@ from django.db.models import F,Q
 from .models import Proposal
 from search.models import Keyword
 from search.views import keyword_list, keyword_been_searched, keyword_normalize
-from issue.models import Issue
 
 
 def proposal(request,proposal_id):
