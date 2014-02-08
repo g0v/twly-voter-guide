@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.db.models import Count, F, Q
 from .models import Bill
 from search.models import Keyword
-from search.views import keyword_list
+from search.views import keyword_list, keyword_been_searched
 from issue.models import Issue
 
 
@@ -18,12 +18,7 @@ def bills(request, keyword_url, index):
         bills = Bill.objects.filter(reduce(operator.or_, (Q(abstract__icontains=x) | Q(summary__icontains=x) for x in keyword.split())))
         query = Q(reduce(operator.or_, (Q(abstract__icontains=x) | Q(summary__icontains=x) for x in keyword.split())))
         if bills:
-            keyword_obj = Keyword.objects.filter(category=3,content=keyword.strip())
-            if keyword_obj:
-                keyword_obj.update(hits=F('hits')+1)
-            else:
-                k = Keyword(content=keyword.strip(),category=3,valid=True,hits=1)
-                k.save()
+            keyword_been_searched(keyword, 3)
     if index == 'normal':
         bills = Bill.objects.filter(query, last_action__isnull=False).order_by('-last_action_at')[:100]
     elif index == 'rejected':

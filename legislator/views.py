@@ -11,7 +11,7 @@ from bill.models import Bill
 from search.models import Keyword
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
-from search.views import keyword_list
+from search.views import keyword_list, keyword_been_searched
 
 
 def get_legislator(legislator_id):
@@ -92,14 +92,7 @@ def proposer_detail(request, legislator_id, keyword_url):
     if keyword:
         proposal = Proposal.objects.filter(query & reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-sitting__date')
         if proposal:
-            proposal.filter(hits__isnull=False).update(hits=F('hits')+1)
-            proposal.filter(hits__isnull=True).update(hits=1)
-            keyword_obj = Keyword.objects.filter(category=1, content=keyword.strip())
-            if keyword_obj:
-                keyword_obj.update(hits=F('hits')+1)
-            else:
-                k = Keyword(content=keyword.strip(), category=1, valid=True, hits=1)
-                k.save()
+            keyword_been_searched(keyword, 1)
     else:
         proposal = Proposal.objects.filter(query).order_by('-sitting__date')
     return render(request,'legislator/proposer_detail.html', {'keyword_obj':keyword_list(1),'proposal':proposal,'ly':ly,'keyword':keyword,'error':error,'proposertype':proposertype})
@@ -129,12 +122,7 @@ def voter_detail(request, legislator_id, index, keyword_url):
         keyword_valid = True
         votes = Legislator_Vote.objects.select_related().filter(query & reduce(operator.and_, (Q(vote__content__icontains=x) for x in keyword.split()))).order_by('-vote')
         if votes:
-            keyword_obj = Keyword.objects.filter(category=2, content=keyword.strip())
-            if keyword_obj:
-                keyword_obj.update(hits=F('hits')+1)
-            else:
-                k = Keyword(content=keyword.strip(), category=2, valid=True, hits=1)
-                k.save()
+            keyword_been_searched(keyword, 2)
     else:
         votes = Legislator_Vote.objects.select_related().filter(query).order_by('-vote')
     vote_addup = votes.values('decision').annotate(totalNum=Count('vote', distinct=True)).order_by('-decision')
@@ -162,6 +150,8 @@ def biller_detail(request, legislator_id, keyword_url):
         keyword = keyword_url.strip()
     if keyword:
         bills = bills.filter(query & reduce(operator.or_, (Q(abstract__icontains=x) for x in keyword.split())))
+        if bills:
+            keyword_been_searched(keyword, 3)
     else:
         bills = bills.filter(query)
     return render(request,'legislator/biller_detail.html', {'keyword_obj':keyword_list(3),'bills':bills,'ly':ly,'keyword':keyword,'error':error,'proposertype':proposertype})

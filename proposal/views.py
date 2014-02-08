@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.db.models import F,Q
 from .models import Proposal
 from search.models import Keyword
-from search.views import keyword_list
+from search.views import keyword_list, keyword_been_searched
 from issue.models import Issue
 
 
@@ -21,12 +21,7 @@ def proposals(request,keyword_url):
     if keyword:
         proposal = Proposal.objects.filter(reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-sitting__date')
         if proposal:
-            keyword_obj = Keyword.objects.filter(category=1, content=keyword)
-            if keyword_obj:
-                keyword_obj.update(hits=F('hits')+1)
-            elif not keyword_url:
-                k = Keyword(content=keyword, category=1, valid=True, hits=1)
-                k.save()
+            keyword_been_searched(keyword, 1)
     else:
         proposal = Proposal.objects.all().order_by('-sitting__date')[:100]
     return render(request,'proposal/proposals.html', {'proposal':proposal,'keyword':keyword,'error':error,'keyword_obj':keyword_list(1)})
