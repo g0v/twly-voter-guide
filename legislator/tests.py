@@ -5,6 +5,12 @@ from .models import Legislator
 from .models import LegislatorDetail
 
 
+class StaticViewTest(TestCase):
+    def test(self):
+        for arg in ['about', 'reference']:
+            response = self.client.get(reverse(arg))
+            self.assertEqual(response.status_code, 200)
+
 class LegislatorTest(TestCase):
     def setUp(self):
         Legislator.objects.create(uid=1, name=u"王金平")

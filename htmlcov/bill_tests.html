@@ -25,8 +25,8 @@
         </h1>
         <img id='keyboard_icon' src='keybd_closed.png'>
         <h2 class='stats'>
-            4 statements &nbsp;
-            <span class='run hide_run shortkey_r button_toggle_run'>4 run</span>
+            9 statements &nbsp;
+            <span class='run hide_run shortkey_r button_toggle_run'>9 run</span>
             <span class='mis shortkey_m button_toggle_mis'>0 missing</span>
             <span class='exc shortkey_x button_toggle_exc'>0 excluded</span>
             
@@ -62,40 +62,32 @@
         <tr>
             <td class='linenos' valign='top'>
 <p id='n1' class='pln'><a href='#n1'>1</a></p>
-<p id='n2' class='pln'><a href='#n2'>2</a></p>
-<p id='n3' class='pln'><a href='#n3'>3</a></p>
-<p id='n4' class='pln'><a href='#n4'>4</a></p>
+<p id='n2' class='stm run hide_run'><a href='#n2'>2</a></p>
+<p id='n3' class='stm run hide_run'><a href='#n3'>3</a></p>
+<p id='n4' class='stm run hide_run'><a href='#n4'>4</a></p>
 <p id='n5' class='pln'><a href='#n5'>5</a></p>
 <p id='n6' class='pln'><a href='#n6'>6</a></p>
-<p id='n7' class='pln'><a href='#n7'>7</a></p>
+<p id='n7' class='stm run hide_run'><a href='#n7'>7</a></p>
 <p id='n8' class='stm run hide_run'><a href='#n8'>8</a></p>
-<p id='n9' class='pln'><a href='#n9'>9</a></p>
-<p id='n10' class='pln'><a href='#n10'>10</a></p>
+<p id='n9' class='stm run hide_run'><a href='#n9'>9</a></p>
+<p id='n10' class='stm run hide_run'><a href='#n10'>10</a></p>
 <p id='n11' class='stm run hide_run'><a href='#n11'>11</a></p>
 <p id='n12' class='stm run hide_run'><a href='#n12'>12</a></p>
-<p id='n13' class='pln'><a href='#n13'>13</a></p>
-<p id='n14' class='pln'><a href='#n14'>14</a></p>
-<p id='n15' class='pln'><a href='#n15'>15</a></p>
-<p id='n16' class='stm run hide_run'><a href='#n16'>16</a></p>
                 
             </td>
             <td class='text' valign='top'>
-<p id='t1' class='pln'><span class='str'>&quot;&quot;&quot;</span><span class='strut'>&nbsp;</span></p>
-<p id='t2' class='pln'><span class='str'>This file demonstrates writing tests using the unittest module. These will pass</span><span class='strut'>&nbsp;</span></p>
-<p id='t3' class='pln'><span class='str'>when you run &quot;manage.py test&quot;.</span><span class='strut'>&nbsp;</span></p>
-<p id='t4' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t5' class='pln'><span class='str'>Replace this with more appropriate tests for your application.</span><span class='strut'>&nbsp;</span></p>
-<p id='t6' class='pln'><span class='str'>&quot;&quot;&quot;</span><span class='strut'>&nbsp;</span></p>
-<p id='t7' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t8' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>test</span> <span class='key'>import</span> <span class='nam'>TestCase</span><span class='strut'>&nbsp;</span></p>
-<p id='t9' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t10' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t11' class='stm run hide_run'><span class='key'>class</span> <span class='nam'>SimpleTest</span><span class='op'>(</span><span class='nam'>TestCase</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t12' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>test_basic_addition</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t13' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='str'>&quot;&quot;&quot;</span><span class='strut'>&nbsp;</span></p>
-<p id='t14' class='pln'><span class='str'>&nbsp; &nbsp; &nbsp; &nbsp; Tests that 1 + 1 always equals 2.</span><span class='strut'>&nbsp;</span></p>
-<p id='t15' class='pln'><span class='str'>&nbsp; &nbsp; &nbsp; &nbsp; &quot;&quot;&quot;</span><span class='strut'>&nbsp;</span></p>
-<p id='t16' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>self</span><span class='op'>.</span><span class='nam'>assertEqual</span><span class='op'>(</span><span class='num'>1</span> <span class='op'>+</span> <span class='num'>1</span><span class='op'>,</span> <span class='num'>2</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t1' class='pln'><span class='com'># -*- coding: utf-8 -*-</span><span class='strut'>&nbsp;</span></p>
+<p id='t2' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>test</span> <span class='key'>import</span> <span class='nam'>TestCase</span><span class='strut'>&nbsp;</span></p>
+<p id='t3' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>core</span><span class='op'>.</span><span class='nam'>urlresolvers</span> <span class='key'>import</span> <span class='nam'>reverse</span><span class='strut'>&nbsp;</span></p>
+<p id='t4' class='stm run hide_run'><span class='key'>from</span> <span class='op'>.</span><span class='nam'>models</span> <span class='key'>import</span> <span class='nam'>Bill</span><span class='strut'>&nbsp;</span></p>
+<p id='t5' class='pln'><span class='strut'>&nbsp;</span></p>
+<p id='t6' class='pln'><span class='strut'>&nbsp;</span></p>
+<p id='t7' class='stm run hide_run'><span class='key'>class</span> <span class='nam'>BillTest</span><span class='op'>(</span><span class='nam'>TestCase</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t8' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>test</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t9' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>for</span> <span class='nam'>arg</span> <span class='key'>in</span> <span class='op'>[</span><span class='str'>&#39;normal&#39;</span><span class='op'>,</span> <span class='str'>&#39;rejected&#39;</span><span class='op'>]</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t10' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>for</span> <span class='nam'>keyword</span> <span class='key'>in</span> <span class='op'>[</span><span class='str'>&#39; &#39;</span><span class='op'>,</span> <span class='str'>u&#39;test spilt&#39;</span><span class='op'>]</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t11' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>response</span> <span class='op'>=</span> <span class='nam'>self</span><span class='op'>.</span><span class='nam'>client</span><span class='op'>.</span><span class='nam'>get</span><span class='op'>(</span><span class='nam'>reverse</span><span class='op'>(</span><span class='str'>&#39;bill:bills&#39;</span><span class='op'>,</span> <span class='nam'>kwargs</span><span class='op'>=</span><span class='op'>{</span><span class='str'>&quot;index&quot;</span><span class='op'>:</span> <span class='nam'>arg</span><span class='op'>,</span> <span class='str'>&quot;keyword_url&quot;</span><span class='op'>:</span> <span class='nam'>keyword</span><span class='op'>}</span><span class='op'>)</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t12' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>self</span><span class='op'>.</span><span class='nam'>assertEqual</span><span class='op'>(</span><span class='nam'>response</span><span class='op'>.</span><span class='nam'>status_code</span><span class='op'>,</span> <span class='num'>200</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
                 
             </td>
         </tr>
