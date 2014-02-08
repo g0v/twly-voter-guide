@@ -7,8 +7,9 @@ env:
   - DJANGO_VERSION=1.5
 
 install:
+  - pip install -q psycopg2 --use-mirrors
   - pip install -q Django==$DJANGO --use-mirrors
-  - pip install -q -e . --use-mirrors
-  - pip install -r requirements.txt --use-mirrors
+  - pip install -q . --use-mirrors
+  - pip install -q -r requirements.txt --use-mirrors
 
 script: coverage run manage.py test --settings=ly.test
