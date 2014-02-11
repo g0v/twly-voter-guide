@@ -45,7 +45,7 @@ pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d l
 ```
 
 ## Django settings.py          
-create local_settings.py file in twly-voter-guide/ly/, for example: `touch ./ly/local_settings.py`, edit local_settings.py to configing your database parameter(notice **USER**, **PASSWORD** below) and **SECRET_KEY**       
+Edit local_settings.py in twly-voter-guide/ly/ to configing your database parameter(notice **USER**, **PASSWORD** below) and **SECRET_KEY**       
 See [Django tutorial](https://docs.djangoproject.com/en/dev/intro/tutorial01/) or maybe use [online generator](http://www.miniwebtool.com/django-secret-key-generator/) to get SECRET_KEY for convenience				
 ```
 SECRET_KEY = '' # put random string inside and don't share it with anybody.
