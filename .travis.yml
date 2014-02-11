@@ -12,6 +12,6 @@ install:
   - "pip install -r requirements.txt"
 
 before_script:
-  - psql -c "CREATE DATABASE ly_dev;" -U postgres
+  - psql -c "CREATE DATABASE ly;" -U postgres
 
 script: coverage run manage.py test --settings=ly.test
