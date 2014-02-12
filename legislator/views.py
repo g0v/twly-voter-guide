@@ -69,7 +69,7 @@ def index(request, index):
 
 def index_district(request, index):
     ly_list = LegislatorDetail.objects.filter(ad=8, in_office=True, county=index).order_by('party', 'name')
-    return render(request,'legislator/county.html', {'ly_list': ly_list,'type':'district','index':index})
+    return render(request,'legislator/county.html', {'ly_list': ly_list,'index':index})
 
 def index_committee(request, index):
     ly_list = Legislator_Committees.objects.select_related().filter(ad=8, committee=index).order_by('-session', 'legislator__party', 'legislator__name')
