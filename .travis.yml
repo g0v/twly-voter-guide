@@ -13,6 +13,6 @@ install:
 
 before_script:
   - psql -c "CREATE DATABASE ly;" -U postgres
-  - touch twly-voter-guide/ly/local_settings.py
+  - touch ly/local_settings.py
 
 script: coverage run manage.py test --settings=ly.test
