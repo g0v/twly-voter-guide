@@ -13,5 +13,6 @@ install:
 
 before_script:
   - psql -c "CREATE DATABASE ly;" -U postgres
+  - touch ly/local_settings.py
 
 script: coverage run manage.py test --settings=ly.test
