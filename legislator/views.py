@@ -195,6 +195,7 @@ def chart_report(request, index='vote'):
         title = u'立法院表決數依月份分組'
     return render(request,'legislator/chart_report.html', {'compare':compare,'title':title,'content':content,'index':index,'vote_obj':vote_obj,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj, 'data': data} )
 
+'''
 def list_union(month_list, obj_q):
     obj = []
     for e in month_list:
@@ -227,3 +228,4 @@ def chart_personal_report(request, legislator_id, index='proposal'):
         month_list = Attendance.objects.filter(date__gte=ly.term_start, category='YS').dates('date','month')
         obj = list_union(month_list, obj_q)
     return render(request,'legislator/chart_personal_report.html', {'index':index,'ly':ly,'obj':obj,'compare_obj':compare_obj} )
+'''

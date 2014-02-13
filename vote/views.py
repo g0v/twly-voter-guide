@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import operator,re
+import operator
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.db.models import Q
 from .models import Vote, Legislator_Vote
@@ -24,7 +25,10 @@ def votes(request, keyword_url, index='normal'):
 def vote(request, vote_id):
     data = None
     vote = Legislator_Vote.objects.select_related().filter(vote_id=vote_id).order_by('-decision', 'legislator__party')
-    if vote:
-        data = dict(vote[0].vote.results)
-        data.pop('total')
+    try:
+        data = dict(Vote.objects.get(uid=vote_id).results)
+        data.pop('total', None)
+    except Exception, e:
+        print e
+        return HttpResponseRedirect('/')
     return render(request,'vote/vote.html', {'vote':vote, 'data':data})

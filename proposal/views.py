@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import operator,re
+import operator
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.db.models import F,Q
 from .models import Proposal
@@ -8,7 +9,11 @@ from search.views import keyword_list, keyword_been_searched, keyword_normalize
 
 
 def proposal(request,proposal_id):
-    proposal = Proposal.objects.select_related().get(uid=proposal_id)
+    try:
+        proposal = Proposal.objects.select_related().filter(uid=proposal_id)[0]
+    except Exception, e:
+        print e
+        return HttpResponseRedirect('/')
     return render(request,'proposal/proposal.html', {'proposal': proposal})
 
 def proposals(request,keyword_url):

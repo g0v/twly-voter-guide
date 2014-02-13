@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import operator
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.db.models import Count, F, Q
 from .models import Bill
@@ -20,7 +21,12 @@ def bills(request, keyword_url, index):
     elif index == 'rejected':
         bills = Bill.objects.filter(query & Q(ttsmotions__progress='退回程序')).annotate(totalNum=Count('ttsmotions__id')).filter(totalNum__gt=1).order_by('-totalNum')
     return render(request,'bill/bills.html', {'index':index, 'keyword_obj':keyword_list(3), 'keyword':keyword, 'bills':bills})
-
+'''
 def bill_detail(request, bill_id, proposal_id):
-    bill = Bill.objects.filter(billid=bill_id,proposalid=proposal_id)[0]
+    try:
+        bill = Bill.objects.filter(billid=bill_id, proposalid=proposal_id)[0]
+    except Exception, e:
+        print e
+        return HttpResponseRedirect('/')
     return render(request,'bill/bill_detail.html', {'bill': bill})
+'''

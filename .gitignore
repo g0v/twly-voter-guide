@@ -5,6 +5,7 @@
 venv
 migrations
 local_settings.py
+ly_local_settings.html
 *.pydevproject
 .project
 .metadata
