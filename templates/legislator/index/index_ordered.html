@@ -9,7 +9,7 @@
             <select name="progress" id="progress">
                 <option value="">全部</option>
                 {% for fragment in distinct_progress_of_bill %}
-                <option value={{fragment}} style="background-color: {% cycle '#EEEEEE' 'white' %};">{{fragment}}</option>
+                <option value="{{fragment}}" style="background-color: {% cycle '#EEEEEE' 'white' %};">{{fragment}}</option>
                 {% endfor %}
             </select>
             <label class="checkbox">
@@ -29,40 +29,40 @@
     {% if ly_list %}
     {% for ly in ly_list %}
     {% if forloop.counter0|divisibleby:col %}
-    {% if forloop.counter0 != 0 %}</tr>{% endif %}
-<tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
-    <td></td>
-    {% endif %}
-    <td>
-        {% if index == 'biller' %}
-        <a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="草案{{ly.totalNum}}個">
+        {% if forloop.counter0 != 0 %}</tr>{% endif %}
+        <tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
+            <td></td>
+        {% endif %}
+        <td>
+            {% if index == 'biller' %}
+            <a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="草案{{ly.totalNum}}個">
             {% elif index == 'conscience_vote' %}
             <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" rel="tooltip" title="脫黨投票{{ly.totalNum}}次">
-                {% else %}
-                <a href="{% url 'legislator:voter_detail' ly.legislator_id %}" rel="tooltip" title="投票缺席{{ly.totalNum}}次">
-                    {% endif %}
-                    {% include "common/ly_color_by_party.html" %}
-                </a>
-            </td>
-            {% endfor %}
-            {% endif %}
-            {% if no_count_list %}
-            <tr><td rowspan="{% widthratio no_count_list|length|add:10 col 1 %}" style="background-color: #FF99FF; text-align:center; vertical-align:middle; font-weight:bold;">0次</td>
-                {% for ly in no_count_list %}
-                {% if forloop.counter0|divisibleby:col and forloop.counter0 != 0 %}
-            </tr>
-            {% endif %}
+            {% else %}
+            <a href="{% url 'legislator:voter_detail' ly.legislator_id %}" rel="tooltip" title="投票缺席{{ly.totalNum}}次">
+                {% endif %}
+                {% include "common/ly_color_by_party.html" %}
+            </a>
+        </td>
+    {% endfor %}
+    {% endif %}
+    {% if no_count_list %}
+    <tr><td rowspan="{% widthratio no_count_list|length|add:10 col 1 %}" style="background-color: #FF99FF; text-align:center; vertical-align:middle; font-weight:bold;">0次</td>
+        {% for ly in no_count_list %}
+        {% if forloop.counter0|divisibleby:col and forloop.counter0 != 0 %}
+        </tr>
+        {% endif %}
             <td style="background-color: #FFCCFF;">
                 {% if index == 'biller' %}<a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="草案0個">
-                    {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" rel="tooltip" title="脫黨投票0次">
-                        {% else %}<a href="{% url 'legislator:voter_detail' ly.legislator_id %}" rel="tooltip" title="沒投票0次">
-                            {% endif %}
-                            {% include "common/ly_color_by_party.html" %}
-                        </a>
-                    </td>
-                    {% endfor %}
-                    {% endif %}
-                    {% include "common/color_info_of_party.html" with column=21 %}
-                    {% endwith %}
-                </table>
-                {% endblock ly_table %}
+                {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" rel="tooltip" title="脫黨投票0次">
+                {% else %}<a href="{% url 'legislator:voter_detail' ly.legislator_id %}" rel="tooltip" title="沒投票0次">
+                {% endif %}
+                {% include "common/ly_color_by_party.html" %}
+                </a>
+            </td>
+        {% endfor %}
+        {% endif %}
+    {% include "common/color_info_of_party.html" with column=21 %}
+    {% endwith %}
+</table>
+{% endblock ly_table %}

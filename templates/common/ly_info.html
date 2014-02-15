@@ -14,7 +14,7 @@
                 <tr>
                     <td colspan=2>
                         <div align="center">
-                            <img src={{ly.image}} width="80%">
+                            <img src="{{ly.image}}" width="80%">
                         </div>
                     </td>
                 </tr>
@@ -113,7 +113,7 @@
                 </tr>
                 <tr>
                     <td style="background-color: lightgrey;">外部連結</td>
-                    <td><a href={{ ly.links.ly }} target="_blank">{{ ly.name }}的立院官網</a></td>
+                    <td><a href="{{ ly.links.ly }}" target="_blank">{{ ly.name }}的立院官網</a></td>
                 </tr>
                 {% endif %}
             </tbody>
@@ -141,7 +141,7 @@
         {% block ly_detail %}
         {% endblock ly_detail %}
         <hr>
-        <div class="fb-comments" data-width="480" data-num-posts="3" data-href={{current_url}}></div>
+        <div class="fb-comments" data-width="480" data-num-posts="3" data-href="{{current_url}}"></div>
     </div>
 </div>
 {% endblock right %}

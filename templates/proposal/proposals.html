@@ -22,7 +22,7 @@
         {% if keyword %}
         <p class="lead">有 {{ proposal|length }} 個包含<font style="color: red;">"{{keyword}}"</font>的附帶決議、臨時提案</p>
         {% else %}
-        <p class="lead">本周共有 {{ proposal|length }} 個附帶決議、臨時提案</p>
+        <p class="lead">最新的 {{ proposal|length }} 個附帶決議、臨時提案</p>
         {% endif %}
     </div>
     {% if proposal %}

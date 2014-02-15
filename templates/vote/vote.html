@@ -34,40 +34,44 @@
             {% for decision in ly_list %}
             {% with decision=decision.grouper %}
             {% ifequal decision null %}
-            <tr><td colspan={{col}} style="background-color: #FFCC33;"><strong>沒投票
-                        {% endifequal %}
-                        {% ifequal decision -1 %}
-                        <tr><td colspan={{col}} style="background-color: #FF99CC;"><strong>反對票
-                                    {% endifequal %}
-                                    {% ifequal decision 1 %}
-                                    <tr><td colspan={{col}} style="background-color: #CCFF99;"><strong>贊成票
-                                                {% endifequal %}
-                                                {% ifequal decision 0 %}
-                                                <tr><td colspan={{col}} style="background-color: #CCCCCC;"><strong>棄權票
-                                                            {% endifequal %}
-                                                            {% endwith %}
-                                                    </strong></td>
-                                                    {% for fragment in decision.list %}
-                                                    {% if forloop.counter0|divisibleby:col %}
-                                                    </tr><tr>
-                                                    {% endif %}
-                                                    {% with ly=fragment.legislator %}
-                                                    <td><a href="{% url 'legislator:voter_detail' ly.legislator_id %}" rel="tooltip" title="這位立委的表決投票紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
-                                                    {% endwith %}
-                                                    {% endfor %}
-                                                    {% endfor %}
-                                                    {% include "common/color_info_of_party.html" with column=col %}
-                                                    {% endwith %}
-                                                </table>
-                                                <hr>
-                                                <div class="fb-comments" data-width="600" data-num-posts="3" href={{current_url}}></div>
-                                                {% endif %}
-                                            </div><!--end: span6 -->
-                                        </div><!--end: row-fluid -->
-                                        {% endblock right %}
-                                        {% block backtotop %}
-                                        {{ block.super }}
-                                        {% endblock backtotop %}
-                                        {% block script %}
-                                        {% include "vote/vote_d3_pie_chart.html" %}
-                                        {% endblock script %}
+            <tr>
+                <td colspan="{{col}}" style="background-color: #FFCC33;"><strong>沒投票
+            {% endifequal %}
+            {% ifequal decision -1 %}
+            <tr>
+                <td colspan="{{col}}" style="background-color: #FF99CC;"><strong>反對票
+            {% endifequal %}
+            {% ifequal decision 1 %}
+            <tr>
+                <td colspan="{{col}}" style="background-color: #CCFF99;"><strong>贊成票
+            {% endifequal %}
+            {% ifequal decision 0 %}
+            <tr>
+                <td colspan="{{col}}" style="background-color: #CCCCCC;"><strong>棄權票
+            {% endifequal %}
+            </strong></td>
+            {% endwith %}
+                {% for fragment in decision.list %}
+                {% if forloop.counter0|divisibleby:col %}
+                </tr><tr>
+                {% endif %}
+                {% with ly=fragment.legislator %}
+                    <td><a href="{% url 'legislator:voter_detail' ly.legislator_id %}" rel="tooltip" title="這位立委的表決投票紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
+                {% endwith %}
+                {% endfor %}
+            {% endfor %}
+            {% include "common/color_info_of_party.html" with column=col %}
+            {% endwith %}
+        </table>
+        <hr>
+        <div class="fb-comments" data-width="600" data-num-posts="3" href="{{current_url}}"></div>
+        {% endif %}
+    </div><!--end: span6 -->
+</div><!--end: row-fluid -->
+{% endblock right %}
+{% block backtotop %}
+{{ block.super }}
+{% endblock backtotop %}
+{% block script %}
+{% include "vote/vote_d3_pie_chart.html" %}
+{% endblock script %}

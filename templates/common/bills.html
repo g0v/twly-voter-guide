@@ -15,7 +15,7 @@
     <tbody>
         {% for fragment in bills %}
         <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
-            <td style="text-align:center; vertical-align:middle;"><a href={{ "http://ly.g0v.tw/bills/"|add:fragment.uid }} target="_blank">法條修正對照表</a></td>
+            <td style="text-align:center; vertical-align:middle;"><a href="{{ "http://ly.g0v.tw/bills/"|add:fragment.uid }}" target="_blank">法條修正對照表</a></td>
             <td style="text-align:center; vertical-align:middle;">
                 {% if fragment.last_action %}
                 {{fragment.last_action}}（{{fragment.last_action_at|date:"Y-m-d"}}）
