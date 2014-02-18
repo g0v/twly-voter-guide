@@ -45,7 +45,6 @@ def index(request, index):
         if 'progress' in request.GET:
             progress = request.GET['progress']
             if progress:
-                print(progress)
                 query = query & Q(legislator_bill__bill__last_action=progress)
         ly_list = LegislatorDetail.objects.filter(query).annotate(totalNum=Count('legislator_bill__id')).exclude(totalNum=0).order_by('-totalNum')
         no_count_list = LegislatorDetail.objects.filter(name_query).exclude(legislator_id__in=ly_list.values_list('legislator_id', flat=True))
