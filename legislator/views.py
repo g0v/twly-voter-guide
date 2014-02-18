@@ -8,7 +8,6 @@ from .models import Legislator, LegislatorDetail, Platform, Attendance
 from vote.models import Vote,Legislator_Vote
 from proposal.models import Proposal
 from bill.models import Bill
-from search.models import Keyword
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from search.views import keyword_list, keyword_been_searched, keyword_normalize
@@ -112,11 +111,11 @@ def voter_detail(request, legislator_id, index, keyword_url):
     #<--
     keyword = keyword_normalize(request, keyword_url)
     if keyword:
-        votes = Legislator_Vote.objects.select_related().filter(query & reduce(operator.and_, (Q(vote__content__icontains=x) for x in keyword.split()))).order_by('-vote')
+        votes = Legislator_Vote.objects.select_related().filter(query & reduce(operator.and_, (Q(vote__content__icontains=x) for x in keyword.split()))).order_by('-vote__sitting__date')
         if votes:
             keyword_been_searched(keyword, 2)
     else:
-        votes = Legislator_Vote.objects.select_related().filter(query).order_by('-vote')
+        votes = Legislator_Vote.objects.select_related().filter(query).order_by('-vote__sitting__date')
     vote_addup = votes.values('decision').annotate(totalNum=Count('vote', distinct=True)).order_by('-decision')
     return render(request,'legislator/voter_detail.html', {'keyword_obj':keyword_list(2),'ly':ly,'index':index,'votes':votes,'keyword':keyword,'vote_addup':vote_addup,'notvote':notvote})
 
