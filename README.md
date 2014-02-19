@@ -1,4 +1,4 @@
-twly-voter-guide
+twly-voter-guide[![Build Status](https://travis-ci.org/g0v/twly-voter-guide.png?branch=master)](https://travis-ci.org/g0v/twly-voter-guide)
 ================
 
 [立委投票指南](http://vote.ly.g0v.tw/)     
