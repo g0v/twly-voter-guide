@@ -70,6 +70,30 @@ class Platform(models.Model):
     def __unicode__(self):
         return self.content
 
+class PoliticalContributions(models.Model):
+    legislator = models.ForeignKey(LegislatorDetail)
+    in_individual = models.IntegerField(blank=True, null=True)
+    in_profit = models.IntegerField(blank=True, null=True)
+    in_party = models.IntegerField(blank=True, null=True)
+    in_civil = models.IntegerField(blank=True, null=True)
+    in_anonymous = models.IntegerField(blank=True, null=True)
+    in_others = models.IntegerField(blank=True, null=True)
+    in_total = models.IntegerField(blank=True, null=True)
+    out_personnel = models.IntegerField(blank=True, null=True)
+    out_propagate = models.IntegerField(blank=True, null=True)
+    out_campaign_vehicle = models.IntegerField(blank=True, null=True)
+    out_campaign_office = models.IntegerField(blank=True, null=True)
+    out_rally = models.IntegerField(blank=True, null=True)
+    out_travel = models.IntegerField(blank=True, null=True)
+    out_miscellaneous = models.IntegerField(blank=True, null=True)
+    out_return = models.IntegerField(blank=True, null=True)
+    out_exchequer = models.IntegerField(blank=True, null=True)
+    out_public_relation = models.IntegerField(blank=True, null=True)
+    out_total = models.IntegerField(blank=True, null=True)
+    balance = models.IntegerField(blank=True, null=True)
+    def __unicode__(self):
+        return self.balance
+
 class FileLog(models.Model):
     sitting = models.CharField(unique=True, max_length=100)
     date = models.DateTimeField()
