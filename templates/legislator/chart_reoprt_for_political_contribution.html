@@ -1,0 +1,89 @@
+﻿{% extends "base.html" %}
+{% load staticfiles %}
+{% load ly_extras %}
+{% block title %}
+{% if title %}
+<title>立委投票指南:{{title}}</title>
+<meta property="og:title" content="立委投票指南:{{title}}"/>
+<meta itemprop="name" content="立委投票指南:{{title}}">
+{% else %}
+<title>立委投票指南:總圖表</title>
+<meta property="og:title" content="立委投票指南:總圖表"/>
+<meta itemprop="name" content="立委投票指南:總圖表">
+{% endif %}
+{% endblock %}
+{% block right %}
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="hero-unit">
+            <div id="d3" align="center">
+                {% if title %}<h4>{{title}}</h4>{% endif %}
+                <p class="lead text-center">
+                    <font style="color: red;"><b>政黨捐贈收入</b></font> <font style="color: orange;"><b>脫黨投票次數</b></font>
+                </p>
+            </div>
+        </div>
+        <hr>
+        <div class="fb-like pull-right" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}"></div>
+        <div class="fb-comments" data-width="400" data-num-posts="3" href={{current_url}}></div>
+    </div>
+    <div class="span12">
+        {% if ly_obj %}
+        <table class="table table-bordered" >
+            <thead>
+                <tr style="font-weight:bold; background-color: #CCFF99;">
+                    <th style="text-align:center; vertical-align:middle; width: 15%">立委</th>
+                    <th style="text-align:center; vertical-align:middle; width: 16%">(元)</th>
+                    <th style="text-align:center; vertical-align:middle; width: 18%">選區</th>
+                    <th style="text-align:center; vertical-align:middle; width: 31%">行政區</th>
+                    <th style="text-align:center; vertical-align:middle; width: 20%">委員會</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ly in ly_obj %}
+                <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+                    <td>
+                    {% if index == 'vote' or index = 'ly' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">
+                        {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">
+                            {% else %}
+                            {% if index == 'biller' %}<a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的法條修正草案">
+                                {% else %}<a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的提案">
+                                    {% endif %}
+                                    {% endif %}
+                                    {% include "common/ly_color_by_party.html" %}</a></td>
+                            {% if index == 'ly_hit' %}
+                            <td>{{ly.hits}}</td>
+                            {% elif index == 'vote' %}
+                            <td>{{ly.totalNum}}</td>
+                            <td>{{ compare|subtract:ly.totalNum|divide:compare }}%</td>
+                            {% else %}
+                            <td>{{ly.totalNum}}</td>
+                            {% if index == 'biller' or index == 'proposal' or index == 'attend_committee' %}
+                            <td>{{ compare }}</td>
+                            {% elif index == 'conscience_vote' or index == 'ly'%}
+                            <td>{{ ly.totalNum|divide:compare }}%</td>
+                            {% endif %}
+                            {% endif %}
+                    <td><a href="{% url 'legislator:index_district' ly.county %}" rel="tooltip" title="{{ly.constituency }}的立委詳細資料">{{ly.county}}</a></td>
+                    <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
+                    <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" rel="tooltip" title="{{ly.current_committee}}委員會的立委詳細資料">{{ ly.current_committee|truncatechars:7 }}</a></td>
+                </tr>
+                {% endfor %}
+                {% include "common/color_info_of_party.html" with column=6 %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+{% block backtotop %}
+{{ block.super }}
+{% endblock backtotop %}
+{% block script %}
+{% if index == 'in_party' %}
+{% include "legislator/d3/political_contributions_bar_chart.html" %}
+{% else %}
+{% include "legislator/d3/report_bar_chart.html" %}
+{% endif %}
+{% endblock script %}

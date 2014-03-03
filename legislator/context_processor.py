@@ -9,7 +9,7 @@ def current_url(request):
     return {'current_url': settings.SITE_DOMAIN+request.get_full_path()}
 
 def last_update_time(request):
-    return {'last_update_time':'2014-01-16'}
+    return {'last_update_time':'2014-03-01'}
 
 def district_list(request):
     return {'district_list':LegislatorDetail.objects.filter(ad=8).values_list('county', flat=True).distinct('county')}

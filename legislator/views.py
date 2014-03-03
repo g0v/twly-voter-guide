@@ -4,8 +4,8 @@ import re
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
-from .models import Legislator, LegislatorDetail, Platform, Attendance
-from vote.models import Vote,Legislator_Vote
+from .models import Legislator, LegislatorDetail, Platform, Attendance, PoliticalContributions
+from vote.models import Vote, Legislator_Vote
 from proposal.models import Proposal
 from bill.models import Bill
 from sittings.models import Sittings
@@ -150,7 +150,7 @@ def platformer_detail(request, legislator_id):
     return render(request,'legislator/ly_politics.html', {'ly':ly,'politics':politics})
 
 def chart_report(request, index='vote'):
-    ly_obj, ly_name, vote_obj,title,content,compare, data = [], [], [], None, None, None, None
+    ly_obj, ly_name, vote_obj, title, content, compare, data = [], [], [], None, None, None, None
     if index == 'vote':
         compare = Vote.objects.count()
         ly_obj = LegislatorDetail.objects.filter(in_office=True, votes__decision__isnull=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')[:10]
@@ -192,6 +192,18 @@ def chart_report(request, index='vote'):
         vote_obj = Vote.objects.extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(totalNum=Count('id', distinct=True)).order_by('year','month')
         title = u'立法院表決數依月份分組'
     return render(request,'legislator/chart_report.html', {'compare':compare,'title':title,'content':content,'index':index,'vote_obj':vote_obj,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj, 'data': data} )
+
+def political_contributions_report(request, index, party=u'中國國民黨'):
+    ly_obj, title, content, compare, data = [], None, None, None, None
+    ids = LegislatorDetail.objects.filter(ad=8, party=party, politicalcontributions__in_party__isnull=False).values_list('id', flat=True)
+    ly_obj = LegislatorDetail.objects.filter(ad=8, party=party, politicalcontributions__in_party__isnull=False)\
+                                     .annotate(totalNum=Sum('politicalcontributions__in_party'))\
+                                     .order_by('-totalNum')
+    #ly_obj = ly_obj.extra(select={'compare': 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.decision isnull AND vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id',},)
+    ly_obj = ly_obj.extra(select={'compare': 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.conflict=True AND vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id',},)
+    #ly_obj = ly_obj.extra(select={'compare': 'SELECT COUNT(*) FROM proposal_legislator_proposal WHERE proposal_legislator_proposal.priproposer=True AND proposal_legislator_proposal.legislator_id = legislator_legislatordetail.id GROUP BY proposal_legislator_proposal.legislator_id',},)
+    title, content = u'立委的政治獻金：%s排行' % party, u''
+    return render(request,'legislator/chart_reoprt_for_political_contribution.html', {'compare':compare,'title':title,'content':content,'index':index,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj,'data':list(ly_obj.values('name', 'totalNum', 'compare'))})
 
 '''
 def list_union(month_list, obj_q):

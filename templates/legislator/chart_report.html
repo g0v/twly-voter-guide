@@ -96,47 +96,47 @@
                                 <td>{{ ly.totalNum|divide:compare }}%</td>
                                 {% endif %}
                                 {% endif %}
-                                <td><a href="{% url 'legislator:index_district' ly.county %}" rel="tooltip" title="{{ly.constituency }}的立委詳細資料">{{ly.county}}</a></td>
-                                <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
-                                <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" rel="tooltip" title="{{ly.current_committee}}委員會的立委詳細資料">{{ ly.current_committee|truncatechars:7 }}</a></td>
-                            </tr>
-                            {% endfor %}
-                            {% include "common/color_info_of_party.html" with column=6 %}
-                        </tbody>
-                    </table>
-                    {% elif vote_obj %}
-                    <table class="table table-bordered" >
-                        <thead>
-                            <tr style="font-weight:bold;background-color: #CCFF99;">
-                                <th style="text-align:center; vertical-align:middle; width: 20%">表決日期</th>
-                                <th style="text-align:center; vertical-align:middle; width: 15%">表決(個)</th>
-                                {% if index == 'nvote_gbdate' %}
-                                <th style="text-align:center; vertical-align:middle; width: 65%">會期</th>
-                                {% endif %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for vote in vote_obj reversed %}
-                            <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
-                                {% if index == 'nvote_gbdate' %}
-                                <td>{{vote.sitting__date|date:"Y-m-d"}}</td>
-                                <td>{{vote.totalNum}}</td>
-                                <td>{{vote.sitting__name}}</td>
-                                {% elif index == 'nvote_gbmonth' %}
-                                <td>{{vote.year|floatformat:"0"}} / {{vote.month|floatformat:"0"}}</td>
-                                <td>{{vote.totalNum}}</td>
-                                {% endif %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <td><a href="{% url 'legislator:index_district' ly.county %}" rel="tooltip" title="{{ly.constituency }}的立委詳細資料">{{ly.county}}</a></td>
+                    <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
+                    <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" rel="tooltip" title="{{ly.current_committee}}委員會的立委詳細資料">{{ ly.current_committee|truncatechars:7 }}</a></td>
+                </tr>
+                {% endfor %}
+                {% include "common/color_info_of_party.html" with column=6 %}
+            </tbody>
+        </table>
+        {% elif vote_obj %}
+        <table class="table table-bordered" >
+            <thead>
+                <tr style="font-weight:bold;background-color: #CCFF99;">
+                    <th style="text-align:center; vertical-align:middle; width: 20%">表決日期</th>
+                    <th style="text-align:center; vertical-align:middle; width: 15%">表決(個)</th>
+                    {% if index == 'nvote_gbdate' %}
+                    <th style="text-align:center; vertical-align:middle; width: 65%">會期</th>
                     {% endif %}
-                </div>
-            </div>
-            {% endblock %}
-            {% block backtotop %}
-            {{ block.super }}
-            {% endblock backtotop %}
-            {% block script %}
-            {% include "legislator/report_d3_bar_chart.html" %}
-            {% endblock script %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for vote in vote_obj reversed %}
+                <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+                    {% if index == 'nvote_gbdate' %}
+                    <td>{{vote.sitting__date|date:"Y-m-d"}}</td>
+                    <td>{{vote.totalNum}}</td>
+                    <td>{{vote.sitting__name}}</td>
+                    {% elif index == 'nvote_gbmonth' %}
+                    <td>{{vote.year|floatformat:"0"}} / {{vote.month|floatformat:"0"}}</td>
+                    <td>{{vote.totalNum}}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+{% block backtotop %}
+{{ block.super }}
+{% endblock backtotop %}
+{% block script %}
+{% include "legislator/d3/report_bar_chart.html" %}
+{% endblock script %}
