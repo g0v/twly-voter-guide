@@ -105,6 +105,8 @@
                             <li><a href="{% url 'legislator:chart_report' 'committee' %}" ><b>委員會開會缺席</b><small>前十名</small></a></li>
                             <li><a href="{% url 'legislator:chart_report' 'attend_committee' %}" ><b>委員會列席(旁聽)次數</b><small>前十名</small></a></li>
                             <li class="divider"></li>
+                            <li><a href="{% url 'legislator:political_contributions_report' index='in_party' compare='vote' party='中國國民黨' %}" ><b>政治獻金</b></a></li>
+                            <li class="divider"></li>
                             <li><a href="{% url 'legislator:chart_report' 'biller' %}" ><b>法條修正草案數</b><small>前十名</small></a></li>
                             <li><a href="{% url 'legislator:chart_report' 'proposal' %}" ><b>臨時提案數</b><small>前十名</small></a></li>
                         </ul>

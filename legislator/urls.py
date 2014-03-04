@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     url(r'^biller/(?P<legislator_id>\d+)/?(?P<keyword_url>.+)?$', views.biller_detail, name='biller_detail'),
     url(r'^platform/(?P<legislator_id>\d+)/$', views.platformer_detail, name='platformer_detail'),
     url(r'^report/(?P<index>biller|conscience_vote|vote|proposal|ly|committee|attend_committee)/$', views.chart_report, name='chart_report'),
-    url(r'^report/political_contributions/(?P<index>in_party)/(?P<party>\S+)/$', views.political_contributions_report, name='political_contributions_report'),
+    url(r'^report/political_contributions/(?P<index>\S+)/(?P<compare>\S+)/(?P<party>\S+)/$', views.political_contributions_report, name='political_contributions_report'),
     # ex: /legislator/personal_report/
     #url(r'^personal_report/(?P<legislator_id>\d+)/(?P<index>proposal|ly|vote)?/?$', views.chart_personal_report, name='chart_personal_report'),
 )

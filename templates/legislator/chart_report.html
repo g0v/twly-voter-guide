@@ -138,5 +138,10 @@
 {{ block.super }}
 {% endblock backtotop %}
 {% block script %}
+<script>
+    $(document).ready( function() {
+        $('#chart_report').addClass('active');
+    });
+</script>
 {% include "legislator/d3/report_bar_chart.html" %}
 {% endblock script %}

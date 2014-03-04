@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import operator
 import re
+import json
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
@@ -180,24 +181,59 @@ def chart_report(request, index='vote'):
         title, content = u'立法院開會缺席前十名', u'立委須參加立法院例行會議，在會議中進行質詢、法案討論表決、人事表決等重要工作(點選立委名字可看立委投票紀錄)'
     return render(request,'legislator/chart_report.html', {'compare':compare,'title':title,'content':content,'index':index,'vote_obj':vote_obj,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj, 'data': list(ly_obj.values('name', 'totalNum'))} )
 
-def political_contributions_report(request, index='in_party', party=u'中國國民黨'):
-    ly_obj, title, content, compare, data = [], None, None, None, None
+def political_contributions_report(request, index='in_party', compare='conscience_vote', party=u'中國國民黨'):
+    ly_obj, title, content, data = [], None, None, None
+    field = {
+        "in_individual": u'個人捐贈收入',
+        "in_profit": u'營利事業捐贈收入',
+        "in_party": u'政黨捐贈收入',
+        "in_civil": u'人民團體捐贈收入',
+        "in_anonymous": u'匿名捐贈收入',
+        "in_others": u'其他收入',
+        "in_total": u'收入合計',
+        "out_personnel": u'人事費用支出',
+        "out_propagate": u'宣傳支出',
+        "out_campaign_vehicle": u'租用宣傳車輛支出',
+        "out_campaign_office": u'租用競選辦事處支出',
+        "out_rally": u'集會支出',
+        "out_travel": u'交通旅運支出',
+        "out_miscellaneous": u'雜支支出',
+        "out_return": u'返還捐贈支出',
+        "out_exchequer": u'繳庫支出',
+        "out_public_relation": u'公共關係費用支出',
+        "out_total": u'支出合計',
+        "balance": u'收支平衡'
+    }
+    compare_field = {
+        "conscience_vote": u'脫黨投票次數',
+        "vote": u'表決缺席次數',
+        "proposal": u'附帶決議、臨時提案數',
+        "biller": u'法條修正草案數'
+    }
+
     filter_dict = {
         "ad": 8,
         "party": party,
         "politicalcontributions__%s__isnull" % index: False
     }
+    legend = [field.get(index)]
+    if compare == 'conscience_vote':
+        extra_query = 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.conflict=True AND vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id'
+        legend.append(u'脫黨投票次數')
+    elif compare == 'vote':
+        extra_query = 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.decision isnull AND vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id'
+        legend.append(u'表決缺席次數')
+    elif compare == 'proposal':
+        extra_query = 'SELECT COUNT(*) FROM proposal_legislator_proposal WHERE proposal_legislator_proposal.priproposer=True AND proposal_legislator_proposal.legislator_id = legislator_legislatordetail.id GROUP BY proposal_legislator_proposal.legislator_id'
+        legend.append(u'附帶決議、臨時提案數')
+    elif compare == 'biller':
+        extra_query = 'SELECT COUNT(*) FROM bill_legislator_bill WHERE bill_legislator_bill.priproposer=True AND bill_legislator_bill.petition=False AND bill_legislator_bill.legislator_id = legislator_legislatordetail.id GROUP BY bill_legislator_bill.legislator_id'
+        legend.append(u'法條修正草案數')
     ly_obj = LegislatorDetail.objects.filter(**filter_dict)\
                                      .annotate(totalNum=Sum('politicalcontributions__%s' % index))\
                                      .order_by('-totalNum')\
-                                     .extra(select={
-                                         'compare': 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.conflict=True AND vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id'
-                                            },)
-    #ly_obj = ly_obj.extra(select={'compare': 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.decision isnull AND vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id',},)
-    #ly_obj = ly_obj.extra(select={'compare': 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.conflict=True AND vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id',},)
-    #ly_obj = ly_obj.extra(select={'compare': 'SELECT COUNT(*) FROM proposal_legislator_proposal WHERE proposal_legislator_proposal.priproposer=True AND proposal_legislator_proposal.legislator_id = legislator_legislatordetail.id GROUP BY proposal_legislator_proposal.legislator_id',},)
-    title, content = u'政治獻金:', [u'政黨捐贈收入', u'脫黨投票次數']
-    return render(request,'legislator/chart_reoprt_for_political_contribution.html', {'compare':compare,'title':title,'content':content,'party':party,'index':index,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj,'data':list(ly_obj.values('name', 'totalNum', 'compare'))})
+                                     .extra(select={'compare': extra_query},)
+    return render(request,'legislator/chart_reoprt_for_political_contribution.html', {'compare':compare,'legend':legend,'party':party,'index':index,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj,'data':list(ly_obj.values('name', 'totalNum', 'compare')),'field':sorted(field.items()),'compare_field':compare_field})
 
 '''
 def list_union(month_list, obj_q):

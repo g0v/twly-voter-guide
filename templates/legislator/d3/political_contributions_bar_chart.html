@@ -127,7 +127,7 @@
     svg.call(tip_compare);
 
     x.domain(data.map(function(d) { return d.name; }));
-    y.domain([0, d3.max(data, function(d) { return d.totalNum; })]);
+    y.domain([Math.min(0, d3.min(data, function(d) { return d.totalNum; })), d3.max(data, function(d) { return d.totalNum; })]);
     yRight.domain([0, d3.max(data, function(d) { return d.compare; })]);
 
     svg.append("g")
@@ -144,9 +144,6 @@
     .attr("class", "y axis axisLeft")
     .call(yAxis)
     .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("dy", "-3em")
-    .attr("y", -45)
     .style("text-anchor", "end")
     .text("(元)");
 
@@ -166,17 +163,17 @@
 
     barGroup.append("rect")
     .attr("class", "bar")
-    .attr("x", function(d) { return x(d.name); })
-    .attr("width", x.rangeBand()/2)
-    .attr("y", function(d) { return y(d.totalNum); })
-    .attr("height", function(d) { return height - y(d.totalNum); })
+    .attr("x", function(d) { return x(d.name) + x.rangeBand()/6 - 0.5; })
+    .attr("width", x.rangeBand()/3)
+    .attr("y", function(d) { return y(Math.max(0, d.totalNum)); })
+    .attr("height", function(d) { return Math.abs(y(0) - y(d.totalNum)); })
     .on('mouseover', tip.show)
     .on('mouseout', tip.hide);
 
     barGroup.append("rect")
     .attr("class", "bar_compare")
-    .attr("x", function(d) { return x(d.name) + x.rangeBand()/2 + 1; })
-    .attr("width", x.rangeBand()/2)
+    .attr("x", function(d) { return x(d.name) + x.rangeBand()/2 + 0.5; })
+    .attr("width", x.rangeBand()/3)
     .attr("y", function(d) { return yRight(d.compare); })
     .attr("height", function(d) { return height - yRight(d.compare); })
     .on('mouseover', tip_compare.show)
