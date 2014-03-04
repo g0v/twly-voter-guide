@@ -19,3 +19,6 @@ def committee_list(request):
 
 def distinct_progress_of_bill(request):
     return {'distinct_progress_of_bill':Bill.objects.filter(last_action__isnull=False).values_list('last_action', flat=True).distinct('last_action')}
+
+def party_list(request):
+    return {'party_list':LegislatorDetail.objects.filter(ad=8).values_list('party', flat=True).distinct('party')}

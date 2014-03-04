@@ -18,9 +18,21 @@
     <div class="span12">
         <div class="hero-unit">
             <div id="d3" align="center">
-                {% if title %}<h4>{{title}}</h4>{% endif %}
+                <div class="lead text-center">
+                {% if title %}{{title}}{% endif %}
+                <div class="btn-group">
+                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span>{{party}}</span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for fragment in party_list %}
+                        <li><a href="{% url 'legislator:political_contributions_report' index=index party=fragment %}">{{fragment}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                </div>
                 <p class="lead text-center">
-                    <font style="color: red;"><b>政黨捐贈收入</b></font> <font style="color: orange;"><b>脫黨投票次數</b></font>
+                <font style="color: red;"><b>{{content.0}}</b></font> <font style="color: orange;"><b>{{content.1}}</b></font>
                 </p>
             </div>
         </div>
@@ -81,9 +93,11 @@
 {{ block.super }}
 {% endblock backtotop %}
 {% block script %}
-{% if index == 'in_party' %}
+<script>
+    $(document).ready( function() {
+        $('.dropdown-toggle').dropdown();
+        $("[rel='tooltip']").tooltip();
+    });
+</script>
 {% include "legislator/d3/political_contributions_bar_chart.html" %}
-{% else %}
-{% include "legislator/d3/report_bar_chart.html" %}
-{% endif %}
 {% endblock script %}
