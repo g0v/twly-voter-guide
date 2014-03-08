@@ -4,8 +4,8 @@ import re
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
-from .models import Legislator, LegislatorDetail, Platform, Attendance
-from vote.models import Vote,Legislator_Vote
+from .models import Legislator, LegislatorDetail, Platform, Attendance, PoliticalContributions
+from vote.models import Vote, Legislator_Vote
 from proposal.models import Proposal
 from bill.models import Bill
 from sittings.models import Sittings
@@ -132,7 +132,7 @@ def biller_detail(request, legislator_id, keyword_url):
     bills = Bill.objects.filter(query)
     keyword = keyword_normalize(request, keyword_url)
     if keyword:
-        bills = bills.filter(query & reduce(operator.or_, (Q(abstract__icontains=x) for x in keyword.split())))
+        bills = bills.filter(query & reduce(operator.and_, (Q(abstract__icontains=x) for x in keyword.split())))
         if bills:
             keyword_been_searched(keyword, 3)
     else:
@@ -150,48 +150,89 @@ def platformer_detail(request, legislator_id):
     return render(request,'legislator/ly_politics.html', {'ly':ly,'politics':politics})
 
 def chart_report(request, index='vote'):
-    ly_obj, ly_name, vote_obj,title,content,compare, data = [], [], [], None, None, None, None
+    ly_obj, ly_name, vote_obj, title, content, compare, data = [], [], [], None, None, None, None
     if index == 'vote':
         compare = Vote.objects.count()
         ly_obj = LegislatorDetail.objects.filter(in_office=True, votes__decision__isnull=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')[:10]
-        data = list(ly_obj.values('name', 'totalNum'))
         title, content = u'立法院表決缺席前十名', u'可和立法院開會缺席交叉比較，為何開會有出席但沒有參加表決？(點選立委名字可看立委個人投票紀錄)'
     elif index == 'conscience_vote':
         compare = Vote.objects.count()
         ly_obj = LegislatorDetail.objects.filter(in_office=True, votes__conflict=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')[:10]
-        data = list(ly_obj.values('name', 'totalNum'))
         title, content = u'脫黨投票次數前十名', u'脫黨投票不一定較好，可能該立委是憑良心投票，也可能是受財團、企業影響所致，還請點選該立委觀看其脫黨投票的表決內容再作論定。'
     elif index == 'attend_committee':
         compare = "{0:.2f}".format(Attendance.objects.filter(category='committee', status='attend').count()/116.0)
         ly_obj = LegislatorDetail.objects.filter(in_office=True, attendance__category='committee', attendance__status='attend').annotate(totalNum=Count('attendance__id')).order_by('-totalNum','party')[:10]
-        data = list(ly_obj.values('name', 'totalNum'))
         title, content = u'委員會開會列席(旁聽)次數前十名', u'委員非該委員會仍列席參加的次數排行(量化數據不能代表好壞只能參考)'
     elif index == 'biller':
         compare = "{0:.2f}".format(Bill.objects.count()/116.0)
         ly_obj = LegislatorDetail.objects.filter(in_office=True, legislator_bill__priproposer=True, legislator_bill__petition=False).annotate(totalNum=Count('legislator_bill__id')).order_by('-totalNum','party')[:10]
-        data = list(ly_obj.values('name', 'totalNum'))
         title, content = u'法條修正草案數前十名', u'量化數據不能代表好壞只能參考，修正草案數多不一定較好，還請點選該立委觀看其修正草案的內容再作論定。'
     elif index == 'proposal':
         compare = "{0:.2f}".format(Proposal.objects.count()/116.0)
         ly_obj = LegislatorDetail.objects.filter(in_office=True, legislator_proposal__priproposer=True).annotate(totalNum=Count('legislator_proposal__id')).order_by('-totalNum','party')[:10]
-        data = list(ly_obj.values('name', 'totalNum'))
         title, content = u'附帶決議、臨時提案數前十名', u'量化數據不能代表好壞只能參考，提案數多不一定較好，還請點選該立委觀看其提案的內容再作論定。'
     elif index == 'committee':
         ly_obj = LegislatorDetail.objects.filter(in_office=True, attendance__category='committee', attendance__status='absent').annotate(totalNum=Count('attendance__id')).order_by('-totalNum','party')[:10]
-        data = list(ly_obj.values('name', 'totalNum'))
         title, content = u'委員會開會缺席前十名', u'委員會是法案推行的第一關卡，立委需在委員會提出法案的增修(點選立委名字可看立委個人提案)'
     elif index == 'ly':
         compare = Sittings.objects.filter(committee='').count()
         ly_obj = LegislatorDetail.objects.filter(in_office=True, attendance__category='YS', attendance__status='absent').annotate(totalNum=Count('attendance__id')).order_by('-totalNum','party')[:10]
-        data = list(ly_obj.values('name', 'totalNum'))
         title, content = u'立法院開會缺席前十名', u'立委須參加立法院例行會議，在會議中進行質詢、法案討論表決、人事表決等重要工作(點選立委名字可看立委投票紀錄)'
-    elif index == 'nvote_gbdate':
-        vote_obj = Vote.objects.values('sitting__date','sitting__name').annotate(totalNum=Count('id', distinct=True)).order_by('sitting__date')
-        title = u'立法院表決數依日期分組'
-    elif index == 'nvote_gbmonth':
-        vote_obj = Vote.objects.extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(totalNum=Count('id', distinct=True)).order_by('year','month')
-        title = u'立法院表決數依月份分組'
-    return render(request,'legislator/chart_report.html', {'compare':compare,'title':title,'content':content,'index':index,'vote_obj':vote_obj,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj, 'data': data} )
+    return render(request,'legislator/chart_report.html', {'compare':compare,'title':title,'content':content,'index':index,'vote_obj':vote_obj,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj, 'data': list(ly_obj.values('name', 'totalNum'))} )
+
+def political_contributions_report(request, index='in_party', compare='conscience_vote', party=u'中國國民黨'):
+    ly_obj, title, content, data = [], None, None, None
+    field = {
+        "in_individual": u'個人捐贈收入',
+        "in_profit": u'營利事業捐贈收入',
+        "in_party": u'政黨捐贈收入',
+        "in_civil": u'人民團體捐贈收入',
+        "in_anonymous": u'匿名捐贈收入',
+        "in_others": u'其他收入',
+        "in_total": u'收入合計',
+        "out_personnel": u'人事費用支出',
+        "out_propagate": u'宣傳支出',
+        "out_campaign_vehicle": u'租用宣傳車輛支出',
+        "out_campaign_office": u'租用競選辦事處支出',
+        "out_rally": u'集會支出',
+        "out_travel": u'交通旅運支出',
+        "out_miscellaneous": u'雜支支出',
+        "out_return": u'返還捐贈支出',
+        "out_exchequer": u'繳庫支出',
+        "out_public_relation": u'公共關係費用支出',
+        "out_total": u'支出合計',
+        "balance": u'收支平衡'
+    }
+    compare_field = {
+        "conscience_vote": u'脫黨投票次數',
+        "vote": u'表決缺席次數',
+        "proposal": u'附帶決議、臨時提案數',
+        "biller": u'法條修正草案數'
+    }
+
+    filter_dict = {
+        "ad": 8,
+        "party": party,
+        "politicalcontributions__%s__isnull" % index: False
+    }
+    legend = [field.get(index)]
+    if compare == 'conscience_vote':
+        extra_query = 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.conflict=True AND vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id'
+        legend.append(u'脫黨投票次數')
+    elif compare == 'vote':
+        extra_query = 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.decision isnull AND vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id'
+        legend.append(u'表決缺席次數')
+    elif compare == 'proposal':
+        extra_query = 'SELECT COUNT(*) FROM proposal_legislator_proposal WHERE proposal_legislator_proposal.priproposer=True AND proposal_legislator_proposal.legislator_id = legislator_legislatordetail.id GROUP BY proposal_legislator_proposal.legislator_id'
+        legend.append(u'附帶決議、臨時提案數')
+    elif compare == 'biller':
+        extra_query = 'SELECT COUNT(*) FROM bill_legislator_bill WHERE bill_legislator_bill.priproposer=True AND bill_legislator_bill.petition=False AND bill_legislator_bill.legislator_id = legislator_legislatordetail.id GROUP BY bill_legislator_bill.legislator_id'
+        legend.append(u'法條修正草案數')
+    ly_obj = LegislatorDetail.objects.filter(**filter_dict)\
+                                     .annotate(totalNum=Sum('politicalcontributions__%s' % index))\
+                                     .order_by('-totalNum')\
+                                     .extra(select={'compare': extra_query},)
+    return render(request,'legislator/chart_reoprt_for_political_contribution.html', {'compare':compare,'legend':legend,'party':party,'index':index,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj,'data':list(ly_obj.values('name', 'totalNum', 'compare')),'field':sorted(field.items()),'compare_field':compare_field})
 
 '''
 def list_union(month_list, obj_q):

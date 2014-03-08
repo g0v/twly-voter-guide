@@ -1,0 +1,111 @@
+﻿{% extends "base.html" %}
+{% load staticfiles %}
+{% load ly_extras %}
+{% block title %}
+{% if party and legend %}
+<title>立委投票指南:政治獻金:{{party}}:{{legend.0}} VS {{legend.1}}</title>
+<meta property="og:title" content="立委投票指南:政治獻金:{{party}}:{{legend.0}} VS {{legend.1}}"/>
+<meta itemprop="name" content="立委投票指南:政治獻金:{{party}}:{{legend.0}} VS {{legend.1}}">
+{% else %}
+<title>立委投票指南:總圖表</title>
+<meta property="og:title" content="立委投票指南:總圖表"/>
+<meta itemprop="name" content="立委投票指南:總圖表">
+{% endif %}
+{% endblock %}
+{% block right %}
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="hero-unit">
+            <div id="d3" align="center">
+                <div class="lead text-center">
+                政治獻金:
+                <div class="btn-group">
+                    <button type="button" class="btn btn-large dropdown-toggle" data-toggle="dropdown">
+                        <span>{{party}}</span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for fragment in party_list %}
+                        <li><a href="{% url 'legislator:political_contributions_report' index=index compare=compare party=fragment %}">{{fragment}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                </div>
+                <p class="lead">
+                    <div class="btn-group pull-left">
+                        <button type="button" class="btn btn-large dropdown-toggle" data-toggle="dropdown">
+                            <b><span><font style="color: red;">{{legend.0}}</font></span></b> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% for key, value in field %}
+                            <li><a href="{% url 'legislator:political_contributions_report' index=key compare=compare party=party %}">{{value}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-large dropdown-toggle" data-toggle="dropdown">
+                            <b><span><font style="color: orange;">{{legend.1}}</font></span></b> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% for key, value in compare_field.items %}
+                            <li><a href="{% url 'legislator:political_contributions_report' index=index compare=key party=party %}">{{value}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </p>
+            </div>
+            <dl>
+                <dt>為何沒有不分區立委？</dt>
+                <p>登記為全國不分區、僑居國外國民立法委員選舉之候選人不得收受政治獻金。<a href="http://homepage.vghtpe.gov.tw/~ged/top2/top2_e13.htm" target="_blank">詳請參見問答第21</a></p>
+                <dt>為何沒有政治獻金細目收入與支出資訊？</dt>
+                <p>目前網站上僅能查閱總數，細目須民眾親自到監察院查詢，且僅能影印不可將資料以電子檔形式帶出。<a href="http://sunshine.cy.gov.tw/GipOpenWeb/wSite/lp?ctNode=283" target="_blank">查閱規則詳請參照</a></p>
+            </dl>
+        </div>
+        <hr>
+        <div class="fb-like pull-right" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}"></div>
+        <div class="fb-comments" data-width="400" data-num-posts="3" href={{current_url}}></div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        {% if ly_obj %}
+        <table class="table table-bordered">
+            <thead>
+                <tr style="font-weight:bold; background-color: #CCFF99;">
+                    <th style="text-align:center; vertical-align:middle; width: 10%">立委</th>
+                    <th style="text-align:center; vertical-align:middle; width: 15%">{{legend.0}}</th>
+                    <th style="text-align:center; vertical-align:middle; width: 15%">{{legend.1}}</th>
+                    <th style="text-align:center; vertical-align:middle; width: 10%">選區</th>
+                    <th style="text-align:center; vertical-align:middle; width: 30%">行政區</th>
+                    <th style="text-align:center; vertical-align:middle; width: 20%">委員會</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ly in ly_obj %}
+                <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
+                    <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
+                    <td style="text-align:center; vertical-align:middle;">{{ly.totalNum}}</td>
+                    <td style="text-align:center; vertical-align:middle;">{{ly.compare}}</td>
+                    <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:index_district' ly.county %}" rel="tooltip" title="{{ly.constituency }}的立委詳細資料">{{ly.county}}</a></td>
+                    <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
+                    <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:index_committee' ly.current_committee %}" rel="tooltip" title="{{ly.current_committee}}委員會的立委詳細資料">{{ ly.current_committee }}</a></td>
+                </tr>
+                {% endfor %}
+                {% include "common/color_info_of_party.html" with column=6 %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+{% block backtotop %}
+{{ block.super }}
+{% endblock backtotop %}
+{% block script %}
+<script>
+    $(document).ready( function() {
+        $('#chart_report').addClass('active');
+    });
+</script>
+{% include "legislator/d3/political_contributions_bar_chart.html" %}
+{% endblock script %}
