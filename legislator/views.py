@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import operator
 import re
-import json
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q

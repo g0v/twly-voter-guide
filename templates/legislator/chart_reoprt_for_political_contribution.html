@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load ly_extras %}
 {% block title %}
-{% if party and content %}
+{% if party and legend %}
 <title>立委投票指南:政治獻金:{{party}}:{{legend.0}} VS {{legend.1}}</title>
 <meta property="og:title" content="立委投票指南:政治獻金:{{party}}:{{legend.0}} VS {{legend.1}}"/>
 <meta itemprop="name" content="立委投票指南:政治獻金:{{party}}:{{legend.0}} VS {{legend.1}}">
@@ -54,6 +54,12 @@
                     </div>
                 </p>
             </div>
+            <dl>
+                <dt>為何沒有不分區立委？</dt>
+                <p>登記為全國不分區、僑居國外國民立法委員選舉之候選人不得收受政治獻金。<a href="http://homepage.vghtpe.gov.tw/~ged/top2/top2_e13.htm" target="_blank">詳請參見問答第21</a></p>
+                <dt>為何沒有政治獻金細目收入與支出資訊？</dt>
+                <p>目前網站上僅能查閱總數，細目須民眾親自到監察院查詢，且僅能影印不可將資料以電子檔形式帶出。<a href="http://sunshine.cy.gov.tw/GipOpenWeb/wSite/lp?ctNode=283" target="_blank">查閱規則詳請參照</a></p>
+            </dl>
         </div>
         <hr>
         <div class="fb-like pull-right" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false" href="{{current_url}}"></div>
