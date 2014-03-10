@@ -232,7 +232,7 @@ def political_contributions_report(request, index='in_party', compare='conscienc
                                      .annotate(totalNum=Sum('politicalcontributions__%s' % index))\
                                      .order_by('-totalNum')\
                                      .extra(select={'compare': extra_query},)
-    return render(request,'legislator/chart_reoprt_for_political_contribution.html', {'compare':compare,'legend':legend,'party':party,'index':index,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj,'data':list(ly_obj.values('name', 'totalNum', 'compare')),'field':sorted(field.items()),'compare_field':compare_field})
+    return render(request,'legislator/chart_report_for_political_contribution.html', {'compare':compare,'legend':legend,'party':party,'index':index,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj,'data':list(ly_obj.values('name', 'totalNum', 'compare')),'field':sorted(field.items()),'compare_field':compare_field})
 
 '''
 def list_union(month_list, obj_q):
