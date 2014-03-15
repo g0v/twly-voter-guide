@@ -94,6 +94,7 @@
 
     var yAxis = d3.svg.axis()
     .scale(y)
+    .tickFormat(function(d) { return d + '(次)'; })
     .orient("left")
 
     var yAxisRight = d3.svg.axis()
@@ -170,8 +171,7 @@
     .append("text")
     .attr("transform", "rotate(-90)")
     .attr("dy", "-3em")
-    .style("text-anchor", "end")
-    .text("(次)");
+   .style("text-anchor", "end");
 
     svg.append("g")
     .attr("class", "y axis")

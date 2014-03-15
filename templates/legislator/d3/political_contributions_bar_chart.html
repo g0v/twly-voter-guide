@@ -96,12 +96,15 @@
     .scale(x)
     .orient("bottom");
 
+    var prefix = d3.format(".1f");
     var yAxis = d3.svg.axis()
     .scale(y)
+    .tickFormat(function(d) { return prefix(d/10000) + '(萬元)'; })
     .orient("left");
 
     var yAxisRight = d3.svg.axis()
     .scale(yRight)
+    .tickFormat(function(d) { return d + '(次)'; })
     .orient("right");
 
     var tip = d3.tip()
@@ -145,16 +148,14 @@
     .attr("class", "y axis axisLeft")
     .call(yAxis)
     .append("text")
-    .style("text-anchor", "end")
-    .text("(元)");
+    .style("text-anchor", "end");
 
     svg.append("g")
     .attr("class", "y axis axisRight")
     .attr("transform", "translate(" + (width) + ",0)")
     .call(yAxisRight)
     .append("text")
-    .style("text-anchor", "end")
-    .text("(次)");
+    .style("text-anchor", "end");
 
     var legislator = svg.selectAll(".legislator")
     .data(data);
