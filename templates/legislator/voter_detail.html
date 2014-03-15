@@ -62,7 +62,7 @@
 {% load pagination_tags %}
 {% autopaginate votes 10 %}
 {% paginate %}
-<table class="table table-bordered" >
+<table class="table table-bordered sortable" >
     <thead>
         <tr style="font-weight:bold;background-color: #FFFFCC;">
             <th style="text-align:center; vertical-align:middle; width: 10%">個人投票</th>
@@ -103,19 +103,20 @@
                             {% endwith %}
                         </tr>
                         {% endfor %}
-                    </tbody>
-                </table>
-                {% paginate %}
-                {% endif %}
-                {% endblock ly_detail %}
-                {% block script %}
-                <script>
-                    $(document).ready( function() {
-                        $('#url_vote').addClass("btn-inverse");
-                        $('#notvote').change(function() {
-                            $("#form").trigger('submit');
-                        });
-                    });
-                </script>
-                {{ block.super }}
-                {% endblock script %}
+    </tbody>
+</table>
+{% paginate %}
+{% endif %}
+{% endblock ly_detail %}
+{% block script %}
+<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/sorttable.js"></script>
+<script>
+    $(document).ready( function() {
+        $('#url_vote').addClass("btn-inverse");
+        $('#notvote').change(function() {
+            $("#form").trigger('submit');
+        });
+    });
+</script>
+{{ block.super }}
+{% endblock script %}

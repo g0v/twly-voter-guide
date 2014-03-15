@@ -31,7 +31,7 @@
 </tr>
     </table>
 
-    <table class="table table-bordered table-condensed" >
+    <table class="table table-bordered table-condensed sortable" >
         <tr style="font-weight:bold;background-color: #CCFF99;"><td>會期</td><td>擔當</td><td>立委</td><td>縣市</td><td>行政區</td><td>到職日期</td><td>法條修正草案數</td><td>附帶決議、臨時提案數</td><td>沒投票表決(次)</td><td>脫黨投票(次)</td></tr>
         {% regroup ly_list by session as session_list %}
         {% for session in session_list %}
@@ -65,6 +65,7 @@
     {% endif %}
     {% endblock right %}
     {% block script %}
+    <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/sorttable.js"></script>
     <script>
         $(document).ready( function() {
             $('#ly').addClass('active');

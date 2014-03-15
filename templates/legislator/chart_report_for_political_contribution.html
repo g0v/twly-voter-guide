@@ -71,7 +71,7 @@
 <div class="row-fluid">
     <div class="span12">
         {% if ly_obj %}
-        <table class="table table-bordered">
+        <table class="table table-bordered sortable">
             <thead>
                 <tr style="font-weight:bold; background-color: #CCFF99;">
                     <th style="text-align:center; vertical-align:middle; width: 10%">立委</th>
@@ -104,6 +104,7 @@
 {{ block.super }}
 {% endblock backtotop %}
 {% block script %}
+<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/sorttable.js"></script>
 <script>
     $(document).ready( function() {
         $('#chart_report').addClass('active');

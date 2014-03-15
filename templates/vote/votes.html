@@ -36,7 +36,7 @@
     {% load pagination_tags %}
     {% autopaginate votes 10 %}
     {% paginate %}
-    <table class="table table-bordered" >
+    <table class="table table-bordered sortable" >
         <thead>
             <tr style="font-weight:bold; background-color: #FFFFCC;">
                 <th style="text-align:center; vertical-align:middle; width: 12%">表決結果</th>
@@ -84,6 +84,7 @@
     {{ block.super }}
     {% endblock backtotop %}
     {% block script %}
+    <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/sorttable.js"></script>
     {% include "common/keyword_auto_complete.html" %}
     <script>
         $(document).ready( function() {
