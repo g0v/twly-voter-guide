@@ -1,15 +1,15 @@
 ﻿{% load ly_extras %}
-<table class="table table-bordered sortable" >
+<table class="table table-bordered zebra" >
     <thead>
-        <tr style="font-weight:bold;background-color: #FFCCFF;">
-            <th style="text-align:center; vertical-align:middle; width: 12%">法案</th>
-            <th style="text-align:center; vertical-align:middle; width: 10%">最新進展</th>
+        <tr style="background-color: #FFCCFF;">
+            <th style="width: 12%">法案</th>
+            <th style="width: 10%">最新進展</th>
             {% if index == 'rejected' %}
-            <th style="text-align:center; vertical-align:middle; width: 12%">被退回次數</th>
+            <th style="width: 12%">被退回次數</th>
             {% endif %}
-            <th style="text-align:center; vertical-align:middle; width: 10%">提案人</th>
-            <th style="text-align:center; vertical-align:middle; width: 20%">說明</th>
-            <th style="text-align:center; vertical-align:middle; width: 36%">案由</th>
+            <th style="width: 10%">提案人</th>
+            <th style="width: 20%">說明</th>
+            <th style="width: 36%">案由</th>
         </tr>
     </thead>
     <tbody>

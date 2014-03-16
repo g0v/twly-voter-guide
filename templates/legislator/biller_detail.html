@@ -13,7 +13,6 @@
 {% block ly_detail %}
 <form action="" method="get" class="form-search" id="form">
     {% csrf_token %}
-    <br>
     <fieldset>
         <input type="search" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:軍事審判 土地徵收 會計法...空格有交集效果" autofocus>
         <button type="submit" class="btn">Go!</button>
@@ -50,7 +49,7 @@
 {% endif %}
 {% endblock ly_detail %}
 {% block script %}
-<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/sorttable.js"></script>
+{% include "common/sorttable.html" %}
 <script>
     $(document).ready( function() {
         $('#url_bill').removeAttr('href').addClass("btn-inverse");

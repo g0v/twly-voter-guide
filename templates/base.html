@@ -17,7 +17,7 @@
         <meta property="og:image" content="https://s3-ap-northeast-1.amazonaws.com/twly.tw/taiwan-vote.PNG"/>
         <meta itemprop="description" content="減少盲目投票，讓民主社會的台灣更進步；輸入關鍵字，關心你關心的議題">
         <meta itemprop="image" content="https://s3-ap-northeast-1.amazonaws.com/twly.tw/taiwan-vote.PNG">
-        <link href="https://s3-ap-northeast-1.amazonaws.com/twly.tw/bootstrap.min.css" rel="stylesheet" >
+        <link href="https://s3-ap-northeast-1.amazonaws.com/twly.tw/bootstrap.min.css" rel="stylesheet">
         <link href="https://s3-ap-northeast-1.amazonaws.com/twly.tw/bootstrap-responsive.min.css" rel="stylesheet" >
         <link rel="shortcut icon" href="https://s3-ap-northeast-1.amazonaws.com/twly.tw/favicon.png">
         <!--[if lt IE 9]>
@@ -46,11 +46,11 @@
                 <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                     <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
                 </a>
-                <a class="brand" href="/">&nbsp;<font size=5><b>立委投票指南</b></font></a>
+                <a class="brand" href="/">&nbsp;<font><b>立委投票指南</b></font></a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
                         <li id="ly" class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size=3>立委列表</font><b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">立委列表<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li class="dropdown-submenu">
                             <a data-toggle="dropdown" href="#" >依<b>選區</b>分組</a>
@@ -77,7 +77,7 @@
                         </li>
 
                         <li id="psearch" class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size=3>草案&提案</font><b class="caret"></b>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">草案&提案<b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'bill:bills' index='normal' %}">法條修正草案</a></li>
@@ -88,7 +88,7 @@
                         </li>
 
                         <li id="vote" class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size=3>投票表決</font><b class="caret"></b>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">投票表決<b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'vote:votes' keyword_url='' index='normal' %}" >全部表決</a></li>
@@ -96,7 +96,7 @@
                         </ul>
                         </li>
                         <li id="chart_report" class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size=3>圖表</font><b class="caret"></b>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">圖表<b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'legislator:chart_report' 'conscience_vote' %}" ><b>脫黨表決次數</b><small>前十名</small></a></li>
@@ -113,12 +113,12 @@
                         </li>
                     </ul>
                     <ul class="nav pull-right">
-                        <li id="reference"><a href="{% url 'reference' %}"><font size=3>資料來源</font></a></li>
-                        <li id="about"><a href="{% url 'about' %}"><font size=3>關於</font></a></li>
+                        <li id="reference"><a href="{% url 'reference' %}">資料來源</a></li>
+                        <li id="about"><a href="{% url 'about' %}">關於</a></li>
                         <li class="divider-vertical"></li>
-                        <li><a class="btn btn-inverse btn-small" href="#searchModal" data-toggle="modal"><font size=3><b>全站搜尋</b></font></a></li>
+                        <li><a class="btn btn-inverse btn-small" href="#searchModal" data-toggle="modal"><b>全站搜尋</b></a></li>
                         <li class="divider-vertical"></li>
-                        <li><p class="text-warning">資料更新時間&nbsp;<br>{{last_update_time}}&nbsp;</p></li>
+                        <li style="padding:12px 0px 12px;"><font class="text-warning">資料更新時間&nbsp;<br>{{last_update_time}}&nbsp;</font></li>
                     </ul>
                 </div>
             </div>
@@ -153,11 +153,8 @@
 
         <div class="container-fluid">
             <div class="row-fluid">
-                <br>
-                <br>
                 {% block left %}
                 {% endblock %}
-
                 {% block right %}
                 {% endblock %}
             </div>

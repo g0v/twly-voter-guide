@@ -20,7 +20,6 @@
 {% block ly_detail %}
 <form action="" method="get" class="form-search" id="form">
     {% csrf_token %}
-    <br>
     <fieldset>
         <input type="search" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:核四 食品安全...空格有交集效果" autofocus>
         <button type="submit" class="btn">Go!</button>
@@ -62,54 +61,54 @@
 {% load pagination_tags %}
 {% autopaginate votes 10 %}
 {% paginate %}
-<table class="table table-bordered sortable" >
+<table class="table table-bordered sortable zebra" >
     <thead>
-        <tr style="font-weight:bold;background-color: #FFFFCC;">
-            <th style="text-align:center; vertical-align:middle; width: 10%">個人投票</th>
-            <th style="text-align:center; vertical-align:middle; width: 10%">表決結果</th>
-            <th style="text-align:center; vertical-align:middle; width: 15%">日期</th>
-            <th style="text-align:center; vertical-align:middle; width: 65%">表決內容</th>
+        <tr style="background-color: #FFFFCC;">
+            <th style="width: 10%">個人投票</th>
+            <th style="width: 10%">表決結果</th>
+            <th style="width: 15%">日期</th>
+            <th style="width: 65%">表決內容</th>
         </tr>
     </thead>
     <tbody>
         {% for vote in votes %}
-        <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
+        <tr>
             {% with decision=vote.decision %}
             {% if decision == -1 %}
             <td style="text-align:center; vertical-align:middle; background-color: #FF66CC;">反對
-                {% elif decision == 1 %}
-                <td style="text-align:center; vertical-align:middle; background-color: #CCFF66;">贊成
-                    {% elif decision == 0 %}
-                    <td style="text-align:center; vertical-align:middle; background-color: #CCCCCC;">棄權
-                        {% else %}
-                        <td style="text-align:center; vertical-align:middle; background-color: #996600;">沒有投票
-                            {% endif %}
-                            {% endwith %}
-                        </td>
-                        {% with vote=vote.vote %}
-                        {% if vote.passed %}<td style="text-align:center; vertical-align:middle; background-color: #CCFF99;">通過
-                            {% else %}<td style="text-align:center; vertical-align:middle; background-color: #FF99CC;">不通過
-                                {% endif %}
-                            </td>
-                            <td style="text-align:center; vertical-align:middle;">{{ vote.sitting.date|date:"Y-m-d" }}</td>
-                            <td>
-                                <a href="{% url 'vote:vote_detail' vote.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單</a><br>
-                                {% if keyword %}
-                                {{vote.content|linebreaksbr|replace:keyword|safe}}
-                                {% else %}
-                                {{vote.content|linebreaksbr|truncatechars:120}}
-                                {% endif %}
-                            </td>
-                            {% endwith %}
-                        </tr>
-                        {% endfor %}
+            {% elif decision == 1 %}
+            <td style="text-align:center; vertical-align:middle; background-color: #CCFF66;">贊成
+            {% elif decision == 0 %}
+            <td style="text-align:center; vertical-align:middle; background-color: #CCCCCC;">棄權
+            {% else %}
+            <td style="text-align:center; vertical-align:middle; background-color: #996600;">沒有投票
+                {% endif %}
+                {% endwith %}
+            </td>
+            {% with vote=vote.vote %}
+            {% if vote.passed %}<td style="text-align:center; vertical-align:middle; background-color: #CCFF99;">通過
+            {% else %}<td style="text-align:center; vertical-align:middle; background-color: #FF99CC;">不通過
+                {% endif %}
+            </td>
+            <td style="text-align:center; vertical-align:middle;">{{ vote.sitting.date|date:"Y-m-d" }}</td>
+            <td>
+                <a href="{% url 'vote:vote_detail' vote.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單</a><br>
+                {% if keyword %}
+                {{vote.content|linebreaksbr|replace:keyword|safe}}
+                {% else %}
+                {{vote.content|linebreaksbr|truncatechars:120}}
+                {% endif %}
+            </td>
+            {% endwith %}
+        </tr>
+        {% endfor %}
     </tbody>
 </table>
 {% paginate %}
 {% endif %}
 {% endblock ly_detail %}
 {% block script %}
-<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/sorttable.js"></script>
+{% include "common/sorttable.html" %}
 <script>
     $(document).ready( function() {
         $('#url_vote').addClass("btn-inverse");

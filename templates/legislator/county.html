@@ -16,21 +16,34 @@
 </div>
 <h4 class="text-center text-warning">{{index}}</h4>
 {% if ly_list %}
-<table class="table table-bordered table-condensed sortable" >
-    <tr style="font-weight:bold;background-color: #CCFF99;"><td>立委</td><td>縣市</td><td>行政區</td><td>委員會</td><td>到職日期</td><td>法條修正草案數</td><td>附帶決議、臨時提案數</td><td>沒投票表決(次)</td><td>脫黨投票(次)</td></tr>
-    {% for ly in ly_list %}
-    <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
-        {% include "common/ly_dropdown.html" with color=True %}
-        <td>{{ly.county}}</td>
-        <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
-        <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" >{{ ly.current_committee }}</a></td>
-        <td>{{ly.term_start|date:"Y-m-d"}}</td>
-        <td><div class="text-center">{{ly.npribill}}</div></td>
-        <td><div class="text-center">{{ly.npriproposer}}</div></td>
-        <td><div class="text-center">{{ly.notvote}}</div></td>
-        <td><div class="text-center">{{ly.nconsciencevote}}</div></td>
-    </tr>
-    {% endfor %}
+<table class="table table-bordered table-condensed sortable zebra" >
+    <thead>
+        <tr style="font-weight:bold;background-color: #CCFF99;">
+            <th>立委</th><th>縣市</th>
+            <th>行政區</th>
+            <th>委員會</th>
+            <th>到職日期</th>
+            <th>法條修正草案數</th>
+            <th>附帶決議、臨時提案數</th>
+            <th>沒投票表決(次)</th>
+            <th>脫黨投票(次)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ly in ly_list %}
+        <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
+            {% include "common/ly_dropdown.html" with color=True %}
+            <td>{{ly.county}}</td>
+            <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
+            <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" >{{ ly.current_committee }}</a></td>
+            <td>{{ly.term_start|date:"Y-m-d"}}</td>
+            <td><div class="text-center">{{ly.npribill}}</div></td>
+            <td><div class="text-center">{{ly.npriproposer}}</div></td>
+            <td><div class="text-center">{{ly.notvote}}</div></td>
+            <td><div class="text-center">{{ly.nconsciencevote}}</div></td>
+        </tr>
+        {% endfor %}
+    </tbody>
     {% include "common/color_info_of_party.html" with column=21 %}
 </table>
 {% else %}
@@ -38,7 +51,7 @@
 {% endif %}
 {% endblock right %}
 {% block script %}
-<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/sorttable.js"></script>
+{% include "common/sorttable.html" %}
 <script>
     $(document).ready( function() {
         $('#ly').addClass('active');

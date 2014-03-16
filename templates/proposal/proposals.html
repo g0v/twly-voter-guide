@@ -7,7 +7,6 @@
 {% endblock %}
 {% block right %}
 <div class="span10">
-    <br>
     {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全...空格有交集效果" %}
     {% if keyword_obj %}
     <h4>熱門：
@@ -38,7 +37,6 @@
 {{ block.super }}
 {% endblock backtotop %}
 {% block script %}
-<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/sorttable.js"></script>
 {% include "common/keyword_auto_complete.html" %}
 <script>
     $(document).ready( function() {

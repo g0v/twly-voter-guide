@@ -14,7 +14,6 @@
 {% block right %}
 <div class="row-fluid">
     <div class="span6">
-        <br>
         {% if vote %}
         <div align="center">
             <br>
@@ -26,7 +25,6 @@
         </div>
     </div><!--end: span6 -->
     <div class="span6">
-        <br>
         {% regroup vote by decision as ly_list %}
         <table class="table table-bordered table-condensed">
             {% with col=20 %}

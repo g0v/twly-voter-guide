@@ -45,30 +45,35 @@
     </div>
     <div class="span6">
         {% if ly_obj %}
-        <table class="table table-bordered" >
+        <table class="table table-bordered zebra" >
             <thead>
-                <tr style="font-weight:bold; background-color: #CCFF99;">
-                    <th style="text-align:center; vertical-align:middle; width: 15%">立委</th>
+                <tr style="background-color: #CCFF99;">
+                    <th style="width: 15%">立委</th>
                     {% if index == 'biller' or index == 'proposal' %}
-                    <th style="text-align:center; vertical-align:middle; width: 10%">提案數</th><th style="text-align:center; vertical-align:middle; width: 10%">平均提案數</th>
+                    <th style="width: 10%">提案數</th>
+                    <th style="width: 10%">平均提案數</th>
                     {% elif index == 'conscience_vote' %}
-                    <th style="text-align:center; vertical-align:middle; width: 10%">脫黨投票(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">脫黨投票率</th>
+                    <th style="width: 10%">脫黨投票(次)</th>
+                    <th style="width: 10%">脫黨投票率</th>
                     {% else %}
                     {% if index == 'vote' %}
-                    <th style="text-align:center; vertical-align:middle; width: 10%">沒投票表決(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">投票率</th>
+                    <th style="width: 10%">沒投票表決(次)</th>
+                    <th style="width: 10%">投票率</th>
                     {% elif index == 'attend_committee' %}
-                    <th style="text-align:center; vertical-align:middle; width: 10%">列席(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">平均列席(次)</th>
+                    <th style="width: 10%">列席(次)</th>
+                    <th style="width: 10%">平均列席(次)</th>
                     {% else %}
                     {% if index == 'ly' %}
-                    <th style="text-align:center; vertical-align:middle; width: 10%">缺席開會(次)</th><th style="text-align:center; vertical-align:middle; width: 10%">缺席率</th>
+                    <th style="width: 10%">缺席開會(次)</th>
+                    <th style="width: 10%">缺席率</th>
                     {% else %}
-                    <th style="text-align:center; vertical-align:middle; width: 20%">缺席開會(次)</th>
+                    <th style="width: 20%">缺席開會(次)</th>
                     {% endif %}
                     {% endif %}
                     {% endif %}
-                    <th style="text-align:center; vertical-align:middle; width: 18%">選區</th>
-                    <th style="text-align:center; vertical-align:middle; width: 31%">行政區</th>
-                    <th style="text-align:center; vertical-align:middle; width: 20%">委員會</th>
+                    <th style="width: 18%">選區</th>
+                    <th style="width: 31%">行政區</th>
+                    <th style="width: 20%">委員會</th>
                 </tr>
             </thead>
             <tbody>
@@ -101,34 +106,8 @@
                     <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" rel="tooltip" title="{{ly.current_committee}}委員會的立委詳細資料">{{ ly.current_committee|truncatechars:7 }}</a></td>
                 </tr>
                 {% endfor %}
-                {% include "common/color_info_of_party.html" with column=6 %}
             </tbody>
-        </table>
-        {% elif vote_obj %}
-        <table class="table table-bordered" >
-            <thead>
-                <tr style="font-weight:bold;background-color: #CCFF99;">
-                    <th style="text-align:center; vertical-align:middle; width: 20%">表決日期</th>
-                    <th style="text-align:center; vertical-align:middle; width: 15%">表決(個)</th>
-                    {% if index == 'nvote_gbdate' %}
-                    <th style="text-align:center; vertical-align:middle; width: 65%">會期</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for vote in vote_obj reversed %}
-                <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
-                    {% if index == 'nvote_gbdate' %}
-                    <td>{{vote.sitting__date|date:"Y-m-d"}}</td>
-                    <td>{{vote.totalNum}}</td>
-                    <td>{{vote.sitting__name}}</td>
-                    {% elif index == 'nvote_gbmonth' %}
-                    <td>{{vote.year|floatformat:"0"}} / {{vote.month|floatformat:"0"}}</td>
-                    <td>{{vote.totalNum}}</td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
+            {% include "common/color_info_of_party.html" with column=6 %}
         </table>
         {% endif %}
     </div>

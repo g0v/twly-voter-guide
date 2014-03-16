@@ -16,60 +16,74 @@
 </div>
 <h4 class="text-center text-warning">{{index}}</h4>
 {% if ly_list %}
-<table class="table table-bordered table-condensed" >
-    {% regroup ly_list by session as session_list %}
-    {% for session in session_list %}
-    <tr>
-        <td><div class="text-center">第{{session.grouper}}會期</div></td>
-        {% for fragment in session.list %}
-        {% with ly=fragment.legislator %}
-        {% include "common/ly_dropdown.html" with color=True %}
-        {% endwith %}
-        {% endfor %}
-    </tr>
-    {% endfor %}
-</tr>
-    </table>
-
-    <table class="table table-bordered table-condensed sortable" >
-        <tr style="font-weight:bold;background-color: #CCFF99;"><td>會期</td><td>擔當</td><td>立委</td><td>縣市</td><td>行政區</td><td>到職日期</td><td>法條修正草案數</td><td>附帶決議、臨時提案數</td><td>沒投票表決(次)</td><td>脫黨投票(次)</td></tr>
+    <table class="table table-bordered table-condensed" >
         {% regroup ly_list by session as session_list %}
         {% for session in session_list %}
-        {% if forloop.counter == 1 %}
-        {% for fragment in session.list %}
-        <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
-            <td><div class="text-center">{{session.grouper}}</div></td>
-            <td>
-                {% if fragment.chair %}
-                <div class="text-center">召集委員</div>
-                {% endif %}
-            </td>
+        <tr>
+            <td><div class="text-center">第{{session.grouper}}會期</div></td>
+            {% for fragment in session.list %}
             {% with ly=fragment.legislator %}
             {% include "common/ly_dropdown.html" with color=True %}
-            <td><a href="{% url 'legislator:index_district' ly.county %}" >{{ly.county}}</a></td>
-            <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
-            <td>{{ly.term_start|date:"Y-m-d"}}</td>
-            <td><div class="text-center">{{ly.npribill}}</div></td>
-            <td><div class="text-center">{{ly.npriproposer}}</div></td>
-            <td><div class="text-center">{{ly.notvote}}</div></td>
-            <td><div class="text-center">{{ly.nconsciencevote}}</div></td>
             {% endwith %}
+            {% endfor %}
         </tr>
-        {% endfor %}
-        {% endif %}
-        {% endfor %}
+            {% endfor %}
+        </tr>
+    </table>
+    <table class="table table-bordered table-condensed sortable zebra" >
+        <thead>
+            <tr style="font-weight:bold;background-color: #CCFF99;">
+                <th>會期</th>
+                <th>擔當</th>
+                <th>立委</th>
+                <th>縣市</th>
+                <th>行政區</th>
+                <th>到職日期</th>
+                <th>法條修正草案數</th>
+                <th>附帶決議、臨時提案數</th>
+                <th>沒投票表決(次)</th>
+                <th>脫黨投票(次)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% regroup ly_list by session as session_list %}
+            {% for session in session_list %}
+            {% if forloop.counter == 1 %}
+            {% for fragment in session.list %}
+                <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
+                    <td><div class="text-center">{{session.grouper}}</div></td>
+                    <td>
+                        {% if fragment.chair %}
+                        <div class="text-center">召集委員</div>
+                        {% endif %}
+                    </td>
+                    {% with ly=fragment.legislator %}
+                    {% include "common/ly_dropdown.html" with color=True %}
+                    <td><a href="{% url 'legislator:index_district' ly.county %}" >{{ly.county}}</a></td>
+                    <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
+                    <td>{{ly.term_start|date:"Y-m-d"}}</td>
+                    <td><div class="text-center">{{ly.npribill}}</div></td>
+                    <td><div class="text-center">{{ly.npriproposer}}</div></td>
+                    <td><div class="text-center">{{ly.notvote}}</div></td>
+                    <td><div class="text-center">{{ly.nconsciencevote}}</div></td>
+                    {% endwith %}
+                </tr>
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+        </tbody>
         {% include "common/color_info_of_party.html" with column=21 %}
     </table>
     {% else %}
     <p class="text-error">沒有立委</p>
     {% endif %}
-    {% endblock right %}
-    {% block script %}
-    <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/sorttable.js"></script>
-    <script>
-        $(document).ready( function() {
-            $('#ly').addClass('active');
-            $("[rel='tooltip']").tooltip();
-        });
-    </script>
-    {% endblock script %}
+{% endblock right %}
+{% block script %}
+{% include "common/sorttable.html" %}
+<script>
+    $(document).ready( function() {
+        $('#ly').addClass('active');
+        $("[rel='tooltip']").tooltip();
+    });
+</script>
+{% endblock script %}
