@@ -37,7 +37,7 @@
                             <b><span><font style="color: red;">{{legend.0}}</font></span></b> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            {% for key, value in field %}
+                            {% for key, value in pc_field %}
                             <li><a href="{% url 'legislator:political_contributions_report' index=key compare=compare party=party %}">{{value}}</a></li>
                             {% endfor %}
                         </ul>
@@ -47,7 +47,10 @@
                             <b><span><font style="color: orange;">{{legend.1}}</font></span></b> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            {% for key, value in compare_field.items %}
+                            {% for key, value in index_field.items %}
+                            <li style="background-color: #CCFF99;"><a href="{% url 'legislator:political_contributions_report' index=index compare=key party=party %}">{{value.legend}}</a></li>
+                            {% endfor %}
+                            {% for key, value in pc_field %}
                             <li><a href="{% url 'legislator:political_contributions_report' index=index compare=key party=party %}">{{value}}</a></li>
                             {% endfor %}
                         </ul>

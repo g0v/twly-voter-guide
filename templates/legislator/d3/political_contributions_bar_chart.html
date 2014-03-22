@@ -77,7 +77,7 @@
 
     var data = {{data|as_json}}
 
-    var margin = {top: 30, right: 80, bottom: 120, left: 120},
+    var margin = {top: 30, right: 120, bottom: 120, left: 120},
     width = 1080 - margin.left - margin.right,
     height = 480 - margin.top - margin.bottom;
 
@@ -104,7 +104,11 @@
 
     var yAxisRight = d3.svg.axis()
     .scale(yRight)
-    .tickFormat(function(d) { return d + '(次)'; })
+    {% if legend.3 == 'count' %}
+        .tickFormat(function(d) { return d + '(次)'; })
+    {% elif legend.3 == 'money' %}
+        .tickFormat(function(d) { return prefix(d/10000) + '(萬元)'; })
+    {% endif %}
     .orient("right");
 
     var tip = d3.tip()
@@ -131,9 +135,13 @@
     svg.call(tip_compare);
 
     x.domain(data.map(function(d) { return d.name; }));
-    y.domain([Math.min(0, d3.min(data, function(d) { return d.totalNum; })), d3.max(data, function(d) { return d.totalNum; })]);
-    yRight.domain([0, d3.max(data, function(d) { return d.compare; })]);
-
+    {% if legend.2 == 'money' and legend.3 == 'count' %}
+        y.domain([Math.min(0, d3.min(data, function(d) { return d.totalNum; })), d3.max(data, function(d) { return d.totalNum; })]);
+        yRight.domain([Math.min(0, d3.min(data, function(d) { return d.compare; })), d3.max(data, function(d) { return d.compare; })]);
+    {% elif legend.2 == 'money' and legend.3 == 'money' %}
+        y.domain([Math.min(0, d3.min(data, function(d) { return Math.min(d.totalNum, d.compare); })), d3.max(data, function(d) { return Math.max(d.totalNum, d.compare); })]);
+        yRight.domain([Math.min(0, d3.min(data, function(d) { return Math.min(d.totalNum, d.compare); })), d3.max(data, function(d) { return Math.max(d.totalNum, d.compare); })]);
+    {% endif %}
     svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
