@@ -184,8 +184,8 @@
     .attr("class", "bar_compare")
     .attr("x", function(d) { return x(d.name) + x.rangeBand()/2 + 0.5; })
     .attr("width", x.rangeBand()/3)
-    .attr("y", function(d) { return yRight(d.compare); })
-    .attr("height", function(d) { return height - yRight(d.compare); })
+    .attr("y", function(d) { return yRight(Math.max(0, d.compare)); })
+    .attr("height", function(d) { return Math.abs(y(0) - yRight(d.compare)); })
     .on('mouseover', tip_compare.show)
     .on('mouseout', tip_compare.hide);
 
