@@ -122,7 +122,11 @@
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function(d) {
+    {% if legend.3 == 'count' %}
         return "<strong>" + d.name + "</strong> ：<span style='color:red'>" + d.compare + "</span>次";
+    {% elif legend.3 == 'money' %}
+        return "<strong>" + d.name + "</strong> ：<span style='color:red'>" + d.compare + "</span>元";
+    {% endif %}
     });
 
     var svg = d3.select("#d3").append("svg")

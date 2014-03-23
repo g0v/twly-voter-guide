@@ -17,20 +17,20 @@
 <div class="row-fluid">
     <div class="span12">
         <div class="hero-unit">
-            <div id="d3" align="center">
-                <div class="lead text-center">
+            <div class="lead">
                 第八屆政治獻金:
                 <div class="btn-group">
-                    <button type="button" class="btn btn-large dropdown-toggle" data-toggle="dropdown">
-                        <span>{{party}}</span> <span class="caret"></span>
+                    <button type="button" class="btn dropdown-toggle btn-info" data-toggle="dropdown">
+                        <span>可以用什麼角度來看資料？</span> <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        {% for fragment in party_list %}
-                        <li><a href="{% url 'legislator:political_contributions_report' index=index compare=compare party=fragment %}">{{fragment}}</a></li>
-                        {% endfor %}
+                        <li><a href="{% url 'legislator:political_contributions_report' index='out_total' compare='out_propagate' party=party %}">選舉宣傳佔了總支出多大比例？</a></li>
+                        <li style="background-color: #DDDDDD;"><a href="{% url 'legislator:political_contributions_report' index='in_party' compare='conscience_vote' party=party %}">拿政黨越多錢，越不敢脫黨投票嗎？</a></li>
+                        <li><a href="{% url 'legislator:political_contributions_report' index='in_total' compare='in_profit' party=party %}">營利事業捐贈佔了總收入多少？</a></li>
                     </ul>
                 </div>
-                </div>
+            </div>
+            <div id="d3" align="center">
                 <p class="lead">
                     <div class="btn-group pull-left">
                         <button type="button" class="btn btn-large dropdown-toggle" data-toggle="dropdown">
@@ -39,6 +39,16 @@
                         <ul class="dropdown-menu">
                             {% for key, value in pc_field %}
                             <li><a href="{% url 'legislator:political_contributions_report' index=key compare=compare party=party %}">{{value}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="btn-group pull-center">
+                        <button type="button" class="btn btn-large dropdown-toggle" data-toggle="dropdown">
+                            <span>{{party}}</span> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% for fragment in party_list %}
+                            <li><a href="{% url 'legislator:political_contributions_report' index=index compare=compare party=fragment %}">{{fragment}}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -90,7 +100,11 @@
                 <tr>
                     <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
                     <td style="text-align:center; vertical-align:middle;">{{ly.totalNum}}</td>
-                    <td style="text-align:center; vertical-align:middle;">{{ly.compare}}</td>
+                    {% if ly.compare %}
+                        <td style="text-align:center; vertical-align:middle;">{{ly.compare}}</td>
+                    {% else %}
+                        <td style="text-align:center; vertical-align:middle;">0</td>
+                    {% endif %}
                     <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:index_district' ly.county %}" rel="tooltip" title="{{ly.constituency }}的立委詳細資料">{{ly.county}}</a></td>
                     <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
                     <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:index_committee' ly.current_committee %}" rel="tooltip" title="{{ly.current_committee}}委員會的立委詳細資料">{{ ly.current_committee }}</a></td>
