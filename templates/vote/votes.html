@@ -38,19 +38,21 @@
     <table class="table table-bordered zebra" >
         <thead>
             <tr style="background-color: #FFFFCC;">
+                <th style="width: 6%">屆期</th>
                 <th style="width: 12%">表決結果</th>
                 <th style="width: 3%">贊成票</th>
                 <th style="width: 3%">反對票</th>
                 <th style="width: 3%">棄權票</th>
                 <th style="width: 3%">沒投票</th>
                 <th style="width: 12%">日期</th>
-                <th style="width: 56%">表決內容</th>
+                <th style="width: 50%">表決內容</th>
                 <th style="width: 8%">備註</th>
             </tr>
         </thead>
         <tbody>
             {% for fragment in votes %}
             <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
+                <td style="text-align:center; vertical-align:middle;">{{fragment.sitting.ad}}</td>
                 {% if fragment.passed %}
                 <td style="text-align:center; vertical-align:middle; background-color: #CCFF99;">通過</td>
                 {% else %}

@@ -3,13 +3,13 @@
 {% block title %}
 {% if ly %}
 {% if index == 'conscience' %}
-<title>立委投票指南:{{ly.name}}的脫黨表決紀錄</title>
-<meta property="og:title" content="立委投票指南:{{ly.name}}的脫黨表決紀錄"/>
-<meta itemprop="name" content="立委投票指南:{{ly.name}}的脫黨表決紀錄">
+<title>立委投票指南:{{ly.name}}第{{ly.ad}}屆的脫黨表決紀錄</title>
+<meta property="og:title" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的脫黨表決紀錄"/>
+<meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的脫黨表決紀錄">
 {% else %}
-<title>立委投票指南:{{ly.name}}的投票表決紀錄</title>
-<meta property="og:title" content="立委投票指南:{{ly.name}}的投票表決紀錄"/>
-<meta itemprop="name" content="立委投票指南:{{ly.name}}的投票表決紀錄">
+<title>立委投票指南:{{ly.name}}第{{ly.ad}}屆的投票表決紀錄</title>
+<meta property="og:title" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的投票表決紀錄"/>
+<meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的投票表決紀錄">
 {% endif %}
 {% else %}
 <title>立委投票指南:立委的投票表決紀錄</title>
@@ -39,7 +39,7 @@
 </h4>
 {% endif %}
 <div class="well well-small">
-    <p class="lead">{{ly.name}}的{% if index == 'conscience' %}<b>脫黨</b>{% endif %}表決紀錄：
+    <p class="lead">{{ly.name}}第{{ly.ad}}屆的{% if index == 'conscience' %}<b>脫黨</b>{% endif %}表決紀錄：
     {% if keyword %}
     包含<font style="color: red;">"{{keyword}}"</font>的表決&nbsp;
     {% endif %}
@@ -64,15 +64,17 @@
 <table class="table table-bordered sortable zebra" >
     <thead>
         <tr style="background-color: #FFFFCC;">
+            <th style="width: 6%">屆期</th>
             <th style="width: 10%">個人投票</th>
             <th style="width: 10%">表決結果</th>
             <th style="width: 15%">日期</th>
-            <th style="width: 65%">表決內容</th>
+            <th style="width: 59%">表決內容</th>
         </tr>
     </thead>
     <tbody>
         {% for vote in votes %}
         <tr>
+            <td style="text-align:center; vertical-align:middle;">{{vote.vote.sitting.ad}}</td>
             {% with decision=vote.decision %}
             {% if decision == -1 %}
             <td style="text-align:center; vertical-align:middle; background-color: #FF66CC;">反對

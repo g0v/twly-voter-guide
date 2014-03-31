@@ -54,7 +54,7 @@
                 </tr><tr>
                 {% endif %}
                 {% with ly=fragment.legislator %}
-                    <td><a href="{% url 'legislator:voter_detail' ly.legislator_id %}" rel="tooltip" title="這位立委的表決投票紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
+                    <td><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=vote.0.vote.sitting.ad %}" rel="tooltip" title="這位立委的表決投票紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
                 {% endwith %}
                 {% endfor %}
             {% endfor %}
