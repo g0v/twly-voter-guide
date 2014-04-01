@@ -55,11 +55,19 @@
                 </tr>
                 <tr>
                     <td style="background-color: lightgrey;">法條修正草案數</td>
+                    {% if ad == 8 %}
                     <td>{{ ly.npribill }} 個</td>
+                    {% else %}
+                    <td>尚無資料</td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <td style="background-color: lightgrey;">附帶決議、臨時提案數</td>
+                    {% if ad == 8 %}
                     <td>{{ ly.npriproposer }} 個</td>
+                    {% else %}
+                    <td>尚無資料</td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <td style="background-color: lightgrey;">沒投票表決(次)</td>
@@ -135,7 +143,11 @@
                     <a id='url_vote' class="btn btn-primary btn-large dropdown-toggle" href="#" data-toggle="dropdown">投票紀錄 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='' %}" >全投票表決紀錄</a></li>
+                        {% if ad %}
+                        <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad index='conscience' %}" >脫黨投票表決紀錄</a></li>
+                        {% else %}
                         <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" >脫黨投票表決紀錄</a></li>
+                        {% endif %}
                     </ul>
                 </div>
                 <a class="btn btn-primary btn-large" id='url_politics' href="{% url 'legislator:platformer_detail' ly.legislator_id %}">競選政見</a>

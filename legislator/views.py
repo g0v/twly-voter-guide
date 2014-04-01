@@ -23,9 +23,10 @@ def get_legislator(legislator_id, ad):
     except Exception, e:
         print e
 
-def index(request, index):
-    error, proposertype, progress, query = None, False, "", Q(ad=8, in_office=True)
-    outof_ly_list = LegislatorDetail.objects.filter(ad=8, in_office=False)
+def index(request, index, ad):
+    ad = ad or 8
+    error, proposertype, progress, query = None, False, "", Q(ad=ad, in_office=True)
+    outof_ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=False)
     if 'lyname' in request.GET:
         ly_name = re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['lyname']).strip()
         if ly_name:
@@ -47,21 +48,21 @@ def index(request, index):
                 query = query & Q(legislator_bill__bill__last_action=progress)
         ly_list = LegislatorDetail.objects.filter(query).annotate(totalNum=Count('legislator_bill__id')).exclude(totalNum=0).order_by('-totalNum')
         no_count_list = LegislatorDetail.objects.filter(name_query).exclude(legislator_id__in=ly_list.values_list('legislator_id', flat=True))
-        return render(request,'legislator/index/index_ordered.html', {'no_count_list':no_count_list,'proposertype':proposertype,'progress':progress,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_ordered.html', {'ad':ad,'no_count_list':no_count_list,'proposertype':proposertype,'progress':progress,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'conscience_vote':
         ly_list = LegislatorDetail.objects.filter(query, votes__conflict=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')
         no_count_list = LegislatorDetail.objects.filter(name_query).exclude(legislator_id__in=ly_list.values_list('legislator_id', flat=True)).order_by('party')
-        return render(request,'legislator/index/index_ordered.html', {'no_count_list':no_count_list,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_ordered.html', {'ad':ad,'no_count_list':no_count_list,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'notvote':
         ly_list = LegislatorDetail.objects.filter(query, votes__decision__isnull=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')
         no_count_list = LegislatorDetail.objects.filter(name_query).exclude(legislator_id__in=ly_list.values_list('legislator_id', flat=True))
-        return render(request,'legislator/index/index_ordered.html', {'no_count_list':no_count_list,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/index_ordered.html', {'ad':ad,'no_count_list':no_count_list,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'committee':
         ly_list = Legislator_Committees.objects.select_related().filter(ad=8).order_by('committee', 'session', 'legislator__party', 'legislator__name')
-        return render(request,'legislator/index/committees.html', {'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/committees.html', {'ad':ad,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'district':
         ly_list = LegislatorDetail.objects.filter(query).order_by('-county','party')
-        return render(request,'legislator/index/countys.html', {'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
+        return render(request,'legislator/index/countys.html', {'ad':ad,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     else:
         return HttpResponseRedirect('/legislator/biller')
 
@@ -74,7 +75,7 @@ def index_committee(request, index):
     return render(request,'legislator/committee.html', {'ly_list': ly_list,'index':index})
 
 def proposer_detail(request, legislator_id, keyword_url):
-    proposertype = False
+    ad, proposertype = 8, False
     ly = get_legislator(legislator_id, ad=8)
     if not ly:
         return HttpResponseRedirect('/')
@@ -90,7 +91,7 @@ def proposer_detail(request, legislator_id, keyword_url):
             keyword_been_searched(keyword, 1)
     else:
         proposal = Proposal.objects.filter(query).order_by('-sitting__date')
-    return render(request,'legislator/proposer_detail.html', {'keyword_obj':keyword_list(1),'proposal':proposal,'ly':ly,'keyword':keyword,'proposertype':proposertype})
+    return render(request,'legislator/proposer_detail.html', {'keyword_obj':keyword_list(1),'proposal':proposal,'ad':ad,'ly':ly,'keyword':keyword,'proposertype':proposertype})
 
 def voter_detail(request, legislator_id, index, keyword_url, ad):
     votes, notvote, query = None, False, Q()
@@ -121,8 +122,8 @@ def voter_detail(request, legislator_id, index, keyword_url, ad):
     return render(request,'legislator/voter_detail.html', {'keyword_obj':keyword_list(2),'ly':ly,'ad':ad,'index':index,'votes':votes,'keyword':keyword,'vote_addup':vote_addup,'notvote':notvote})
 
 def biller_detail(request, legislator_id, keyword_url):
-    proposertype = False
-    ly = get_legislator(legislator_id, ad=8)
+    ad, proposertype = 8, False
+    ly = get_legislator(legislator_id, ad=ad)
     if not ly:
         return HttpResponseRedirect('/')
     query = Q(proposer__id=ly.id, legislator_bill__priproposer=True)
@@ -138,9 +139,10 @@ def biller_detail(request, legislator_id, keyword_url):
             keyword_been_searched(keyword, 3)
     else:
         bills = bills.filter(query)
-    return render(request,'legislator/biller_detail.html', {'keyword_obj':keyword_list(3),'bills':bills,'ly':ly,'keyword':keyword,'proposertype':proposertype})
+    return render(request,'legislator/biller_detail.html', {'keyword_obj':keyword_list(3),'bills':bills,'ad':ad,'ly':ly,'keyword':keyword,'proposertype':proposertype})
 
 def platformer_detail(request, legislator_id):
+    ad = 8
     ly = get_legislator(legislator_id, ad=8)
     if not ly:
         return HttpResponseRedirect('/')
@@ -148,7 +150,7 @@ def platformer_detail(request, legislator_id):
         politics = Platform.objects.filter(party=ly.party).order_by('id')
     else:
         politics = Platform.objects.filter(legislator_id=ly.id).order_by('id')
-    return render(request,'legislator/ly_politics.html', {'ly':ly,'politics':politics})
+    return render(request,'legislator/ly_politics.html', {'ad':ad,'ly':ly,'politics':politics})
 
 def chart_report(request, ad, index='vote'):
     ly_obj, ly_name, vote_obj, title, content, compare, data = [], [], [], None, None, None, None
@@ -180,7 +182,7 @@ def chart_report(request, ad, index='vote'):
         compare = Sittings.objects.filter(ad=ad, committee='').count()
         ly_obj = LegislatorDetail.objects.filter(ad=ad, in_office=True, attendance__category='YS', attendance__status='absent').annotate(totalNum=Count('attendance__id')).order_by('-totalNum','party')[:10]
         title, content = u'立法院開會缺席前十名', u'立委須參加立法院例行會議，在會議中進行質詢、法案討論表決、人事表決等重要工作(點選立委名字可看立委投票紀錄)'
-    return render(request,'legislator/chart_report.html', {'compare':compare,'title':u'%s(第%s屆)' %(title, ad),'content':content,'index':index,'vote_obj':vote_obj,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj, 'data': list(ly_obj.values('name', 'totalNum'))} )
+    return render(request,'legislator/chart_report.html', {'compare':compare,'ad':ad,'title':u'%s(第%s屆)' %(title, ad),'content':content,'index':index,'vote_obj':vote_obj,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj, 'data': list(ly_obj.values('name', 'totalNum'))} )
 
 def political_contributions_report(request, index='in_party', compare='conscience_vote', party=u'中國國民黨'):
     ly_obj, title, content, data = [], None, None, None

@@ -13,15 +13,15 @@
 {% endif %}
 {% endblock %}
 {% block right %}
-<div class="page-header">
-    <h3 align="center">
+<div class="page-header text-center">
+    <h3>
         {% if title %}{{title}}{% endif %}
         {% if index == 'conscience_vote' or index == 'vote' or index == 'ly' %}
             <font class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">想看其他屆<b class="caret"></b></a>
             <ul class="dropdown-menu">
-                <li><a href="{% url 'legislator:chart_report' 'conscience_vote' %}" ><b>第8屆</b><small> 2012~2016</small></a></li>
-                <li><a href="{% url 'legislator:chart_report' index='conscience_vote' ad=7 %}" ><b>第7屆</b><small> 2008~2012</small></a></li>
+                <li><a href="{% url 'legislator:chart_report' index %}" ><b>第8屆</b><small> 2012~2016</small></a></li>
+                <li><a href="{% url 'legislator:chart_report' index=index ad=7 %}" ><b>第7屆</b><small> 2008~2012</small></a></li>
             </ul>
             <font>
         {% endif %}
@@ -89,8 +89,8 @@
                 {% for ly in ly_obj %}
                 <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
                     <td>
-                        {% if index == 'vote' or index = 'ly' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">
-                            {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">
+                        {% if index == 'vote' or index = 'ly' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">
+                            {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad index='conscience' %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">
                                 {% else %}
                                 {% if index == 'biller' %}<a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的法條修正草案">
                                     {% else %}<a href="{% url 'legislator:proposer_detail' ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的提案">
