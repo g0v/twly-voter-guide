@@ -5,7 +5,6 @@
     {% if index == 'biller' %}
     <form action="" method="get" class="form-inline text-center" id="form_bill">
         <fieldset>法條修正草案數(多&rarr;少)
-            {% csrf_token %}
             <select name="progress" id="progress">
                 <option value="">全部</option>
                 {% for fragment in distinct_progress_of_bill %}
