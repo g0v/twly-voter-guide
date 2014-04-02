@@ -32,7 +32,7 @@
 <h4>熱門：
     {% for keyword in keyword_obj %}
     {% if forloop.counter0 < 5 %}
-    <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
+    <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
     {% endif %}
     {% endfor %}
 </h4>
@@ -43,16 +43,20 @@
     包含<font style="color: red;">"{{keyword}}"</font>的表決&nbsp;
     {% endif %}
     {% for decision in vote_addup %}
-    {{decision.totalNum}}次
-    {% if decision.decision == 1 %}<font color="#66CC66">贊成</font>&nbsp;,&nbsp;
-    {% elif decision.decision == 0 %}<font color="#999999">棄權</font>&nbsp;,&nbsp;
-    {% elif decision.decision == -1 %}<font color="#FF66CC">反對</font>
-    {% else %}<font color="#996600">沒有投票</font>&nbsp;,&nbsp;
-    {% endif %}
+        {{decision.totalNum}}次
+        {% if decision.decision == 1 %}<font color="#66CC66">贊成</font>&nbsp;,&nbsp;
+        {% elif decision.decision == 0 %}<font color="#999999">棄權</font>&nbsp;,&nbsp;
+        {% elif decision.decision == -1 %}<font color="#FF66CC">反對</font>
+        {% else %}<font color="#996600">沒有投票</font>&nbsp;,&nbsp;
+        {% endif %}
     {% empty %}
-    {% if index == 'conscience' %}<p class="text-error">沒有任何脫黨投票紀錄</p>
-    {% else %}<p class="text-error">沒有參加任何表決</p>
-    {% endif %}
+        {% if ly.ad > 6 %}
+            {% if index == 'conscience' %}<p class="text-error">沒有任何脫黨投票紀錄</p>
+            {% else %}<p class="text-error">沒有參加任何表決</p>
+            {% endif %}
+        {% else %}
+            <p class="text-error">尚無資料，敬請期待</p>
+        {% endif %}
     {% endfor %}
     </p>
 </div>

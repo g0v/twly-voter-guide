@@ -2,8 +2,8 @@
 {% block title %}
 {% if ly %}
 <title>立委投票指南:{{ly.name}}的法條修正草案</title>
-<meta property="og:title" content="立委投票指南:{{ly.name}}的法條修正草案"/>
-<meta itemprop="name" content="立委投票指南:{{ly.name}}的法條修正草案">
+<meta property="og:title" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的法條修正草案"/>
+<meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的法條修正草案">
 {% else %}
 <title>立委投票指南:立委的法條修正草案</title>
 <meta property="og:title" content="立委投票指南:立委的法條修正草案"/>
@@ -31,7 +31,7 @@
 {% endif %}
 <div class="well well-small">
     <p class="lead">
-    {{ly.name}}：{{ bills|length }}個
+    {{ly.name}}(第{{ly.ad}}屆)：{{ bills|length }}個
     {% if keyword %}
     包含<font style="color: red;">"{{keyword}}"</font>的
     {% endif %}法條修正<small> 草案</small>

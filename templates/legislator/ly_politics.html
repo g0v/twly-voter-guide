@@ -2,8 +2,8 @@
 {% block title %}
 {% if ly %}
 <title>立委投票指南:{{ly.name}}的競選政見</title>
-<meta property="og:title" content="立委投票指南:{{ly.name}}的競選政見"/>
-<meta itemprop="name" content="立委投票指南:{{ly.name}}的競選政見">
+<meta property="og:title" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的競選政見"/>
+<meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的競選政見">
 {% else %}
 <title>立委投票指南:立委的競選政見</title>
 <meta property="og:title" content="立委投票指南:立委的競選政見"/>
@@ -13,6 +13,7 @@
 {% block ly_detail %}
 {% if politics %}
 <table class="table table-bordered ">
+    <tr class="warning" ><td><font class="lead">{{ly.name}}第{{ly.ad}}屆的政見：</font></td></tr>
     {% if ly.eleDistrict == '全國不分區' %}
     <tr class="info" ><td><p class="text-center">全國不分區的立委統一由所屬政黨提出政見，無個人政見</p></td></tr>
     {% endif %}

@@ -20,6 +20,19 @@
                 </tr>
                 {% endif %}
                 <tr>
+                    <td style="background-color: lightgrey;">屆期</td>
+                    <td>
+                        <font class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">第{{ly.ad}}屆<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            {% for ad in ly.in_office_ad %}
+                            <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad %}" ><b>第{{ad}}屆</b></a></li>
+                            {% endfor %}
+                        </ul>
+                        <font>
+                    </td>
+                </tr>
+                <tr>
                     <td style="background-color: lightgrey;">立委</td>
                     <td><b>{{ ly.name }}</b></td>
                 </tr>
@@ -53,22 +66,16 @@
                     <td style="background-color: lightgrey;">到職日期</td>
                     <td>{{ ly.term_start|date:"Y-m-d" }}</td>
                 </tr>
+                {% if ly.ad > 7 %}
                 <tr>
                     <td style="background-color: lightgrey;">法條修正草案數</td>
-                    {% if ad == 8 %}
                     <td>{{ ly.npribill }} 個</td>
-                    {% else %}
-                    <td>尚無資料</td>
-                    {% endif %}
                 </tr>
                 <tr>
                     <td style="background-color: lightgrey;">附帶決議、臨時提案數</td>
-                    {% if ad == 8 %}
                     <td>{{ ly.npriproposer }} 個</td>
-                    {% else %}
-                    <td>尚無資料</td>
-                    {% endif %}
                 </tr>
+                {% endif %}
                 <tr>
                     <td style="background-color: lightgrey;">沒投票表決(次)</td>
                     <td>{{ly.notvote}} 次</td>
@@ -137,20 +144,18 @@
         <div class="row-fluid">
             <div class="span12">
                 <b>{{ ly.name }}</b>的&nbsp;
-                <a class="btn btn-primary btn-large" id='url_bill' href="{% url 'legislator:biller_detail' ly.legislator_id %}">法條修正草案</a>
-                <a class="btn btn-primary btn-large" id='url_proposal' href="{% url 'legislator:proposer_detail' ly.legislator_id %}">附帶決議、臨時提案</a>
                 <div class="btn-group">
                     <a id='url_vote' class="btn btn-primary btn-large dropdown-toggle" href="#" data-toggle="dropdown">投票紀錄 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='' %}" >全投票表決紀錄</a></li>
-                        {% if ad %}
-                        <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad index='conscience' %}" >脫黨投票表決紀錄</a></li>
-                        {% else %}
-                        <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" >脫黨投票表決紀錄</a></li>
-                        {% endif %}
+                        <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad index='' %}" >全投票表決紀錄</a></li>
+                        <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad index='conscience' %}" >脫黨投票表決紀錄</a></li>
                     </ul>
                 </div>
+                {% if ly.ad > 7 %}
+                <a class="btn btn-primary btn-large" id='url_bill' href="{% url 'legislator:biller_detail' ly.legislator_id %}">法條修正草案</a>
+                <a class="btn btn-primary btn-large" id='url_proposal' href="{% url 'legislator:proposer_detail' ly.legislator_id %}">附帶決議、臨時提案</a>
                 <a class="btn btn-primary btn-large" id='url_politics' href="{% url 'legislator:platformer_detail' ly.legislator_id %}">競選政見</a>
+                {% endif %}
             </div>
         </div>
         <br>

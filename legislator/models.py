@@ -40,6 +40,11 @@ class LegislatorDetail(models.Model):
     def __unicode__(self):
         return self.name
 
+    def _in_office_ad(self):
+        print LegislatorDetail.objects.filter(legislator_id=self.legislator_id).values_list('ad', flat=True)
+        return LegislatorDetail.objects.filter(legislator_id=self.legislator_id).values_list('ad', flat=True).order_by('-ad')
+    in_office_ad = property(_in_office_ad)
+
     def _not_vote_count(self):
         return Legislator_Vote.objects.filter(decision__isnull=True, legislator_id=self.id).count()
     notvote = property(_not_vote_count)
