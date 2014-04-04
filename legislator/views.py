@@ -24,7 +24,7 @@ def get_legislator(legislator_id, ad):
         print e
 
 def index(request, index, ad):
-    ad = ad or 8
+    ad = str(ad or 8)
     error, proposertype, progress, query = None, False, "", Q(ad=ad, in_office=True)
     outof_ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=False)
     if 'lyname' in request.GET:
