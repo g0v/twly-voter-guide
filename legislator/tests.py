@@ -21,8 +21,8 @@ class LegislatorTest(TestCase):
             response = self.client.get(reverse('legislator:index', kwargs={"index": arg}))
             self.assertEqual(response.status_code, 200)
         # homepage
-        response = self.client.get(reverse('legislator:index'))
-        self.assertEqual(response.status_code, 302)
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
         # search legislator name
         for arg in [u'王', ' ']:
             response = self.client.get("%s?lyname=%s" % (reverse('legislator:index', kwargs={"index": "biller"}), arg))
