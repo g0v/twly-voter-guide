@@ -66,9 +66,10 @@ def index(request, index, ad):
     else:
         return HttpResponseRedirect('/legislator/biller')
 
-def index_district(request, index):
-    ly_list = LegislatorDetail.objects.filter(ad=8, in_office=True, county=index).order_by('party', 'name')
-    return render(request,'legislator/county.html', {'ly_list': ly_list,'index':index})
+def index_district(request, index, ad):
+    ad = str(ad or 8)
+    ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=True, county=index).order_by('party', 'name')
+    return render(request,'legislator/county.html', {'ad':ad,'ly_list':ly_list,'index':index})
 
 def index_committee(request, index):
     ly_list = Legislator_Committees.objects.select_related().filter(ad=8, committee=index).order_by('-session', 'legislator__party', 'legislator__name')

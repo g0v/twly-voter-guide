@@ -93,11 +93,11 @@
                 </tr>
                 <tr>
                     <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">地址</td>
-                    <td>{{contact.address}}</td>
+                    <td><a href="{{ "https://maps.google.com.tw/?q="|add:contact.address }}" target="_blank">{{contact.address}}</a></td>
                 </tr>
                 <tr>
                     <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">電話</td>
-                    <td>{{contact.phone}}</td>
+                    <td><a href="{{ "tel:"|add:contact.phone }}" target="_blank">{{contact.phone}}</a></td>
                 </tr>
                 <tr>
                     <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">傳真</td>
