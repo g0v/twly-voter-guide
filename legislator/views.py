@@ -146,7 +146,7 @@ def platformer_detail(request, legislator_id):
     ly = get_legislator(legislator_id, ad=8)
     if not ly:
         return HttpResponseRedirect('/')
-    if ly.constituency == u'全國不分區':
+    if ly.constituency == u'全國不分區' or ly.constituency == u'僑居國外國民':
         politics = Platform.objects.filter(party=ly.party).order_by('id')
     else:
         politics = Platform.objects.filter(legislator_id=ly.id).order_by('id')

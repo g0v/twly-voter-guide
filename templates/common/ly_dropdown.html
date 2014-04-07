@@ -2,22 +2,15 @@
     <div class="dropdown text-center">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% if color %}{% include "common/ly_color_by_party.html" %}{% else %}{{ly.name}}{% endif %}</a>
         <ul class="dropdown-menu">
-            {% if ly.ad == 8 %}
-            <li class="dropdown-submenu">
-            <a data-toggle="dropdown" href="#" >{{ly.name}}的提案</a>
-            <ul class="dropdown-menu">
-                <li><a href="{% url 'legislator:biller_detail' ly.legislator_id %}" >法條修正草案</a></li>
-                <li><a href="{% url 'legislator:proposer_detail' ly.legislator_id %}">附帶決議、臨時提案</a></li>
-            </ul>
-            </li>
-            {% endif %}
             {% if ly.ad > 6 %}
-            <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}">{{ly.name}}的投票紀錄</a></li>
+                <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}">{{ly.name}}的投票紀錄</a></li>
             {% else %}
-            <li><a href="{% url 'legislator:voter_detail' ly.legislator_id %}">{{ly.name}}的投票紀錄</a></li>
+                <li><a href="{% url 'legislator:voter_detail' ly.legislator_id %}">{{ly.name}}的投票紀錄</a></li>
             {% endif %}
             {% if ly.ad == 8 %}
-            <li><a href="{% url 'legislator:platformer_detail' ly.legislator_id %}">{{ly.name}}的競選政見</a></li>
+                <li><a href="{% url 'legislator:biller_detail' ly.legislator_id %}">{{ly.name}}的法條修正草案</a></li>
+                <li><a href="{% url 'legislator:proposer_detail' ly.legislator_id %}">{{ly.name}}的附帶決議、臨時提案</a></li>
+                <li><a href="{% url 'legislator:platformer_detail' ly.legislator_id %}">{{ly.name}}的競選政見</a></li>
             {% endif %}
         </ul>
     </div>
