@@ -88,21 +88,29 @@
                 <tr>
                     <td colspan=2></td>
                 </tr>
+                {% if contact.name %}
                 <tr style="background-color: {% cycle '#CCFF99' '#CCFFCC' '#FFFF99' %};">
                     <td colspan=2 style="text-align:center; vertical-align:middle;">{{contact.name}}</td>
                 </tr>
+                {% endif %}
+                {% if contact.address %}
                 <tr>
                     <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">地址</td>
                     <td><a href="{{ "https://maps.google.com.tw/?q="|add:contact.address }}" target="_blank">{{contact.address}}</a></td>
                 </tr>
                 <tr>
+                {% endif %}
+                {% if contact.phone %}
                     <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">電話</td>
                     <td><a href="{{ "tel:"|add:contact.phone }}" target="_blank">{{contact.phone}}</a></td>
                 </tr>
+                {% endif %}
+                {% if contact.fax %}
                 <tr>
                     <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">傳真</td>
                     <td>{{contact.fax}}</td>
                 </tr>
+                {% endif %}
                 {% endfor %}
                 {% if ly.education %}
                 <tr>
