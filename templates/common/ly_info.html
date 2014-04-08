@@ -77,12 +77,12 @@
                 </tr>
                 {% endif %}
                 <tr>
-                    <td style="background-color: lightgrey;">沒投票表決(次)</td>
-                    <td>{{ly.notvote}} 次</td>
+                    <td style="background-color: lightgrey;">沒投票表決</td>
+                    <td>{{ly.notvote}} 次<br>(沒投票率{{ly.pnotvote|floatformat:2}} %)</td>
                 </tr>
                 <tr>
-                    <td style="background-color: lightgrey;">脫黨表決(次)</td>
-                    <td>{{ly.nconsciencevote}} 次</td>
+                    <td style="background-color: lightgrey;">脫黨表決</td>
+                    <td>{{ly.nconsciencevote}} 次<br>(脫黨投票率{{ly.pconsciencevote|floatformat:2}} %)</td>
                 </tr>
                 {% for contact in ly.contacts %}
                 <tr>
