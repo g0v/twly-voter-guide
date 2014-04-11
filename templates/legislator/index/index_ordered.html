@@ -36,9 +36,9 @@
             {% if index == 'biller' %}
             <a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="草案{{ly.totalNum}}個">
             {% elif index == 'conscience_vote' %}
-            <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad index='conscience' %}" rel="tooltip" title="脫黨投票{{ly.totalNum}}次">
+            <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad index='conscience' %}" rel="tooltip" title="脫黨投票{{ly.totalNum}}次(脫黨投票率{{ly.pconsciencevote|floatformat:2}} %)">
             {% else %}
-            <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad %}" rel="tooltip" title="投票缺席{{ly.totalNum}}次">
+            <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad %}" rel="tooltip" title="投票缺席{{ly.totalNum}}次(投票缺席率{{ly.pnotvote|floatformat:2}} %)">
                 {% endif %}
                 {% include "common/ly_color_by_party.html" %}
             </a>

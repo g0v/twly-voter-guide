@@ -41,7 +41,9 @@
             <th>法條修正草案數</th>
             <th>附帶決議、臨時提案數</th>
             <th>沒投票表決(次)</th>
+            <th>投票缺席率(%)</th>
             <th>脫黨投票(次)</th>
+            <th>脫黨投票率(%)</th>
         </tr>
     </thead>
     <tbody>
@@ -50,12 +52,14 @@
             {% include "common/ly_dropdown.html" with color=True %}
             <td>{{ly.county}}</td>
             <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
-            <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" >{{ ly.current_committee }}</a></td>
+            <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" >{{ ly.current_committee|truncatechars:10 }}</a></td>
             <td>{{ly.term_start|date:"Y-m-d"}}</td>
             <td><div class="text-center">{{ly.npribill}}</div></td>
             <td><div class="text-center">{{ly.npriproposer}}</div></td>
             <td><div class="text-center">{{ly.notvote}}</div></td>
+            <td><div class="text-center">{{ly.pnotvote|floatformat:2}}</div></td>
             <td><div class="text-center">{{ly.nconsciencevote}}</div></td>
+            <td><div class="text-center">{{ly.pconsciencevote|floatformat:2}}</div></td>
         </tr>
         {% endfor %}
     </tbody>
