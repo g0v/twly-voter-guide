@@ -109,6 +109,19 @@ class PoliticalContributions(models.Model):
     def __unicode__(self):
         return self.balance
 
+class Stock(models.Model):
+    legislator = models.ForeignKey(LegislatorDetail)
+    date = models.DateTimeField()
+    category = models.TextField()
+    name = models.TextField()
+    owner = models.TextField(blank=True, null=True)
+    quantity = models.IntegerField(blank=True, null=True)
+    face_value = models.IntegerField(blank=True, null=True)
+    currency = models.TextField()
+    total = models.IntegerField()
+    def __unicode__(self):
+        return self.total
+
 class FileLog(models.Model):
     sitting = models.CharField(unique=True, max_length=100)
     date = models.DateTimeField()
