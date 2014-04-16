@@ -16,10 +16,13 @@ def subtract(value, arg):
 
 @register.filter(name='divide')
 def divide(value, arg):
-    try:
-        return "{0:.2f}".format(100.0 * value / arg)
-    except Exception, e:
-        print e
+    if arg:
+        try:
+            return "{0:.2f}".format(100.0 * value / arg)
+        except Exception, e:
+            print e
+    else:
+        return 0
 
 @register.filter(name='as_json')
 def as_json(data):
