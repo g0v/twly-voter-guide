@@ -1,4 +1,5 @@
 ﻿{% extends "base.html" %}
+{% load ly_extras %}
 {% block title %}
 {% if index %}
 <title>立委投票指南:{{index}}的立委</title>
@@ -57,9 +58,9 @@
             <td><div class="text-center">{{ly.npribill}}</div></td>
             <td><div class="text-center">{{ly.npriproposer}}</div></td>
             <td><div class="text-center">{{ly.notvote}}</div></td>
-            <td><div class="text-center">{{ly.pnotvote|floatformat:2}}</div></td>
+            <td><div class="text-center">{{ly.notvote|divide:ly.compare}}</div></td>
             <td><div class="text-center">{{ly.nconsciencevote}}</div></td>
-            <td><div class="text-center">{{ly.pconsciencevote|floatformat:2}}</div></td>
+            <td><div class="text-center">{{ly.nconsciencevote|divide:ly.compare}}</div></td>
         </tr>
         {% endfor %}
     </tbody>

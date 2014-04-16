@@ -50,11 +50,17 @@ def index(request, index, ad):
         no_count_list = LegislatorDetail.objects.filter(name_query).exclude(legislator_id__in=ly_list.values_list('legislator_id', flat=True))
         return render(request,'legislator/index/index_ordered.html', {'ad':ad,'no_count_list':no_count_list,'proposertype':proposertype,'progress':progress,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'conscience_vote':
-        ly_list = LegislatorDetail.objects.filter(query, votes__conflict=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')
+        ly_list = LegislatorDetail.objects.filter(query, votes__conflict=True)\
+                                          .annotate(totalNum=Count('votes__id'))\
+                                          .order_by('-totalNum','party')\
+                                          .extra(select={'compare': 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id'},)
         no_count_list = LegislatorDetail.objects.filter(name_query).exclude(legislator_id__in=ly_list.values_list('legislator_id', flat=True)).order_by('party')
         return render(request,'legislator/index/index_ordered.html', {'ad':ad,'no_count_list':no_count_list,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'notvote':
-        ly_list = LegislatorDetail.objects.filter(query, votes__decision__isnull=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')
+        ly_list = LegislatorDetail.objects.filter(query, votes__decision__isnull=True)\
+                                          .annotate(totalNum=Count('votes__id'))\
+                                          .order_by('-totalNum','party')\
+                                          .extra(select={'compare': 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id'},)
         no_count_list = LegislatorDetail.objects.filter(name_query).exclude(legislator_id__in=ly_list.values_list('legislator_id', flat=True))
         return render(request,'legislator/index/index_ordered.html', {'ad':ad,'no_count_list':no_count_list,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index,'error':error})
     elif index == 'committee':
@@ -68,7 +74,9 @@ def index(request, index, ad):
 
 def index_district(request, index, ad):
     ad = str(ad or 8)
-    ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=True, county=index).order_by('party', 'name')
+    ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=True, county=index)\
+                                      .order_by('party', 'name')\
+                                      .extra(select={'compare': 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id'},)
     return render(request,'legislator/county.html', {'ad':ad,'ly_list':ly_list,'index':index})
 
 def index_committee(request, index):
