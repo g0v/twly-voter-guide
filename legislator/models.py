@@ -111,17 +111,22 @@ class PoliticalContributions(models.Model):
         return self.balance
 
 class Stock(models.Model):
-    legislator = models.ForeignKey(LegislatorDetail)
+    source_file = models.TextField()
+    index = models.IntegerField()
+    legislator = models.ForeignKey(Legislator, to_field="uid")
     date = models.DateTimeField()
     category = models.TextField()
     name = models.TextField()
     owner = models.TextField(blank=True, null=True)
     quantity = models.IntegerField(blank=True, null=True)
-    face_value = models.IntegerField(blank=True, null=True)
+    face_value = models.FloatField(blank=True, null=True)
     currency = models.TextField()
-    total = models.IntegerField()
+    total = models.FloatField()
     def __unicode__(self):
         return self.total
+
+    class Meta:
+        unique_together = ('source_file', 'index',)
 
 class FileLog(models.Model):
     sitting = models.CharField(unique=True, max_length=100)
