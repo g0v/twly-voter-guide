@@ -49,10 +49,11 @@
                 <tr>
                     <td style="background-color: lightgrey;">現任委員會</td>
                     <td>
+                        {% with current_committee=ly.current_committee %}
                         {% if ly.in_office %}
-                            {% if ly.current_committee %}
-                            <a href="{% url 'legislator:index_committee' ly.current_committee %}" rel="tooltip" title="查看該委員會的立委" >
-                                {{ ly.current_committee|truncatechars:7 }}
+                            {% if current_committee %}
+                            <a href="{% url 'legislator:index_committee' current_committee %}" rel="tooltip" title="查看該委員會的立委" >
+                                {{ current_committee|truncatechars:7 }}
                             </a>
                             {% else %}
                             尚無資料
@@ -60,6 +61,7 @@
                         {% else %}
                         已離職
                         {% endif %}
+                        {% endwith %}
                     </td>
                 </tr>
                 <tr>

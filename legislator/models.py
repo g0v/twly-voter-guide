@@ -41,7 +41,6 @@ class LegislatorDetail(models.Model):
         return self.name
 
     def _in_office_ad(self):
-        print LegislatorDetail.objects.filter(legislator_id=self.legislator_id).values_list('ad', flat=True)
         return LegislatorDetail.objects.filter(legislator_id=self.legislator_id).values_list('ad', flat=True).order_by('-ad')
     in_office_ad = property(_in_office_ad)
 
