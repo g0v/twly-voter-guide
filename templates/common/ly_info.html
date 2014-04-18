@@ -37,6 +37,10 @@
                     <td><b>{{ ly.name }}</b></td>
                 </tr>
                 <tr>
+                    <td style="background-color: lightgrey;">黨籍</td>
+                    <td>{{ ly.party }}</td>
+                </tr>
+                <tr>
                     <td style="background-color: lightgrey;">選區縣市</td>
                     <td><a href="{% url 'legislator:index_district' ly.county %}" rel="tooltip" title="查看該選區的立委">{{ly.county}}</a></td>
                 </tr>
@@ -152,6 +156,15 @@
         <div class="row-fluid">
             <div class="span12">
                 <b>{{ ly.name }}</b>的&nbsp;
+                <div class="btn-group">
+                    <a id='url_property' class="btn btn-primary btn-large dropdown-toggle" href="#" data-toggle="dropdown">財產 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='stock' %}"><b>股票</b></a></li>
+                        {% for category in property_category %}
+                        <li style="background-color: {% cycle '#EEEEEE' 'white' %};">{{category}} (敬請期待)</li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 <div class="btn-group">
                     <a id='url_vote' class="btn btn-primary btn-large dropdown-toggle" href="#" data-toggle="dropdown">投票紀錄 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
