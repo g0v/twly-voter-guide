@@ -4,7 +4,7 @@ import re
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
-from .models import Legislator, LegislatorDetail, Platform, Attendance, PoliticalContributions
+from .models import Legislator, LegislatorDetail, Platform, Attendance, PoliticalContributions, Stock
 from vote.models import Vote, Legislator_Vote
 from proposal.models import Proposal
 from bill.models import Bill
@@ -82,6 +82,15 @@ def index_district(request, index, ad):
 def index_committee(request, index):
     ly_list = Legislator_Committees.objects.select_related().filter(ad=8, committee=index).order_by('-session', 'legislator__party', 'legislator__name')
     return render(request,'legislator/committee.html', {'ly_list': ly_list,'index':index})
+
+def personal_property(request, legislator_id, index):
+    ly = get_legislator(legislator_id, ad=8)
+    if not ly:
+        return HttpResponseRedirect('/')
+    query = Q(proposer__id=ly.id, legislator_proposal__priproposer=True)
+    objs = Stock.objects.filter(legislator_id=legislator_id).order_by('-date')
+    summaries = objs.values('date').annotate(total=Sum('total', distinct=True))
+    return render(request,'legislator/personal_property.html', {'objs':objs,'summaries':summaries,'ly':ly,'index':index})
 
 def proposer_detail(request, legislator_id, keyword_url):
     proposertype = False

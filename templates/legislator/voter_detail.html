@@ -51,11 +51,11 @@
         {% endif %}
     {% empty %}
         {% if ly.ad > 6 %}
-            {% if index == 'conscience' %}<p class="text-error">沒有任何脫黨投票紀錄</p>
+            {% if index == 'conscience' %}<p class="lead text-error">沒有任何脫黨投票紀錄</p>
             {% else %}<p class="text-error">沒有參加任何表決</p>
             {% endif %}
         {% else %}
-            <p class="text-error">尚無資料，敬請期待</p>
+            <p class="lead text-error">尚無資料，敬請期待</p>
         {% endif %}
     {% endfor %}
     </p>
