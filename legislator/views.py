@@ -4,7 +4,7 @@ import re
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
-from .models import Legislator, LegislatorDetail, Platform, Attendance, PoliticalContributions, Stock
+from .models import Legislator, LegislatorDetail, Platform, Attendance, PoliticalContributions, Stock, Land
 from vote.models import Vote, Legislator_Vote
 from proposal.models import Proposal
 from bill.models import Bill
@@ -88,8 +88,11 @@ def personal_property(request, legislator_id, index):
     if not ly:
         return HttpResponseRedirect('/')
     query = Q(proposer__id=ly.id, legislator_proposal__priproposer=True)
-    objs = Stock.objects.filter(legislator_id=legislator_id).order_by('-date')
-    summaries = objs.values('date').annotate(total=Sum('total', distinct=True))
+    if index == 'stock':
+        objs = Stock.objects.filter(legislator_id=legislator_id).order_by('-date')
+    elif index == 'land':
+        objs = Land.objects.filter(legislator_id=legislator_id).order_by('-date')
+    summaries = objs.values('date').annotate(total=Sum('total'), count=Count('id'))
     return render(request,'legislator/personal_property.html', {'objs':objs,'summaries':summaries,'ly':ly,'index':index})
 
 def proposer_detail(request, legislator_id, keyword_url):

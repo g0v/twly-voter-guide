@@ -15,52 +15,21 @@
 <div class="well well-small">
     <p class="text-error">因監察院只提供圖檔，此為初步轉檔結果，尚未完整校正，歡迎<a href="https://docs.google.com/spreadsheets/d/16UxAPkZLtU8OVJQCJasqnqOkHfceArbM05zo0FYRcbw/edit#gid=0" target="_blank">回報錯誤</a>，將盡快修正。找原始檔 -> <a href="http://sunshine.cy.gov.tw/GipOpenWeb/wSite/sp?xdUrl=/wSite/SpecialPublication/baseQuery.jsp" target="_blank">監察院財產申報資料</a></p>
     {% for summary in summaries %}
-        {{summary.date|date:"Y-m-d"}}的股票總額： {{summary.total}} 元<br>
+        {% if index == 'stock' %}
+        {{summary.date|date:"Y-m-d"}}的股票總額： {{summary.count}}筆，共{{summary.total|floatformat}} 元<br>
+        {% elif index == 'land' %}
+            {{summary.date|date:"Y-m-d"}}的土地持有總面積： {{summary.count}}筆，共{{summary.total|floatformat}} 平方公尺 ({{summary.total|multiply:0.3025|floatformat}} 坪)<br>
+        {% endif %}
     {% endfor %}
 </div>
 {% if objs %}
         <table id="datatable" class="table table-bordered">
-            <thead>
-                <tr style="background-color: #FFEEFF;">
-                    <th width="10%">日期</th>
-                    <th width="30%">股票名稱</th>
-                    <th width="10%">總額</th>
-                    <th width="10%">幣別</th>
-                    <th width="10%">股數</th>
-                    <th width="10%">面額</th>
-                    <th width="10%">所有人</th>
-                    <th width="10%">索引</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for obj in objs %}
-                <tr>
-                    <td>{{obj.date|date:"Y-m-d"}}</td>
-                    <td>{{obj.name}}</td>
-                    <td>{{obj.total}}</td>
-                    <td>{{obj.currency}}</td>
-                    <td>{{obj.quantity}}</td>
-                    <td>{{obj.face_value}}</td>
-                    <td>{{obj.owner}}</td>
-                    <td>{{obj.source_file}}-{{obj.index}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr style="background-color: #FFCCFF;">
-                    <th width="10%">日期</th>
-                    <th width="30%">股票名稱</th>
-                    <th width="15%">總額</th>
-                    <th width="15%">幣別</th>
-                    <th width="10%">股數</th>
-                    <th width="10%">面額</th>
-                    <th width="10%">所有人</th>
-                    <th width="10%">索引</th>
-                </tr>
-            </tfoot>
+            {% with "common/property/"|add:index|add:".html" as template %}
+            {% include template %}
+            {% endwith %}
         </table>
 {% else %}
-    <p class="lead text-error">尚無財產申報資料，敬請期待</p>
+    <p class="lead text-error">無此類財產申報資料</p>
 {% endif %}
 {% endblock ly_detail %}
 {% block script %}
