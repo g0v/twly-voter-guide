@@ -16,9 +16,9 @@
     <p class="text-error">因監察院只提供圖檔，此為初步轉檔結果，尚未完整校正，歡迎<a href="https://docs.google.com/spreadsheets/d/16UxAPkZLtU8OVJQCJasqnqOkHfceArbM05zo0FYRcbw/edit#gid=0" target="_blank">回報錯誤</a>，將盡快修正。找原始檔 -> <a href="http://sunshine.cy.gov.tw/GipOpenWeb/wSite/sp?xdUrl=/wSite/SpecialPublication/baseQuery.jsp" target="_blank">監察院財產申報資料</a></p>
     {% for summary in summaries %}
         {% if index == 'stock' %}
-        {{summary.date|date:"Y-m-d"}}的股票總額： {{summary.count}}筆，共{{summary.total|floatformat}} 元<br>
+        {{summary.date|date:"Y-m-d"}}的股票總額： {{summary.count}}筆，約<span class="price">{{summary.total|floatformat}}</span>元<br>
         {% elif index == 'land' %}
-            {{summary.date|date:"Y-m-d"}}的土地持有總面積： {{summary.count}}筆，共{{summary.total|floatformat}} 平方公尺 ({{summary.total|multiply:0.3025|floatformat}} 坪)<br>
+            {{summary.date|date:"Y-m-d"}}的土地持有總面積： {{summary.count}}筆，約<span class="area">{{summary.total|floatformat}}</span>平方公尺 ({{summary.total|multiply:0.3025|floatformat}}坪)<br>
         {% endif %}
     {% endfor %}
 </div>
@@ -36,7 +36,18 @@
 <link href="//cdn.jsdelivr.net/jquery.datatables/1.9.4/css/jquery.dataTables.css" rel="stylesheet">
 <link href="//cdn.jsdelivr.net/jquery.datatables/1.9.4/css/jquery.dataTables_themeroller.css" rel="stylesheet">
 <script src="//datatables.net/download/build/nightly/jquery.dataTables.js"></script>
+<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/zhutil.min.js"></script>
 <script>
+    $('.price').each(function(index,ele){
+        var number = $(ele).text()
+        zh_number = zhutil.approximate(number, {base: '億', extra_decimal: 2});
+        $(ele).replaceWith(zh_number)
+    })
+    $('.area').each(function(index,ele){
+        var number = $(ele).text()
+        , zh_number = zhutil.approximate(number, {base: '萬', extra_decimal: 2});
+        $(ele).replaceWith(zh_number)
+    })
     $(document).ready( function() {
         $('#datatable').dataTable({
             "sDom": "<'row'<'span6'f><'span6'i>r>t",

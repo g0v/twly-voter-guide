@@ -2,12 +2,12 @@
     <tr style="background-color: #FFEEFF;">
         <th width="15%">日期</th>
         <th width="25%">股票名稱</th>
-        <th width="10%">折合新臺幣總額</th>
+        <th width="15%">折合新臺幣總額</th>
         <th width="8%">幣別</th>
         <th width="10%">股數</th>
         <th width="7%">面額</th>
         <th width="10%">所有人</th>
-        <th width="15%">索引</th>
+        <th width="10%">索引</th>
     </tr>
 </thead>
 <tbody>
@@ -15,7 +15,7 @@
     <tr>
         <td>{{obj.date|date:"Y-m-d"}}</td>
         <td>{{obj.name}}</td>
-        <td><p class="text-right">{{obj.total|floatformat}}</p></td>
+        <td><p class="price text-right">{{obj.total|floatformat}}</p>元</td>
         <td>{{obj.currency}}</td>
         <td><p class="text-right">{{obj.quantity}}</p></td>
         <td><p class="text-right">{{obj.face_value|floatformat}}</p></td>
@@ -28,11 +28,11 @@
     <tr style="background-color: #FFEEFF;">
         <th width="15%">日期</th>
         <th width="25%">股票名稱</th>
-        <th width="10%">折合新臺幣總額</th>
+        <th width="15%">折合新臺幣總額</th>
         <th width="8%">幣別</th>
         <th width="10%">股數</th>
         <th width="7%">面額</th>
         <th width="10%">所有人</th>
-        <th width="15%">索引</th>
+        <th width="10%">索引</th>
     </tr>
 </tfoot>
