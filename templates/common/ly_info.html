@@ -161,6 +161,7 @@
                     <ul class="dropdown-menu">
                         <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='stock' %}"><b>股票</b></a></li>
                         <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='land' %}"><b>土地</b></a></li>
+                        <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='building' %}"><b>建物</b></a></li>
                         {% for category in property_category %}
                         <li style="background-color: {% cycle '#EEEEEE' 'white' %};">{{category}} (敬請期待)</li>
                         {% endfor %}

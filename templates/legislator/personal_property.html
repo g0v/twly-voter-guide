@@ -1,10 +1,10 @@
 ﻿{% extends "common/ly_info.html" %}
 {% load ly_extras %}
 {% block title %}
-{% if ly %}
-    <title>立委投票指南:{{ly.name}}的財產申報紀錄</title>
-    <meta property="og:title" content="立委投票指南:{{ly.name}}的財產申報紀錄"/>
-    <meta itemprop="name" content="立委投票指南:{{ly.name}}的財產申報紀錄">
+{% if ly and category %}
+    <title>立委投票指南:{{ly.name}}的{{category}}申報紀錄</title>
+    <meta property="og:title" content="立委投票指南:{{ly.name}}的{{category}}申報紀錄"/>
+    <meta itemprop="name" content="立委投票指南:{{ly.name}}的{{category}}申報紀錄">
 {% else %}
     <title>立委投票指南:立委的財產申報紀錄</title>
     <meta property="og:title" content="立委投票指南:立委的財產申報紀錄"/>
@@ -16,18 +16,22 @@
     <p class="text-error">因監察院只提供圖檔，此為初步轉檔結果，尚未完整校正，歡迎<a href="https://docs.google.com/spreadsheets/d/16UxAPkZLtU8OVJQCJasqnqOkHfceArbM05zo0FYRcbw/edit#gid=0" target="_blank">回報錯誤</a>，將盡快修正。找原始檔 -> <a href="http://sunshine.cy.gov.tw/GipOpenWeb/wSite/sp?xdUrl=/wSite/SpecialPublication/baseQuery.jsp" target="_blank">監察院財產申報資料</a></p>
     {% for summary in summaries %}
         {% if index == 'stock' %}
-        {{summary.date|date:"Y-m-d"}}的股票總額： {{summary.count}}筆，約<span class="price">{{summary.total|floatformat}}</span>元<br>
+        {{summary.date|date:"Y-m-d"}}的<b>股票</b>總額： {{summary.count}}筆，約<abbr title="{{ summary.total|floatformat }}"><span class="price">{{summary.total}}</span></abbr>元<br>
         {% elif index == 'land' %}
-            {{summary.date|date:"Y-m-d"}}的土地持有總面積： {{summary.count}}筆，約<span class="area">{{summary.total|floatformat}}</span>平方公尺 ({{summary.total|multiply:0.3025|floatformat}}坪)<br>
+        {{summary.date|date:"Y-m-d"}}的<b>土地</b>持有總面積： {{summary.count}}筆，約<abbr title="{{ summary.total|floatformat }}"><span class="area">{{summary.total}}</span></abbr>平方公尺 ({{summary.total|multiply:0.3025|floatformat}}坪)<br>
+        {% else %}
+        {% if index == 'building' %}
+        {{summary.date|date:"Y-m-d"}}的<b>建物</b>持有總面積： {{summary.count}}筆，約<abbr title="{{ summary.total|floatformat }}"><span class="area">{{summary.total}}</span></abbr>平方公尺 ({{summary.total|multiply:0.3025|floatformat}}坪)<br>
+        {% endif %}
         {% endif %}
     {% endfor %}
 </div>
 {% if objs %}
-        <table id="datatable" class="table table-bordered">
-            {% with "common/property/"|add:index|add:".html" as template %}
-            {% include template %}
-            {% endwith %}
-        </table>
+    <table id="datatable" class="table table-bordered">
+        {% with "common/property/"|add:index|add:".html" as template %}
+        {% include template %}
+        {% endwith %}
+    </table>
 {% else %}
     <p class="lead text-error">無此類財產申報資料</p>
 {% endif %}
@@ -38,16 +42,6 @@
 <script src="//datatables.net/download/build/nightly/jquery.dataTables.js"></script>
 <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/zhutil.min.js"></script>
 <script>
-    $('.price').each(function(index,ele){
-        var number = $(ele).text()
-        zh_number = zhutil.approximate(number, {base: '億', extra_decimal: 2});
-        $(ele).replaceWith(zh_number)
-    })
-    $('.area').each(function(index,ele){
-        var number = $(ele).text()
-        , zh_number = zhutil.approximate(number, {base: '萬', extra_decimal: 2});
-        $(ele).replaceWith(zh_number)
-    })
     $(document).ready( function() {
         $('#datatable').dataTable({
             "sDom": "<'row'<'span6'f><'span6'i>r>t",
@@ -56,6 +50,16 @@
             "bPaginate": false,
             "aaSorting": [[0, "desc"]]
         });
+        $('.price').each(function(index,ele){
+            var number = $(ele).text()
+            zh_number = zhutil.approximate(number, {base: '億', extra_decimal: 2});
+            $(ele).replaceWith(zh_number)
+        })
+        $('.area').each(function(index,ele){
+            var number = $(ele).text()
+            , zh_number = zhutil.approximate(number, {base: '萬', extra_decimal: 2});
+            $(ele).replaceWith(zh_number)
+        })
         $('#url_property').addClass("btn-inverse");
     });
 </script>
