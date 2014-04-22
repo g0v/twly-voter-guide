@@ -142,6 +142,7 @@ INSTALLED_APPS = (
         'proposal',
         'bill',
         'search',
+        'property',
         'commontag',
         'pagination',
         'rest_framework',

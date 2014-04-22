@@ -4,7 +4,8 @@ import re
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
-from .models import Legislator, LegislatorDetail, Platform, Attendance, PoliticalContributions, Stock, Land, Building
+from .models import Legislator, LegislatorDetail, Platform, Attendance, PoliticalContributions
+from property.models import Stock, Land, Building, Car
 from vote.models import Vote, Legislator_Vote
 from proposal.models import Proposal
 from bill.models import Bill
@@ -84,18 +85,23 @@ def index_committee(request, index):
     return render(request,'legislator/committee.html', {'ly_list': ly_list,'index':index})
 
 def personal_property(request, legislator_id, index):
-    categories = {'stock': u'股票', 'land': u'土地', 'building': u'建物'}
+    categories = {'stock': u'股票', 'land': u'土地', 'building': u'建物', 'car': u'汽車'}
     ly = get_legislator(legislator_id, ad=8)
     if not ly:
         return HttpResponseRedirect('/')
     query = Q(proposer__id=ly.id, legislator_proposal__priproposer=True)
     if index == 'stock':
         objs = Stock.objects.filter(legislator_id=legislator_id).order_by('-date')
+        summaries = objs.values('date').annotate(total=Sum('total'), count=Count('id'))
     elif index == 'land':
         objs = Land.objects.filter(legislator_id=legislator_id).order_by('-date')
+        summaries = objs.values('date').annotate(total=Sum('total'), count=Count('id'))
     elif index == 'building':
         objs = Building.objects.filter(legislator_id=legislator_id).order_by('-date')
-    summaries = objs.values('date').annotate(total=Sum('total'), count=Count('id'))
+        summaries = objs.values('date').annotate(total=Sum('total'), count=Count('id'))
+    elif index == 'car':
+        objs = Car.objects.filter(legislator_id=legislator_id).order_by('-date')
+        summaries = objs.values('date').annotate(total=Sum('capacity'), count=Count('id'))
     return render(request,'legislator/personal_property.html', {'objs':objs,'summaries':summaries,'ly':ly,'index':index,'category':categories.get(index)})
 
 def proposer_detail(request, legislator_id, keyword_url):
