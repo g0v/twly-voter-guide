@@ -22,6 +22,8 @@
         {% else %}
         {% if index == 'building' %}
         {{summary.date|date:"Y-m-d"}}的<b>建物</b>持有總面積： {{summary.count}}筆，約<abbr title="{{ summary.total|floatformat }}"><span class="area">{{summary.total}}</span></abbr>平方公尺 ({{summary.total|multiply:0.3025|floatformat}}坪)<br>
+        {% elif index == 'car' %}
+        {{summary.date|date:"Y-m-d"}}的<b>汽車</b>： {{summary.count}}輛，總汽缸容量約<abbr title="{{ summary.total|floatformat }}"><span class="area">{{summary.total}}</span></abbr> cc<br>
         {% endif %}
         {% endif %}
     {% endfor %}
