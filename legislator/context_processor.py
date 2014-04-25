@@ -24,4 +24,4 @@ def party_list(request):
     return {'party_list':LegislatorDetail.objects.filter(ad=8).values_list('party', flat=True).distinct('party')}
 
 def property_category(request):
-    return {'property_category':[u'航空器', u'現金', u'存款', u'債券', u'基金受益憑證', u'其他有價證券', u'具有相當價值之財產', u'保險', u'債權', u'債務', u'事業投資']}
+    return {'property_category':[u'債券', u'基金受益憑證', u'其他有價證券', u'具有相當價值之財產', u'保險', u'債權', u'債務', u'事業投資']}

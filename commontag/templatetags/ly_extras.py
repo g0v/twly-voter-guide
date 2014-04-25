@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 from django.utils import simplejson
 from django import template
@@ -5,6 +6,67 @@ from django.utils.safestring import mark_safe
 
 
 register = template.Library()
+
+
+@register.filter(name='personal_property_summary')
+def personal_property_summary(value, arg):
+    attribute = {
+        'stock': {
+            'after_title': u'總額',
+            'count_unit': u'筆',
+            'after_unit': u'約',
+            'zhutil_unit': u'price',
+            'total_unit': u'元',
+            'remark': False,
+            'cht': u'股票'
+        },
+        'land': {
+            'after_title': u'持有總面積',
+            'count_unit': u'筆',
+            'after_unit': u'約',
+            'zhutil_unit': u'price',
+            'total_unit': u'平方公尺',
+            'remark': True,
+            'cht': u'土地'
+        },
+        'building': {
+            'after_title': u'持有總面積',
+            'count_unit': u'筆',
+            'after_unit': u'約',
+            'zhutil_unit': u'area',
+            'total_unit': u'平方公尺',
+            'remark': True,
+            'cht': u'建物'
+        },
+        'car': {
+            'after_title': u'',
+            'count_unit': u'輛',
+            'after_unit': u'總汽缸容量約',
+            'zhutil_unit': u'area',
+            'total_unit': u' cc',
+            'remark': False,
+            'cht': u'汽車'
+        },
+        'cash': {
+            'after_title': u'總額',
+            'count_unit': u'筆',
+            'after_unit': u'約',
+            'zhutil_unit': u'price',
+            'total_unit': u'元',
+            'remark': False,
+            'cht': u'現金'
+        },
+        'deposit': {
+            'after_title': u'總額',
+            'count_unit': u'筆',
+            'after_unit': u'約',
+            'zhutil_unit': u'price',
+            'total_unit': u'元',
+            'remark': False,
+            'cht': u'存款'
+        }
+    }
+    return attribute.get(value).get(arg)
 
 @register.filter(name='mod')
 def mod(value, arg):

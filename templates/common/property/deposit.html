@@ -1,0 +1,35 @@
+<thead>
+    <tr style="background-color: #FFEEFF;">
+        <th width="15%">日期</th>
+        <th width="15%">折合新臺幣總額</th>
+        <th width="10%">幣別</th>
+        <th width="25%">存放機構</th>
+        <th width="10%">種類</th>
+        <th width="10%">所有人</th>
+        <th width="15%">索引</th>
+    </tr>
+</thead>
+<tbody>
+    {% for obj in objs %}
+    <tr>
+        <td>{{obj.date|date:"Y-m-d"}}</td>
+        <td><p class="price text-right">{{obj.total|floatformat}}</p>元</td>
+        <td>{{obj.currency}}</td>
+        <td>{{obj.bank}}</td>
+        <td>{{obj.deposit_type}}</td>
+        <td>{{obj.owner}}</td>
+        <td>{{obj.source_file}}-{{obj.index}}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+<tfoot>
+    <tr style="background-color: #FFEEFF;">
+        <th width="15%">日期</th>
+        <th width="15%">折合新臺幣總額</th>
+        <th width="10%">幣別</th>
+        <th width="20%">存放機構</th>
+        <th width="15%">種類</th>
+        <th width="10%">所有人</th>
+        <th width="15%">索引</th>
+    </tr>
+</tfoot>

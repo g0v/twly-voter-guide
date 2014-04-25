@@ -63,7 +63,7 @@ class SittingsSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('uid', 'name', 'committee', 'date', 'ad', 'session', 'votes')
 
 class LegislatorDetailSerializer(serializers.HyperlinkedModelSerializer):
-    votes = Legislator_VoteSerializer(many=True)
+    #votes = Legislator_VoteSerializer(many=True)
     contacts = fields.Field()
     term_end = fields.Field()
     links = fields.Field()

@@ -1,10 +1,10 @@
 ﻿{% extends "common/ly_info.html" %}
 {% load ly_extras %}
 {% block title %}
-{% if ly and category %}
-    <title>立委投票指南:{{ly.name}}的{{category}}申報紀錄</title>
-    <meta property="og:title" content="立委投票指南:{{ly.name}}的{{category}}申報紀錄"/>
-    <meta itemprop="name" content="立委投票指南:{{ly.name}}的{{category}}申報紀錄">
+{% if ly and cht %}
+    <title>立委投票指南:{{ly.name}}的{{cht}}申報紀錄</title>
+    <meta property="og:title" content="立委投票指南:{{ly.name}}的{{cht}}申報紀錄"/>
+    <meta itemprop="name" content="立委投票指南:{{ly.name}}的{{cht}}申報紀錄">
 {% else %}
     <title>立委投票指南:立委的財產申報紀錄</title>
     <meta property="og:title" content="立委投票指南:立委的財產申報紀錄"/>
@@ -15,17 +15,7 @@
 <div class="well well-small">
     <p class="text-error">因監察院只提供圖檔，此為初步轉檔結果，尚未完整校正，歡迎<a href="https://docs.google.com/spreadsheets/d/16UxAPkZLtU8OVJQCJasqnqOkHfceArbM05zo0FYRcbw/edit#gid=0" target="_blank">回報錯誤</a>，將盡快修正。找原始檔 -> <a href="http://sunshine.cy.gov.tw/GipOpenWeb/wSite/sp?xdUrl=/wSite/SpecialPublication/baseQuery.jsp" target="_blank">監察院財產申報資料</a></p>
     {% for summary in summaries %}
-        {% if index == 'stock' %}
-        {{summary.date|date:"Y-m-d"}}的<b>股票</b>總額： {{summary.count}}筆，約<abbr title="{{ summary.total|floatformat }}"><span class="price">{{summary.total}}</span></abbr>元<br>
-        {% elif index == 'land' %}
-        {{summary.date|date:"Y-m-d"}}的<b>土地</b>持有總面積： {{summary.count}}筆，約<abbr title="{{ summary.total|floatformat }}"><span class="area">{{summary.total}}</span></abbr>平方公尺 ({{summary.total|multiply:0.3025|floatformat}}坪)<br>
-        {% else %}
-        {% if index == 'building' %}
-        {{summary.date|date:"Y-m-d"}}的<b>建物</b>持有總面積： {{summary.count}}筆，約<abbr title="{{ summary.total|floatformat }}"><span class="area">{{summary.total}}</span></abbr>平方公尺 ({{summary.total|multiply:0.3025|floatformat}}坪)<br>
-        {% elif index == 'car' %}
-        {{summary.date|date:"Y-m-d"}}的<b>汽車</b>： {{summary.count}}輛，總汽缸容量約<abbr title="{{ summary.total|floatformat }}"><span class="area">{{summary.total}}</span></abbr> cc<br>
-        {% endif %}
-        {% endif %}
+    {{summary.date|date:"Y-m-d"}}的<b>{{index|personal_property_summary:'cht'}}</b>{{index|personal_property_summary:'after_title'}}： {{summary.count}}{{index|personal_property_summary:'count_unit'}}，{{index|personal_property_summary:'after_unit'}}<abbr title="{{ summary.total|floatformat }}"><span class="{{index|personal_property_summary:'zhutil_unit'}}">{{summary.total}}</span></abbr>{{index|personal_property_summary:'total_unit'}} {% if index|personal_property_summary:'remark' %}({{summary.total|multiply:0.3025|floatformat}}坪){% endif %}<br>
     {% endfor %}
 </div>
 {% if objs %}
@@ -35,7 +25,7 @@
         {% endwith %}
     </table>
 {% else %}
-    <p class="lead text-error">無此類財產申報資料</p>
+    <p class="lead text-error">2011年之後尚無此類財產申報資料</p>
 {% endif %}
 {% endblock ly_detail %}
 {% block script %}

@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
 from .models import Legislator, LegislatorDetail, Platform, Attendance, PoliticalContributions
-from property.models import Stock, Land, Building, Car
+from property.models import Stock, Land, Building, Car, Cash, Deposit
 from vote.models import Vote, Legislator_Vote
 from proposal.models import Proposal
 from bill.models import Bill
@@ -85,24 +85,45 @@ def index_committee(request, index):
     return render(request,'legislator/committee.html', {'ly_list': ly_list,'index':index})
 
 def personal_property(request, legislator_id, index):
-    categories = {'stock': u'股票', 'land': u'土地', 'building': u'建物', 'car': u'汽車'}
+    attribute = {
+        'stock': {
+            'model': Stock,
+            'sum': 'total',
+            'cht': u'股票'
+        },
+        'land': {
+            'model': Land,
+            'sum': 'total',
+            'cht': u'土地'
+        },
+        'building': {
+            'model': Building,
+            'sum': 'total',
+            'cht': u'建物'
+        },
+        'car': {
+            'model': Car,
+            'sum': 'capacity',
+            'cht': u'汽車'
+        },
+        'cash': {
+            'model': Cash,
+            'sum': 'total',
+            'cht': u'現金'
+        },
+        'deposit': {
+            'model': Deposit,
+            'sum': 'total',
+            'cht': u'存款'
+        }
+    }
     ly = get_legislator(legislator_id, ad=8)
     if not ly:
         return HttpResponseRedirect('/')
     query = Q(proposer__id=ly.id, legislator_proposal__priproposer=True)
-    if index == 'stock':
-        objs = Stock.objects.filter(legislator_id=legislator_id).order_by('-date')
-        summaries = objs.values('date').annotate(total=Sum('total'), count=Count('id'))
-    elif index == 'land':
-        objs = Land.objects.filter(legislator_id=legislator_id).order_by('-date')
-        summaries = objs.values('date').annotate(total=Sum('total'), count=Count('id'))
-    elif index == 'building':
-        objs = Building.objects.filter(legislator_id=legislator_id).order_by('-date')
-        summaries = objs.values('date').annotate(total=Sum('total'), count=Count('id'))
-    elif index == 'car':
-        objs = Car.objects.filter(legislator_id=legislator_id).order_by('-date')
-        summaries = objs.values('date').annotate(total=Sum('capacity'), count=Count('id'))
-    return render(request,'legislator/personal_property.html', {'objs':objs,'summaries':summaries,'ly':ly,'index':index,'category':categories.get(index)})
+    objs = attribute.get(index).get('model').objects.filter(legislator_id=legislator_id).order_by('-date')
+    summaries = objs.values('date').annotate(total=Sum(attribute.get(index).get('sum')), count=Count('id'))
+    return render(request,'legislator/personal_property.html', {'objs':objs,'summaries':summaries,'ly':ly,'index':index,'cht':attribute.get(index).get('cht')})
 
 def proposer_detail(request, legislator_id, keyword_url):
     proposertype = False
