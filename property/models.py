@@ -2,6 +2,38 @@
 from django.db import models
 
 
+class Deposit(models.Model):
+    source_file = models.TextField()
+    index = models.IntegerField()
+    legislator = models.ForeignKey('legislator.Legislator', to_field="uid")
+    date = models.DateTimeField()
+    category = models.TextField()
+    bank = models.TextField()
+    deposit_type = models.TextField()
+    currency = models.TextField()
+    owner = models.TextField(blank=True, null=True)
+    total = models.FloatField()
+    def __unicode__(self):
+        return self.total
+
+    class Meta:
+        unique_together = ('source_file', 'index',)
+
+class Cash(models.Model):
+    source_file = models.TextField()
+    index = models.IntegerField()
+    legislator = models.ForeignKey('legislator.Legislator', to_field="uid")
+    date = models.DateTimeField()
+    category = models.TextField()
+    currency = models.TextField()
+    owner = models.TextField(blank=True, null=True)
+    total = models.FloatField()
+    def __unicode__(self):
+        return self.total
+
+    class Meta:
+        unique_together = ('source_file', 'index',)
+
 class Stock(models.Model):
     source_file = models.TextField()
     index = models.IntegerField()
