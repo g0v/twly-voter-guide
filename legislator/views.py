@@ -125,6 +125,21 @@ def personal_property(request, legislator_id, index):
     summaries = objs.values('date').annotate(total=Sum(attribute.get(index).get('sum')), count=Count('id'))
     return render(request,'legislator/personal_property.html', {'objs':objs,'summaries':summaries,'ly':ly,'index':index,'cht':attribute.get(index).get('cht')})
 
+def personal_political_contributions(request, legislator_id, ad):
+    data = None
+    ad = ad or 8
+    ly = get_legislator(legislator_id, ad=ad)
+    if not ly:
+        return HttpResponseRedirect('/')
+    try:
+        data_income = dict(PoliticalContributions.objects.values("in_individual", "in_profit", "in_party", "in_civil", "in_anonymous", "in_others").get(legislator_id=ly.id))
+        data_expenses = dict(PoliticalContributions.objects.values("out_personnel", "out_propagate", "out_campaign_vehicle", "out_campaign_office", "out_rally", "out_travel", "out_miscellaneous", "out_return", "out_exchequer", "out_public_relation")
+.get(legislator_id=ly.id))
+    except Exception, e:
+        print e
+        return HttpResponseRedirect('/')
+    return render(request,'legislator/personal_politicalcontributions.html', {'ly':ly,'data_income':data_income,'data_expenses':data_expenses})
+
 def proposer_detail(request, legislator_id, keyword_url):
     proposertype = False
     ly = get_legislator(legislator_id, ad=8)

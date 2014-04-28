@@ -1,0 +1,37 @@
+﻿{% extends "common/ly_info.html" %}
+{% load ly_extras %}
+{% block title %}
+{% if ly %}
+    <title>立委投票指南:{{ly.name}}的政治獻金</title>
+    <meta property="og:title" content="立委投票指南:{{ly.name}}的政治獻金"/>
+    <meta itemprop="name" content="立委投票指南:{{ly.name}}的政治獻金">
+{% else %}
+    <title>立委投票指南:立委的政治獻金</title>
+    <meta property="og:title" content="立委投票指南:立委的政治獻金"/>
+    <meta itemprop="name" content="立委投票指南:立委的政治獻金">
+{% endif %}
+{% endblock title %}
+{% block ly_detail %}
+    <div align="center">
+            <br>
+        <div class="hero-unit">
+            <p class="lead">收入</p>
+            <div id="d3_in" align="center"></div>
+        </div>
+            <br>
+        <div class="hero-unit">
+            <p class="lead">支出</p>
+            <div id="d3_out" align="center"></div>
+        </div>
+    </div>
+{% endblock ly_detail %}
+{% block script %}
+{% include "legislator/d3/personal_politicalcontributions_in_pie_chart.html" %}
+{% include "legislator/d3/personal_politicalcontributions_out_pie_chart.html" %}
+<script>
+    $(document).ready( function() {
+        $('#url_polticalcontributions').addClass("btn-inverse");
+    });
+</script>
+{{ block.super }}
+{% endblock script %}
