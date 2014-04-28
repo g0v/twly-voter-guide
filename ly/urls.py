@@ -22,6 +22,15 @@ router.register(r'bill', views.BillViewSet)
 router.register(r'legislator_bill', views.Legislator_BillViewSet)
 router.register(r'attendance', views.AttendanceViewSet)
 router.register(r'platform', views.PlatformViewSet)
+router.register(r'property_car', views.CarViewSet)
+router.register(r'property_aircraft', views.AircraftViewSet)
+router.register(r'property_boat', views.BoatViewSet)
+router.register(r'property_stock', views.StockViewSet)
+router.register(r'property_land', views.LandViewSet)
+router.register(r'property_building', views.BuildingViewSet)
+router.register(r'property_cash', views.CashViewSet)
+router.register(r'property_deposit', views.DepositViewSet)
+router.register(r'political_contributions', views.PoliticalContributionsViewSet)
 #<--
 urlpatterns = patterns('',
     url(r'^legislator/', include('legislator.urls', namespace="legislator")),
