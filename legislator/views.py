@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
 from .models import Legislator, LegislatorDetail, Platform, Attendance, PoliticalContributions
-from property.models import Stock, Land, Building, Car, Cash, Deposit
+from property.models import Stock, Land, Building, Car, Cash, Deposit, Bonds, Fund, OtherBonds, Antique
 from vote.models import Vote, Legislator_Vote
 from proposal.models import Proposal
 from bill.models import Bill
@@ -86,6 +86,25 @@ def index_committee(request, index):
 
 def personal_property(request, legislator_id, index):
     attribute = {
+        'antique': {
+            'model': Antique,
+            'cht': u'具有相當價值之財產'
+        },
+        'otherbonds': {
+            'model': OtherBonds,
+            'sum': 'total',
+            'cht': u'其他有價證券'
+        },
+        'fund': {
+            'model': Fund,
+            'sum': 'total',
+            'cht': u'基金'
+        },
+        'bonds': {
+            'model': Bonds,
+            'sum': 'total',
+            'cht': u'債券'
+        },
         'stock': {
             'model': Stock,
             'sum': 'total',
@@ -122,7 +141,10 @@ def personal_property(request, legislator_id, index):
         return HttpResponseRedirect('/')
     query = Q(proposer__id=ly.id, legislator_proposal__priproposer=True)
     objs = attribute.get(index).get('model').objects.filter(legislator_id=legislator_id).order_by('-date')
-    summaries = objs.values('date').annotate(total=Sum(attribute.get(index).get('sum')), count=Count('id'))
+    if attribute.get(index).get('sum'):
+        summaries = objs.values('date').annotate(total=Sum(attribute.get(index).get('sum')), count=Count('id'))
+    else:
+        summaries = objs.values('date').annotate(count=Count('id'))
     return render(request,'legislator/personal_property.html', {'objs':objs,'summaries':summaries,'ly':ly,'index':index,'cht':attribute.get(index).get('cht')})
 
 def personal_political_contributions(request, legislator_id, ad):
