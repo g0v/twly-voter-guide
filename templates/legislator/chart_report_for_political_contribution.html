@@ -98,7 +98,7 @@
             <tbody>
                 {% for ly in ly_obj %}
                 <tr>
-                    <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
+                    <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:personal_political_contributions' legislator_id=ly.legislator_id ad=ly.ad %}" rel="tooltip" title="{{ly.name}}的政治獻金">{% include "common/ly_color_by_party.html" %}</a></td>
                     <td style="text-align:center; vertical-align:middle;">{{ly.totalNum}}</td>
                     {% if ly.compare %}
                         <td style="text-align:center; vertical-align:middle;">{{ly.compare}}</td>
