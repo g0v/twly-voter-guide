@@ -2,6 +2,29 @@
 from django.db import models
 
 
+class Bonds(models.Model):
+    source_file = models.TextField()
+    index = models.IntegerField()
+    legislator = models.ForeignKey('legislator.Legislator', to_field="uid")
+    date = models.DateTimeField()
+    category = models.TextField()
+    name = models.TextField()
+    symbol = models.TextField()
+    owner = models.TextField(blank=True, null=True)
+    dealer = models.TextField(blank=True, null=True)
+    quantity = models.IntegerField()
+    face_value = models.FloatField(blank=True, null=True)
+    market_value = models.FloatField(blank=True, null=True)
+    currency = models.TextField()
+    total = models.FloatField()
+    total_value = models.FloatField(blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        unique_together = ('source_file', 'index',)
+
 class Deposit(models.Model):
     source_file = models.TextField()
     index = models.IntegerField()
@@ -43,7 +66,7 @@ class Stock(models.Model):
     name = models.TextField()
     symbol = models.IntegerField(blank=True, null=True)
     owner = models.TextField(blank=True, null=True)
-    quantity = models.IntegerField(blank=True, null=True)
+    quantity = models.IntegerField()
     face_value = models.FloatField(blank=True, null=True)
     market_value = models.FloatField(blank=True, null=True)
     currency = models.TextField()
