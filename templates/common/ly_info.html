@@ -165,6 +165,10 @@
                         <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='car' %}"><b>汽車</b></a></li>
                         <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='cash' %}"><b>現金</b></a></li>
                         <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='deposit' %}"><b>存款</b></a></li>
+                        <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='bonds' %}"><b>債券</b></a></li>
+                        <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='fund' %}"><b>基金</b></a></li>
+                        <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='otherbonds' %}"><b>其他有價證券</b></a></li>
+                        <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='antique' %}"><b>具有相當價值之財產</b></a></li>
                         {% for category in property_category %}
                         <li style="background-color: {% cycle '#EEEEEE' 'white' %};">{{category}} (敬請期待)</li>
                         {% endfor %}

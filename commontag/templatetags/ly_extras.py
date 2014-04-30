@@ -11,6 +11,39 @@ register = template.Library()
 @register.filter(name='personal_property_summary')
 def personal_property_summary(value, arg):
     attribute = {
+        'antique': {
+            'after_title': u'共',
+            'count_unit': u'總',
+            'remark': False,
+            'cht': u'具有相當價值之財產'
+        },
+        'otherbonds': {
+            'after_title': u'總額',
+            'count_unit': u'筆',
+            'after_unit': u'約',
+            'zhutil_unit': u'price',
+            'total_unit': u'元',
+            'remark': False,
+            'cht': u'其他有價證券'
+        },
+        'fund': {
+            'after_title': u'總額',
+            'count_unit': u'筆',
+            'after_unit': u'約',
+            'zhutil_unit': u'price',
+            'total_unit': u'元',
+            'remark': False,
+            'cht': u'基金'
+        },
+        'bonds': {
+            'after_title': u'總額',
+            'count_unit': u'筆',
+            'after_unit': u'約',
+            'zhutil_unit': u'price',
+            'total_unit': u'元',
+            'remark': False,
+            'cht': u'債券'
+        },
         'stock': {
             'after_title': u'總額',
             'count_unit': u'筆',

@@ -1,13 +1,14 @@
 <thead>
     <tr style="background-color: #FFEEFF;">
-        <th width="15%">申報日期</th>
-        <th width="25%">股票名稱</th>
+        <th width="10%">申報日期</th>
+        <th width="25%">基金名稱</th>
         <th width="15%">折合新臺幣總額</th>
         <th width="8%">幣別</th>
-        <th width="10%">股數</th>
-        <th width="7%">面額</th>
+        <th width="10%">單位數</th>
+        <th width="7%">單位淨值</th>
+        <th width="10%">買賣機構</th>
         <th width="10%">所有人</th>
-        <th width="10%">索引</th>
+        <th width="5%">索引</th>
     </tr>
 </thead>
 <tbody>
@@ -19,6 +20,7 @@
         <td>{{obj.currency}}</td>
         <td><p class="text-right">{{obj.quantity}}</p></td>
         <td><p class="text-right">{{obj.face_value|floatformat}}</p></td>
+        <td>{{obj.dealer}}</td>
         <td>{{obj.owner}}</td>
         <td>{{obj.source_file}}-{{obj.index}}</td>
     </tr>
@@ -26,13 +28,14 @@
 </tbody>
 <tfoot>
     <tr style="background-color: #FFEEFF;">
-        <th width="15%">申報日期</th>
-        <th width="25%">股票名稱</th>
+        <th width="10%">申報日期</th>
+        <th width="25%">基金名稱</th>
         <th width="15%">折合新臺幣總額</th>
         <th width="8%">幣別</th>
-        <th width="10%">股數</th>
-        <th width="7%">面額</th>
+        <th width="10%">單位數</th>
+        <th width="7%">單位淨值</th>
+        <th width="10%">買賣機構</th>
         <th width="10%">所有人</th>
-        <th width="10%">索引</th>
+        <th width="5%">索引</th>
     </tr>
 </tfoot>

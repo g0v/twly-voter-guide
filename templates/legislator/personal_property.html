@@ -15,7 +15,7 @@
 <div class="well well-small">
     <p class="text-error">因監察院只提供圖檔，此為初步轉檔結果，尚未完整校正，歡迎<a href="https://docs.google.com/spreadsheets/d/16UxAPkZLtU8OVJQCJasqnqOkHfceArbM05zo0FYRcbw/edit#gid=0" target="_blank">回報錯誤</a>，將盡快修正。找原始檔 -> <a href="http://sunshine.cy.gov.tw/GipOpenWeb/wSite/sp?xdUrl=/wSite/SpecialPublication/baseQuery.jsp" target="_blank">監察院財產申報資料</a></p>
     {% for summary in summaries %}
-    {{summary.date|date:"Y-m-d"}}的<b>{{index|personal_property_summary:'cht'}}</b>{{index|personal_property_summary:'after_title'}}： {{summary.count}}{{index|personal_property_summary:'count_unit'}}，{{index|personal_property_summary:'after_unit'}}<abbr title="{{ summary.total|floatformat }}"><span class="{{index|personal_property_summary:'zhutil_unit'}}">{{summary.total}}</span></abbr>{{index|personal_property_summary:'total_unit'}} {% if index|personal_property_summary:'remark' %}({{summary.total|multiply:0.3025|floatformat}}坪){% endif %}<br>
+    {{summary.date|date:"Y-m-d"}}的<b>{{index|personal_property_summary:'cht'}}</b>{{index|personal_property_summary:'after_title'}}： {{summary.count}}{{index|personal_property_summary:'count_unit'}}{% if summary.total %}，{{index|personal_property_summary:'after_unit'}}<abbr title="{{ summary.total|floatformat }}"><span class="{{index|personal_property_summary:'zhutil_unit'}}">{{summary.total}}</span></abbr>{{index|personal_property_summary:'total_unit'}}{% endif %} {% if index|personal_property_summary:'remark' %}({{summary.total|multiply:0.3025|floatformat}}坪){% endif %}<br>
     {% endfor %}
 </div>
 {% if objs %}
