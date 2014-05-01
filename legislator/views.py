@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
 from .models import Legislator, LegislatorDetail, Platform, Attendance, PoliticalContributions
-from property.models import Stock, Land, Building, Car, Cash, Deposit, Bonds, Fund, OtherBonds, Antique
+from property.models import Stock, Land, Building, Car, Cash, Deposit, Bonds, Fund, OtherBonds, Antique, Insurance, Claim, Debt, Investment
 from vote.models import Vote, Legislator_Vote
 from proposal.models import Proposal
 from bill.models import Bill
@@ -86,6 +86,25 @@ def index_committee(request, index):
 
 def personal_property(request, legislator_id, index):
     attribute = {
+        'insurance': {
+            'model': Insurance,
+            'cht': u'保險'
+        },
+        'claim': {
+            'model': Claim,
+            'sum': 'total',
+            'cht': u'債權'
+        },
+        'debt': {
+            'model': Debt,
+            'sum': 'total',
+            'cht': u'債務'
+        },
+        'investment': {
+            'model': Investment,
+            'sum': 'total',
+            'cht': u'事業投資'
+        },
         'antique': {
             'model': Antique,
             'cht': u'具有相當價值之財產'

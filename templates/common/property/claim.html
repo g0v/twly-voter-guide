@@ -1,0 +1,41 @@
+{% load ly_extras %}
+<thead>
+    <tr style="background-color: #FFEEFF;">
+        <th width="10%">申報日期</th>
+        <th width="15%">種類</th>
+        <th width="10%">餘額</th>
+        <th width="10%">債權人</th>
+        <th width="20%">債務人及地址</th>
+        <th width="15%">取得原因</th>
+        <th width="15%">取得時間</th>
+        <th width="5%">索引</th>
+    </tr>
+</thead>
+<tbody>
+    {% for obj in objs %}
+    <tr>
+        <td>{{obj.date|date:"Y-m-d"}}</td>
+        <td>{{obj.species}}</td>
+        <td><p class="price text-right">{{obj.total|floatformat}}</p></td>
+        <td>{{obj.owner}}</td>
+        <td>{{obj.debtor}}</td>
+        <td>{{obj.register_reason}}</td>
+        <td>{{obj.register_date}}</td>
+        <td>{{obj.source_file}}-{{obj.index}}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+<tfoot>
+    <tr style="background-color: #FFEEFF;">
+
+        <th width="10%">申報日期</th>
+        <th width="15%">種類</th>
+        <th width="10%">餘額</th>
+        <th width="10%">債權人</th>
+        <th width="20%">債務人及地址</th>
+        <th width="15%">取得原因</th>
+        <th width="15%">取得時間</th>
+        <th width="5%">索引</th>
+
+    </tr>
+</tfoot>

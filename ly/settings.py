@@ -202,7 +202,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
         "legislator.context_processor.committee_list",
         "legislator.context_processor.distinct_progress_of_bill",
         "legislator.context_processor.party_list",
-        "legislator.context_processor.property_category",
         )
 
 SITE_DOMAIN = 'http://twly.herokuapp.com'

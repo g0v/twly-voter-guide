@@ -2,6 +2,75 @@
 from django.db import models
 
 
+class Investment(models.Model):
+    source_file = models.TextField()
+    index = models.IntegerField()
+    legislator = models.ForeignKey('legislator.Legislator', to_field="uid")
+    date = models.DateTimeField()
+    category = models.TextField()
+    owner = models.TextField()
+    company = models.TextField()
+    address = models.TextField()
+    register_date = models.TextField(blank=True, null=True)
+    register_reason = models.TextField(blank=True, null=True)
+    total = models.FloatField()
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        unique_together = ('source_file', 'index',)
+
+class Debt(models.Model):
+    source_file = models.TextField()
+    index = models.IntegerField()
+    legislator = models.ForeignKey('legislator.Legislator', to_field="uid")
+    date = models.DateTimeField()
+    category = models.TextField()
+    species = models.TextField()
+    debtor = models.TextField()
+    owner = models.TextField()
+    register_date = models.TextField(blank=True, null=True)
+    register_reason = models.TextField(blank=True, null=True)
+    total = models.FloatField()
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        unique_together = ('source_file', 'index',)
+
+class Claim(models.Model):
+    source_file = models.TextField()
+    index = models.IntegerField()
+    legislator = models.ForeignKey('legislator.Legislator', to_field="uid")
+    date = models.DateTimeField()
+    category = models.TextField()
+    species = models.TextField()
+    debtor = models.TextField()
+    owner = models.TextField()
+    register_date = models.TextField(blank=True, null=True)
+    register_reason = models.TextField(blank=True, null=True)
+    total = models.FloatField()
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        unique_together = ('source_file', 'index',)
+
+class Insurance(models.Model):
+    source_file = models.TextField()
+    index = models.IntegerField()
+    legislator = models.ForeignKey('legislator.Legislator', to_field="uid")
+    date = models.DateTimeField()
+    category = models.TextField()
+    company = models.TextField()
+    name = models.TextField()
+    owner = models.TextField()
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        unique_together = ('source_file', 'index',)
+
 class Antique(models.Model):
     source_file = models.TextField()
     index = models.IntegerField()
