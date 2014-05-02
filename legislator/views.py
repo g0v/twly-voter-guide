@@ -60,6 +60,7 @@ def index(request, index, ad):
     elif index == 'notvote':
         ly_list = LegislatorDetail.objects.filter(query, votes__decision__isnull=True)\
                                           .annotate(totalNum=Count('votes__id'))\
+                                          .exclude(totalNum=0)\
                                           .order_by('-totalNum','party')\
                                           .extra(select={'compare': 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id'},)
         no_count_list = LegislatorDetail.objects.filter(name_query).exclude(legislator_id__in=ly_list.values_list('legislator_id', flat=True))

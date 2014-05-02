@@ -24,7 +24,7 @@
 <h4>熱門：
     {% for keyword in keyword_obj %}
     {% if forloop.counter0 < 5 %}
-    <a href="{% url 'legislator:biller_detail' legislator_id=ly.id keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的修正草案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
+    <a href="{% url 'legislator:biller_detail' legislator_id=ly.legislator_id keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的修正草案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
     {% endif %}
     {% endfor %}
 </h4>
@@ -44,7 +44,11 @@
 {% include "common/bills.html" %}
 {% paginate %}
 {% else %}
-<p class="text-error">完全沒有草案</p>
+    {% if proposertype %}
+    <p class="text-error">完全沒有草案</p>
+    {% else %}
+    「沒有{{ly.name}}是<b class="text-error">第一</b>提案人的草案，請<a href="{% url 'legislator:biller_detail' legislator_id=ly.legislator_id %}/?keyword=&proposertype=on" rel="tooltip" title="包含此關鍵字的修正草案">[按這裡]</a>切換到共同提案的草案」
+    {% endif %}
 {% endif %}
 {% endblock ly_detail %}
 {% block script %}
