@@ -48,7 +48,7 @@
     {% if proposertype %}
     <p class="text-error">完全沒有草案</p>
     {% else %}
-    「沒有{{ly.name}}是<b class="text-error">第一</b>提案人的提案，請<a href="{% url 'legislator:proposer_detail' legislator_id=ly.legislator_id %}/?keyword=&proposertype=on" rel="tooltip" title="包含此關鍵字的修正草案">[按這裡]</a>切換到共同提案的紀錄」
+    「沒有{{ly.name}}是<b class="text-error">第一</b>提案人的提案，請<a href="{% url 'legislator:proposer_detail' legislator_id=ly.legislator_id %}/?keyword=&proposertype=on">[按這裡]</a>切換到共同提案的紀錄」
     {% endif %}
 
 {% endif %}
