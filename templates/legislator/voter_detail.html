@@ -18,17 +18,12 @@
 {% endif %}
 {% endblock title %}
 {% block ly_detail %}
-    <form action="" method="get" class="form-search" id="form">
-        <fieldset>
-            <input type="search" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:核四 食品安全...空格有交集效果" autofocus>
-            <button type="submit" class="btn">Go!</button>
-        </fieldset>
-    </form>
-    {% if keyword_obj and index != 'conscience'%}
+    {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全...空格有交集效果" %}
+    {% if keyword_obj and index != 'conscience' %}
     <h4>熱門：
         {% for keyword in keyword_obj %}
         {% if forloop.counter0 < 5 %}
-        <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
+        <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
         {% endif %}
         {% endfor %}
     </h4>
@@ -48,7 +43,7 @@
     </div>
     {% endif %}
 <div class="well well-small">
-    <p class="lead">{{ly.name}}第{{ly.ad}}屆的{% if index == 'conscience' %}<b>脫黨</b>{% endif %}表決紀錄：
+    <font class="lead">{{ly.name}}第{{ly.ad}}屆的{% if index == 'conscience' %}<b>脫黨</b>{% endif %}表決紀錄：
     {% if keyword %}
     包含<font style="color: red;">"{{keyword}}"</font>的表決&nbsp;
     {% endif %}
@@ -68,7 +63,7 @@
             <p class="lead text-error">尚無資料，敬請期待</p>
         {% endif %}
     {% endfor %}
-    </p>
+    </font>
 </div>
 {% if votes %}
 {% load pagination_tags %}
@@ -107,6 +102,8 @@
                 <a href="{% url 'vote:vote_detail' vote.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單和完整內容</a><br>
                 {% if keyword %}
                 {{vote.content|linebreaksbr|replace:keyword|safe}}
+                {% elif vote.summary %}
+                <span class="badge badge-warning">精簡版</span>&nbsp;{{ vote.summary }}
                 {% else %}
                 {{vote.content|linebreaksbr|truncatechars:120}}
                 {% endif %}

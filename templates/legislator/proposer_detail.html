@@ -25,18 +25,18 @@
 <h4>熱門：
     {% for keyword in keyword_obj %}
     {% if forloop.counter0 < 5 %}
-    <a href="{% url 'legislator:proposer_detail' legislator_id=ly.legislator_id keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的立委提案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
+    <a href="{% url 'legislator:proposer_detail' legislator_id=ly.legislator_id keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的立委提案"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
     {% endif %}
     {% endfor %}
 </h4>
 {% endif %}
 <div class="well well-small">
-    <p class="lead">{{ly.name}}(第{{ly.ad}}屆)：
+    <font class="lead">{{ly.name}}(第{{ly.ad}}屆)：
     {{ proposal|length }}個
     {% if keyword %}
     包含<font style="color: red;">"{{keyword}}"</font>的
     {% endif %}臨時提案、附帶決議
-    </p>
+    </font>
 </div>
 {% if proposal %}
 {% load pagination_tags %}

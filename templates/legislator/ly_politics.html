@@ -15,7 +15,7 @@
 <table class="table table-bordered ">
     <tr class="warning" ><td><font class="lead">{{ly.name}}第{{ly.ad}}屆的政見：</font></td></tr>
     {% if ly.constituency == '全國不分區' or ly.constituency == '僑居國外國民' %}
-    <tr class="info" ><td><p class="text-center">全國不分區及僑居國外國民的立委統一由所屬政黨提出政見，無個人政見</p></td></tr>
+    <tr class="info" ><td><font class="text-center">全國不分區及僑居國外國民的立委統一由所屬政黨提出政見，無個人政見</font></td></tr>
     {% endif %}
     {% for fragment in politics %}
     <tr>

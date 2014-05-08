@@ -12,16 +12,16 @@
     <h4>熱門：
         {% for keyword in keyword_obj %}
         {% if forloop.counter0 < 5 %}
-        <a href="{% url 'proposal:proposals' keyword %}" rel="tooltip" title="包含此關鍵字的立委提案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
+        <a href="{% url 'proposal:proposals' keyword %}" rel="tooltip" title="包含此關鍵字的立委提案"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
         {% endif %}
         {% endfor %}
     </h4>
     {% endif %}
     <div class="well well-small">
         {% if keyword %}
-        <p class="lead">有 {{ proposal|length }} 個包含<font style="color: red;">"{{keyword}}"</font>的附帶決議、臨時提案</p>
+        <font class="lead">有 {{ proposal|length }} 個包含<font style="color: red;">"{{keyword}}"</font>的附帶決議、臨時提案</font>
         {% else %}
-        <p class="lead">最新的 {{ proposal|length }} 個附帶決議、臨時提案</p>
+        <font class="lead">最新的 {{ proposal|length }} 個附帶決議、臨時提案</font>
         {% endif %}
     </div>
     {% if proposal %}

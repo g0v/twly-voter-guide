@@ -18,13 +18,13 @@
     <h4>熱門：
         {% for keyword in keyword_obj %}
         {% if forloop.counter0 < 5 %}
-        <a href="{% url 'bill:bills' index=index keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的修正草案"><font style="color: {% cycle '#0099CC' '#009933' %};">{{keyword}}&nbsp;</font></a>
+        <a href="{% url 'bill:bills' index=index keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的修正草案"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
         {% endif %}
         {% endfor %}
     </h4>
     {% endif %}
     <div class="well well-small">
-        <p class="lead">
+        <font class="lead">
         {% if index == 'normal' %}
         立委們提出的
         {% if keyword %}
@@ -40,7 +40,7 @@
         {{ bills|length }} 個法條修正草案
         {% endif %}
         {% endif %}
-        </p>
+        </font>
     </div>
     {% if bills %}
     {% load pagination_tags %}
