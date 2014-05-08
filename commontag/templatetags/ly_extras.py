@@ -146,7 +146,8 @@ def vote_result(value, arg):
             'cht': u'不通過'
         }
     }
-    return attribute.get(value).get(arg)
+    if attribute.get(value):
+        return attribute.get(value).get(arg)
 
 @register.filter(name='mod')
 def mod(value, arg):
