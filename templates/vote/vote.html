@@ -1,4 +1,5 @@
 ﻿{% extends "base.html" %}
+{% load ly_extras %}
 {% load staticfiles %}
 {% block title %}
 {% if vote %}
@@ -15,14 +16,22 @@
 <div class="row-fluid">
     <div class="span6">
         {% if vote %}
+        {% with vote=vote.0.vote %}
         <div align="center">
             <br>
             <div id="d3" align="center"></div>
+            <span class="badge badge-important"><font class="lead">{{vote.result|vote_result:'cht'}}</font></span>
         </div>
         <div class="hero-unit">
-            <p class="text-success">表決日期：{{ vote.0.vote.sitting.date|date:"Y-m-d" }}</p>
-            <p class="lead">{{ vote.0.vote.content|linebreaksbr }}</p>
+            <p class="text-success">表決日期：{{ vote.sitting.date|date:"Y-m-d" }}</p>
+            {% if vote.summary %}
+            <span class="badge badge-warning"><font class="lead">精簡版</font></span><br>
+            <p class="lead">{{ vote.summary }}</p>
+            {% endif %}
+            <span class="badge badge-info"><font class="lead">原文</font></span><br>
+            <p>{{ vote.content|linebreaksbr }}</p>
         </div>
+        {% endwith %}
     </div><!--end: span6 -->
     <div class="span6">
         {% regroup vote by decision as ly_list %}

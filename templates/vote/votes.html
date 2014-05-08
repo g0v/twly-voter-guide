@@ -24,7 +24,7 @@
     </h4>
     {% endif %}
     <div class="well well-small">
-        <p class="lead">立法院至今有 {{ votes|length }} 個
+        <p class="lead">第七屆(2008)至今有 {{ votes|length }} 個
         {% if keyword %}包含<font style="color: red;">"{{keyword}}"</font>的
         {% endif %}
         {% if index == 'conscience' %}<b>脫黨</b>
@@ -53,17 +53,15 @@
             {% for fragment in votes %}
             <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
                 <td style="text-align:center; vertical-align:middle;">{{fragment.sitting.ad}}</td>
-                {% if fragment.passed %}
-                <td style="text-align:center; vertical-align:middle; background-color: #CCFF99;">通過</td>
-                {% else %}
-                <td style="text-align:center; vertical-align:middle; background-color: #FF99CC;">不通過</td>
-                {% endif %}
+                <td style="text-align:center; vertical-align:middle; background-color: #{{fragment.result|vote_result:'td_bgcolor'}}">{{fragment.result|vote_result:'cht'}}</td>
                 <td style="text-align:center; vertical-align:middle; background-color: #66CC66;">{{fragment.results.agree}}</td><td style="text-align:center; vertical-align:middle; background-color: #FF66CC;">{{fragment.results.disagree}}</td><td style="text-align:center; vertical-align:middle; background-color: #999999;">{{fragment.results.abstain}}</td><td style="text-align:center; vertical-align:middle; background-color: #FFFF99;">{{fragment.results.not_voting}}</td>
                 <td style="text-align:center; vertical-align:middle;">{{ fragment.sitting.date|date:"Y-m-d" }}</td>
                 <td>
-                    <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單</a><br>
+                    <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單和完整內容</a><br>
                     {% if keyword %}
                     {{fragment.content|linebreaksbr|replace:keyword|safe}}
+                    {% elif fragment.summary %}
+                    <span class="badge badge-warning">精簡版</span>&nbsp;{{ fragment.summary }}
                     {% else %}
                     {{fragment.content|linebreaksbr|truncatechars:120}}
                     {% endif %}

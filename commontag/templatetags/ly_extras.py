@@ -134,6 +134,20 @@ def personal_property_summary(value, arg):
     }
     return attribute.get(value).get(arg)
 
+@register.filter(name='vote_result')
+def vote_result(value, arg):
+    attribute = {
+        'Passed': {
+            'td_bgcolor': u'CCFF99',
+            'cht': u'通過'
+        },
+        'Not Passed': {
+            'td_bgcolor': u'FF99CC',
+            'cht': u'不通過'
+        }
+    }
+    return attribute.get(value).get(arg)
+
 @register.filter(name='mod')
 def mod(value, arg):
     return value % arg

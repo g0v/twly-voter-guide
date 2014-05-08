@@ -206,11 +206,12 @@ def voter_detail(request, legislator_id, index, keyword_url, ad):
     ly = get_legislator(legislator_id, ad)
     if not ly:
         return HttpResponseRedirect('/')
-    #--> 沒投票的表決是否搜尋
-    if 'notvote' in request.GET:
-        notvote = request.GET['notvote']
-        if notvote:
-            query = Q(decision__isnull=False)
+    #--> 依投票類型分類
+    decision_query = {"agree": Q(decision=1), "disagree": Q(decision=-1), "abstain": Q(decision=0), "notvote": Q(decision__isnull=True)}
+    if 'decision' in request.GET:
+        decision = request.GET['decision']
+        if decision_query.get(decision):
+            query = decision_query.get(decision)
     #<--
     # 脫黨投票
     if index == 'conscience':

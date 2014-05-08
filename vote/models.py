@@ -9,10 +9,12 @@ class Vote(models.Model):
     sitting = models.ForeignKey('sittings.Sittings', to_field="uid", related_name='votes')
     vote_seq = models.CharField(max_length=10)
     content = models.TextField()
+    summary = models.TextField(null=True)
     hits = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
     conflict = models.NullBooleanField()
+    result = models.CharField(null=True, max_length=50)
     results = JSONField(null=True)
     def __unicode__(self):
         return self.content
