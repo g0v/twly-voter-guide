@@ -57,7 +57,7 @@
 {% include "common/sorttable.html" %}
 <script>
     $(document).ready( function() {
-        $('#url_proposal').removeAttr('href').addClass("btn-inverse");
+        $('#url_proposal').removeAttr('href').addClass("btn-info");
         $('#proposertype').change(function() {
             $("#form").trigger('submit');
         });

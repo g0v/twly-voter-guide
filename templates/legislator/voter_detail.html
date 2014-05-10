@@ -69,7 +69,7 @@
 {% load pagination_tags %}
 {% autopaginate votes 10 %}
 {% paginate %}
-<table class="table table-bordered sortable zebra" >
+<table class="table table-bordered zebra">
     <thead>
         <tr style="background-color: #FFFFCC;">
             <th style="width: 6%">屆期</th>
@@ -120,7 +120,7 @@
 {% include "common/sorttable.html" %}
 <script>
     $(document).ready( function() {
-        $('#url_vote').addClass("btn-inverse");
+        $('#url_vote').addClass("btn-info");
         $('#notvote').change(function() {
             $("#form").trigger('submit');
         });

@@ -159,8 +159,9 @@
             <div class="span12">
                 <b>{{ ly.name }}</b>的&nbsp;
                 <div class="btn-group">
-                    <a id='url_property' class="btn btn-primary btn-large dropdown-toggle" href="#" data-toggle="dropdown">財產 <span class="caret"></span></a>
+                    <a id='url_property' class="btn btn-large dropdown-toggle" href="#" data-toggle="dropdown">財產 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
+                        <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='overview' %}"><b>總覽</b></a></li>
                         <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='stock' %}"><b>股票</b></a></li>
                         <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='land' %}"><b>土地</b></a></li>
                         <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='building' %}"><b>建物</b></a></li>
@@ -178,17 +179,17 @@
                     </ul>
                 </div>
                 <div class="btn-group">
-                    <a id='url_vote' class="btn btn-primary btn-large dropdown-toggle" href="#" data-toggle="dropdown">投票紀錄 <span class="caret"></span></a>
+                    <a id='url_vote' class="btn btn-large dropdown-toggle" href="#" data-toggle="dropdown">投票紀錄 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad index='' %}" >全投票表決紀錄</a></li>
                         <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad index='conscience' %}" >脫黨投票表決紀錄</a></li>
                     </ul>
                 </div>
                 {% if ly.ad > 7 %}
-                <a class="btn btn-primary btn-large" id='url_polticalcontributions' href="{% url 'legislator:personal_political_contributions' legislator_id=ly.legislator_id ad=ly.ad %}">政治獻金</a>
-                <a class="btn btn-primary btn-large" id='url_bill' href="{% url 'legislator:biller_detail' ly.legislator_id %}">法條修正案</a>
-                <a class="btn btn-primary btn-large" id='url_proposal' href="{% url 'legislator:proposer_detail' ly.legislator_id %}">附帶提案</a>
-                <a class="btn btn-primary btn-large" id='url_politics' href="{% url 'legislator:platformer_detail' ly.legislator_id %}">競選政見</a>
+                <a class="btn btn-large" id='url_polticalcontributions' href="{% url 'legislator:personal_political_contributions' legislator_id=ly.legislator_id ad=ly.ad %}">政治獻金</a>
+                <a class="btn btn-large" id='url_bill' href="{% url 'legislator:biller_detail' ly.legislator_id %}">法條修正案</a>
+                <a class="btn btn-large" id='url_proposal' href="{% url 'legislator:proposer_detail' ly.legislator_id %}">附帶提案</a>
+                <a class="btn btn-large" id='url_politics' href="{% url 'legislator:platformer_detail' ly.legislator_id %}">競選政見</a>
                 {% endif %}
             </div>
         </div>

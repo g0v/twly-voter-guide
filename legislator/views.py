@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import operator
 import re
+from operator import itemgetter
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
@@ -87,6 +88,55 @@ def index_committee(request, index):
 
 def personal_property(request, legislator_id, index):
     attribute = {
+        'land': {
+            'model': Land,
+            'sum': 'total',
+            'cht': u'土地'
+        },
+        'building': {
+            'model': Building,
+            'sum': 'total',
+            'cht': u'建物'
+        },
+        'stock': {
+            'model': Stock,
+            'sum': 'total',
+            'cht': u'股票'
+        },
+        'car': {
+            'model': Car,
+            'sum': 'capacity',
+            'cht': u'汽車'
+        },
+        'cash': {
+            'model': Cash,
+            'sum': 'total',
+            'cht': u'現金'
+        },
+        'deposit': {
+            'model': Deposit,
+            'sum': 'total',
+            'cht': u'存款'
+        },
+        'bonds': {
+            'model': Bonds,
+            'sum': 'total',
+            'cht': u'債券'
+        },
+        'fund': {
+            'model': Fund,
+            'sum': 'total',
+            'cht': u'基金'
+        },
+        'otherbonds': {
+            'model': OtherBonds,
+            'sum': 'total',
+            'cht': u'其他有價證券'
+        },
+        'antique': {
+            'model': Antique,
+            'cht': u'具有相當價值之財產'
+        },
         'insurance': {
             'model': Insurance,
             'cht': u'保險'
@@ -105,67 +155,41 @@ def personal_property(request, legislator_id, index):
             'model': Investment,
             'sum': 'total',
             'cht': u'事業投資'
-        },
-        'antique': {
-            'model': Antique,
-            'cht': u'具有相當價值之財產'
-        },
-        'otherbonds': {
-            'model': OtherBonds,
-            'sum': 'total',
-            'cht': u'其他有價證券'
-        },
-        'fund': {
-            'model': Fund,
-            'sum': 'total',
-            'cht': u'基金'
-        },
-        'bonds': {
-            'model': Bonds,
-            'sum': 'total',
-            'cht': u'債券'
-        },
-        'stock': {
-            'model': Stock,
-            'sum': 'total',
-            'cht': u'股票'
-        },
-        'land': {
-            'model': Land,
-            'sum': 'total',
-            'cht': u'土地'
-        },
-        'building': {
-            'model': Building,
-            'sum': 'total',
-            'cht': u'建物'
-        },
-        'car': {
-            'model': Car,
-            'sum': 'capacity',
-            'cht': u'汽車'
-        },
-        'cash': {
-            'model': Cash,
-            'sum': 'total',
-            'cht': u'現金'
-        },
-        'deposit': {
-            'model': Deposit,
-            'sum': 'total',
-            'cht': u'存款'
         }
     }
+    objs, summaries = None, []
     ly = get_legislator(legislator_id, ad=8)
     if not ly:
         return HttpResponseRedirect('/')
-    query = Q(proposer__id=ly.id, legislator_proposal__priproposer=True)
-    objs = attribute.get(index).get('model').objects.filter(legislator_id=legislator_id).order_by('-date')
-    if attribute.get(index).get('sum'):
-        summaries = objs.values('date').annotate(total=Sum(attribute.get(index).get('sum')), count=Count('id'))
+    if index == 'overview':
+        date_union = set()
+        for key, value in attribute.items():
+            if value.get('sum'):
+                objs = value.get('model').objects.filter(legislator_id=legislator_id).order_by('-date')\
+                                                        .values('date').annotate(total=Sum(value.get('sum')), count=Count('id'))
+            else:
+                objs = value.get('model').objects.filter(legislator_id=legislator_id).order_by('-date')\
+                                                        .values('date').annotate(count=Count('id'))
+            for obj in objs:
+                obj['index'] = key
+            date_union = date_union | set([obj['date'] for obj in objs])
+            if objs:
+                summaries.append(list(objs))
+        for category in summaries:
+            date_exist = [item['date'] for item in category]
+            key = category[0]['index']
+            for date in date_union:
+                if date not in date_exist:
+                    category.append({'date': date, 'totol': None, 'index': key})
+            category.sort(key = lambda x: x['date'], reverse=True)
+        return render(request,'legislator/personal_property_overview.html', {'summaries':summaries,'date_union':sorted(list(date_union), reverse=True),'ly':ly,'index':index})
     else:
-        summaries = objs.values('date').annotate(count=Count('id'))
-    return render(request,'legislator/personal_property.html', {'objs':objs,'summaries':summaries,'ly':ly,'index':index,'cht':attribute.get(index).get('cht')})
+        objs = attribute.get(index).get('model').objects.filter(legislator_id=legislator_id).order_by('-date')
+        if attribute.get(index).get('sum'):
+            summaries = objs.values('date').annotate(total=Sum(attribute.get(index).get('sum')), count=Count('id'))
+        else:
+            summaries = objs.values('date').annotate(count=Count('id'))
+        return render(request,'legislator/personal_property.html', {'objs':objs,'summaries':summaries,'ly':ly,'index':index,'cht':attribute.get(index).get('cht')})
 
 def personal_political_contributions(request, legislator_id, ad):
     data_income, data_expenses, data_total = None, None, None

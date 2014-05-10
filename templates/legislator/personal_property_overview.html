@@ -1,0 +1,87 @@
+﻿{% extends "common/ly_info.html" %}
+{% load ly_extras %}
+{% block title %}
+{% if ly %}
+    <title>立委投票指南:{{ly.name}}的財產申報紀錄總覽</title>
+    <meta property="og:title" content="立委投票指南:{{ly.name}}的財產申報紀錄總覽"/>
+    <meta itemprop="name" content="立委投票指南:{{ly.name}}的財產申報紀錄總覽">
+{% else %}
+    <title>立委投票指南:立委的財產申報紀錄</title>
+    <meta property="og:title" content="立委投票指南:立委的財產申報紀錄"/>
+    <meta itemprop="name" content="立委投票指南:立委的財產申報紀錄">
+{% endif %}
+{% endblock title %}
+{% block ly_detail %}
+<div class="well well-small">
+    <font class="text-error">因監察院只提供圖檔，此為初步轉檔結果，尚未完整校正，歡迎<a href="https://docs.google.com/spreadsheets/d/16UxAPkZLtU8OVJQCJasqnqOkHfceArbM05zo0FYRcbw/edit#gid=0" target="_blank">回報錯誤</a>，將盡快修正。找原始檔 -> <a href="http://sunshine.cy.gov.tw/GipOpenWeb/wSite/sp?xdUrl=/wSite/SpecialPublication/baseQuery.jsp" target="_blank">監察院財產申報資料</a></font>
+</div>
+<table class="table table-bordered sortable" >
+    <thead>
+        <tr>
+            <th rowspan=2 style="background-color: #CCFFCC;width: 10%">財產種類</th>
+            <th colspan="{{date_union|length}}" style="background-color: #CCFFCC;width: 90%">申報日期</th>
+        </tr>
+        <tr style="background-color: #CCFFFF;">
+        {% for date in date_union %}
+            <th>{{date|date:"Y-m-d"}}</th>
+        {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+    {% for category in summaries %}
+        {% for summary in category %}
+            {% with index=summary.index %}
+            {% ifchanged index %}
+            </tr><tr>
+                <td style="text-align:center; vertical-align:middle;">{{index|personal_property_summary:'cht'}}</td>
+            {% endifchanged %}
+            {% if summary.count %}
+                <td style="text-align:center; vertical-align:middle;">
+                    {{summary.count}}{{index|personal_property_summary:'count_unit'}}
+                    {% if summary.total %}
+                    <br>{{index|personal_property_summary:'after_title'}}{{index|personal_property_summary:'after_unit'}}<abbr title="{{ summary.total|floatformat }}"><span class="{{index|personal_property_summary:'zhutil_unit'}}">{{summary.total}}</span></abbr>{{index|personal_property_summary:'total_unit'}}
+                    {% endif %}
+                    {% if index|personal_property_summary:'remark' %}
+                    &nbsp;({{summary.total|multiply:0.3025|floatformat}}坪)
+                    {% endif %}
+                </td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+            {% endwith %}
+        {% endfor %}
+    {% empty %}
+        <p class="lead text-error">2011年之後尚無此類財產申報資料</p>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock ly_detail %}
+{% block script %}
+<link href="//cdn.jsdelivr.net/jquery.datatables/1.9.4/css/jquery.dataTables.css" rel="stylesheet">
+<link href="//cdn.jsdelivr.net/jquery.datatables/1.9.4/css/jquery.dataTables_themeroller.css" rel="stylesheet">
+<script src="//datatables.net/download/build/nightly/jquery.dataTables.js"></script>
+<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/zhutil.min.js"></script>
+<script>
+    $(document).ready( function() {
+        $('#datatable').dataTable({
+            "sDom": "<'row'<'span6'f><'span6'i>r>t",
+            "sPaginationType": "bootstrap",
+            "sScrollY": "400px",
+            "bPaginate": false,
+            "aaSorting": [[0, "desc"]]
+        });
+        $('.price').each(function(index,ele){
+            var number = $(ele).text()
+            zh_number = zhutil.approximate(number, {base: '億', extra_decimal: 2});
+            $(ele).replaceWith(zh_number)
+        })
+        $('.area').each(function(index,ele){
+            var number = $(ele).text()
+            , zh_number = zhutil.approximate(number, {base: '萬', extra_decimal: 2});
+            $(ele).replaceWith(zh_number)
+        })
+        $('#url_property').addClass("btn-info");
+    });
+</script>
+{{ block.super }}
+{% endblock script %}

@@ -132,7 +132,8 @@ def personal_property_summary(value, arg):
             'cht': u'存款'
         }
     }
-    return attribute.get(value).get(arg)
+    if attribute.get(value):
+        return attribute.get(value).get(arg)
 
 @register.filter(name='vote_result')
 def vote_result(value, arg):
