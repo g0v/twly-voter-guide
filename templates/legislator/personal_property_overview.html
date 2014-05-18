@@ -33,7 +33,7 @@
             {% with index=summary.index %}
             {% ifchanged index %}
             </tr><tr>
-                <td style="text-align:center; vertical-align:middle;">{{index|personal_property_summary:'cht'}}</td>
+                <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index=index %}"><b>{{index|personal_property_summary:'cht'}}</b></a></td>
             {% endifchanged %}
             {% if summary.count %}
                 <td style="text-align:center; vertical-align:middle;">

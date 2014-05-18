@@ -9,6 +9,14 @@ from bill.models import Legislator_Bill
 from committees.models import Legislator_Committees
 
 
+class Attendance(models.Model):
+    legislator = models.ForeignKey('legislator.LegislatorDetail')
+    sitting = models.ForeignKey('sittings.Sittings', to_field="uid")
+    category = models.CharField(max_length=100)
+    status = models.CharField(max_length=100)
+    def __unicode__(self):
+        return self.sitting
+
 class Legislator(models.Model):
     uid = models.IntegerField(unique=True)
     name = models.CharField(max_length=50)
@@ -77,6 +85,14 @@ class LegislatorDetail(models.Model):
             return committees[0].committee
     current_committee = property(_current_committee)
 
+    def _ly_absent_count(self):
+        return Attendance.objects.filter(legislator_id=self.id, category='YS', status='absent').count()
+    ly_absent = property(_ly_absent_count)
+
+    def _committee_absent_count(self):
+        return Attendance.objects.filter(legislator_id=self.id, category='committee', status='absent').count()
+    committee_absent = property(_committee_absent_count)
+
 class Platform(models.Model):
     legislator = models.ForeignKey(LegislatorDetail, blank=True, null=True)
     content = models.TextField()
@@ -115,10 +131,3 @@ class FileLog(models.Model):
     def __unicode__(self):
         return self.session
 
-class Attendance(models.Model):
-    legislator = models.ForeignKey(LegislatorDetail)
-    sitting = models.ForeignKey('sittings.Sittings', to_field="uid")
-    category = models.CharField(max_length=100)
-    status = models.CharField(max_length=100)
-    def __unicode__(self):
-        return self.sitting

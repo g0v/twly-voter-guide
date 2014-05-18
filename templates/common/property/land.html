@@ -3,6 +3,7 @@
     <tr style="background-color: #FFEEFF;">
         <th width="10%">申報日期</th>
         <th width="20%">土地坐落</th>
+        <th width="20%">持有土地現值</th>
         <th width="20%">持有面積<br>(平方公尺)</th>
         <th width="10%">總面積<br>(平方公尺)</th>
         <th width="10%">權利範圍(持分)</th>
@@ -18,6 +19,11 @@
     <tr>
         <td>{{obj.date|date:"Y-m-d"}}</td>
         <td>{{obj.name}}</td>
+        {% if obj.market_value %}
+        <td><p class="price">{{obj.market_value}}</p></td>
+        {% else %}
+        <td><p>尚無資料</p></td>
+        {% endif %}
         <td><p class="text-right">{{obj.total|floatformat}}</p></td>
         <td><p class="text-right">{{obj.area}}</p></td>
         <td>{{obj.share_portion}} ({{obj.portion|multiply:100|floatformat}}%)</td>

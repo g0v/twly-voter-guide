@@ -27,7 +27,6 @@
     </h4>
     {% endif %}
     <form action="" method="get" class="form-search" id="form">
-        {% csrf_token %}
         <fieldset>
             <input type="search" name="lyname" id="lyname" class="span2" maxlength="4" placeholder="請輸入立委的姓或名" autofocus rel="tooltip" title="請輸入立委的姓或名">
             <button type="submit" class="btn">Go!</button>

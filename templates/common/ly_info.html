@@ -74,7 +74,7 @@
                 </tr>
                 {% if ly.ad > 7 %}
                 <tr>
-                    <td style="background-color: lightgrey;">法條修正草案數</td>
+                    <td style="background-color: lightgrey;">法條修正案</td>
                     <td>{{ ly.npribill }} 個</td>
                 </tr>
                 <tr>
@@ -89,6 +89,14 @@
                 <tr>
                     <td style="background-color: lightgrey;">脫黨表決</td>
                     <td>{{ly.nconsciencevote}} 次<br>(脫黨投票率{{ly.pconsciencevote|floatformat:2}} %)</td>
+                </tr>
+                <tr>
+                    <td style="background-color: lightgrey;">立法院院會缺席</td>
+                    <td>{{ly.ly_absent}} 次</td>
+                </tr>
+                <tr>
+                    <td style="background-color: lightgrey;">委員會開會缺席</td>
+                    <td>{{ly.committee_absent}} 次</td>
                 </tr>
                 {% for contact in ly.contacts %}
                 <tr>
