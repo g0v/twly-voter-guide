@@ -7,6 +7,14 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
+@register.filter(name='ad_year')
+def ad_year(value):
+    term_end_year = {1:1993, 2:1996, 3:1999, 4:2002, 5:2005, 6:2008, 7:2012, 8:2016}
+    try:
+        value = int(value)
+        return '%s~%s' % (term_end_year.get(value-1, ''), term_end_year.get(value, ''))
+    except Exception, e:
+        return ''
 
 @register.filter(name='personal_property_summary')
 def personal_property_summary(value, arg):

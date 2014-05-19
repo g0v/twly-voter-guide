@@ -1,4 +1,5 @@
 ﻿{% extends "base.html" %}
+{% load ly_extras %}
 {% block right %}
 <div class="row-fluid">
     <div class="span3">
@@ -23,10 +24,10 @@
                     <td style="background-color: lightgrey;">屆期</td>
                     <td>
                         <font class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">第{{ly.ad}}屆<b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>第{{ly.ad}}屆</b><small> {{ly.ad|ad_year}}</small><b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             {% for ad in ly.in_office_ad %}
-                            <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad %}" ><b>第{{ad}}屆</b></a></li>
+                            <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad %}" ><b>第{{ad}}屆</b><small> {{ad|ad_year}}</small></a></li>
                             {% endfor %}
                         </ul>
                         <font>

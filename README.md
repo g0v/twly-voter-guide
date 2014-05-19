@@ -12,7 +12,7 @@ In Ubuntu 12.04 LTS
 sudo apt-get update
 sudo apt-get upgrade
 sudo reboot
-sudo apt-get install git python-pip python-dev python-setuptools postgresql
+sudo apt-get install git python-pip python-dev python-setuptools libpg-dev postgresql
 easy_install virtualenv
 ```
 
