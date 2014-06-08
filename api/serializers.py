@@ -105,6 +105,14 @@ class LegislatorDetailSerializer(serializers.HyperlinkedModelSerializer):
     term_end = fields.Field()
     links = fields.Field()
     social_media = fields.Field()
+    not_vote_count = serializers.Field(source='_not_vote_count')
+    not_vote_percentage = serializers.Field(source='_not_vote_percentage')
+    conscience_vote_count = serializers.Field(source='_conscience_vote_count')
+    conscience_vote_percentage = serializers.Field(source='_conscience_vote_percentage')
+    primary_biller_count = serializers.Field(source='_pribiller_count')
+    primary_proposer_count = serializers.Field(source='_priproposer_count')
+    ly_absent_count = serializers.Field(source='_ly_absent_count')
+    committee_absent_count = serializers.Field(source='_committee_absent_count')
     class Meta:
         model = LegislatorDetail
 
