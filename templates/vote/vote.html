@@ -89,10 +89,12 @@
             $('#vote').addClass('active');
             $("[rel='tooltip']").tooltip();
             $('#county').change(function() {
+                $('#gender').val("");
                 $('.name').css('backgroundColor', '#FFF');
                 $('.' + $(this).val()).css('backgroundColor', '#FF6');
             });
             $('#gender').change(function() {
+                $('#county').val("");
                 $('.name').css('backgroundColor', '#FFF');
                 $('.' + $(this).val()).css('backgroundColor', '#FF6');
             });

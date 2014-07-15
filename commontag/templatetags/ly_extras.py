@@ -11,7 +11,7 @@ register = template.Library()
 
 @register.filter(name='distinct_county')
 def distinct_county(value):
-    return LegislatorDetail.objects.filter(ad=value).exclude(county='').values_list('county', flat=True).distinct()
+    return LegislatorDetail.objects.filter(ad=value).exclude(county='').values_list('county', flat=True).distinct().order_by('county')
 
 @register.filter(name='ad_year')
 def ad_year(value):

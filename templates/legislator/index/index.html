@@ -119,10 +119,12 @@
         });
         $('#progress').val('{{progress}}')
         $('#county').change(function() {
+            $('#gender').val("");
             $('.name').css('backgroundColor', '#FFF');
             $('.' + $(this).val()).css('backgroundColor', '#FF6');
         });
         $('#gender').change(function() {
+            $('#county').val("");
             $('.name').css('backgroundColor', '#FFF');
             $('.' + $(this).val()).css('backgroundColor', '#FF6');
         });
