@@ -1,0 +1,14 @@
+{% load ly_extras %}
+<form class="form-inline">
+    <select id='county'>
+        <option value="">標註選區</option>
+        {% for fragment in ad|distinct_county %}
+        <option value="{{fragment}}">{{fragment}}</option>
+        {% endfor %}
+    </select>
+    <select id='gender'>
+        <option value="">標註性別</option>
+        <option value="男">男</option>
+        <option value="女">女</option>
+    </select>
+</form>

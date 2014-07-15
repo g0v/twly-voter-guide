@@ -196,7 +196,7 @@ table{max-width:100%;background-color:transparent;border-collapse:collapse;borde
 .table thead th{text-align:center;vertical-align:middle;}
 .table caption+thead tr:first-child th,.table caption+thead tr:first-child td,.table colgroup+thead tr:first-child th,.table colgroup+thead tr:first-child td,.table thead:first-child tr:first-child th,.table thead:first-child tr:first-child td{border-top:0;}
 .table.zebra tbody tr:nth-child(2n) td {background: white;}
-.table.zebra tbody tr:nth-child(2n+1) td {background: #DDDDDD;}
+.table.zebra tbody tr:nth-child(2n+1) td {background: #EEEEEE;}
 table tbody+tbody{border-top:2px solid #dddddd;}
 .table .table{background-color:#ffffff;}
 .table-condensed th,.table-condensed td{padding:4px 5px;}

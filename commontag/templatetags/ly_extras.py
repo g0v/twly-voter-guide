@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 import re
-from django.utils import simplejson
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django import template
 from django.utils.safestring import mark_safe
+from legislator.models import LegislatorDetail
 
 
 register = template.Library()
+
+@register.filter(name='distinct_county')
+def distinct_county(value):
+    return LegislatorDetail.objects.filter(ad=value).exclude(county='').values_list('county', flat=True).distinct()
 
 @register.filter(name='ad_year')
 def ad_year(value):
@@ -182,7 +188,7 @@ def divide(value, arg):
 
 @register.filter(name='as_json')
 def as_json(data):
-    return mark_safe(simplejson.dumps(data))
+    return mark_safe(json.dumps(data, cls=DjangoJSONEncoder))
 
 @register.filter(name='replace')
 def replace(value, arg):

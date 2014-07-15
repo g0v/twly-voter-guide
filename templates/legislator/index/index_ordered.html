@@ -32,7 +32,7 @@
         <tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
             <td></td>
         {% endif %}
-        <td>
+        <td class="name {{ly.county}} {{ly.gender}}">
             {% if index == 'biller' %}
             <a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="草案{{ly.totalNum}}個">
             {% elif index == 'conscience_vote' %}
@@ -51,7 +51,7 @@
         {% if forloop.counter0|divisibleby:col and forloop.counter0 != 0 %}
         </tr>
         {% endif %}
-            <td style="background-color: #FFCCFF;">
+            <td class="name {{ly.county}} {{ly.gender}}" style="background-color: #FFCCFF;">
                 {% if index == 'biller' %}<a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="草案0個">
                 {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" rel="tooltip" title="脫黨投票0次">
                 {% else %}<a href="{% url 'legislator:voter_detail' ly.legislator_id %}" rel="tooltip" title="沒投票0次">

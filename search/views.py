@@ -18,6 +18,6 @@ def keyword_been_searched(keyword, category):
 
 def keyword_normalize(request, keyword_url):
     if 'keyword' in request.GET:
-        return re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+-=,./<>?;:\'\"\[\]{}\|()]',' ',request.GET['keyword']).strip()
+        return re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+\-=,./<>?;:\'"\[\]{}\|()]',' ',request.GET['keyword']).strip()
     elif keyword_url:
         return keyword_url.strip()

@@ -33,6 +33,7 @@
             <button type="submit" class="btn">Go!</button>
         </fieldset>
     </form>
+    {% include "common/highlight.html" with ad=ad %}
 </div>
 {% block ly_table %}
 {% endblock ly_table %}
@@ -117,6 +118,14 @@
             $("#form_bill").trigger('submit');
         });
         $('#progress').val('{{progress}}')
+        $('#county').change(function() {
+            $('.name').css('backgroundColor', '#FFF');
+            $('.' + $(this).val()).css('backgroundColor', '#FF6');
+        });
+        $('#gender').change(function() {
+            $('.name').css('backgroundColor', '#FFF');
+            $('.' + $(this).val()).css('backgroundColor', '#FF6');
+        });
     });
 </script>
 {% endblock script %}

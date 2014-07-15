@@ -31,9 +31,10 @@
             <span class="badge badge-info"><font class="lead">原文</font></span><br>
             <p>{{ vote.content|linebreaksbr }}</p>
         </div>
-        {% endwith %}
     </div><!--end: span6 -->
     <div class="span6">
+        {% include "common/highlight.html" with ad=vote.sitting.ad %}
+        {% endwith %}
         {% regroup vote by decision as ly_list %}
         <table class="table table-bordered table-condensed">
             {% with col=20 %}
@@ -63,7 +64,7 @@
                 </tr><tr>
                 {% endif %}
                 {% with ly=fragment.legislator %}
-                    <td><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=vote.0.vote.sitting.ad %}" rel="tooltip" title="這位立委的表決投票紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
+                    <td class="name {{ly.county}} {{ly.gender}}"><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=vote.0.vote.sitting.ad %}" rel="tooltip" title="這位立委的表決投票紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
                 {% endwith %}
                 {% endfor %}
             {% endfor %}
@@ -76,9 +77,25 @@
     </div><!--end: span6 -->
 </div><!--end: row-fluid -->
 {% endblock right %}
+
 {% block backtotop %}
-{{ block.super }}
+    {{ block.super }}
 {% endblock backtotop %}
+
 {% block script %}
-{% include "vote/vote_d3_pie_chart.html" %}
+    {% include "vote/vote_d3_pie_chart.html" %}
+    <script>
+        $(document).ready( function() {
+            $('#vote').addClass('active');
+            $("[rel='tooltip']").tooltip();
+            $('#county').change(function() {
+                $('.name').css('backgroundColor', '#FFF');
+                $('.' + $(this).val()).css('backgroundColor', '#FF6');
+            });
+            $('#gender').change(function() {
+                $('.name').css('backgroundColor', '#FFF');
+                $('.' + $(this).val()).css('backgroundColor', '#FF6');
+            });
+        });
+    </script>
 {% endblock script %}

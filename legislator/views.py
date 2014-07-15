@@ -374,38 +374,3 @@ def political_contributions_report(request, index='in_party', compare='conscienc
                                          .order_by('-totalNum')\
                                          .annotate(compare=Sum('politicalcontributions__%s' % compare))
     return render(request,'legislator/chart_report_for_political_contribution.html', {'compare':compare,'legend':legend,'party':party,'index':index,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj,'data':list(ly_obj.values('name', 'totalNum', 'compare')),'pc_field':sorted(pc_field.items()),'index_field':index_field})
-
-'''
-def list_union(month_list, obj_q):
-    obj = []
-    for e in month_list:
-        match = False
-        for q in obj_q:
-            if e.year == q['year'] and e.month == q['month']:
-                obj.append({'year':e.year,'month':e.month,'n':q['id__count']})
-                match = True
-                break
-        if not match:
-            obj.append({'year':e.year,'month':e.month,'n':0})
-    return obj
-
-def chart_personal_report(request, legislator_id, index='proposal'):
-    ly = LegislatorDetail.objects.get(ad=8, legislator_id=legislator_id)
-    if index == 'proposal':
-        query_p = Q(date__gte=ly.term_start,legislator_proposal__priproposer=True)
-        compare_obj = Proposal.objects.filter(query_p & Q(proposer__in_office=True)).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        obj_q = Proposal.objects.filter(query_p & Q(proposer__id=ly.id)).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        month_list = Proposal.objects.filter(date__gte=ly.term_start).dates('date','month')
-        obj = list_union(month_list, obj_q)
-    elif index == 'vote':
-        compare_obj = Vote.objects.filter(date__gte=ly.term_start).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        obj_q = Vote.objects.filter(date__gte=ly.term_start, voter__id=ly.id, legislator_vote__decision__isnull=False).extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        month_list = Vote.objects.filter(date__gte=ly.term_start).dates('date','month')
-        obj = list_union(month_list, obj_q)
-    elif index == 'ly':
-        compare_obj = Attendance.objects.filter(legislator_id=ly.id, category='YS').extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        obj_q = Attendance.objects.filter(legislator_id=ly.id, category='YS', status='present').extra(select={'year': "EXTRACT(year FROM date)", 'month': "EXTRACT(month from date)"}).values('year','month').annotate(Count('id', distinct=True)).order_by('year','month')
-        month_list = Attendance.objects.filter(date__gte=ly.term_start, category='YS').dates('date','month')
-        obj = list_union(month_list, obj_q)
-    return render(request,'legislator/chart_personal_report.html', {'index':index,'ly':ly,'obj':obj,'compare_obj':compare_obj} )
-'''
