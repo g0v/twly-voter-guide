@@ -55,7 +55,7 @@
         {% else %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=notvote"><font color="#996600">沒有投票</font></a>&nbsp;,&nbsp;
         {% endif %}
     {% empty %}
-        {% if ly.ad > 6 %}
+        {% if ly.ad > 5 %}
             {% if index == 'conscience' %}<p class="lead text-error">沒有任何脫黨投票紀錄</p>
             {% else %}<p class="text-error">沒有參加任何表決</p>
             {% endif %}

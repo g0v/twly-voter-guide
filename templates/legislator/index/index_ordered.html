@@ -53,8 +53,8 @@
         {% endif %}
             <td class="name {{ly.county}} {{ly.gender}}" style="background-color: #FFCCFF;">
                 {% if index == 'biller' %}<a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="草案0個">
-                {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id index='conscience' %}" rel="tooltip" title="脫黨投票0次">
-                {% else %}<a href="{% url 'legislator:voter_detail' ly.legislator_id %}" rel="tooltip" title="沒投票0次">
+                {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad index='conscience' %}" rel="tooltip" title="脫黨投票0次">
+                {% else %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ad %}" rel="tooltip" title="沒投票0次">
                 {% endif %}
                 {% include "common/ly_color_by_party.html" %}
                 </a>

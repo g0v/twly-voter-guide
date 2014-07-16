@@ -15,8 +15,8 @@
         <ul class="dropdown-menu">
             <li><a href="{% url 'legislator:index' index %}" ><b>第8屆</b><small> 2012~2016</small></a></li>
             <li><a href="{% url 'legislator:index' index=index ad=7 %}" ><b>第7屆</b><small> 2008~2012</small></a></li>
-            {% if index == 'district' %}
             <li><a href="{% url 'legislator:index' index=index ad=6 %}" ><b>第6屆</b><small> 2005~2008</small></a></li>
+            {% if index == 'district' %}
             <li><a href="{% url 'legislator:index' index=index ad=5 %}" ><b>第5屆</b><small> 2002~2005</small></a></li>
             <li><a href="{% url 'legislator:index' index=index ad=4 %}" ><b>第4屆</b><small> 1999~2002</small></a></li>
             <li><a href="{% url 'legislator:index' index=index ad=3 %}" ><b>第3屆</b><small> 1996~1999</small></a></li>
@@ -55,7 +55,13 @@
         <td></td>
         {% endif %}
         <td>{{ly.term_end.date|date:"Y-m-d"}}</td>
-        <td>{{ly.term_end.reason}}</td>
+        <td>
+        {% if ly.term_end.reason %}
+            {{ly.term_end.reason}}
+        {% else %}
+            無資料
+        {% endif %}
+        </td>
     </tr>
     {% endfor %}
 </table>
