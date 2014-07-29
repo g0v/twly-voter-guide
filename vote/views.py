@@ -7,7 +7,7 @@ from .models import Vote, Legislator_Vote
 from search.views import keyword_list, keyword_been_searched, keyword_normalize
 
 
-def votes(request, keyword_url, index='normal'):
+def votes(request, index='normal'):
     result = None
     if index == 'conscience':
         query = Q(conflict=True)
@@ -18,7 +18,7 @@ def votes(request, keyword_url, index='normal'):
         result = request.GET['result']
         query = query & Q(result=result)
     #<--
-    keyword = keyword_normalize(request, keyword_url)
+    keyword = keyword_normalize(request.GET)
     if keyword:
         votes = Vote.objects.filter(query & reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-sitting__date', 'vote_seq')
         if votes:

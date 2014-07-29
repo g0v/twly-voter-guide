@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import operator
 import re
-from operator import itemgetter
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
@@ -205,7 +204,7 @@ def personal_political_contributions(request, legislator_id, ad):
         print e
     return render(request,'legislator/personal_politicalcontributions.html', {'ly':ly,'data_total':data_total,'data_income':data_income,'data_expenses':data_expenses})
 
-def proposer_detail(request, legislator_id, keyword_url):
+def proposer_detail(request, legislator_id):
     proposertype = False
     ly = get_legislator(legislator_id, ad=8)
     if not ly:
@@ -215,7 +214,7 @@ def proposer_detail(request, legislator_id, keyword_url):
         proposertype = request.GET['proposertype']
         if proposertype:
             query = Q(proposer__id=ly.id)
-    keyword = keyword_normalize(request, keyword_url)
+    keyword = keyword_normalize(request.GET)
     if keyword:
         proposal = Proposal.objects.filter(query & reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-sitting__date')
         if proposal:
@@ -224,7 +223,7 @@ def proposer_detail(request, legislator_id, keyword_url):
         proposal = Proposal.objects.filter(query).order_by('-sitting__date')
     return render(request,'legislator/proposer_detail.html', {'keyword_obj':keyword_list(1),'proposal':proposal,'ly':ly,'keyword':keyword,'proposertype':proposertype})
 
-def voter_detail(request, legislator_id, index, keyword_url, ad):
+def voter_detail(request, legislator_id, index, ad):
     votes, notvote, query = None, False, Q()
     ad = ad or 8
     ly = get_legislator(legislator_id, ad)
@@ -243,7 +242,7 @@ def voter_detail(request, legislator_id, index, keyword_url, ad):
     else:
         query = query & Q(legislator_id=ly.id)
     #<--
-    keyword = keyword_normalize(request, keyword_url)
+    keyword = keyword_normalize(request.GET)
     if keyword:
         votes = Legislator_Vote.objects.select_related().filter(query & reduce(operator.and_, (Q(vote__content__icontains=x) for x in keyword.split()))).order_by('-vote__sitting__date')
         if votes:
@@ -253,7 +252,7 @@ def voter_detail(request, legislator_id, index, keyword_url, ad):
     vote_addup = votes.values('decision').annotate(totalNum=Count('vote', distinct=True)).order_by('-decision')
     return render(request,'legislator/voter_detail.html', {'keyword_obj':keyword_list(2),'ly':ly,'index':index,'votes':votes,'keyword':keyword,'vote_addup':vote_addup,'notvote':notvote})
 
-def biller_detail(request, legislator_id, keyword_url):
+def biller_detail(request, legislator_id):
     proposertype = False
     ly = get_legislator(legislator_id, ad=8)
     if not ly:
@@ -264,7 +263,7 @@ def biller_detail(request, legislator_id, keyword_url):
         if proposertype:
             query = Q(proposer__id=ly.id)
     bills = Bill.objects.filter(query)
-    keyword = keyword_normalize(request, keyword_url)
+    keyword = keyword_normalize(request.GET)
     if keyword:
         bills = bills.filter(query & reduce(operator.and_, (Q(abstract__icontains=x) for x in keyword.split())))
         if bills:

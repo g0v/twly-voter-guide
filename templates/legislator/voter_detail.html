@@ -23,7 +23,7 @@
     <h4>熱門：
         {% for keyword in keyword_obj %}
         {% if forloop.counter0 < 5 %}
-        <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad keyword_url=keyword %}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
+        <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
         {% endif %}
         {% endfor %}
     </h4>

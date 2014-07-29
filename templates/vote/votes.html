@@ -18,7 +18,7 @@
     <h4>熱門：
         {% for keyword in keyword_obj %}
         {% if forloop.counter0 < 5 %}
-        <a href="{% url 'vote:votes' keyword_url=keyword index=index %}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
+        <a href="{% url 'vote:votes' index=index %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
         {% endif %}
         {% endfor %}
     </h4>
@@ -29,8 +29,8 @@
             <span>以通過、不通過分類</span> <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li><a href="{% url 'vote:votes' keyword_url='' index=index %}?result=Passed"><font color="#66CC66">通過</font></a></li>
-            <li><a href="{% url 'vote:votes' keyword_url='' index=index %}?result=Not Passed"><font color="#FF66CC">不通過</font></a></li>
+            <li><a href="{% url 'vote:votes' index=index %}?result=Passed"><font color="#66CC66">通過</font></a></li>
+            <li><a href="{% url 'vote:votes' index=index %}?result=Not Passed"><font color="#FF66CC">不通過</font></a></li>
         </ul>
     </div>
     {% endif %}

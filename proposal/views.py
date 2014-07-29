@@ -8,7 +8,7 @@ from search.models import Keyword
 from search.views import keyword_list, keyword_been_searched, keyword_normalize
 
 
-def proposal(request,proposal_id):
+def proposal(request, proposal_id):
     try:
         proposal = Proposal.objects.select_related().filter(uid=proposal_id)[0]
     except Exception, e:
@@ -16,8 +16,8 @@ def proposal(request,proposal_id):
         return HttpResponseRedirect('/')
     return render(request,'proposal/proposal.html', {'proposal': proposal})
 
-def proposals(request,keyword_url):
-    keyword = keyword_normalize(request, keyword_url)
+def proposals(request):
+    keyword = keyword_normalize(request.GET)
     if keyword:
         proposal = Proposal.objects.filter(reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-sitting__date')
         if proposal:
