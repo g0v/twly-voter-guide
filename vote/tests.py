@@ -17,7 +17,7 @@ class VoteTest(TestCase):
     def test_votes(self):
         for arg in ['normal', 'conscience']:
             for keyword in [' ', u'test']:
-                response = self.client.get(reverse('vote:votes', kwargs={"index": arg, "keyword_url": keyword}))
+                response = self.client.get(reverse('vote:votes', kwargs={"index": arg}))
                 self.assertEqual(response.status_code, 200)
 
     def test_vote(self):

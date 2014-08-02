@@ -167,26 +167,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <b>{{ ly.name }}</b>的&nbsp;
-                <div class="btn-group">
-                    <a id='url_property' class="btn btn-large dropdown-toggle" href="#" data-toggle="dropdown">財產 <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='overview' %}"><b>總覽</b></a></li>
-                        <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='stock' %}"><b>股票</b></a></li>
-                        <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='land' %}"><b>土地</b></a></li>
-                        <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='building' %}"><b>建物</b></a></li>
-                        <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='car' %}"><b>汽車</b></a></li>
-                        <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='cash' %}"><b>現金</b></a></li>
-                        <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='deposit' %}"><b>存款</b></a></li>
-                        <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='bonds' %}"><b>債券</b></a></li>
-                        <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='fund' %}"><b>基金</b></a></li>
-                        <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='otherbonds' %}"><b>其他有價證券</b></a></li>
-                        <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='antique' %}"><b>具有相當價值之財產</b></a></li>
-                        <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='insurance' %}"><b>保險</b></a></li>
-                        <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='claim' %}"><b>債權</b></a></li>
-                        <li style="background-color: #EEEEEE;"><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='debt' %}"><b>債務</b></a></li>
-                        <li><a href="{% url 'legislator:personal_property' legislator_id=ly.legislator_id index='investment' %}"><b>事業投資</b></a></li>
-                    </ul>
-                </div>
+                <a id='url_property' class="btn btn-large" href="http://sunshine.cy.g0v.tw/people/{{ly.name}}/property/overview/" target="_blank">個人財產申報</a>
                 <div class="btn-group">
                     <a id='url_vote' class="btn btn-large dropdown-toggle" href="#" data-toggle="dropdown">投票紀錄 <span class="caret"></span></a>
                     <ul class="dropdown-menu">

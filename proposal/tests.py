@@ -16,7 +16,7 @@ class ProposalTest(TestCase):
 
     def test_proposals(self):
         for keyword in [' ', u'test']:
-            response = self.client.get(reverse('proposal:proposals', kwargs={"keyword_url": keyword}))
+            response = self.client.get(reverse('proposal:proposals'))
             self.assertEqual(response.status_code, 200)
 
     def test_proposal(self):

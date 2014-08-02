@@ -46,10 +46,10 @@ class LegislatorTest(TestCase):
             response = self.client.get(reverse('legislator:%s' % arg, kwargs={"legislator_id": 0}))
             self.assertEqual(response.status_code, 302)
         for arg in ['biller_detail', 'proposer_detail']:
-            response = self.client.get("%s?proposertype=on" % reverse('legislator:%s' % arg, kwargs={"legislator_id": 1, "keyword_url": "test"}))
+            response = self.client.get("%s?proposertype=on" % reverse('legislator:%s' % arg, kwargs={"legislator_id": 1}))
             self.assertEqual(response.status_code, 200)
         for arg in ['', 'conscience']:
-            response = self.client.get("%s?notvote=on" % reverse('legislator:voter_detail', kwargs={"index": arg, "legislator_id": 1, "keyword_url": "test"}))
+            response = self.client.get("%s?notvote=on" % reverse('legislator:voter_detail', kwargs={"index": arg, "legislator_id": 1}))
             self.assertEqual(response.status_code, 200)
 
     def test_chart_report(self):

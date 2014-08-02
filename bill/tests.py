@@ -12,5 +12,5 @@ class BillTest(TestCase):
     def test(self):
         for arg in ['normal', 'rejected']:
             for keyword in [' ', u'test']:
-                response = self.client.get(reverse('bill:bills', kwargs={"index": arg, "keyword_url": keyword}))
+                response = self.client.get(reverse('bill:bills', kwargs={"index": arg}))
                 self.assertEqual(response.status_code, 200)
