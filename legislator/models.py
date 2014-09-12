@@ -18,6 +18,7 @@ class Attendance(models.Model):
         return self.sitting
 
 class Legislator(models.Model):
+    id = models.CharField(max_length=32, primary_key=True)
     uid = models.IntegerField(unique=True)
     name = models.CharField(max_length=50)
     former_names = models.CharField(max_length=100, blank=True, null=True)
@@ -102,7 +103,7 @@ class Platform(models.Model):
         return self.content
 
 class PoliticalContributions(models.Model):
-    legislator = models.ForeignKey(LegislatorDetail)
+    legislator = models.ForeignKey(LegislatorDetail, related_name='politicalcontributions')
     in_individual = models.IntegerField(blank=True, null=True)
     in_profit = models.IntegerField(blank=True, null=True)
     in_party = models.IntegerField(blank=True, null=True)

@@ -2,45 +2,12 @@
 from rest_framework import serializers
 from . import fields
 from legislator.models import Legislator, LegislatorDetail, Attendance, Platform, PoliticalContributions
-from property.models import Stock, Land, Building, Car, Cash, Deposit, Aircraft, Boat
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from vote.models import Vote, Legislator_Vote
 from proposal.models import Proposal, Legislator_Proposal
 from bill.models import Bill, Legislator_Bill
 
-
-class StockSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Stock
-
-class LandSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Land
-
-class BuildingSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Building
-
-class CarSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Car
-
-class CashSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Cash
-
-class DepositSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Deposit
-
-class AircraftSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Aircraft
-
-class BoatSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Boat
 
 class PoliticalContributionsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -100,6 +67,7 @@ class SittingsSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('uid', 'name', 'committee', 'date', 'ad', 'session', 'votes')
 
 class LegislatorDetailSerializer(serializers.HyperlinkedModelSerializer):
+    politicalcontributions = PoliticalContributionsSerializer(many=True)
     #votes = Legislator_VoteSerializer(many=True)
     contacts = fields.Field()
     term_end = fields.Field()
