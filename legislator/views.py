@@ -85,12 +85,6 @@ def index_committee(request, index):
     ly_list = Legislator_Committees.objects.select_related().filter(ad=8, committee=index).order_by('-session', 'legislator__party', 'legislator__name')
     return render(request,'legislator/committee.html', {'ly_list': ly_list,'index':index})
 
-def personal_property(request, legislator_id, index):
-    ly = Legislator.objects.filter(uid=legislator_id)
-    if not ly:
-        return HttpResponseRedirect('/')
-    return HttpResponseRedirect('http://sunshine.cy.g0v.tw/people/%s/property/overview/' % ly.name)
-
 def personal_political_contributions(request, legislator_id, ad):
     data_income, data_expenses, data_total = None, None, None
     ad = ad or 8
