@@ -14,6 +14,8 @@
 {% endblock %}
 
 {% block right %}
+    <div class="span1">
+    </div>
     <div class="span10">
         {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全...空格有交集效果" %}
         {% if keyword_obj and index != 'conscience' %}
@@ -49,7 +51,7 @@
         </div>
         {% if votes %}
         {% load pagination_tags %}
-        {% autopaginate votes 10 %}
+        {% autopaginate votes 1000 %}
         {% paginate %}
         <table class="table table-bordered zebra" >
             <thead>
@@ -93,6 +95,8 @@
         </table>
         {% paginate %}
         {% endif %}
+    </div>
+    <div class="span1">
     </div>
 {% endblock right %}
 

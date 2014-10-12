@@ -142,7 +142,6 @@ INSTALLED_APPS = (
     'proposal',
     'bill',
     'search',
-    'property',
     'commontag',
     'pagination',
     'rest_framework',
@@ -151,7 +150,6 @@ INSTALLED_APPS = (
 )
 
 REST_FRAMEWORK = {
-    #'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
     'PAGINATE_BY': 10,
     'DEFAULT_RENDERER_CLASSES': (
