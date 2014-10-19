@@ -1,7 +1,8 @@
 twly-voter-guide [![Build Status](https://travis-ci.org/g0v/twly-voter-guide.png?branch=master)](https://travis-ci.org/g0v/twly-voter-guide)
 ================
 
-[立委投票指南](http://vote.ly.g0v.tw/)     
+[立委投票指南網站](http://vote.ly.g0v.tw/)     
+[Android App 開發](https://github.com/irisshu/g0v-twly-voter-guide-android)
 
 [日本語インストールドキュメント](https://github.com/g0v/twly-voter-guide/blob/master/README.ja.md) - by @nyampire
 
@@ -21,6 +22,10 @@ easy_install virtualenv
 
 ```
 sudo -u <username> psql -c "ALTER USER <username> with encrypted PASSWORD 'put_your_password_here';"
+```
+eg.
+```
+sudo -u postgres psql -c "ALTER USER postgres with encrypted PASSWORD 'my_password';"
 ```
 
 ## Clone source code from GitHub to local
