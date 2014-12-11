@@ -35,13 +35,15 @@
 {% include "legislator/d3/personal_politicalcontributions_in_pie_chart.html" %}
 {% include "legislator/d3/personal_politicalcontributions_out_pie_chart.html" %}
 <script>
-    $('.price').each(function(index,ele){
-        var number = $(ele).text()
-        zh_number = zhutil.approximate(number, {base: '萬', extra_decimal: 2});
-        $(ele).replaceWith(zh_number)
-    })
     $(document).ready( function() {
         $('#url_polticalcontributions').addClass("btn-info");
+        $('.price').each(function(index,ele){
+            var number = $(ele).text()
+            zh_number = zhutil.approximate(number, {base: '萬', extra_decimal: 2});
+            $(ele).replaceWith(zh_number)
+        });
+        relax_in();
+        relax_out();
     });
 </script>
 {{ block.super }}
