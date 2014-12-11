@@ -85,10 +85,6 @@ class LegislatorDetail(models.Model):
         return Attendance.objects.filter(legislator_id=self.id, category='YS', status='absent').count()
     ly_absent = property(_ly_absent_count)
 
-    def _committee_absent_count(self):
-        return Attendance.objects.filter(legislator_id=self.id, category='committee', status='absent').count()
-    committee_absent = property(_committee_absent_count)
-
 class Platform(models.Model):
     legislator = models.ForeignKey(LegislatorDetail, blank=True, null=True)
     content = models.TextField()
