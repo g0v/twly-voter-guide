@@ -39,13 +39,13 @@ class LegislatorTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_legislator_personal_page(self):
-        for arg in ['biller_detail', 'proposer_detail', 'voter_detail', 'platformer_detail']:
+        for arg in ['biller_detail', 'voter_detail', 'platformer_detail']:
             response = self.client.get(reverse('legislator:%s' % arg, kwargs={"legislator_id": 1}))
             self.assertEqual(response.status_code, 200)
             # legislator_id not exist case
             response = self.client.get(reverse('legislator:%s' % arg, kwargs={"legislator_id": 0}))
             self.assertEqual(response.status_code, 302)
-        for arg in ['biller_detail', 'proposer_detail']:
+        for arg in ['biller_detail']:
             response = self.client.get("%s?proposertype=on" % reverse('legislator:%s' % arg, kwargs={"legislator_id": 1}))
             self.assertEqual(response.status_code, 200)
         for arg in ['', 'conscience']:
@@ -53,6 +53,6 @@ class LegislatorTest(TestCase):
             self.assertEqual(response.status_code, 200)
 
     def test_chart_report(self):
-        for arg in ['biller', 'conscience_vote', 'vote', 'proposal', 'ly', 'committee', 'attend_committee']:
+        for arg in ['biller', 'conscience_vote', 'vote', 'ly']:
             response = self.client.get(reverse('legislator:chart_report', kwargs={"index": arg}))
             self.assertEqual(response.status_code, 200)

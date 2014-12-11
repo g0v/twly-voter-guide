@@ -11,7 +11,7 @@ class VoteTest(TestCase):
         Legislator.objects.create(uid=1, name=u"王金平")
         LegislatorDetail.objects.create(legislator_id=1, ad=8, name=u'王金平', party=u'中國國民黨', caucus=u'中國國民黨', constituency='全國不分區', county='全國不分區', in_office=True, hits=0)
         Sittings.objects.create(uid="08-01-YS-01", date="2012-02-01", ad=8, session=1)
-        Vote.objects.create(uid="08-01-YS-01-001", sitting_id="08-01-YS-01", vote_seq="001", content="test content", hits=0, likes=0, dislikes=0, results={"abstain": 0, "not_voting": 4, "total": 113, "disagree": 46, "agree": 63})
+        Vote.objects.create(uid="08-01-YS-01-001", sitting_id="08-01-YS-01", vote_seq="001", content="test content", results={"abstain": 0, "not_voting": 4, "total": 113, "disagree": 46, "agree": 63})
         Legislator_Vote.objects.create(legislator_id=1, vote_id="08-01-YS-01-001", decision=1)
 
     def test_votes(self):
