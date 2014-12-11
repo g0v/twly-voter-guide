@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from json_field import JSONField
 
 class Sittings(models.Model):
     uid = models.CharField(max_length=100, unique=True)
@@ -8,5 +9,6 @@ class Sittings(models.Model):
     date = models.DateField()
     ad = models.IntegerField()
     session = models.IntegerField()
+    links = JSONField(null=True)
     def __unicode__(self):
         return self.name
