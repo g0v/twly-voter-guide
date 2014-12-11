@@ -5,7 +5,6 @@ from legislator.models import Legislator, LegislatorDetail, Attendance, Platform
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from vote.models import Vote, Legislator_Vote
-from proposal.models import Proposal, Legislator_Proposal
 from bill.models import Bill, Legislator_Bill
 
 
@@ -21,15 +20,6 @@ class CommitteesSerializer(serializers.HyperlinkedModelSerializer):
 class Legislator_CommitteesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Legislator_Committees
-
-class Legislator_ProposalSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Legislator_Proposal
-
-class ProposalSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Proposal
-        fields = ('proposer', 'uid', 'sitting', 'proposal_seq', 'content')
 
 class Legislator_VoteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

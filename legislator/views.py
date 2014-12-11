@@ -6,7 +6,6 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
 from .models import Legislator, LegislatorDetail, Platform, Attendance, PoliticalContributions
 from vote.models import Vote, Legislator_Vote
-from proposal.models import Proposal
 from bill.models import Bill
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
@@ -98,25 +97,6 @@ def personal_political_contributions(request, legislator_id, ad):
         print e
     return render(request,'legislator/personal_politicalcontributions.html', {'ly':ly,'data_total':data_total,'data_income':data_income,'data_expenses':data_expenses})
 
-def proposer_detail(request, legislator_id):
-    proposertype = False
-    ly = get_legislator(legislator_id, ad=8)
-    if not ly:
-        return HttpResponseRedirect('/')
-    query = Q(proposer__id=ly.id, legislator_proposal__priproposer=True)
-    if 'proposertype' in request.GET:
-        proposertype = request.GET['proposertype']
-        if proposertype:
-            query = Q(proposer__id=ly.id)
-    keyword = keyword_normalize(request.GET)
-    if keyword:
-        proposal = Proposal.objects.filter(query & reduce(operator.and_, (Q(content__icontains=x) for x in keyword.split()))).order_by('-sitting__date')
-        if proposal:
-            keyword_been_searched(keyword, 1)
-    else:
-        proposal = Proposal.objects.filter(query).order_by('-sitting__date')
-    return render(request,'legislator/proposer_detail.html', {'keyword_obj':keyword_list(1),'proposal':proposal,'ly':ly,'keyword':keyword,'proposertype':proposertype})
-
 def voter_detail(request, legislator_id, index, ad):
     votes, notvote, query = None, False, Q()
     ad = ad or 8
@@ -187,21 +167,10 @@ def chart_report(request, ad, index='vote'):
         compare = Vote.objects.filter(sitting__ad=ad).count()
         ly_obj = LegislatorDetail.objects.filter(ad=ad, in_office=True, votes__conflict=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')[:10]
         title, content = u'脫黨投票次數前十名', u'脫黨投票不一定較好，可能該立委是憑良心投票，也可能是受財團、企業影響所致，還請點選該立委觀看其脫黨投票的表決內容再作論定。'
-    elif index == 'attend_committee':
-        compare = "{0:.2f}".format(Attendance.objects.filter(category='committee', status='attend').count()/116.0)
-        ly_obj = LegislatorDetail.objects.filter(ad=8, in_office=True, attendance__category='committee', attendance__status='attend').annotate(totalNum=Count('attendance__id')).order_by('-totalNum','party')[:10]
-        title, content = u'委員會開會列席(旁聽)次數前十名', u'委員非該委員會仍列席參加的次數排行(量化數據不能代表好壞只能參考)'
     elif index == 'biller':
         compare = "{0:.2f}".format(Bill.objects.count()/116.0)
         ly_obj = LegislatorDetail.objects.filter(ad=8, in_office=True, legislator_bill__priproposer=True, legislator_bill__petition=False).annotate(totalNum=Count('legislator_bill__id')).order_by('-totalNum','party')[:10]
         title, content = u'法條修正草案數前十名', u'量化數據不能代表好壞只能參考，修正草案數多不一定較好，還請點選該立委觀看其修正草案的內容再作論定。'
-    elif index == 'proposal':
-        compare = "{0:.2f}".format(Proposal.objects.count()/116.0)
-        ly_obj = LegislatorDetail.objects.filter(ad=8, in_office=True, legislator_proposal__priproposer=True).annotate(totalNum=Count('legislator_proposal__id')).order_by('-totalNum','party')[:10]
-        title, content = u'附帶決議、臨時提案數前十名', u'量化數據不能代表好壞只能參考，提案數多不一定較好，還請點選該立委觀看其提案的內容再作論定。'
-    elif index == 'committee':
-        ly_obj = LegislatorDetail.objects.filter(ad=8, in_office=True, attendance__category='committee', attendance__status='absent').annotate(totalNum=Count('attendance__id')).order_by('-totalNum','party')[:10]
-        title, content = u'委員會開會缺席前十名', u'委員會是法案推行的第一關卡，立委需在委員會提出法案的增修(點選立委名字可看立委個人提案)'
     elif index == 'ly':
         compare = Sittings.objects.filter(ad=ad, committee='').count()
         ly_obj = LegislatorDetail.objects.filter(ad=ad, in_office=True, attendance__category='YS', attendance__status='absent').annotate(totalNum=Count('attendance__id')).order_by('-totalNum','party')[:10]
@@ -239,10 +208,6 @@ def political_contributions_report(request, index='in_party', compare='conscienc
         "vote": {
             "legend": u'表決缺席次數',
             "query": 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.decision isnull AND vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id'
-        },
-        "proposal": {
-            "legend": u'附帶決議、臨時提案數',
-            "query": 'SELECT COUNT(*) FROM proposal_legislator_proposal WHERE proposal_legislator_proposal.priproposer=True AND proposal_legislator_proposal.legislator_id = legislator_legislatordetail.id GROUP BY proposal_legislator_proposal.legislator_id'
         },
         "biller": {
             "legend": u'法條修正草案數',

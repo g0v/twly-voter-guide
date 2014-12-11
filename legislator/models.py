@@ -4,7 +4,6 @@ from django.db import models
 from django.utils import timezone
 from json_field import JSONField
 from vote.models import Vote, Legislator_Vote
-from proposal.models import Legislator_Proposal
 from bill.models import Legislator_Bill
 from committees.models import Legislator_Committees
 
@@ -71,10 +70,6 @@ class LegislatorDetail(models.Model):
     def _conscience_vote_count(self):
         return Legislator_Vote.objects.filter(legislator_id=self.id, conflict=True).count()
     nconsciencevote = property(_conscience_vote_count)
-
-    def _priproposer_count(self):
-        return Legislator_Proposal.objects.filter(legislator_id=self.id, priproposer=True).count()
-    npriproposer = property(_priproposer_count)
 
     def _pribiller_count(self):
         return Legislator_Bill.objects.filter(legislator_id=self.id, priproposer=True).count()

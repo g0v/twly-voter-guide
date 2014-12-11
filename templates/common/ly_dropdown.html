@@ -10,7 +10,6 @@
             {% endif %}
             {% if ly.ad == 8 %}
                 <li><a href="{% url 'legislator:biller_detail' ly.legislator_id %}">{{ly.name}}的法條修正草案</a></li>
-                <li><a href="{% url 'legislator:proposer_detail' ly.legislator_id %}">{{ly.name}}的附帶提案</a></li>
                 <li><a href="{% url 'legislator:platformer_detail' ly.legislator_id %}">{{ly.name}}的競選政見</a></li>
             {% endif %}
         </ul>

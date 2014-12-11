@@ -14,8 +14,6 @@ router.register(r'legislator_terms', views.LegislatorDetailViewSet)
 router.register(r'committees', views.CommitteesViewSet)
 router.register(r'legislator_committees', views.Legislator_CommitteesViewSet)
 router.register(r'sittings', views.SittingsViewSet)
-router.register(r'proposal', views.ProposalViewSet)
-router.register(r'legislator_proposal', views.Legislator_ProposalViewSet)
 router.register(r'vote', views.VoteViewSet)
 router.register(r'legislator_vote', views.Legislator_VoteViewSet)
 router.register(r'bill', views.BillViewSet)
@@ -27,7 +25,6 @@ router.register(r'political_contributions', views.PoliticalContributionsViewSet)
 urlpatterns = patterns('',
     url(r'^legislator/', include('legislator.urls', namespace="legislator")),
     url(r'^vote/', include('vote.urls', namespace="vote")),
-    url(r'^proposal/', include('proposal.urls', namespace="proposal")),
     url(r'^bill/', include('bill.urls', namespace="bill")),
     url(r'^about/$', 'ly.views.about', name='about'),
     url(r'^reference/$', 'ly.views.reference', name='reference'),

@@ -178,7 +178,6 @@
                 {% if ly.ad > 7 %}
                 <a class="btn btn-large" id='url_polticalcontributions' href="{% url 'legislator:personal_political_contributions' legislator_id=ly.legislator_id ad=ly.ad %}">政治獻金</a>
                 <a class="btn btn-large" id='url_bill' href="{% url 'legislator:biller_detail' ly.legislator_id %}">法條修正案</a>
-                <a class="btn btn-large" id='url_proposal' href="{% url 'legislator:proposer_detail' ly.legislator_id %}">附帶提案</a>
                 <a class="btn btn-large" id='url_politics' href="{% url 'legislator:platformer_detail' ly.legislator_id %}">競選政見</a>
                 {% endif %}
             </div>

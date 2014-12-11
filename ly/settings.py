@@ -135,7 +135,6 @@ INSTALLED_APPS = (
     'committees',
     'sittings',
     'vote',
-    'proposal',
     'bill',
     'search',
     'commontag',

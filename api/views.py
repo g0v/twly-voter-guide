@@ -7,7 +7,6 @@ from legislator.models import Legislator, LegislatorDetail, Attendance, Platform
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from vote.models import Vote, Legislator_Vote
-from proposal.models import Proposal, Legislator_Proposal
 from bill.models import Bill, Legislator_Bill
 
 
@@ -50,16 +49,6 @@ class PlatformViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
     filter_fields = ('legislator', 'content', 'category', 'party')
-
-class ProposalViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Proposal.objects.all()
-    serializer_class = ProposalSerializer
-    filter_fields = ('proposer', 'uid', 'sitting', 'proposal_seq', 'content')
-
-class Legislator_ProposalViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Legislator_Proposal.objects.all()
-    serializer_class = Legislator_ProposalSerializer
-    filter_fields = ('legislator', 'proposal', 'priproposer')
 
 class VoteViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Vote.objects.all()

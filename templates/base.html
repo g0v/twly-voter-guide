@@ -83,7 +83,6 @@
                             <li><a href="{% url 'bill:bills' index='normal' %}">法條修正草案</a></li>
                             <li><a href="{% url 'bill:bills' index='rejected' %}"><b>被封殺</b>的法條修正草案</a></li>
                             <li class="divider"></li>
-                            <li><a href="{% url 'proposal:proposals' %}">附帶提案</a></li>
                         </ul>
                         </li>
 
@@ -102,13 +101,10 @@
                             <li><a href="{% url 'legislator:chart_report' 'conscience_vote' %}" ><b>脫黨表決次數</b><small>前十名</small></a></li>
                             <li><a href="{% url 'legislator:chart_report' 'vote' %}" ><b>立法院表決缺席</b><small>前十名</small></a></li>
                             <li><a href="{% url 'legislator:chart_report' 'ly' %}" ><b>立法院開會缺席</b><small>前十名</small></a></li>
-                            <li><a href="{% url 'legislator:chart_report' 'committee' %}" ><b>委員會開會缺席</b><small>前十名</small></a></li>
-                            <li><a href="{% url 'legislator:chart_report' 'attend_committee' %}" ><b>委員會列席(旁聽)次數</b><small>前十名</small></a></li>
                             <li class="divider"></li>
                             <li><a href="{% url 'legislator:political_contributions_report' index='in_party' compare='vote' party='中國國民黨' %}" ><b>政治獻金</b></a></li>
                             <li class="divider"></li>
                             <li><a href="{% url 'legislator:chart_report' 'biller' %}" ><b>法條修正草案數</b><small>前十名</small></a></li>
-                            <li><a href="{% url 'legislator:chart_report' 'proposal' %}" ><b>臨時提案數</b><small>前十名</small></a></li>
                         </ul>
                         </li>
                     </ul>
