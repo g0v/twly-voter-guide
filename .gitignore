@@ -4,7 +4,6 @@
 
 htmlcov
 venv
-migrations
 local_settings.py
 *.pydevproject
 .project
