@@ -127,9 +127,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
+    #'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'haystack',
     'json_field',
     'legislator',
     'committees',
@@ -140,6 +141,7 @@ INSTALLED_APPS = (
     'commontag',
     'pagination',
     'rest_framework',
+    'debug_toolbar',
 )
 
 REST_FRAMEWORK = {
@@ -187,7 +189,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     #"django.core.context_processors.static",
-    #"django.contrib.messages.context_processors.messages")
+    #"django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
     "legislator.context_processor.current_url",
     "legislator.context_processor.last_update_time",
@@ -198,3 +200,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 SITE_DOMAIN = 'http://twly.herokuapp.com'
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}

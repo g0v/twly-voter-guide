@@ -1,5 +1,6 @@
 ﻿{% extends "base.html" %}
 {% load ly_extras %}
+{% load highlight %}
 
 {% block title %}
     {% if index == 'conscience' %}
@@ -17,26 +18,13 @@
     <div class="span1">
     </div>
     <div class="span10">
-        {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全...空格有交集效果" %}
-        {% if keyword_obj and index != 'conscience' %}
+        {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全" %}
+        {% if keyword_obj %}
         <h4>熱門：
             {% for keyword in keyword_obj %}
-            {% if forloop.counter0 < 5 %}
             <a href="{% url 'vote:votes' index=index %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
-            {% endif %}
             {% endfor %}
         </h4>
-        {% endif %}
-        {% if not keyword %}
-        <div class="btn-group">
-            <button type="button" class="btn dropdown-toggle btn-info" data-toggle="dropdown">
-                <span>以通過、不通過分類</span> <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a href="{% url 'vote:votes' index=index %}?result=Passed"><font color="#66CC66">通過</font></a></li>
-                <li><a href="{% url 'vote:votes' index=index %}?result=Not Passed"><font color="#FF66CC">不通過</font></a></li>
-            </ul>
-        </div>
         {% endif %}
         <div class="well well-small">
             <font class="lead">第六屆(2005)至今有 {{ votes|length }} 個
@@ -44,42 +32,35 @@
             {% endif %}
             {% if index == 'conscience' %}<b>脫黨</b>
             {% endif %}
-            {% if result %}<b>{{result|vote_result:'cht'}}</b>的
-            {% endif %}
             表決
             </font>
         </div>
         {% if votes %}
         {% load pagination_tags %}
-        {% autopaginate votes 1000 %}
+        {% autopaginate votes 100 %}
         {% paginate %}
         <table class="table table-bordered zebra" >
             <thead>
                 <tr style="background-color: #FFFFCC;">
                     <th style="width: 6%">屆期</th>
-                    <th style="width: 12%">表決結果</th>
-                    <th style="width: 3%">贊成票</th>
-                    <th style="width: 3%">反對票</th>
-                    <th style="width: 3%">棄權票</th>
-                    <th style="width: 3%">沒投票</th>
-                    <th style="width: 12%">日期</th>
+                    <th style="width: 16%">表決結果</th>
+                    <th style="width: 16%">日期</th>
                     <th style="width: 50%">表決內容</th>
-                    <th style="width: 8%">備註</th>
+                    <th style="width: 12%">備註</th>
                 </tr>
             </thead>
             <tbody>
                 {% for fragment in votes %}
                 <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
-                    <td style="text-align:center; vertical-align:middle;">{{fragment.sitting.ad}}</td>
+                    <td style="text-align:center; vertical-align:middle;">{{fragment.ad}}</td>
                     <td style="text-align:center; vertical-align:middle; background-color: #{{fragment.result|vote_result:'td_bgcolor'}}">{{fragment.result|vote_result:'cht'}}</td>
-                    <td style="text-align:center; vertical-align:middle; background-color: #66CC66;">{{fragment.results.agree}}</td><td style="text-align:center; vertical-align:middle; background-color: #FF66CC;">{{fragment.results.disagree}}</td><td style="text-align:center; vertical-align:middle; background-color: #999999;">{{fragment.results.abstain}}</td><td style="text-align:center; vertical-align:middle; background-color: #FFFF99;">{{fragment.results.not_voting}}</td>
-                    <td style="text-align:center; vertical-align:middle;">{{ fragment.sitting.date|date:"Y-m-d" }}</td>
+                    <td style="text-align:center; vertical-align:middle;">{{ fragment.date|date:"Y-m-d" }}</td>
                     <td>
                         <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單和完整內容</a><br>
                         {% if keyword %}
-                        {{fragment.content|linebreaksbr|replace:keyword|safe}}
+                        {% highlight fragment.text with keyword %}
                         {% else %}
-                        {{fragment.content|linebreaksbr|truncatechars:120}}
+                        {{fragment.text|linebreaksbr|truncatechars:120}}
                         {% endif %}
                     </td>
                     <td style="text-align:center; vertical-align:middle;">

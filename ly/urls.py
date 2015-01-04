@@ -30,10 +30,4 @@ urlpatterns = patterns('',
     url(r'^reference/$', 'ly.views.reference', name='reference'),
     url(r'', include('legislator.urls', namespace="legislator")),
     url(r'^api/', include(router.urls)),
-    #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    # Examples:
-    # url(r'^$', 'ly.views.home', name='home'),
-    # url(r'^ly/', include('ly.foo.urls')),
-
-    # Uncomment the next line to enable the admin:
 )
