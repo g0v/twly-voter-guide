@@ -14,7 +14,8 @@ def votes(request, index):
     qs = Q(content=request.GET['keyword']) if request.GET.get('keyword') else Q()
     qs = qs & Q(conflict=True) if index == 'conscience' else qs
     votes = SearchQuerySet().filter(qs).models(Vote).order_by('-date', 'vote_seq')
-    return render(request, 'vote/votes.html', {'votes': votes, 'index': index, 'keyword': request.GET.get('keyword'), 'keyword_obj': keyword_list(2)[:5]})
+    keywords = keyword_list(2)
+    return render(request, 'vote/votes.html', {'votes': votes, 'index': index, 'keyword': request.GET.get('keyword'), 'keyword_obj': keywords, 'hot_keyword': keywords[:5]})
 
 def vote(request, vote_id):
     decisions = Legislator_Vote.objects.select_related().filter(vote_id=vote_id).order_by('-decision', 'legislator__party')

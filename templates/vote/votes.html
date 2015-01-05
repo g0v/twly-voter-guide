@@ -15,69 +15,67 @@
 {% endblock %}
 
 {% block right %}
-    <div class="span1">
+    <div class="span2">
     </div>
-    <div class="span10">
+    <div class="span8">
         {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全" %}
-        {% if keyword_obj %}
+        {% if hot_keyword %}
         <h4>熱門：
-            {% for keyword in keyword_obj %}
+            {% for keyword in hot_keyword %}
             <a href="{% url 'vote:votes' index=index %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
             {% endfor %}
         </h4>
         {% endif %}
         <div class="well well-small">
             <font class="lead">第六屆(2005)至今有 {{ votes|length }} 個
-            {% if keyword %}包含<font style="color: red;">"{{keyword}}"</font>的
+            {% if keyword %}有關<font style="color: red;">"{{keyword}}"</font>的
             {% endif %}
             {% if index == 'conscience' %}<b>脫黨</b>
             {% endif %}
             表決
             </font>
         </div>
+
         {% if votes %}
         {% load pagination_tags %}
         {% autopaginate votes 100 %}
         {% paginate %}
-        <table class="table table-bordered zebra" >
-            <thead>
-                <tr style="background-color: #FFFFCC;">
-                    <th style="width: 6%">屆期</th>
-                    <th style="width: 16%">表決結果</th>
-                    <th style="width: 16%">日期</th>
-                    <th style="width: 50%">表決內容</th>
-                    <th style="width: 12%">備註</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for fragment in votes %}
-                <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
-                    <td style="text-align:center; vertical-align:middle;">{{fragment.ad}}</td>
-                    <td style="text-align:center; vertical-align:middle; background-color: #{{fragment.result|vote_result:'td_bgcolor'}}">{{fragment.result|vote_result:'cht'}}</td>
-                    <td style="text-align:center; vertical-align:middle;">{{ fragment.date|date:"Y-m-d" }}</td>
-                    <td>
-                        <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單和完整內容</a><br>
-                        {% if keyword %}
+
+<ul class="media-list">
+    {% for fragment in votes %}
+    <li class="media">
+        <div class="media-body well">
+            <h5 class="muted">
+                第{{ fragment.ad }}屆&nbsp;&nbsp;{{ fragment.date|date:"Y-m-d" }}&nbsp;&nbsp;第{{ fragment.vote_seq }}個表決
+            </h5>
+            <h4 class="media-heading">
+
+                    {% if keyword %}
                         {% highlight fragment.text with keyword %}
-                        {% else %}
-                        {{fragment.text|linebreaksbr|truncatechars:120}}
-                        {% endif %}
-                    </td>
-                    <td style="text-align:center; vertical-align:middle;">
-                    {% if fragment.conflict %}
-                    <p class="text-error">脫黨表決</p>
+                    {% else %}
+                        {{ fragment.text|linebreaksbr }}
                     {% endif %}
-                    </td>
-                </tr>
-                {% empty %}
-                <p>完全沒有表決</p>
-                {% endfor %}
-            </tbody>
-        </table>
+            </h4>
+            <div>
+                <blockquote>
+                    <h2 class="text-success">{{fragment.result|vote_result:'cht'}}</h2>
+                    {% if fragment.conflict %}
+                        <small class="text-error"><font class="lead text-error">有立委脫黨投票</font></small>
+
+                    {% endif %}
+                </blockquote>
+                <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單和完整內容</a>
+            </div>
+        </div>
+    </li>
+    {% empty %}
+        <p>完全沒有議案</p>
+    {% endfor %}
+</ul>
         {% paginate %}
         {% endif %}
     </div>
-    <div class="span1">
+    <div class="span2">
     </div>
 {% endblock right %}
 
