@@ -76,15 +76,7 @@
                         </ul>
                         </li>
 
-                        <li id="psearch" class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">找法案<b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{% url 'bill:bills' index='normal' %}">法條修正草案</a></li>
-                            <li><a href="{% url 'bill:bills' index='rejected' %}"><b>被封殺</b>的法條修正草案</a></li>
-                            <li class="divider"></li>
-                        </ul>
-                        </li>
+                        <li id="nav_bills" class="dropdown"><a href="{% url 'bill:bills' %}">找法案</a></li>
 
                         <li id="vote" class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">找表決<b class="caret"></b>

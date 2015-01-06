@@ -5,6 +5,7 @@ from json_field import JSONField
 
 class Bill(models.Model):
     proposer = models.ManyToManyField('legislator.LegislatorDetail', blank=True, null=True, through='Legislator_Bill')
+    ad = models.IntegerField()
     uid = models.TextField(unique=True)
     api_bill_id = models.TextField(unique=True)
     abstract = models.TextField(blank=True, null=True)
@@ -59,12 +60,3 @@ class BillMotions(models.Model):
     motion_class = models.TextField(blank=True, null=True)
     resolution = models.TextField(blank=True, null=True)
     status = models.TextField(blank=True, null=True)
-
-class BillDetail(models.Model):
-    bill = models.ForeignKey(Bill, to_field='uid')
-    article = models.TextField(blank=True, null=True)
-    before = models.TextField(blank=True, null=True)
-    after = models.TextField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    class Meta:
-        ordering = ['id']

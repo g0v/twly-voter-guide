@@ -33,21 +33,22 @@
             <td></td>
             {% endif %}
             {% endwith %}
-            <td style="vertical-align:middle;">{{fragment.proposed_by}}
-                {% if keyword %}
+            <td style="vertical-align:middle;">
+                {{fragment.proposed_by}}
+            {% if keyword %}
                 {{fragment.summary|replace:keyword|safe}}</td>
             {% else %}
-            {{fragment.summary}}</td>
-        {% endif %}
-        {% if fragment.abstract %}
-        {% if keyword %}
-        <td>{{fragment.abstract|linebreaksbr|replace:keyword|safe}}</td>
-        {% else %}
-        <td>{{fragment.abstract}}</td>
-        {% endif %}
-        {% else %}
-        <td></td>
-        {% endif %}
+                {{fragment.summary}}</td>
+            {% endif %}
+            {% if fragment.abstract %}
+            {% if keyword %}
+            <td>{{fragment.abstract|linebreaksbr|replace:keyword|safe}}</td>
+            {% else %}
+            <td>{{fragment.abstract}}</td>
+            {% endif %}
+            {% else %}
+            <td></td>
+            {% endif %}
     </tr>
     {% empty %}
     <p>完全沒有法案</p>

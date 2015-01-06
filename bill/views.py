@@ -1,26 +1,16 @@
 # -*- coding: utf-8 -*-
-import operator
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.db.models import Count, Q
+from django.db.models import Q
+
+from haystack.query import SearchQuerySet
+
 from .models import Bill
-from search.views import keyword_list, keyword_been_searched, keyword_normalize
+from search.views import keyword_list
 
 
-def bills(request, index):
-    query = Q()
-    keyword = keyword_normalize(request.GET)
-    if keyword:
-        bills = Bill.objects.filter(reduce(operator.or_, (Q(abstract__icontains=x) | Q(summary__icontains=x) for x in keyword.split())))
-        query = Q(reduce(operator.or_, (Q(abstract__icontains=x) | Q(summary__icontains=x) for x in keyword.split())))
-        if bills:
-            keyword_been_searched(keyword, 3)
-    if index == 'normal':
-        progress = request.GET.get('progress', None)
-        if progress:
-            bills = Bill.objects.filter(query, last_action=progress).order_by('-last_action_at')
-        else:
-            bills = Bill.objects.filter(query, last_action__isnull=False).order_by('-last_action_at')[:100]
-    elif index == 'rejected':
-        bills = Bill.objects.filter(query & Q(ttsmotions__progress='退回程序')).annotate(totalNum=Count('ttsmotions__id')).filter(totalNum__gt=1).order_by('-totalNum')
-    return render(request, 'bill/bills.html', {'index':index, 'keyword_obj':keyword_list(3), 'keyword':keyword, 'bills':bills})
+def bills(request):
+    qs = Q(content=request.GET['keyword']) if request.GET.get('keyword') else Q()
+    qs = qs & Q(last_action=request.GET['progress']) if request.GET.get('progress') else qs
+    bills = SearchQuerySet().filter(qs).models(Bill).order_by('-last_action_at')
+    keywords = keyword_list(3)
+    return render(request, 'bill/bills.html', {'index': '', 'bills': bills, 'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'keyword': request.GET.get('keyword'), 'progress': request.GET.get('progress', '')})
