@@ -20,7 +20,7 @@
     <div class="span8">
         {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全" %}
         {% if hot_keyword %}
-        <h4>熱門：
+        <h4>熱門搜尋：
             {% for keyword in hot_keyword %}
             <a href="{% url 'vote:votes' index=index %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
             {% endfor %}
@@ -40,38 +40,40 @@
         {% load pagination_tags %}
         {% autopaginate votes 100 %}
         {% paginate %}
-
-<ul class="media-list">
-    {% for fragment in votes %}
-    <li class="media">
-        <div class="media-body well">
-            <h5 class="muted">
-                第{{ fragment.ad }}屆&nbsp;&nbsp;{{ fragment.date|date:"Y-m-d" }}&nbsp;&nbsp;第{{ fragment.vote_seq }}個表決
-            </h5>
-            <h4 class="media-heading">
-
+        <ul class="media-list">
+            {% for fragment in votes %}
+            <li class="media">
+                <div class="media-body well">
+                    <div class="muted media-heading">
+                        第{{ fragment.ad }}屆（{{ fragment.date|date:"Y-m-d" }}）第{{ fragment.vote_seq }}個表決
+                    </div>
+                    <h5 class="text-success">表決內容</h5>
                     {% if keyword %}
+                        <small>（前文略）</small>
                         {% highlight fragment.text with keyword %}
+                        <small>（後文略）</small>
                     {% else %}
                         {{ fragment.text|linebreaksbr }}
                     {% endif %}
-            </h4>
-            <div>
-                <blockquote>
-                    <h2 class="text-success">{{fragment.result|vote_result:'cht'}}</h2>
-                    {% if fragment.conflict %}
-                        <small class="text-error"><font class="lead text-error">有立委脫黨投票</font></small>
+                    <h5 class="text-success">表決結果</h5>
+                    <div>
+                        <blockquote>
+                            <span class="label label-inverse"><font class="lead">{{fragment.result|vote_result:'cht'}}</font></span>
+                            {% if fragment.conflict %}
+                                <small class="text-error"><font class="lead text-error">有立委脫黨投票</font></small>
 
-                    {% endif %}
-                </blockquote>
-                <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單和完整內容</a>
-            </div>
-        </div>
-    </li>
-    {% empty %}
-        <p>完全沒有議案</p>
-    {% endfor %}
-</ul>
+                            {% endif %}
+                        </blockquote>
+                        <h4>
+                            <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看各立委投什麼票">☞ 查看投票名單和完整內容</a>
+                        </h4>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+                <p>完全沒有議案</p>
+            {% endfor %}
+        </ul>
         {% paginate %}
         {% endif %}
     </div>
