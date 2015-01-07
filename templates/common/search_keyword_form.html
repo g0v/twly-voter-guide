@@ -1,7 +1,10 @@
-<form action="" method="get" class="form-search" id="form">
+<form action="" method="get" class="form-inline" id="form">
     <br>
     <fieldset>
-        <input type="search" name="keyword" id="keyword" class="span5" maxlength="20" autofocus placeholder="{{placeholder_text}}" >
+        <input type="search" name="keyword" id="keyword" class="span4" maxlength="20" autofocus placeholder="{{placeholder_text}}" >
+        {% if advance_search %}
+            {% include advance_search %}
+        {% endif %}
         <button type="submit" class="btn">Go!</button>
     </fieldset>
 </form>

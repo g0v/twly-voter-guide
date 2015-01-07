@@ -3,27 +3,16 @@
 {% load highlight %}
 
 {% block title %}
-    {% if index == 'normal' %}
-        <title>立委投票指南:法條修正草案檢索</title>
-        <meta property="og:title" content="立委投票指南:法條修正草案檢索"/>
-        <meta itemprop="name" content="立委投票指南:法條修正草案檢索">
-    {% elif index == 'rejected' %}
-        <title>立委投票指南:被封殺的法條修正草案檢索</title>
-        <meta property="og:title" content="立委投票指南:被封殺的法條修正草案檢索"/>
-        <meta itemprop="name" content="立委投票指南:被封殺的法條修正草案檢索">
-    {% endif %}
+    <title>立委投票指南:法條修正草案檢索</title>
+    <meta property="og:title" content="立委投票指南:法條修正草案檢索"/>
+    <meta itemprop="name" content="立委投票指南:法條修正草案檢索">
 {% endblock title %}
 
 {% block right %}
     <div class="span2">
     </div>
     <div class="span8">
-        {% include "common/search_keyword_form.html" with placeholder_text="例:軍事審判 土地徵收 會計法" %}
-        <form action="" method="get" class="form-inline" id="form_bill">
-            <fieldset>最新進展
-                {% include "common/bills_progress_form.html" %}
-            </fieldset>
-        </form>
+        {% include "common/search_keyword_form.html" with placeholder_text="例:軍事審判 土地徵收 會計法" advance_search="common/bills_progress_form.html" %}
         {% if hot_keyword %}
             <h4>熱門搜尋：
                 {% for keyword in hot_keyword %}
@@ -33,7 +22,7 @@
         {% endif %}
         <div class="well well-small">
             <font class="lead">
-                第八屆(2012)至今至今有 {{ bills|length }} 個
+                第八屆(2012)至今有 {{ bills|length }} 個
                 {% if keyword %}
                     有關<font style="color: red;">"{{keyword}}"</font>的
                 {% endif %}
@@ -51,19 +40,22 @@
                         <h5 class="text-success">立法理由</h5>
                         <div class="media-heading">
                             {% if keyword %}
-                                <small>（前文略）</small>{% highlight fragment.text with keyword %}
+                                {{fragment.proposed_by}}
+                                <small>（略）</small>
+                                {% highlight fragment.text with keyword %}
                             {% else %}
                                 {{fragment.abstract}}
                             {% endif %}
                         </div>
                         <div>
-                            <h5 class="text-success">最新進展</h5>
+                            <h5 class="text-success">進展</h5>
                             <blockquote>
-                                {% if fragment.last_action %}
-                                    {{fragment.last_action}}（{{fragment.last_action_at|date:"Y-m-d"}}）
-                                {% else %}
-                                    尚無資料
+                                {% if fragment.rejected_times != 0 %}
+                                <span class="label label-warning"><font class="lead">總共被退回程序委員會{{fragment.rejected_times}}次</font></span>
                                 {% endif %}
+                                {% for progress, date in fragment.progress_history %}
+                                {{progress}}（{{date}}）
+                                {% endfor %}
                             </blockquote>
                         </div>
                         <h4>
