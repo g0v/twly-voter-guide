@@ -18,4 +18,4 @@ def keyword_been_searched(keyword, category):
 
 def keyword_normalize(GET):
     if 'keyword' in GET:
-        return re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+\-=,./<>?;:\'"\[\]{}\|()]',' ',GET['keyword']).strip()
+        return re.sub(u'[，。／＼、；］［＝－＜＞？：＂｛｝｜＋＿（）！＠＃％＄︿＆＊～~`!@#$%^&*_+\-=,./<>?;:\'"\[\]{}\|()]', ' ', GET['keyword'])
