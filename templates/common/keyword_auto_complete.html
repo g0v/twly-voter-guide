@@ -1,13 +1,11 @@
-﻿<link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+﻿{% load ly_extras %}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script>
     $(function() {
-        var availableTags = [
-        {% for keyword in keyword_obj %}
-        "{{keyword}}",
-        {% endfor %}
-        ];
-        $( "#keyword" ).autocomplete({
+        var availableTags = {{keyword_obj|as_json}};
+        $("#keyword").autocomplete({
             source: availableTags,
             select: function(event, ui) {
                 $(event.target).val(ui.item.value);
