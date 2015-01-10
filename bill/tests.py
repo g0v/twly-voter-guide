@@ -7,10 +7,8 @@ from legislator.models import Legislator, LegislatorDetail
 
 class BillTest(TestCase):
     def setUp(self):
-        Bill.objects.create(uid="08-01-YS-01-001", api_bill_id="08-01-YS-01", abstract="test content")
+        Bill.objects.create(uid="08-01-YS-01-001", api_bill_id="08-01-YS-01", ad=8, abstract="test content")
 
     def test(self):
-        for arg in ['normal', 'rejected']:
-            for keyword in [' ', u'test']:
-                response = self.client.get(reverse('bill:bills', kwargs={"index": arg}))
-                self.assertEqual(response.status_code, 200)
+        response = self.client.get(reverse('bill:bills'))
+        self.assertEqual(response.status_code, 200)

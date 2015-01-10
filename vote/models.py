@@ -19,5 +19,5 @@ class Vote(models.Model):
 class Legislator_Vote(models.Model):
     legislator = models.ForeignKey('legislator.LegislatorDetail', related_name='votes')
     vote = models.ForeignKey(Vote, to_field="uid")
-    decision = models.IntegerField(blank=True, null=True)
+    decision = models.IntegerField(db_index=True, blank=True, null=True)
     conflict = models.NullBooleanField(db_index=True)
