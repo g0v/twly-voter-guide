@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import generics
 from .serializers import *
-from legislator.models import Legislator, LegislatorDetail, Attendance, Platform, PoliticalContributions
+from legislator.models import Legislator, LegislatorDetail, Attendance, PoliticalContributions
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from vote.models import Vote, Legislator_Vote
@@ -44,11 +44,6 @@ class Legislator_CommitteesViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Legislator_Committees.objects.all()
     serializer_class = Legislator_CommitteesSerializer
     filter_fields = ('legislator', 'committee', 'ad', 'session', 'chair')
-
-class PlatformViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Platform.objects.all()
-    serializer_class = PlatformSerializer
-    filter_fields = ('legislator', 'content', 'category', 'party')
 
 class VoteViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Vote.objects.all()

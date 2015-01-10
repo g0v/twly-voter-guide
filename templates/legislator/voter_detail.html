@@ -1,22 +1,18 @@
 {% extends "common/ly_info.html" %}
 {% load ly_extras %}
+
 {% block title %}
-{% if ly %}
-{% if index == 'conscience' %}
-<title>立委投票指南:{{ly.name}}第{{ly.ad}}屆的脫黨表決紀錄</title>
-<meta property="og:title" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的脫黨表決紀錄"/>
-<meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的脫黨表決紀錄">
-{% else %}
-<title>立委投票指南:{{ly.name}}第{{ly.ad}}屆的投票表決紀錄</title>
-<meta property="og:title" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的投票表決紀錄"/>
-<meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的投票表決紀錄">
-{% endif %}
-{% else %}
-<title>立委投票指南:立委的投票表決紀錄</title>
-<meta property="og:title" content="立委投票指南:立委的投票表決紀錄"/>
-<meta itemprop="name" content="立委投票指南:立委的投票表決紀錄">
-{% endif %}
+    {% if index == 'conscience' %}
+        <title>立委投票指南:{{ly.name}}第{{ly.ad}}屆的脫黨表決紀錄</title>
+        <meta property="og:title" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的脫黨表決紀錄"/>
+        <meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的脫黨表決紀錄">
+    {% else %}
+        <title>立委投票指南:{{ly.name}}第{{ly.ad}}屆的投票表決紀錄</title>
+        <meta property="og:title" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的投票表決紀錄"/>
+        <meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的投票表決紀錄">
+    {% endif %}
 {% endblock title %}
+
 {% block ly_detail %}
     {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全...空格有交集效果" %}
     {% if keyword_obj and index != 'conscience' %}
@@ -42,88 +38,80 @@
         </ul>
     </div>
     {% endif %}
-<div class="well well-small">
-    <font class="lead">{{ly.name}}第{{ly.ad}}屆的{% if index == 'conscience' %}<b>脫黨</b>{% endif %}表決紀錄：
-    {% if keyword %}
-    包含<font style="color: red;">"{{keyword}}"</font>的表決&nbsp;
-    {% endif %}
-    {% for decision in vote_addup %}
-        {{decision.totalNum}}次
-        {% if decision.decision == 1 %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=agree"><font color="#66CC66">贊成</font></a>&nbsp;,&nbsp;
-        {% elif decision.decision == 0 %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=abstain"><font color="#999999">棄權</font></a>&nbsp;,&nbsp;
-        {% elif decision.decision == -1 %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=disagree"><font color="#FF66CC">反對</font></a>&nbsp;,&nbsp;
-        {% else %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=notvote"><font color="#996600">沒有投票</font></a>&nbsp;,&nbsp;
+    <div class="well well-small">
+        <font class="lead">{{ly.name}}第{{ly.ad}}屆的{% if index == 'conscience' %}<b>脫黨</b>{% endif %}表決紀錄：
+        {% if keyword %}
+        包含<font style="color: red;">"{{keyword}}"</font>的表決&nbsp;
         {% endif %}
-    {% empty %}
-        {% if ly.ad > 5 %}
-            {% if index == 'conscience' %}<p class="lead text-error">沒有任何脫黨投票紀錄</p>
-            {% else %}<p class="text-error">沒有參加任何表決</p>
-            {% endif %}
+        {% if ly.vote_param.total > 0 %}
+            <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=agree">{{ly.vote_param.agree}}次贊成</a>&nbsp;,&nbsp;
+            <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=abstain">{{ly.vote_param.abstain}}次棄權</a>&nbsp;,&nbsp;
+            <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=disagree">{{ly.vote_param.disagree}}次反對</a>&nbsp;,&nbsp;
+            <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=notvote">{{ly.vote_param.not_voting}}次沒有投票</a>&nbsp;,&nbsp;
         {% else %}
-            <p class="lead text-error">尚無資料，敬請期待</p>
+            {% if ly.ad > 5 %}
+                {% if index == 'conscience' %}<p class="lead text-error">沒有任何脫黨投票紀錄</p>
+                {% else %}<p class="text-error">沒有參加任何表決</p>
+                {% endif %}
+            {% endif %}
         {% endif %}
-    {% endfor %}
-    </font>
-</div>
-{% if votes %}
-{% load pagination_tags %}
-{% autopaginate votes 10 %}
-{% paginate %}
-<table class="table table-bordered zebra">
-    <thead>
-        <tr style="background-color: #FFFFCC;">
-            <th style="width: 6%">屆期</th>
-            <th style="width: 10%">個人投票</th>
-            <th style="width: 10%">表決結果</th>
-            <th style="width: 15%">日期</th>
-            <th style="width: 59%">表決內容</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for vote in votes %}
-        <tr>
-            <td style="text-align:center; vertical-align:middle;">{{vote.vote.sitting.ad}}</td>
-            {% with decision=vote.decision %}
-            {% if decision == -1 %}
-            <td style="text-align:center; vertical-align:middle; background-color: #FF66CC;">反對
-            {% elif decision == 1 %}
-            <td style="text-align:center; vertical-align:middle; background-color: #CCFF66;">贊成
-            {% elif decision == 0 %}
-            <td style="text-align:center; vertical-align:middle; background-color: #CCCCCC;">棄權
-            {% else %}
-            <td style="text-align:center; vertical-align:middle; background-color: #996600;">沒有投票
-                {% endif %}
-                {% endwith %}
-            </td>
-            {% with vote=vote.vote %}
-            <td style="text-align:center; vertical-align:middle; background-color: #{{vote.result|vote_result:'td_bgcolor'}}">{{vote.result|vote_result:'cht'}}</td>
-            <td style="text-align:center; vertical-align:middle;">{{ vote.sitting.date|date:"Y-m-d" }}</td>
-            <td>
-                <a href="{% url 'vote:vote_detail' vote.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單和完整內容</a><br>
-                {% if keyword %}
-                {{vote.content|linebreaksbr|replace:keyword|safe}}
-                {% elif vote.summary %}
-                <span class="badge badge-warning">精簡版</span>&nbsp;{{ vote.summary }}
+        </font>
+    </div>
+    {% if votes %}
+    {% load pagination_tags %}
+    {% autopaginate votes 10 %}
+    {% paginate %}
+    <table class="table table-bordered zebra">
+        <thead>
+            <tr style="background-color: #FFFFCC;">
+                <th style="width: 6%">屆期</th>
+                <th style="width: 10%">個人投票</th>
+                <th style="width: 10%">表決結果</th>
+                <th style="width: 15%">日期</th>
+                <th style="width: 59%">表決內容</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vote in votes %}
+            <tr>
+                <td style="text-align:center; vertical-align:middle;">{{vote.vote.sitting.ad}}</td>
+                {% with decision=vote.decision %}
+                {% if decision == -1 %}
+                <td style="text-align:center; vertical-align:middle; background-color: #FF66CC;">反對
+                {% elif decision == 1 %}
+                <td style="text-align:center; vertical-align:middle; background-color: #CCFF66;">贊成
+                {% elif decision == 0 %}
+                <td style="text-align:center; vertical-align:middle; background-color: #CCCCCC;">棄權
                 {% else %}
-                {{vote.content|linebreaksbr|truncatechars:120}}
-                {% endif %}
-            </td>
-            {% endwith %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% paginate %}
+                <td style="text-align:center; vertical-align:middle; background-color: #996600;">沒有投票
+                    {% endif %}
+                    {% endwith %}
+                </td>
+                {% with vote=vote.vote %}
+                <td style="text-align:center; vertical-align:middle; background-color: #{{vote.result|vote_result:'td_bgcolor'}}">{{vote.result|vote_result:'cht'}}</td>
+                <td style="text-align:center; vertical-align:middle;">{{ vote.sitting.date|date:"Y-m-d" }}</td>
+                <td>
+                    <a href="{% url 'vote:vote_detail' vote.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單和完整內容</a><br>
+                    {% if keyword %}
+                    {{vote.content|linebreaksbr|replace:keyword|safe}}
+                    {% elif vote.summary %}
+                    <span class="badge badge-warning">精簡版</span>&nbsp;{{ vote.summary }}
+                    {% else %}
+                    {{vote.content|linebreaksbr|truncatechars:120}}
+                    {% endif %}
+                </td>
+                {% endwith %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% paginate %}
 {% endif %}
 {% endblock ly_detail %}
 {% block script %}
-{% include "common/sorttable.html" %}
 <script>
     $(document).ready( function() {
         $('#url_vote').addClass("btn-info");
-        $('#notvote').change(function() {
-            $("#form").trigger('submit');
-        });
     });
 </script>
 {{ block.super }}

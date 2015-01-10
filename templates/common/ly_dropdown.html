@@ -6,11 +6,11 @@
             {% if ly.ad > 5 %}
                 <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}">{{ly.name}}的投票紀錄</a></li>
             {% else %}
-                <li><a href="{% url 'legislator:voter_detail' ly.legislator_id %}">{{ly.name}}的投票紀錄</a></li>
+                <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}">{{ly.name}}的投票紀錄</a></li>
             {% endif %}
             {% if ly.ad == 8 %}
-                <li><a href="{% url 'legislator:biller_detail' ly.legislator_id %}">{{ly.name}}的法條修正草案</a></li>
-                <li><a href="{% url 'legislator:platformer_detail' ly.legislator_id %}">{{ly.name}}的競選政見</a></li>
+                <li><a href="{% url 'legislator:biller_detail' legislator_id=ly.legislator_id ad=ly.ad %}">{{ly.name}}的法條修正草案</a></li>
+                <li><a href="{% url 'legislator:platformer_detail' legislator_id=ly.legislator_id ad=ly.ad %}">{{ly.name}}的競選政見</a></li>
             {% endif %}
         </ul>
     </div>

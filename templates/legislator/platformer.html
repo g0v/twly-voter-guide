@@ -1,0 +1,29 @@
+{% extends "common/ly_info.html" %}
+
+{% block title %}
+    {% if ly %}
+        <title>立委投票指南:{{ly.name}}的競選政見</title>
+        <meta property="og:title" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的競選政見"/>
+        <meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的競選政見">
+    {% endif %}
+{% endblock %}
+
+{% block ly_detail %}
+    {% if ly %}
+        <div>
+            <font class="lead">政見：</font><br>
+            {{ ly.platform|linebreaksbr }}
+        </div>
+    {% endif %}
+{% endblock ly_detail %}
+
+{% block script %}
+    <script>
+        $(document).ready( function() {
+            $('#ly').addClass('active');
+            $('.dropdown-toggle').dropdown();
+            $("[rel='tooltip']").tooltip();
+            $('#url_politics').removeAttr('href').addClass("btn-info");
+        });
+    </script>
+{% endblock script %}

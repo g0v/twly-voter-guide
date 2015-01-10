@@ -55,9 +55,9 @@
                             <li class="dropdown-submenu">
                             <a data-toggle="dropdown" href="#" >依<b>選區</b>分組</a>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'legislator:index' 'district' %}" >全部</a></li>
+                                <li><a href="{% url 'legislator:counties' %}" >全部</a></li>
                                 {% for fragment in district_list %}
-                                <li style="background-color: {% cycle '#DDDDDD' 'white' %};"><a href="{% url 'legislator:index_district' fragment %}" >{{fragment}}</a></li>
+                                <li style="background-color: {% cycle '#DDDDDD' 'white' %};"><a href="{% url 'legislator:county' fragment %}" >{{fragment}}</a></li>
                                 {% endfor %}
                             </ul>
                             </li>
@@ -65,14 +65,13 @@
                             <a data-toggle="dropdown" href="#" >依<b>委員會</b>分組</a>
                             <ul class="dropdown-menu">
                                 {% for fragment in committee_list %}
-                                <li style="background-color: {% cycle '#DDDDDD' 'white' %};"><a href="{% url 'legislator:index_committee' fragment %}" >{{fragment}}</a></li>
+                                <li style="background-color: {% cycle '#DDDDDD' 'white' %};"><a href="{% url 'legislator:committee' fragment %}" >{{fragment}}</a></li>
                                 {% endfor %}
                             </ul>
                             </li>
                             <li class="divider"></li>
                             <li><a href="{% url 'legislator:index' 'notvote' %}" >投票<b>表決缺席次數</b>(多&rarr;少)</a></li>
                             <li><a href="{% url 'legislator:index' 'conscience_vote' %}" >脫黨投票<b>表決數</b>(多&rarr;少)</a></li>
-                            <li><a href="{% url 'legislator:index' 'biller' %}" >法條修正<b>草案數</b>(多&rarr;少)</a></li>
                         </ul>
                         </li>
 
@@ -93,15 +92,13 @@
                             <li><a href="{% url 'legislator:chart_report' 'conscience_vote' %}" ><b>脫黨表決次數</b><small>前十名</small></a></li>
                             <li><a href="{% url 'legislator:chart_report' 'vote' %}" ><b>立法院表決缺席</b><small>前十名</small></a></li>
                             <li><a href="{% url 'legislator:chart_report' 'ly' %}" ><b>立法院開會缺席</b><small>前十名</small></a></li>
+                            <li><a href="{% url 'legislator:chart_report' 'biller' %}" ><b>法條修正草案數</b><small>前十名</small></a></li>
                             <li class="divider"></li>
                             <li><a href="{% url 'legislator:political_contributions_report' index='in_party' compare='vote' party='中國國民黨' %}" ><b>政治獻金</b></a></li>
-                            <li class="divider"></li>
-                            <li><a href="{% url 'legislator:chart_report' 'biller' %}" ><b>法條修正草案數</b><small>前十名</small></a></li>
                         </ul>
                         </li>
                     </ul>
                     <ul class="nav pull-right">
-                        <li id="appendectomy"><a href="http://appy.tw/" target="_blank"><font class="text-error">我想罷免</font></a></li>
                         <li id="reference"><a href="{% url 'reference' %}">資料來源</a></li>
                         <li id="about"><a href="{% url 'about' %}">關於</a></li>
                         <li class="divider-vertical"></li>

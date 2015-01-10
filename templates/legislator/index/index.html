@@ -27,12 +27,6 @@
         <font>
     </h4>
     {% endif %}
-    <form action="" method="get" class="form-search" id="form">
-        <fieldset>
-            <input type="search" name="lyname" id="lyname" class="span2" maxlength="4" placeholder="請輸入立委的姓或名" rel="tooltip" title="請輸入立委的姓或名">
-            <button type="submit" class="btn">Go!</button>
-        </fieldset>
-    </form>
     {% include "common/highlight.html" with ad=ad %}
 </div>
 {% block ly_table %}
@@ -94,22 +88,6 @@
                 that._renderItemData( ul, item );
             });
         }
-    });
-</script>
-<script>
-    $(function() {
-        {% with "common/legislator_"|add:ad|add:".json" as template %}
-        var data = {% include template %};
-        {% endwith %}
-        $( "#lyname" ).catcomplete({
-            delay: 0,
-            source: data,
-            select: function(event, ui) {
-                $(event.target).val(ui.item.value);
-                $('#form').submit();
-                return false;
-            }
-        });
     });
 </script>
 <script>

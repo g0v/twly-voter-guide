@@ -1,82 +1,71 @@
 {% extends "base.html" %}
 {% load ly_extras %}
+
 {% block title %}
-{% if index %}
-<title>立委投票指南:{{index}}的立委</title>
-<meta property="og:title" content="立委投票指南:{{index}}的立委"/>
-<meta itemprop="name" content="立委投票指南:{{index}}的立委">
-{% else %}
-<title>立委投票指南</title>
-<meta property="og:title" content="立委投票指南"/>
-<meta itemprop="name" content="立委投票指南">
-{% endif %}
+    <title>立委投票指南:{{county}}的立委</title>
+    <meta property="og:title" content="立委投票指南:{{county}}的立委"/>
+    <meta itemprop="name" content="立委投票指南:{{county}}的立委">
 {% endblock title %}
+
 {% block right %}
-<div class="page-header text-center">
-    <h3>台灣第{{ad}}屆立委</h3>
-    <h4>
-        <font class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">想看其他屆<b class="caret"></b></a>
-        <ul class="dropdown-menu">
-            <li><a href="{% url 'legislator:index_district' index %}" ><b>第8屆</b><small> 2012~2016</small></a></li>
-            <li><a href="{% url 'legislator:index_district' index=index ad=7 %}" ><b>第7屆</b><small> 2008~2012</small></a></li>
-            <li><a href="{% url 'legislator:index_district' index=index ad=6 %}" ><b>第6屆</b><small> 2005~2008</small></a></li>
-            <li><a href="{% url 'legislator:index_district' index=index ad=5 %}" ><b>第5屆</b><small> 2002~2005</small></a></li>
-            <li><a href="{% url 'legislator:index_district' index=index ad=4 %}" ><b>第4屆</b><small> 1999~2002</small></a></li>
-            <li><a href="{% url 'legislator:index_district' index=index ad=3 %}" ><b>第3屆</b><small> 1996~1999</small></a></li>
-            <li><a href="{% url 'legislator:index_district' index=index ad=2 %}" ><b>第2屆</b><small> 1993~1996</small></a></li>
-            <li><a href="{% url 'legislator:index_district' index=index ad=1 %}" ><b>第1屆</b><small> ~1993</small></a></li>
-        </ul>
-        <font>
-    </h4>
-</div>
-<h4 class="text-center text-warning">{{index}}</h4>
-{% if ly_list %}
-<table class="table table-bordered table-condensed sortable zebra" >
-    <thead>
-        <tr style="font-weight:bold;background-color: #CCFF99;">
-            <th>立委</th><th>縣市</th>
-            <th>行政區</th>
-            <th>委員會</th>
-            <th>到職日期</th>
-            <th>法條修正草案數</th>
-            <th>附帶決議、臨時提案數</th>
-            <th>沒投票表決(次)</th>
-            <th>投票缺席率(%)</th>
-            <th>脫黨投票(次)</th>
-            <th>脫黨投票率(%)</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for ly in ly_list %}
-        <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
-            {% include "common/ly_dropdown.html" with color=True %}
-            <td>{{ly.county}}</td>
-            <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
-            <td><a href="{% url 'legislator:index_committee' ly.current_committee %}" >{{ ly.current_committee|truncatechars:10 }}</a></td>
-            <td>{{ly.term_start|date:"Y-m-d"}}</td>
-            <td><div class="text-center">{{ly.npribill}}</div></td>
-            <td><div class="text-center">{{ly.npriproposer}}</div></td>
-            <td><div class="text-center">{{ly.notvote}}</div></td>
-            <td><div class="text-center">{{ly.notvote|divide:ly.compare}}</div></td>
-            <td><div class="text-center">{{ly.nconsciencevote}}</div></td>
-            <td><div class="text-center">{{ly.nconsciencevote|divide:ly.compare}}</div></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    {% include "common/color_info_of_party.html" with column=21 %}
-</table>
-{% else %}
-<p class="text-error">沒有立委</p>
-{% endif %}
+    <div class="page-header text-center">
+        <h3>台灣第{{ad}}屆立委</h3>
+        <h4>
+            <font class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">想看其他屆<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'legislator:county' county %}" ><b>第8屆</b><small> 2012~2016</small></a></li>
+                <li><a href="{% url 'legislator:county' county=county ad=7 %}" ><b>第7屆</b><small> 2008~2012</small></a></li>
+                <li><a href="{% url 'legislator:county' county=county ad=6 %}" ><b>第6屆</b><small> 2005~2008</small></a></li>
+                <li><a href="{% url 'legislator:county' county=county ad=5 %}" ><b>第5屆</b><small> 2002~2005</small></a></li>
+                <li><a href="{% url 'legislator:county' county=county ad=4 %}" ><b>第4屆</b><small> 1999~2002</small></a></li>
+                <li><a href="{% url 'legislator:county' county=county ad=3 %}" ><b>第3屆</b><small> 1996~1999</small></a></li>
+                <li><a href="{% url 'legislator:county' county=county ad=2 %}" ><b>第2屆</b><small> 1993~1996</small></a></li>
+                <li><a href="{% url 'legislator:county' county=county ad=1 %}" ><b>第1屆</b><small> ~1993</small></a></li>
+            </ul>
+            <font>
+        </h4>
+    </div>
+    <h4 class="text-center text-warning">{{county}}</h4>
+    {% if ly_list %}
+        <table class="table table-bordered table-condensed zebra" >
+            <thead>
+                <tr style="font-weight:bold;background-color: #CCFF99;">
+                    <th>立委</th>
+                    <th>行政區</th>
+                    <th>到職日期</th>
+                    <th>院會缺席</th>
+                    <th>法條修正草案數</th>
+                    <th>沒投票表決</th>
+                    <th>脫黨投票</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ly in ly_list %}
+                <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
+                    {% include "common/ly_dropdown.html" with color=True %}
+                    <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
+                    <td>{{ly.term_start|date:"Y-m-d"}}</td>
+                    <td><div class="text-center">{{ly.attendance_param.absent}} 次（{{ly.attendance_param.absent|divide:ly.attendance_param.total}} %）</div></td>
+                    <td><div class="text-center">{{ly.bill_param.chief}}</div></td>
+                    <td><div class="text-center">{{ly.vote_param.not_voting}} 次（{{ly.vote_param.not_voting|divide:ly.vote_param.total}} %）</div></td>
+                    <td><div class="text-center">{{ly.vote_param.conflict}} 次（{{ly.vote_param.conflict|divide:ly.vote_param.total}} %）</div></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% include "common/color_info_of_party.html" with column=21 %}
+        </table>
+    {% else %}
+        <p class="text-error">沒有立委</p>
+    {% endif %}
 {% endblock right %}
+
 {% block script %}
-{% include "common/sorttable.html" %}
-<script>
-    $(document).ready( function() {
-        $('#ly').addClass('active');
-        $('.dropdown-toggle').dropdown();
-        $("[rel='tooltip']").tooltip();
-    });
-</script>
+    <script>
+        $(document).ready( function() {
+            $('#ly').addClass('active');
+            $('.dropdown-toggle').dropdown();
+            $("[rel='tooltip']").tooltip();
+        });
+    </script>
 {% endblock script %}

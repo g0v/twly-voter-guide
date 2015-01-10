@@ -1,57 +1,35 @@
 {% load ly_extras %}
-<table class="table table-bordered zebra" >
-    <thead>
-        <tr style="background-color: #FFCCFF;">
-            <th style="width: 12%">法案</th>
-            <th style="width: 10%">最新進展</th>
-            {% if index == 'rejected' %}
-            <th style="width: 12%">被退回次數</th>
-            {% endif %}
-            <th style="width: 10%">提案人</th>
-            <th style="width: 20%">說明</th>
-            <th style="width: 36%">案由</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for fragment in bills %}
-        <tr style="background-color: {% cycle '#DDDDDD' 'white' %};">
-            <td style="text-align:center; vertical-align:middle;"><a href="{{ "http://ly.g0v.tw/bills/"|add:fragment.uid }}" target="_blank">法條修正對照表</a></td>
-            <td style="text-align:center; vertical-align:middle;">
-                {% if fragment.last_action %}
-                {{fragment.last_action}}（{{fragment.last_action_at|date:"Y-m-d"}}）
+{% load highlight %}
+
+<ul class="media-list">
+    {% for fragment in bills %}
+    <li class="media">
+        <div class="media-body well">
+            <h5 class="text-success">立法理由</h5>
+            <div class="media-heading">
+                {% if keyword %}
+                    {{fragment.proposed_by}}
+                    <small>（略）</small>
+                    {% highlight fragment.text with keyword %}
                 {% else %}
-                尚無資料
+                    {{fragment.abstract}}
                 {% endif %}
-            </td>
-            {% if index == 'rejected' %}
-            <td style="text-align:center; vertical-align:middle;"><b class="lead">{{fragment.totalNum}}</b></td>
-            {% endif %}
-            {% with ly=fragment.primary_proposer.0 %}
-            {% if ly %}
-            <td style="text-align:center; vertical-align:middle;"><a href="{% url 'legislator:biller_detail' ly.legislator_id %}" rel="tooltip" title="{{ ly.name }}的所有法條修正草案">{% include "common/ly_color_by_party.html" %}</a></td>
-            {% else %}
-            <td></td>
-            {% endif %}
-            {% endwith %}
-            <td style="vertical-align:middle;">
-                {{fragment.proposed_by}}
-            {% if keyword %}
-                {{fragment.summary|replace:keyword|safe}}</td>
-            {% else %}
-                {{fragment.summary}}</td>
-            {% endif %}
-            {% if fragment.abstract %}
-            {% if keyword %}
-            <td>{{fragment.abstract|linebreaksbr|replace:keyword|safe}}</td>
-            {% else %}
-            <td>{{fragment.abstract}}</td>
-            {% endif %}
-            {% else %}
-            <td></td>
-            {% endif %}
-    </tr>
-    {% empty %}
-    <p>完全沒有法案</p>
+            </div>
+            <div>
+                <h5 class="text-success">進展</h5>
+                <blockquote>
+                    {% if fragment.rejected_times != 0 %}
+                    <span class="label label-warning"><font class="lead">總共被退回程序委員會{{fragment.rejected_times}}次</font></span>
+                    {% endif %}
+                    {% for progress, date in fragment.progress_history %}
+                    {{progress}}（{{date}}）
+                    {% endfor %}
+                </blockquote>
+            </div>
+            <h4>
+                <a href="{{ "http://ly.g0v.tw/bills/"|add:fragment.uid }}" target="_blank">☞ 查看法條修正對照表</a>
+            </h4>
+        </div>
+    </li>
     {% endfor %}
-</tbody>
-</table>
+</ul>

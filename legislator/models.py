@@ -11,30 +11,30 @@ from committees.models import Legislator_Committees
 class Attendance(models.Model):
     legislator = models.ForeignKey('legislator.LegislatorDetail')
     sitting = models.ForeignKey('sittings.Sittings', to_field="uid")
-    category = models.CharField(max_length=100)
-    status = models.CharField(max_length=100)
+    category = models.CharField(db_index=True, max_length=100)
+    status = models.CharField(db_index=True, max_length=100)
     def __unicode__(self):
         return self.sitting
 
 class Legislator(models.Model):
-    id = models.CharField(max_length=32, primary_key=True)
-    uid = models.IntegerField(unique=True)
-    name = models.CharField(max_length=50)
+    uid = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=100)
     former_names = models.CharField(max_length=100, blank=True, null=True)
     def __unicode__(self):
         return self.name
 
 class LegislatorDetail(models.Model):
     legislator = models.ForeignKey(Legislator, to_field="uid", related_name='each_terms')
-    ad = models.IntegerField()
-    name = models.CharField(max_length=100)
+    ad = models.IntegerField(db_index=True, )
+    name = models.CharField(db_index=True, max_length=100)
     gender = models.CharField(max_length=100, blank=True, null=True)
-    party = models.CharField(max_length=100, blank=True, null=True)
+    title = models.CharField(max_length=100, blank=True, null=True)
+    party = models.CharField(db_index=True, max_length=100, blank=True, null=True)
     caucus = models.CharField(max_length=100, blank=True, null=True)
-    constituency = models.CharField(max_length=100)
-    county = models.CharField(max_length=100, blank=True, null=True)
+    constituency = models.IntegerField(db_index=True, blank=True, null=True)
+    county = models.CharField(db_index=True, max_length=100, blank=True, null=True)
     district = models.CharField(max_length=100, blank=True, null=True)
-    in_office = models.BooleanField()
+    in_office = models.BooleanField(db_index=True, )
     contacts = JSONField(null=True)
     term_start = models.DateField(blank=True, null=True)
     term_end = JSONField(null=True)
@@ -43,8 +43,14 @@ class LegislatorDetail(models.Model):
     remark = models.TextField(blank=True, null=True)
     image = models.URLField(blank=True, null=True)
     links = JSONField(null=True)
-    social_media = JSONField(null=True)
-    hits = models.IntegerField()
+    platform = models.TextField(blank=True, null=True)
+    bill_param = JSONField(null=True)
+    vote_param = JSONField(null=True)
+    attendance_param = JSONField(null=True)
+
+    class Meta:
+        unique_together = ("legislator", "ad")
+
     def __unicode__(self):
         return self.name
 
@@ -84,14 +90,6 @@ class LegislatorDetail(models.Model):
     def _ly_absent_count(self):
         return Attendance.objects.filter(legislator_id=self.id, category='YS', status='absent').count()
     ly_absent = property(_ly_absent_count)
-
-class Platform(models.Model):
-    legislator = models.ForeignKey(LegislatorDetail, blank=True, null=True)
-    content = models.TextField()
-    category = models.IntegerField(blank=True, null=True)
-    party = models.CharField(max_length=100, blank=True, null=True)
-    def __unicode__(self):
-        return self.content
 
 class PoliticalContributions(models.Model):
     legislator = models.ForeignKey(LegislatorDetail, related_name='politicalcontributions')
