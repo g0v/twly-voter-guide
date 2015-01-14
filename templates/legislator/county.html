@@ -34,10 +34,14 @@
                     <th>立委</th>
                     <th>行政區</th>
                     <th>到職日期</th>
-                    <th>院會缺席</th>
-                    <th>法條修正草案數</th>
-                    <th>沒投票表決</th>
-                    <th>脫黨投票</th>
+                    {% if ad > 5 %}
+                        <th>院會缺席</th>
+                        <th>沒投票表決</th>
+                        <th>脫黨投票</th>
+                    {% endif %}
+                    {% if ad > 7 %}
+                        <th>法條修正草案數</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -46,10 +50,14 @@
                     {% include "common/ly_dropdown.html" with color=True %}
                     <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
                     <td>{{ly.term_start|date:"Y-m-d"}}</td>
+                    {% if ad > 5 %}
                     <td><div class="text-center">{{ly.attendance_param.absent}} 次（{{ly.attendance_param.absent|divide:ly.attendance_param.total}} %）</div></td>
-                    <td><div class="text-center">{{ly.bill_param.chief}}</div></td>
                     <td><div class="text-center">{{ly.vote_param.not_voting}} 次（{{ly.vote_param.not_voting|divide:ly.vote_param.total}} %）</div></td>
                     <td><div class="text-center">{{ly.vote_param.conflict}} 次（{{ly.vote_param.conflict|divide:ly.vote_param.total}} %）</div></td>
+                    {% endif %}
+                    {% if ad > 7 %}
+                    <td><div class="text-center">{{ly.bill_param.chief}}</div></td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

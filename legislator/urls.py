@@ -4,7 +4,6 @@ from legislator import views
 
 ad = 8
 urlpatterns = patterns('',
-    url(r'^$', views.index, {"index": 'biller', "ad":''}),
     url(r'^(?P<index>conscience_vote|notvote)/(?P<ad>[1-9])/$', views.index, name='index'),
     url(r'^(?P<index>conscience_vote|notvote)/$', views.index, {"ad": ad}, name='index'),
     url(r'^counties/(?P<ad>\d+)/$', views.counties, name='counties'),

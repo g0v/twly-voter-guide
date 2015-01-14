@@ -62,6 +62,7 @@
                         <td>{{ly.bill_param.chief}} 個</td>
                     </tr>
                     {% endif %}
+                    {% if ly.ad > 5 %}
                     <tr>
                         <td style="background-color: lightgrey;">沒投票表決</td>
                         <td>{{ly.vote_param.not_voting}} 次<br>(投票缺席率{{ly.vote_param.not_voting|divide:ly.vote_param.total}} %)</td>
@@ -74,6 +75,7 @@
                         <td style="background-color: lightgrey;">院會缺席</td>
                         <td>{{ly.attendance_param.absent}} 次<br>(院會缺席率{{ly.attendance_param.absent|divide:ly.attendance_param.total}} %)</td>
                     </tr>
+                    {% endif %}
                     {% for contact in ly.contacts %}
                     <tr>
                         <td colspan=2></td>

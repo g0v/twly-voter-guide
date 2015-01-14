@@ -2,7 +2,7 @@
 import operator
 import re
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum, F, Q
 from django.forms.models import model_to_dict
@@ -56,7 +56,7 @@ def counties(request, ad):
 def county(request, county, ad):
     ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=True, county=county)\
                                       .order_by('party', 'name')
-    return render(request, 'legislator/county.html', {'ad': ad, 'ly_list': ly_list, 'county': county})
+    return render(request, 'legislator/county.html', {'ad': int(ad), 'ly_list': ly_list, 'county': county})
 
 def committee(request, committee, ad):
     ly_list = Legislator_Committees.objects.select_related('legislator').filter(ad=ad, legislator__in_office=True, committee=committee).order_by('-session', 'legislator__party', 'legislator__name')
@@ -123,7 +123,7 @@ def chart_report(request, ad, index='vote'):
     return render(request,'legislator/chart_report.html', {'compare':compare,'ad':ad,'title':u'%s(第%s屆)' %(title, ad),'content':content,'index':index,'vote_obj':vote_obj,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj, 'data': list(ly_obj.values('name', 'totalNum'))} )
 
 def political_contributions_report(request, index='in_party', compare='conscience_vote', party=u'中國國民黨'):
-    ly_obj, title, content, data = [], None, None, None
+    ly_obj, legend = [], []
     pc_field = {
         "in_individual": u'個人捐贈收入',
         "in_profit": u'營利事業捐贈收入',
@@ -156,7 +156,7 @@ def political_contributions_report(request, index='in_party', compare='conscienc
         },
         "biller": {
             "legend": u'法條修正草案數',
-            "query": 'SELECT COUNT(*) FROM bill_bills WHERE bill_bills.priproposer=True AND bill_bills.petition=False AND bill_bills.legislator_id = legislator_legislatordetail.id GROUP BY bill_bills.legislator_id'
+            "query": 'SELECT COUNT(*) FROM bill_legislator_bill WHERE bill_legislator_bill.priproposer=True AND bill_legislator_bill.petition=False AND bill_legislator_bill.legislator_id = legislator_legislatordetail.id GROUP BY bill_legislator_bill.legislator_id'
         }
     }
     filter_dict = {
@@ -165,15 +165,17 @@ def political_contributions_report(request, index='in_party', compare='conscienc
         "politicalcontributions__%s__isnull" % index: False
     }
     if pc_field.get(index) and index_field.get(compare):
-        legend = [pc_field.get(index), index_field.get(compare).get('legend'), 'money', 'count']
+        legend = [pc_field[index], index_field[compare].get('legend'), 'money', 'count']
         ly_obj = LegislatorDetail.objects.filter(**filter_dict)\
                                          .annotate(totalNum=Sum('politicalcontributions__%s' % index))\
                                          .order_by('-totalNum')\
                                          .extra(select={'compare': index_field.get(compare).get('query')},)
     elif pc_field.get(index) and pc_field.get(compare):
-        legend = [pc_field.get(index), pc_field.get(compare), 'money', 'money']
+        legend = [pc_field[index], pc_field[compare], 'money', 'money']
         ly_obj = LegislatorDetail.objects.filter(**filter_dict)\
                                          .annotate(totalNum=Sum('politicalcontributions__%s' % index))\
                                          .order_by('-totalNum')\
                                          .annotate(compare=Sum('politicalcontributions__%s' % compare))
-    return render(request,'legislator/chart_report_for_political_contribution.html', {'compare':compare,'legend':legend,'party':party,'index':index,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj,'data':list(ly_obj.values('name', 'totalNum', 'compare')),'pc_field':sorted(pc_field.items()),'index_field':index_field})
+    else:
+        raise Http404
+    return render(request, 'legislator/chart_report_for_political_contribution.html',  {'compare': compare, 'legend': legend, 'party': party, 'index': index, 'ly_name':  [ly.name for ly in ly_obj], 'ly_obj': ly_obj, 'data': list(ly_obj.values('name',  'totalNum',  'compare')), 'pc_field': sorted(pc_field.items()), 'index_field': index_field})

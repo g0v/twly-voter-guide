@@ -43,7 +43,7 @@
         {% if keyword %}
         包含<font style="color: red;">"{{keyword}}"</font>的表決&nbsp;
         {% endif %}
-        {% if ly.vote_param.total > 0 %}
+        {% if ly.vote_param and ly.vote_param.total > 0 %}
             <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=agree">{{ly.vote_param.agree}}次贊成</a>&nbsp;,&nbsp;
             <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=abstain">{{ly.vote_param.abstain}}次棄權</a>&nbsp;,&nbsp;
             <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=disagree">{{ly.vote_param.disagree}}次反對</a>&nbsp;,&nbsp;
