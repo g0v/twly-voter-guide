@@ -5,6 +5,7 @@ from json_field import JSONField
 
 
 class Candidates(models.Model):
+    uid = models.CharField(primary_key=True, max_length=64)
     legislator = models.ForeignKey('legislator.LegislatorDetail', blank=True, null=True)
     ad = models.IntegerField(db_index=True, )
     number = models.IntegerField(db_index=True, blank=True, null=True)
@@ -16,6 +17,7 @@ class Candidates(models.Model):
     county = models.CharField(db_index=True, max_length=100)
     district = models.CharField(db_index=True, max_length=100, blank=True, null=True)
     votes = models.IntegerField(blank=True, null=True)
+    votes_percentage = models.CharField(max_length=100, blank=True, null=True)
     elected = models.NullBooleanField(db_index=True)
     contact_details = JSONField(null=True)
     education = models.TextField(blank=True, null=True)
@@ -24,6 +26,11 @@ class Candidates(models.Model):
     image = models.URLField(blank=True, null=True)
     links = JSONField(null=True)
     platform = models.TextField(blank=True, null=True)
+    politicalcontributions = JSONField(null=True)
+
+    class Meta:
+        unique_together = ('uid', 'ad')
+
     def __unicode__(self):
         return self.name
 
