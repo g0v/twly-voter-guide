@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load ly_extras %}
+
+{% block title %}
+    <title>立委投票指南: {{ad|ad_year}}{{county}}候選人</title>
+    <meta property="og:title" content="立委投票指南: {{ad|ad_year}}{{county}}候選人"/>
+    <meta itemprop="name" content="立委投票指南: {{ad|ad_year}}{{county}}候選人">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.css" rel="stylesheet">
+    <script src="//semantic-ui.com/dist/semantic.min.js"></script>
+{% endblock title %}
+
+{% block right %}
+    <div class="hero-unit row" style="margin-left: 0px;">
+        <img class="pull-right" src="https://s3-ap-southeast-1.amazonaws.com/councilor.tw/county-logo/{{county}}.png"></img>
+        <h2>{{ad|ad_year}} {{county}} - 立委選區</h2>
+    </div>
+    <div class="four column doubling ui grid row">
+            {% for district in districts %}
+            <div class="column direct-container">
+            <a href="{% url 'candidates:district' county=county ad=ad constituency=district.constituency %}" class="direct-item {% cycle 'council-bluegreen' 'council-darkbluegreen' %}">
+                <h4>{{district.constituency|stringformat:"02d"}}. {{district.district}}</h4>
+                <div>&nbsp;</div>
+                <div class="direct-sub">
+                    <p class="county-candidate">{{district.candidates}}</p>
+                </div>
+            </a>
+            </div>
+            {% endfor %}
+        </div>
+        <hr>
+        <div id="disqus_thread"></div>
+    </div>
+{% endblock right %}

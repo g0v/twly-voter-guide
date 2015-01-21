@@ -15,7 +15,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Candidates',
             fields=[
-                ('uid', models.CharField(max_length=64, serialize=False, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('uid', models.CharField(max_length=64)),
                 ('ad', models.IntegerField(db_index=True)),
                 ('number', models.IntegerField(db_index=True, null=True, blank=True)),
                 ('name', models.CharField(max_length=100)),

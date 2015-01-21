@@ -5,8 +5,9 @@ from json_field import JSONField
 
 
 class Candidates(models.Model):
-    uid = models.CharField(primary_key=True, max_length=64)
-    legislator = models.ForeignKey('legislator.LegislatorDetail', blank=True, null=True)
+    uid = models.CharField(max_length=64)
+    latest_term = models.ForeignKey('legislator.LegislatorDetail', blank=True, null=True)
+    legislator = models.ForeignKey('legislator.LegislatorDetail', blank=True, null=True, related_name='elected_candidate')
     ad = models.IntegerField(db_index=True, )
     number = models.IntegerField(db_index=True, blank=True, null=True)
     name = models.CharField(max_length=100)
@@ -33,4 +34,3 @@ class Candidates(models.Model):
 
     def __unicode__(self):
         return self.name
-

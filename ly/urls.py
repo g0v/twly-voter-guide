@@ -21,6 +21,7 @@ router.register(r'political_contributions', views.PoliticalContributionsViewSet)
 #<--
 urlpatterns = patterns('',
     url(r'^legislator/', include('legislator.urls', namespace="legislator")),
+    url(r'^candidates/', include('candidates.urls', namespace="candidates")),
     url(r'^vote/', include('vote.urls', namespace="vote")),
     url(r'^bill/', include('bill.urls', namespace="bill")),
     url(r'^about/$', 'ly.views.about', name='about'),

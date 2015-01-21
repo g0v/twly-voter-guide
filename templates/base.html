@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% block title %}
         {% endblock %}
-        <meta name="keywords" content="立委投票指南,台灣,立委,立法委員,委員會,提案,立法院,表決,投票,選舉,公民" />
+        <meta name="keywords" content="立委投票指南,台灣,立委,立法委員,委員會,法案,立法院,表決,投票,選舉,公民" />
         <meta name="description" content="減少盲目投票，讓民主社會的台灣更進步；輸入關鍵字，關心你關心的議題" />
         <meta property="fb:admins" content="TaiwanLy"/>
         <meta property="fb:app_id" content="562924493762519"/>
@@ -14,12 +14,13 @@
         <meta property="og:site_name" content="立委投票指南"/>
         <meta property="og:url" content="{{current_url}}"/>
         <meta property="og:description" content="減少盲目投票，讓民主社會的台灣更進步；輸入關鍵字，關心你關心的議題"/>
-        <meta property="og:image" content="https://s3-ap-northeast-1.amazonaws.com/twly.tw/taiwan-vote.PNG"/>
+        <meta property="og:image" content="https://s3-ap-southeast-1.amazonaws.com/councilor.tw/facebook-og-image.png"/>
         <meta itemprop="description" content="減少盲目投票，讓民主社會的台灣更進步；輸入關鍵字，關心你關心的議題">
-        <meta itemprop="image" content="https://s3-ap-northeast-1.amazonaws.com/twly.tw/taiwan-vote.PNG">
+        <meta itemprop="image" content="https://s3-ap-southeast-1.amazonaws.com/councilor.tw/facebook-og-image.png">
         <link href="https://s3-ap-northeast-1.amazonaws.com/twly.tw/bootstrap.min.css" rel="stylesheet">
         <link href="https://s3-ap-northeast-1.amazonaws.com/twly.tw/bootstrap-responsive.min.css" rel="stylesheet" >
-        <link rel="shortcut icon" href="https://s3-ap-northeast-1.amazonaws.com/twly.tw/favicon.png">
+        <link href="https://s3-ap-southeast-1.amazonaws.com/councilor.tw/g0v.css" rel="stylesheet">
+        <link rel="shortcut icon" href="https://s3-ap-southeast-1.amazonaws.com/councilor.tw/favicon.ico.png">
         <!--[if lt IE 9]>
         <script src="//cdnjs.bootcss.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
         <![endif]-->
@@ -49,6 +50,7 @@
                 <a class="brand" href="/">&nbsp;<font><b>立委投票指南</b></font></a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
+                        <li id="candidates"><a href="{% url 'candidates:counties' ad=8 %}" >2012候選人</a></li>
                         <li id="ly" class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">找立委<b class="caret"></b></a>
                         <ul class="dropdown-menu">
