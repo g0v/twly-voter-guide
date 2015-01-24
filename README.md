@@ -49,6 +49,16 @@ createdb -h localhost -U <username> ly
 pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d ly local_db.dump
 ```
 
+## Install elasticsearch         
+```
+wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.2.deb
+sudo dpkg -i elasticsearch-1.4.2.deb
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java7-installer
+sudo /etc/init.d/elasticsearch start
+```
+
 ## Django settings.py          
 create and edit local_settings.py in twly-voter-guide/ly/ to configing your database parameter(notice **USER**, **PASSWORD** below) and **SECRET_KEY**, [sample](https://github.com/g0v/twly-voter-guide/blob/master/ly/local_settings.sample.py)       
 See [Django tutorial](https://docs.djangoproject.com/en/dev/intro/tutorial01/) or maybe use [online generator](http://www.miniwebtool.com/django-secret-key-generator/) to get SECRET_KEY for convenience				
@@ -67,6 +77,11 @@ DATABASES = {
 }
 ```
 Because local_settings.py is list in .gitignore, so this file won't be appear in source control, for safety.
+
+## build elasticSearch index
+```
+python manage.py rebuild_index
+```
 
 ## runserver
 ```

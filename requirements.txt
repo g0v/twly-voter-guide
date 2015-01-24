@@ -1,15 +1,28 @@
 Django==1.7.1
+
+# db related
+psycopg2==2.5.1
 django-json-field==0.5.5
+django-postgrespool==0.3.0
+
+# api related
+djangorestframework==2.3.13
 django-filter==0.7
+
+# deploy related
 dj-database-url==0.2.2
 dj-static==0.0.6
 gunicorn==18.0
-psycopg2==2.5.1
 static==0.4
-django-pagination==1.0.7
-djangorestframework==2.3.13
-django-debug-toolbar==1.2.2
+
+# testing related
 django-discover-runner==1.0
 coverage==3.7.1
+
+# elastic search
+elasticsearch==1.3.0
 django-haystack==2.3.1
-django-postgrespool==0.3.0
+
+# others
+django-pagination==1.0.7
+django-debug-toolbar==1.2.2
