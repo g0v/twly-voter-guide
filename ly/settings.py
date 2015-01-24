@@ -209,3 +209,9 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'twly',
     },
 }
+
+DATABASE_POOL_ARGS = {
+    'max_overflow': 10,
+    'pool_size': 5,
+    'recycle': 300
+}
