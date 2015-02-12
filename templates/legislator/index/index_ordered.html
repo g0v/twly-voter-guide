@@ -2,62 +2,36 @@
 {% load ly_extras %}
 
 {% block ly_table %}
-    <h3 class="text-center text-warning">
-        {% if index == 'biller' %}
-            <form action="" method="get" class="form-inline text-center" id="form_bill">
-                <fieldset>法條修正草案數(多&rarr;少)
-                    {% include "common/bills_progress_form.html" %}
-                    <label class="checkbox">
-                        <input type="checkbox" name="proposertype" id="proposertype" {% if proposertype %} checked{% endif %} rel="tooltip" title="計算草案數時，不是第一提案人也要計數嗎?(第一提案人貢獻較高，其他人貢獻較低或只是掛名)">
-                    </label>
-                </fieldset>
-            </form>
-            <h4 class="text-center"><p>量化數據不能代表好壞只能參考，修正草案數多不一定較好，還請點選該立委觀看其修正草案的內容再作論定。</p></h4>
-        {% elif index == 'conscience_vote' %}
-            脫黨投票次數(多&rarr;少)<h4 class="text-center"><p>脫黨投票：立委表決的決定與所屬政黨多數意見不同。</p><p>脫黨投票不一定較好，可能該立委是憑良心投票，也可能是受財團、企業影響所致，還請點選該立委觀看其脫黨投票的表決內容再作論定。</p></h4>
-        {% else %}
-            投票表決缺席次數(多&rarr;少)
-        {% endif %}
-    </h3>
+    <div class="description span12" style="margin-left: 1%;">
+        <h3 class="text-warning">
+            {{param.title}}率
+        </h3>
+        {% autoescape off %}
+            {{param.description}}
+        {% endautoescape %}
+    </div>
     <table class="table table-bordered table-condensed">
         {% with col=15 %}
         {% if ly_list %}
-            {% for ly in ly_list %}
-                {% if forloop.counter0|divisibleby:col %}
-                    {% if forloop.counter0 != 0 %}
-                        </tr>
-                    {% endif %}
-                    <tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
-                        <td></td>
-                {% endif %}
-                <td class="name {{ly.county}} {{ly.gender}}">
-                    {% if index == 'biller' %}
-                        <a href="{% url 'legislator:biller_detail' legislator_id=ly.legislator_id ad=ly.ad %}" rel="tooltip" title="草案{{ly.totalNum}}個">
-                    {% elif index == 'conscience_vote' %}
-                        <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad index='conscience' %}" rel="tooltip" title="脫黨投票{{ly.totalNum}}次(脫黨投票率{{ly.vote_param.conflict|divide:ly.vote_param.total}} %)">
-                    {% else %}
-                        <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}" rel="tooltip" title="投票缺席{{ly.totalNum}}次(投票缺席率{{ly.vote_param.not_voting|divide:ly.vote_param.total}} %)">
-                    {% endif %}
-                    {% include "common/ly_color_by_party.html" %}
-                    </a>
-                </td>
-            {% endfor %}
-        {% endif %}
-        {% if no_count_list %}
             <tr>
-                <td rowspan="{% widthratio no_count_list|length|add:10 col 1 %}" style="background-color: #FF99FF; text-align:center; vertical-align:middle; font-weight:bold;">0次</td>
-            {% for ly in no_count_list %}
-                {% if forloop.counter0|divisibleby:col and forloop.counter0 != 0 %}
-                    </tr>
-                {% endif %}
-                <td class="name {{ly.county}} {{ly.gender}}" style="background-color: #FFCCFF;">
-                    {% if index == 'biller' %}<a href="{% url 'legislator:biller_detail' legislator_id=ly.legislator_id ad=ly.ad %}" rel="tooltip" title="草案0個">
-                    {% elif index == 'conscience_vote' %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad index='conscience' %}" rel="tooltip" title="脫黨投票0次">
-                    {% else %}<a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}" rel="tooltip" title="沒投票0次">
-                    {% endif %}
-                    {% include "common/ly_color_by_party.html" %}
-                    </a>
-                </td>
+                <td>{{param.title}}率</td>
+                <td colspan="{{col|add:-1}}"></td>
+            </tr>
+            {% regroup ly_list by ranking as rankings %}
+            {% for ranking in rankings %}
+                <tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
+                    <td>{{ranking.grouper|floatformat}} % ~ {{ranking.grouper|add:10|floatformat}} %</td>
+                    {% for ly in ranking.list %}
+                        <td class="name {{ly.county}} {{ly.gender}}">
+                            <a href="{% url param.url_class legislator_id=ly.legislator_id ad=ly.ad index=param.index %}" rel="tooltip" title="{{param.title}}率{{ly.percentage}} %（{{param.title}}{{ly.count}}次）">
+                        {% include "common/ly_color_by_party.html" %}
+                        </a>
+                        </td>
+                        {% if forloop.counter|divisibleby:col %}
+                            </tr><td></td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
             {% endfor %}
         {% endif %}
         {% include "common/color_info_of_party.html" with column=col|add:1 %}

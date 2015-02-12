@@ -24,28 +24,29 @@ def get_legislator(legislator_id, ad):
         print e
 
 def index(request, index, ad):
-    query = Q(ad=ad, in_office=True)
     outof_ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=False)
-    if index == 'conscience_vote':
-        ly_list = LegislatorDetail.objects.filter(query, votes__conflict=True)\
-                                          .annotate(totalNum=Count('votes__id'))\
-                                          .order_by('-totalNum','party')
-        no_count_list = LegislatorDetail.objects.filter(query).exclude(legislator_id__in=ly_list.values_list('legislator_id', flat=True)).order_by('party')
-        return render(request,'legislator/index/index_ordered.html', {'ad':ad,'no_count_list':no_count_list,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index})
-    elif index == 'notvote':
-        ly_list = LegislatorDetail.objects.filter(query, votes__decision__isnull=True)\
-                                          .annotate(totalNum=Count('votes__id'))\
-                                          .exclude(totalNum=0)\
-                                          .order_by('-totalNum','party')
-        no_count_list = LegislatorDetail.objects.filter(query).exclude(legislator_id__in=ly_list.values_list('legislator_id', flat=True))
-        return render(request,'legislator/index/index_ordered.html', {'ad':ad,'no_count_list':no_count_list,'ly_list': ly_list,'outof_ly_list': outof_ly_list,'index':index})
-
-def committees(request, ad):
-    ly_list = Legislator_Committees.objects.select_related()\
-                                           .filter(ad=ad, in_office=True)\
-                                           .order_by('committee', 'session', 'legislator__party', 'legislator__name')
-    outof_ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=False)
-    return render(request, 'legislator/index/committees.html', {'ad': ad, 'ly_list': ly_list, 'outof_ly_list': outof_ly_list})
+    maps = {
+        'conflict': {
+            'title': u'脫黨投票',
+            'description': u'<h4><p>脫黨投票：立委表決的決定與所屬政黨多數意見不同。</p><small>脫黨投票不一定較好，可能該立委是憑良心投票，也可能是受財團、企業影響所致，還請點選該立委觀看其脫黨投票的表決內容再作論定。</small>',
+            'url_class': 'legislator:voter_detail',
+            'index': 'conscience',
+        },
+        'not_voting': {
+            'title': u'投票缺席',
+            'description': u'',
+            'url_class': 'legislator:voter_detail',
+            'index': '',
+        },
+    }
+    ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=True)\
+                                      .extra(select={
+                                          'count': "cast(vote_param::json->>'%s' as int)" % index,
+                                          'percentage': "round(cast(cast(vote_param::json->>'%s' as float)/cast(vote_param::json->>'total' as float)*100 as numeric), 2)" % index,
+                                          'ranking': "floor(cast(vote_param::json->>'%s' as float)/cast(vote_param::json->>'total' as float)*10)*10" % index,
+                                      },)\
+                                      .order_by('-percentage', 'party')
+    return render(request, 'legislator/index/index_ordered.html', {'ad': ad, 'ly_list': ly_list, 'outof_ly_list': outof_ly_list, 'param': maps[index], 'index': index})
 
 def counties(request, ad):
     ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=True)\
@@ -63,19 +64,15 @@ def committee(request, committee, ad):
     return render(request, 'legislator/committee.html',  {'ly_list': ly_list, 'committee': committee})
 
 def personal_political_contributions(request, legislator_id, ad):
-    ly = get_object_or_404(LegislatorDetail.objects.select_related('politicalcontributions'), ad=ad, legislator_id=legislator_id)
+    ly = get_object_or_404(LegislatorDetail.objects.select_related('elected_candidate'), ad=ad, legislator_id=legislator_id)
     try:
-        pc = ly.politicalcontributions.get()
-        data_income = model_to_dict(pc, fields=["in_individual", "in_profit", "in_party", "in_civil", "in_anonymous", "in_others"])
-        data_expenses = model_to_dict(pc, fields=["out_personnel", "out_propagate", "out_campaign_vehicle", "out_campaign_office", "out_rally", "out_travel", "out_miscellaneous", "out_return", "out_exchequer", "out_public_relation"])
-        data_total = model_to_dict(pc, fields=["in_total", "out_total"])
-    except:
+        pc = ly.elected_candidate.get().politicalcontributions
+        return render(request, 'legislator/personal_politicalcontributions.html', {'ly': ly, 'data_total': {k: pc[k] for k in ['in_total', 'out_total']}, 'data_income': pc['in'], 'data_expenses': pc['out']})
+    except Exception, e:
         raise Http404
-    return render(request, 'legislator/personal_politicalcontributions.html', {'ly': ly, 'data_total': data_total, 'data_income': data_income, 'data_expenses': data_expenses})
 
 def voter_detail(request, legislator_id, ad, index):
     ly = get_object_or_404(LegislatorDetail.objects.select_related('votes'), ad=ad, legislator_id=legislator_id)
-
     qs = Q(conflict=True) if index == 'conscience' else Q()
     if 'decision' in request.GET:
         decisions = {"agree": Q(decision=1), "disagree": Q(decision=-1), "abstain": Q(decision=0), "notvote": Q(decision__isnull=True)}

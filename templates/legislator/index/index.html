@@ -8,10 +8,10 @@
 {% block right %}
 <div class="page-header text-center">
     <h3>台灣<b>第{{ad}}屆</b>立委<small> {{ad|ad_year}}</small></h3>
-    {% if index == 'conscience_vote' or index == 'notvote' or index == 'district' %}
+    {% if index == 'conflict' or index == 'not_voting' or index == 'district' %}
     <h4>
         <font class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">想看其他屆<b class="caret"></b></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">其他屆<b class="caret"></b></a>
         <ul class="dropdown-menu">
             <li><a href="{% url 'legislator:index' index %}" ><b>第8屆</b><small> 2012~2016</small></a></li>
             <li><a href="{% url 'legislator:index' index=index ad=7 %}" ><b>第7屆</b><small> 2008~2012</small></a></li>
