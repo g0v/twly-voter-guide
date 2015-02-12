@@ -17,7 +17,7 @@ router.register(r'legislator_vote', views.Legislator_VoteViewSet)
 router.register(r'bill', views.BillViewSet)
 router.register(r'legislator_bill', views.Legislator_BillViewSet)
 router.register(r'attendance', views.AttendanceViewSet)
-router.register(r'political_contributions', views.PoliticalContributionsViewSet)
+router.register(r'candidates', views.CandidatesViewSet)
 #<--
 urlpatterns = patterns('',
     url(r'^legislator/', include('legislator.urls', namespace="legislator")),

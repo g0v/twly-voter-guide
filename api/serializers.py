@@ -1,16 +1,13 @@
 #from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from . import fields
-from legislator.models import Legislator, LegislatorDetail, Attendance, PoliticalContributions
+from legislator.models import Legislator, LegislatorDetail, Attendance
+from candidates.models import Candidates
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from vote.models import Vote, Legislator_Vote
 from bill.models import Bill, Legislator_Bill
 
-
-class PoliticalContributionsSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = PoliticalContributions
 
 class CommitteesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -52,8 +49,6 @@ class SittingsSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('uid', 'name', 'committee', 'date', 'ad', 'session', 'votes')
 
 class LegislatorDetailSerializer(serializers.HyperlinkedModelSerializer):
-    politicalcontributions = PoliticalContributionsSerializer(many=True)
-    #votes = Legislator_VoteSerializer(many=True)
     contacts = fields.Field()
     term_end = fields.Field()
     links = fields.Field()
@@ -62,6 +57,14 @@ class LegislatorDetailSerializer(serializers.HyperlinkedModelSerializer):
     attendance_param = fields.Field()
     class Meta:
         model = LegislatorDetail
+        fields = ('legislator', 'ad', 'name', 'gender', 'title', 'party', 'caucus', 'constituency', 'county', 'district', 'in_office', 'contacts', 'term_start', 'term_end', 'education', 'experience', 'remark', 'image', 'links', 'platform', 'bill_param', 'vote_param', 'attendance_param', 'elected_candidate', )
+
+class CandidatesSerializer(serializers.HyperlinkedModelSerializer):
+    contact_details = fields.Field()
+    links = fields.Field()
+    politicalcontributions = fields.Field()
+    class Meta:
+        model = Candidates
 
 class LegislatorSerializer(serializers.HyperlinkedModelSerializer):
     each_terms = LegislatorDetailSerializer(many=True)

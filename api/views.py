@@ -3,17 +3,13 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import generics
 from .serializers import *
-from legislator.models import Legislator, LegislatorDetail, Attendance, PoliticalContributions
+from legislator.models import Legislator, LegislatorDetail, Attendance
+from candidates.models import Candidates
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from vote.models import Vote, Legislator_Vote
 from bill.models import Bill, Legislator_Bill
 
-
-class PoliticalContributionsViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = PoliticalContributions.objects.all()
-    serializer_class = PoliticalContributionsSerializer
-    filter_fields = ('legislator',)
 
 class LegislatorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Legislator.objects.all()
@@ -23,12 +19,17 @@ class LegislatorViewSet(viewsets.ReadOnlyModelViewSet):
 class LegislatorDetailViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = LegislatorDetail.objects.all()
     serializer_class = LegislatorDetailSerializer
-    filter_fields = ('legislator', 'ad', 'name', 'gender', 'party', 'caucus', 'constituency', 'county', 'in_office', 'term_start', 'term_end', 'politicalcontributions')
+    filter_fields = ('legislator', 'ad', 'name', 'gender', 'party', 'caucus', 'constituency', 'county', 'in_office', 'term_start', 'term_end')
 
 class AttendanceViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
     filter_fields = ('legislator', 'sitting', 'category', 'status')
+
+class CandidatesViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Candidates.objects.all()
+    serializer_class = CandidatesSerializer
+    #filter_fields = ('legislator', 'ad', 'name', 'gender', 'party', 'caucus', 'constituency', 'county', 'in_office', 'term_start', 'term_end')
 
 class SittingsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Sittings.objects.all()
