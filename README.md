@@ -13,7 +13,7 @@ In Ubuntu 12.04 LTS
 sudo apt-get update
 sudo apt-get upgrade
 sudo reboot
-sudo apt-get install git python-pip python-dev python-setuptools postgresql libpq-dev
+sudo apt-get install git python-pip python-dev python-setuptools postgresql libpq-dev python-software-properties
 easy_install virtualenv
 ```
 

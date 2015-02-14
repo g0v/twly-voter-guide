@@ -21,4 +21,4 @@ def distinct_progress_of_bill(request):
     return {'distinct_progress_of_bill': Bill.objects.filter(last_action__isnull=False).values_list('last_action', flat=True).distinct('last_action')}
 
 def party_list(request):
-    return {'party_list': [u'\u4e2d\u570b\u570b\u6c11\u9ee8', u'\u53f0\u7063\u5718\u7d50\u806f\u76df', u'\u6c11\u4e3b\u9032\u6b65\u9ee8', u'\u7121\u9ee8\u5718\u7d50\u806f\u76df', u'\u7121\u9ee8\u7c4d', u'\u89aa\u6c11\u9ee8']}
+    return {'party_list': [u'\u4e2d\u570b\u570b\u6c11\u9ee8', u'\u81fa\u7063\u5718\u7d50\u806f\u76df', u'\u6c11\u4e3b\u9032\u6b65\u9ee8', u'\u7121\u9ee8\u5718\u7d50\u806f\u76df', u'\u7121\u9ee8\u7c4d', u'\u89aa\u6c11\u9ee8']}

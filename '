@@ -145,18 +145,15 @@ def political_contributions_report(request, index='in_party', compare='conscienc
     index_field = {
         "conscience_vote": {
             "legend": u'脫黨投票次數',
-            "column": 'vote_param',
-            "key": 'conflict',
+            "query": 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.conflict=True AND vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id'
         },
         "vote": {
             "legend": u'表決缺席次數',
-            "column": 'vote_param',
-            "key": 'not_voting',
+            "query": 'SELECT COUNT(*) FROM vote_legislator_vote WHERE vote_legislator_vote.decision isnull AND vote_legislator_vote.legislator_id = legislator_legislatordetail.id GROUP BY vote_legislator_vote.legislator_id'
         },
         "biller": {
             "legend": u'法條修正草案數',
-            "column": 'bill_param',
-            "key": 'chief',
+            "query": 'SELECT COUNT(*) FROM bill_legislator_bill WHERE bill_legislator_bill.priproposer=True AND bill_legislator_bill.petition=False AND bill_legislator_bill.legislator_id = legislator_legislatordetail.id GROUP BY bill_legislator_bill.legislator_id'
         }
     }
     filter_dict = {
@@ -169,9 +166,10 @@ def political_contributions_report(request, index='in_party', compare='conscienc
         ly_obj = LegislatorDetail.objects.filter(**filter_dict)\
                                          .extra(select={
                                              'totalNum': "SELECT cast(COALESCE(politicalcontributions::json->'in'->>'%s', politicalcontributions::json->'out'->>'%s', politicalcontributions::json->>'%s') as int) FROM candidates_candidates WHERE candidates_candidates.legislator_id = legislator_legislatordetail.id" % (index, index, index),
-                                             'compare': "SELECT cast(%s::json->>'%s' as int) FROM candidates_candidates WHERE candidates_candidates.legislator_id = legislator_legislatordetail.id" % (index_field[compare]['column'], index_field[compare]['key']),
+                                             'compare': "SELECT cast(politicalcontributions::json->'in'->>'%s' as int) FROM candidates_candidates WHERE candidates_candidates.legislator_id = legislator_legislatordetail.id" % (index, index, index),
                                          },)\
-                                         .order_by('-totalNum')
+                                         .order_by('-totalNum')\
+                                         .extra(select={'compare': index_field.get(compare).get('query')},)
     elif pc_field.get(index) and pc_field.get(compare):
         legend = [pc_field[index], pc_field[compare], 'money', 'money']
         ly_obj = LegislatorDetail.objects.filter(**filter_dict)\

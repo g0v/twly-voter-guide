@@ -1,6 +1,5 @@
 # Django settings for ly project.
 from os.path import join, abspath, dirname
-from local_settings import *
 
 
 here = lambda *x: join(abspath(dirname(__file__)), *x)
@@ -14,8 +13,16 @@ ADMINS = (
     ('thewayiam', 'twly.tw@gmail.com'),
 )
 
-MANAGERS = ADMINS
 
+SECRET_KEY = 'some_random_secrect'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': join(PROJECT_ROOT, 'db.sqlite3'),
+    }
+}
+
+MANAGERS = ADMINS
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -86,16 +93,8 @@ TEMPLATE_LOADERS = (
     #     'django.template.loaders.eggs.Loader',
 )
 
-if not DEBUG:
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-            'LOCATION': 'cache_table',
-        }
-    }
-
 MIDDLEWARE_CLASSES = (
-    #'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -104,7 +103,7 @@ MIDDLEWARE_CLASSES = (
     'pagination.middleware.PaginationMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'django.middleware.cache.FetchFromCacheMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 ROOT_URLCONF = 'ly.urls'
@@ -215,3 +214,8 @@ DATABASE_POOL_ARGS = {
     'pool_size': 5,
     'recycle': 300
 }
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
