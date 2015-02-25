@@ -15,12 +15,6 @@ ADMINS = (
 
 
 SECRET_KEY = 'some_random_secrect'
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': join(PROJECT_ROOT, 'db.sqlite3'),
-    }
-}
 
 MANAGERS = ADMINS
 
