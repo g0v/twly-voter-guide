@@ -27,7 +27,7 @@ class VoteSerializer(serializers.HyperlinkedModelSerializer):
     sitting_id = serializers.SlugRelatedField(many=True, read_only=True, slug_field='uid')
     class Meta:
         model = Vote
-        fields = ('voter', 'uid', 'sitting', 'vote_seq', 'content', 'conflict', 'results', 'result')
+        fields = ('uid', 'sitting', 'vote_seq', 'content', 'conflict', 'results', 'result')
 
 class Legislator_BillSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
