@@ -57,24 +57,30 @@
                         <td>{{ ly.term_start|date:"Y-m-d" }}</td>
                     </tr>
                     {% if ly.ad > 7 %}
-                    <tr>
-                        <td style="background-color: lightgrey;">法條修正案</td>
-                        <td>{{ly.bill_param.chief}} 個</td>
-                    </tr>
+                        {% if ly.bill_param %}
+                        <tr>
+                            <td style="background-color: lightgrey;">法條修正案</td>
+                            <td>{{ly.bill_param.chief}} 個</td>
+                        </tr>
+                        {% endif %}
                     {% endif %}
                     {% if ly.ad > 5 %}
-                    <tr>
-                        <td style="background-color: lightgrey;">沒投票表決</td>
-                        <td>{{ly.vote_param.not_voting}} 次<br>(投票缺席率{{ly.vote_param.not_voting|divide:ly.vote_param.total}} %)</td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: lightgrey;">脫黨表決</td>
-                        <td>{{ly.vote_param.conflict}} 次<br>(脫黨投票率{{ly.vote_param.conflict|divide:ly.vote_param.total}} %)</td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: lightgrey;">院會缺席</td>
-                        <td>{{ly.attendance_param.absent}} 次<br>(院會缺席率{{ly.attendance_param.absent|divide:ly.attendance_param.total}} %)</td>
-                    </tr>
+                        {% if ly.vote_param %}
+                        <tr>
+                            <td style="background-color: lightgrey;">沒投票表決</td>
+                            <td>{{ly.vote_param.not_voting}} 次<br>(投票缺席率{{ly.vote_param.not_voting|divide:ly.vote_param.total}} %)</td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: lightgrey;">脫黨表決</td>
+                            <td>{{ly.vote_param.conflict}} 次<br>(脫黨投票率{{ly.vote_param.conflict|divide:ly.vote_param.total}} %)</td>
+                        </tr>
+                        {% endif %}
+                        {% if ly.attendance_param %}
+                        <tr>
+                            <td style="background-color: lightgrey;">院會缺席</td>
+                            <td>{{ly.attendance_param.absent}} 次<br>(院會缺席率{{ly.attendance_param.absent|divide:ly.attendance_param.total}} %)</td>
+                        </tr>
+                        {% endif %}
                     {% endif %}
                     {% for contact in ly.contacts %}
                     <tr>

@@ -41,9 +41,9 @@ def index(request, index, ad):
     }
     ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=True)\
                                       .extra(select={
-                                          'count': "cast(vote_param::json->>'%s' as int)" % index,
-                                          'percentage': "round(cast(cast(vote_param::json->>'%s' as float)/cast(vote_param::json->>'total' as float)*100 as numeric), 2)" % index,
-                                          'ranking': "floor(cast(vote_param::json->>'%s' as float)/cast(vote_param::json->>'total' as float)*10)*10" % index,
+                                          'count': "COALESCE(cast(vote_param::json->>'%s' as int), 0)" % index,
+                                          'percentage': "COALESCE(round(cast(cast(vote_param::json->>'%s' as float)/cast(vote_param::json->>'total' as float)*100 as numeric), 2), 0)" % index,
+                                          'ranking': "COALESCE(floor(cast(vote_param::json->>'%s' as float)/cast(vote_param::json->>'total' as float)*10)*10, 0.0)" % index,
                                       },)\
                                       .order_by('-percentage', 'party')
     return render(request, 'legislator/index/index_ordered.html', {'ad': ad, 'ly_list': ly_list, 'outof_ly_list': outof_ly_list, 'param': maps[index], 'index': index})
