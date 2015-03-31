@@ -1,4 +1,5 @@
 #from django.contrib.auth.models import User, Group
+import django_filters
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import generics
@@ -51,10 +52,17 @@ class VoteViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VoteSerializer
     filter_fields = ('voter', 'uid', 'sitting', 'vote_seq', 'content')
 
+class Legislator_VoteFilter(django_filters.FilterSet):
+    not_voting = django_filters.Filter(name='decision', lookup_type='isnull')
+    class Meta:
+        model = Legislator_Vote
+        fields = ['legislator', 'vote', 'decision', 'conflict', 'not_voting']
+
 class Legislator_VoteViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Legislator_Vote.objects.all().select_related('vote', 'legislator')
     serializer_class = Legislator_VoteSerializer
-    filter_fields = ('legislator', 'vote', 'decision', 'conflict')
+    #filter_fields = ('legislator', 'vote', 'decision', 'conflict')
+    filter_class = Legislator_VoteFilter
 
 class BillViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Bill.objects.all().prefetch_related('proposer')

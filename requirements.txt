@@ -1,4 +1,4 @@
-Django==1.7.1
+Django==1.7.7
 
 # db related
 psycopg2==2.5.1
@@ -6,8 +6,8 @@ django-json-field==0.5.5
 django-postgrespool==0.3.0
 
 # api related
-djangorestframework==2.3.14
-django-filter==0.7
+djangorestframework==3.1.1
+django-filter==0.9.2
 
 # deploy related
 dj-database-url==0.3.0
