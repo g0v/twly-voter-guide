@@ -24,10 +24,10 @@ class Legislator_VoteSerializer(serializers.HyperlinkedModelSerializer):
 
 class VoteSerializer(serializers.HyperlinkedModelSerializer):
     results = fields.Field()
-    sitting_id = serializers.SlugRelatedField(many=True, read_only=True, slug_field='uid')
+    sitting_id = serializers.StringRelatedField()
     class Meta:
         model = Vote
-        fields = ('uid', 'sitting', 'vote_seq', 'content', 'conflict', 'results', 'result')
+        fields = ('uid', 'sitting_id', 'sitting', 'vote_seq', 'content', 'conflict', 'results', 'result')
 
 class Legislator_BillSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -67,6 +67,6 @@ class CandidatesSerializer(serializers.HyperlinkedModelSerializer):
         model = Candidates
 
 class LegislatorSerializer(serializers.HyperlinkedModelSerializer):
-    each_terms = LegislatorDetailSerializer(many=True)
+    each_terms = LegislatorDetailSerializer(many=True, read_only=True)
     class Meta:
         model = Legislator
