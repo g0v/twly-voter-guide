@@ -9,7 +9,7 @@ def current_url(request):
     return {'current_url': settings.SITE_DOMAIN+request.get_full_path()}
 
 def last_update_time(request):
-    return {'last_update_time': '2014-12-11'}
+    return {'last_update_time': '2015-03-21'}
 
 def district_list(request):
     return {'district_list': [u'\u50d1\u5c45\u570b\u5916\u570b\u6c11', u'\u5168\u570b\u4e0d\u5206\u5340', u'\u5357\u6295\u7e23', u'\u81fa\u4e2d\u5e02', u'\u81fa\u5317\u5e02', u'\u81fa\u5357\u5e02', u'\u81fa\u6771\u7e23', u'\u5609\u7fa9\u5e02', u'\u5609\u7fa9\u7e23', u'\u57fa\u9686\u5e02', u'\u5b9c\u862d\u7e23', u'\u5c4f\u6771\u7e23', u'\u5c71\u5730\u539f\u4f4f\u6c11', u'\u5e73\u5730\u539f\u4f4f\u6c11', u'\u5f70\u5316\u7e23', u'\u65b0\u5317\u5e02', u'\u65b0\u7af9\u5e02', u'\u65b0\u7af9\u7e23', u'\u6843\u5712\u7e23', u'\u6f8e\u6e56\u7e23', u'\u82b1\u84ee\u7e23', u'\u82d7\u6817\u7e23', u'\u9023\u6c5f\u7e23', u'\u91d1\u9580\u7e23', u'\u96f2\u6797\u7e23', u'\u9ad8\u96c4\u5e02']}
