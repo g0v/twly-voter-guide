@@ -30,7 +30,7 @@ class AttendanceViewSet(viewsets.ReadOnlyModelViewSet):
 class CandidatesViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Candidates.objects.all().select_related('legislator', 'latest_term')
     serializer_class = CandidatesSerializer
-    #filter_fields = ('legislator', 'ad', 'name', 'gender', 'party', 'caucus', 'constituency', 'county', 'in_office', 'term_start', 'term_end')
+    filter_fields = ('latest_term', 'legislator', 'ad', 'number', 'name', 'birth', 'gender', 'party', 'constituency', 'county', 'district', 'votes', 'votes_percentage', 'elected')
 
 class SittingsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Sittings.objects.all().prefetch_related('votes')
@@ -61,7 +61,6 @@ class Legislator_VoteFilter(django_filters.FilterSet):
 class Legislator_VoteViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Legislator_Vote.objects.all().select_related('vote', 'legislator')
     serializer_class = Legislator_VoteSerializer
-    #filter_fields = ('legislator', 'vote', 'decision', 'conflict')
     filter_class = Legislator_VoteFilter
 
 class BillViewSet(viewsets.ReadOnlyModelViewSet):

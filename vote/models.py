@@ -5,8 +5,8 @@ from json_field import JSONField
 
 class Vote(models.Model):
     voter = models.ManyToManyField('legislator.LegislatorDetail', through='Legislator_Vote')
-    uid = models.CharField(max_length=110, unique=True)
-    sitting = models.ForeignKey('sittings.Sittings', to_field="uid", related_name='votes')
+    uid = models.CharField(max_length=32, primary_key=True)
+    sitting = models.ForeignKey('sittings.Sittings', related_name='votes')
     vote_seq = models.CharField(max_length=10)
     category = models.CharField(max_length=100, blank=True, null=True)
     content = models.TextField()
@@ -14,10 +14,10 @@ class Vote(models.Model):
     result = models.CharField(blank=True, null=True, max_length=50)
     results = JSONField(null=True)
     def __unicode__(self):
-        return self.content
+        return self.uid
 
 class Legislator_Vote(models.Model):
     legislator = models.ForeignKey('legislator.LegislatorDetail', related_name='votes')
-    vote = models.ForeignKey(Vote, to_field="uid")
+    vote = models.ForeignKey(Vote)
     decision = models.IntegerField(db_index=True, blank=True, null=True)
     conflict = models.NullBooleanField(db_index=True)

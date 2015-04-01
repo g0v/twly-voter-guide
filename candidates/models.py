@@ -5,7 +5,7 @@ from json_field import JSONField
 
 
 class Candidates(models.Model):
-    uid = models.CharField(max_length=64)
+    uid = models.CharField(max_length=64, primary_key=True)
     latest_term = models.ForeignKey('legislator.LegislatorDetail', blank=True, null=True)
     legislator = models.ForeignKey('legislator.LegislatorDetail', blank=True, null=True, related_name='elected_candidate')
     ad = models.IntegerField(db_index=True, )

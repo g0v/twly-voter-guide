@@ -10,14 +10,14 @@ from .models import Candidates
 def counties(request, ad):
     counties = Candidates.objects.filter(ad=ad)\
                                  .values('county')\
-                                 .annotate(candidates=Count('id'))\
+                                 .annotate(candidates=Count('uid'))\
                                  .order_by('-candidates')
     return render(request, 'candidates/counties.html', {'ad': ad, 'counties': counties})
 
 def districts(request, ad, county):
     districts = Candidates.objects.filter(ad=ad, county=county)\
                                   .values('constituency', 'district')\
-                                  .annotate(candidates=Count('id'))\
+                                  .annotate(candidates=Count('uid'))\
                                   .order_by('constituency')
     if len(districts) == 1:
         return HttpResponseRedirect(reverse('candidates:district', kwargs={'ad': ad, 'county': county, 'constituency': 1}))
