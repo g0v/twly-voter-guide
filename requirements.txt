@@ -1,4 +1,4 @@
-Django==1.7.7
+Django==1.8
 
 # db related
 psycopg2==2.5.1
@@ -16,7 +16,6 @@ gunicorn==19.1.1
 static==0.4
 
 # testing related
-django-discover-runner==1.0
 coverage==3.7.1
 
 # elastic search
@@ -25,4 +24,4 @@ django-haystack==2.3.1
 
 # others
 django-pagination==1.0.7
-django-debug-toolbar==1.2.2
+django-debug-toolbar==1.3
