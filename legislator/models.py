@@ -58,39 +58,6 @@ class LegislatorDetail(models.Model):
         return LegislatorDetail.objects.filter(legislator_id=self.legislator_id).values_list('ad', flat=True).order_by('-ad')
     in_office_ad = property(_in_office_ad)
 
-    def _not_vote_percentage(self):
-        if Legislator_Vote.objects.filter(legislator_id=self.id):
-            return Legislator_Vote.objects.filter(decision__isnull=True, legislator_id=self.id).count() * 100.0 / Legislator_Vote.objects.filter(legislator_id=self.id).count()
-        return 0
-    pnotvote = property(_not_vote_percentage)
-
-    def _not_vote_count(self):
-        return Legislator_Vote.objects.filter(decision__isnull=True, legislator_id=self.id).count()
-    notvote = property(_not_vote_count)
-
-    def _conscience_vote_percentage(self):
-        if Vote.objects.filter(sitting__ad=self.ad):
-            return Legislator_Vote.objects.filter(legislator_id=self.id, conflict=True).count() * 100.0 / Vote.objects.filter(sitting__ad=self.ad).count()
-    pconsciencevote = property(_conscience_vote_percentage)
-
-    def _conscience_vote_count(self):
-        return Legislator_Vote.objects.filter(legislator_id=self.id, conflict=True).count()
-    nconsciencevote = property(_conscience_vote_count)
-
-    def _pribiller_count(self):
-        return Legislator_Bill.objects.filter(legislator_id=self.id, priproposer=True).count()
-    npribill = property(_pribiller_count)
-
-    def _current_committee(self):
-        committees = Legislator_Committees.objects.filter(legislator_id=self.id).order_by('-session')
-        if committees:
-            return committees[0].committee
-    current_committee = property(_current_committee)
-
-    def _ly_absent_count(self):
-        return Attendance.objects.filter(legislator_id=self.id, category='YS', status='absent').count()
-    ly_absent = property(_ly_absent_count)
-
 class FileLog(models.Model):
     sitting = models.CharField(unique=True, max_length=100)
     date = models.DateTimeField()

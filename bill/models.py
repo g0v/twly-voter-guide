@@ -4,7 +4,7 @@ from json_field import JSONField
 
 
 class Bill(models.Model):
-    proposer = models.ManyToManyField('legislator.LegislatorDetail', blank=True, null=True, through='Legislator_Bill')
+    proposer = models.ManyToManyField('legislator.LegislatorDetail', through='Legislator_Bill')
     uid = models.TextField(primary_key=True)
     ad = models.IntegerField(db_index=True, )
     api_bill_id = models.TextField(unique=True)
