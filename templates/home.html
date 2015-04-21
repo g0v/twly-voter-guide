@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load staticfiles %}
 {% load highlight %}
 
 {% block title %}
@@ -16,7 +15,7 @@
     <div class="span12">
     <div class="span6" align="center">
         <h3 class="text-info">找候選人</h3>
-        <img id="ImageMap" src="{% static "img/taiwan.png" %}" border="0" usemap="#Map">
+        <img id="ImageMap" src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/taiwan.png" border="0" usemap="#Map">
         <map name="Map">
             <area shape="rect" coords="375,9,443,43" href="{% url 'candidates:districts' county='臺北市' ad=8 %}" title="臺北市"/>
             <area shape="rect" coords="299,8,367,41" href="{% url 'candidates:districts' county='新北市' ad=8 %}" title="新北市"/>
