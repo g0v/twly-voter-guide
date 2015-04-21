@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-{% load staticfiles %}
 <html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% block title %}
-        {% endblock %}
+        {% endblock title %}
         <meta name="keywords" content="立委投票指南,台灣,立委,立法委員,委員會,法案,立法院,表決,投票,選舉,公民" />
         <meta name="description" content="減少盲目投票，讓民主社會的台灣更進步；輸入關鍵字，關心你關心的議題" />
         <meta property="fb:admins" content="TaiwanLy"/>
@@ -106,7 +105,7 @@
                         <li class="divider-vertical"></li>
                         <li><a class="btn btn-inverse btn-small" href="#searchModal" data-toggle="modal"><b>全站搜尋</b></a></li>
                         <li class="divider-vertical"></li>
-                        <li style="padding:12px 0px 12px;"><font class="text-warning">資料更新時間&nbsp;<br>{{last_update_time}}&nbsp;</font></li>
+                        <li style="padding:12px 0px 12px;"><font class="text-warning">資料更新時間&nbsp;<br>2015-03-21&nbsp;</font></li>
                     </ul>
                 </div>
             </div>
@@ -141,26 +140,22 @@
 
         <div class="container-fluid">
             <div class="row-fluid">
-                {% block left %}
-                {% endblock %}
                 {% block right %}
-                {% endblock %}
+                {% endblock right %}
             </div>
         </div>
-        {% block backtotop %}
-        <div align="center">
-            <a href="#top" class="lead">回頭</a>
 
-        </div>
-        {% endblock %}
         <footer class="footer">
         <div align="center" class="container">
+            {% block backtotop %}
+                <a href="#top" class="lead">回頭</a>
+            {% endblock backtotop %}
             <p><a href="https://g0v.hackpad.com/--dMc3UYvwTjT" target="_blank">意見回饋</a> - <a href="mailto:g0v-ly@googlegroups.com">寄給G0V</a></p>
         </div>
         </footer>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
         <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/bootstrap.min.js"></script>
         {% block script %}
-        {% endblock %}
+        {% endblock script %}
     </body>
 </html>

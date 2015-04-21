@@ -1,0 +1,31 @@
+{% load ly_extras %}
+{% load highlight %}
+
+<li class="media">
+    <div class="media-body well">
+        <h5 class="text-success">立法理由</h5>
+        <div class="media-heading">
+            {% if keyword %}
+                {{fragment.proposed_by}}
+                <small>（略）</small>
+                {% highlight fragment.text with keyword %}
+            {% else %}
+                {{fragment.abstract}}
+            {% endif %}
+        </div>
+        <div>
+            <h5 class="text-success">進展</h5>
+            <blockquote>
+                {% if fragment.rejected_times != 0 %}
+                <span class="label label-warning"><font class="lead">總共被退回程序委員會{{fragment.rejected_times}}次</font></span>
+                {% endif %}
+                {% for progress, date in fragment.progress_history %}
+                {{progress}}（{{date}}）
+                {% endfor %}
+            </blockquote>
+        </div>
+        <h4>
+            <a href="{{ "http://ly.g0v.tw/bills/"|add:fragment.uid }}" target="_blank">☞ 查看法條修正對照表</a>
+        </h4>
+    </div>
+</li>

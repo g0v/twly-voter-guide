@@ -43,7 +43,6 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'ly.urls'
 
-# Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'ly.wsgi.application'
 
 INSTALLED_APPS = (
@@ -53,10 +52,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
     #'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
     'haystack',
     'json_field',
     'legislator',
@@ -81,7 +77,6 @@ REST_FRAMEWORK = {
     )
 }
 
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -94,7 +89,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'legislator.context_processor.current_url',
-                'legislator.context_processor.last_update_time',
                 'legislator.context_processor.district_list',
                 'legislator.context_processor.committee_list',
                 'legislator.context_processor.distinct_progress_of_bill',
@@ -105,6 +99,10 @@ TEMPLATES = [
 ]
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 SITE_DOMAIN = 'http://twly.herokuapp.com'
 

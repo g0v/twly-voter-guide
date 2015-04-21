@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     url(r'^bill/', include('bill.urls', namespace="bill")),
     url(r'^about/$', 'ly.views.about', name='about'),
     url(r'^reference/$', 'ly.views.reference', name='reference'),
-    url(r'^$', 'candidates.views.counties', {'ad': 8}),
+    #url(r'^$', 'candidates.views.counties', {'ad': 8}),
+    url(r'^$', 'ly.views.home', name='home'),
     url(r'^api/', include(router.urls)),
 )

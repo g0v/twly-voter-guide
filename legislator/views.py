@@ -61,7 +61,7 @@ def committee(request, committee, ad):
     return render(request, 'legislator/committee.html',  {'ly_list': ly_list, 'committee': committee})
 
 def personal_political_contributions(request, legislator_id, ad):
-    ly = get_object_or_404(LegislatorDetail.objects.select_related('elected_candidate'), ad=ad, legislator_id=legislator_id)
+    ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
     try:
         pc = ly.elected_candidate.get().politicalcontributions
         return render(request, 'legislator/personal_politicalcontributions.html', {'ly': ly, 'data_total': {k: pc[k] for k in ['in_total', 'out_total']}, 'data_income': pc['in'], 'data_expenses': pc['out']})
@@ -69,7 +69,7 @@ def personal_political_contributions(request, legislator_id, ad):
         raise Http404
 
 def voter_detail(request, legislator_id, ad, index):
-    ly = get_object_or_404(LegislatorDetail.objects.select_related('votes'), ad=ad, legislator_id=legislator_id)
+    ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
     qs = Q(conflict=True) if index == 'conscience' else Q()
     if 'decision' in request.GET:
         decisions = {"agree": Q(decision=1), "disagree": Q(decision=-1), "abstain": Q(decision=0), "notvote": Q(decision__isnull=True)}
@@ -83,7 +83,7 @@ def voter_detail(request, legislator_id, ad, index):
     return render(request, 'legislator/voter_detail.html', {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'ly': ly, 'index': index, 'votes': votes, 'keyword': request.GET.get('keyword')})
 
 def biller_detail(request, legislator_id, ad):
-    ly = get_object_or_404(LegislatorDetail.objects.select_related('bills'), ad=ad, legislator_id=legislator_id)
+    ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
     bills = ly.bills.filter(legislator_id=ly.id, priproposer=True)
     qs = Q(uid__in=bills.values_list('bill_id', flat=True))
     qs = qs & Q(content=request.GET['keyword']) if request.GET.get('keyword') else qs

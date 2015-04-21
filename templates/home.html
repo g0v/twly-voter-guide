@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load highlight %}
+
+{% block title %}
+    <title>立委投票指南</title>
+    <meta property="og:title" content="立委投票指南"/>
+    <meta itemprop="name" content="立委投票指南">
+{% endblock %}
+
+{% block right %}
+    <div class="description span12" align="center">
+        <h2>立委投票指南</h2>
+        <p>減少盲目投票，讓民主社會的台灣更進步；輸入關鍵字，關心你關心的議題</p>
+    </div>
+    <div class="span12">
+    <div class="span6" align="center">
+        <h3 class="text-info">找候選人</h3>
+        <img id="ImageMap" src="{% static "img/taiwan.png" %}" border="0" usemap="#Map">
+        <map name="Map">
+            <area shape="rect" coords="375,9,443,43" href="{% url 'candidates:districts' county='臺北市' ad=8 %}" title="臺北市"/>
+            <area shape="rect" coords="299,8,367,41" href="{% url 'candidates:districts' county='新北市' ad=8 %}" title="新北市"/>
+            <area shape="rect" coords="224,10,293,42" href="{% url 'candidates:districts' county='桃園縣' ad=8 %}" title="桃園縣"/>
+            <area shape="rect" coords="450,46,518,82" href="{% url 'candidates:districts' county='基隆市' ad=8 %}" title="基隆市"/>
+            <area shape="rect" coords="440,124,508,158" href="{% url 'candidates:districts' county='宜蘭縣' ad=8 %}" title="宜蘭縣"/>
+            <area shape="rect" coords="415,223,484,257" href="{% url 'candidates:districts' county='花蓮縣' ad=8 %}" title="花蓮縣"/>
+            <area shape="rect" coords="403,340,471,374" href="{% url 'candidates:districts' county='臺東縣' ad=8 %}" title="臺東縣"/>
+            <area shape="rect" coords="225,410,292,444" href="{% url 'candidates:districts' county='屏東縣' ad=8 %}" title="屏東縣"/>
+            <area shape="rect" coords="194,360,263,395" href="{% url 'candidates:districts' county='高雄市' ad=8 %}" title="高雄市"/>
+            <area shape="rect" coords="144,310,212,344" href="{% url 'candidates:districts' county='臺南市' ad=8 %}" title="臺南市"/>
+            <area shape="rect" coords="148,257,216,291" href="{% url 'candidates:districts' county='嘉義市' ad=8 %}" title="嘉義市"/>
+            <area shape="rect" coords="73,259,141,293" href="{% url 'candidates:districts' county='嘉義縣' ad=8 %}" title="嘉義縣"/>
+            <area shape="rect" coords="123,215,191,249" href="{% url 'candidates:districts' county='雲林縣' ad=8 %}" title="雲林縣"/>
+            <area shape="rect" coords="144,172,212,206" href="{% url 'candidates:districts' county='彰化縣' ad=8 %}" title="彰化縣"/>
+            <area shape="rect" coords="168,130,236,164" href="{% url 'candidates:districts' county='臺中市' ad=8 %}" title="臺中市"/>
+            <area shape="rect" coords="193,92,261,126" href="{% url 'candidates:districts' county='苗栗縣' ad=8 %}" title="苗栗縣"/>
+            <area shape="rect" coords="165,51,233,85" href="{% url 'candidates:districts' county='新竹縣' ad=8 %}" title="新竹縣"/>
+            <area shape="rect" coords="239,50,307,84" href="{% url 'candidates:districts' county='新竹市' ad=8 %}" title="新竹市"/>
+            <area shape="rect" coords="9,43,77,77" href="{% url 'candidates:districts' county='連江縣' ad=8 %}" title="連江縣"/>
+            <area shape="rect" coords="10,83,78,117" href="{% url 'candidates:districts' county='金門縣' ad=8 %}" title="金門縣"/>
+            <area shape="rect" coords="14,179,82,213" href="{% url 'candidates:districts' county='澎湖縣' ad=8 %}" title="澎湖縣"/>
+            <area shape="rect" coords="295,180,363,214" href="{% url 'candidates:districts' county='南投縣' ad=8 %}" title="南投縣"/>
+            <area shape="rect" coords="15,329,83,363" href="{% url 'candidates:districts' county='全國不分區' ad=8 %}" title="全國不分區"/>
+            <area shape="rect" coords="14,370,82,404" href="{% url 'candidates:districts' county='山地原住民' ad=8 %}" title="山地原住民"/>
+            <area shape="rect" coords="14,411,82,445" href="{% url 'candidates:districts' county='平地原住民' ad=8 %}" title="平地原住民"/>
+        </map>
+    </div>
+    <div class="span6" align="center">
+        <h3 class="text-warning">找議題</h3>
+        {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全" %}
+        {% if hot_keyword %}
+            <h4>熱門搜尋：
+                {% for keyword in hot_keyword %}
+                <a href="{% url 'home' %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決、法案"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
+                {% endfor %}
+            </h4>
+        {% endif %}
+        {% if keyword %}
+            <div class="well well-small">
+                <font class="lead">
+                    {{ results|length }} 個有關<font style="color: red;">"{{keyword}}"</font>的表決、法案
+                </font>
+            </div>
+        {% endif %}
+
+        {% if results %}
+        {% load pagination_tags %}
+        {% autopaginate results 100 %}
+        {% paginate %}
+        <ul class="media-list">
+            {% for fragment in results %}
+                {% if fragment.model_name == 'vote' %}
+                    {% include "vote/vote_summary.html" %}
+                {% elif fragment.model_name == 'bill' %}
+                    {% include "bill/bill_summary.html" %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% paginate %}
+        {% endif %}
+    </div>
+    </div>
+{% endblock right %}
+
+{% block backtotop %}
+{% endblock backtotop %}
+
+{% block script %}
+    {% include "common/keyword_auto_complete.html" %}
+    <script type="text/javascript" src="http://davidlynch.org/projects/maphilight/jquery.maphilight.js"></script>
+    <script type="text/javascript">
+        $(document).ready( function() {
+            $("[rel='tooltip']").tooltip();
+            $('#ImageMap').maphilight();
+        });
+    </script>
+{% endblock script %}
