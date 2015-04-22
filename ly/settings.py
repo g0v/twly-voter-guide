@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #'django.contrib.admin',
+    'social.apps.django_app.default',
     'haystack',
     'json_field',
     'legislator',
@@ -88,6 +89,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
                 'legislator.context_processor.current_url',
                 'legislator.context_processor.district_list',
                 'legislator.context_processor.committee_list',
@@ -113,6 +116,12 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'twly',
     },
 }
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.FacebookOAuth2',
+)
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 
 try:
     from local_settings import *

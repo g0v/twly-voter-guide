@@ -20,13 +20,15 @@ router.register(r'attendance', views.AttendanceViewSet)
 router.register(r'candidates', views.CandidatesViewSet)
 #<--
 urlpatterns = patterns('',
+    url(r'^$', 'ly.views.home', name='home'),
     url(r'^legislator/', include('legislator.urls', namespace="legislator")),
     url(r'^candidates/', include('candidates.urls', namespace="candidates")),
     url(r'^vote/', include('vote.urls', namespace="vote")),
     url(r'^bill/', include('bill.urls', namespace="bill")),
     url(r'^about/$', 'ly.views.about', name='about'),
     url(r'^reference/$', 'ly.views.reference', name='reference'),
+    url('', include('social.apps.django_app.urls', namespace='social')),
+    url(r'^accounts/profile/$', 'ly.views.profile', name='profile'),
     #url(r'^$', 'candidates.views.counties', {'ad': 8}),
-    url(r'^$', 'ly.views.home', name='home'),
     url(r'^api/', include(router.urls)),
 )
