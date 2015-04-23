@@ -63,6 +63,7 @@ INSTALLED_APPS = (
     'vote',
     'bill',
     'search',
+    'standpoint',
     'commontag',
     'pagination',
     'rest_framework',
@@ -120,6 +121,8 @@ HAYSTACK_CONNECTIONS = {
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
 )
+
+LOGIN_URL = '/login/facebook/'
 
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 
