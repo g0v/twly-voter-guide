@@ -21,15 +21,21 @@ def vote(request, vote_id):
         if not request.user.is_authenticated():
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         if request.GET.get('title'):
-            Standpoint.objects.get_or_create(title=request.GET['title'], vote_id=vote_id)
+            Standpoint.objects.get_or_create(title=request.GET['title'].strip(), vote_id=vote_id)
         elif request.GET.get('standpoint_id'):
             obj, created = User_Standpoint.objects.get_or_create(standpoint_id=request.GET['standpoint_id'], user=request.user)
             if created:
                 Standpoint.objects.filter(pk=request.GET['standpoint_id']).update(pro=F('pro') + 1)
-    standpoints = Standpoint.objects.filter(vote_id=vote_id).order_by('-pro')
-    decisions = Legislator_Vote.objects.select_related().filter(vote_id=vote_id).order_by('-decision', 'legislator__party')
+    standpoints_of_vote = Standpoint.objects.filter(vote_id=vote_id)\
+                                            .order_by('-pro')
+    if request.user.is_authenticated():
+        standpoints_of_vote = standpoints_of_vote.extra(select={
+                                                     'have_voted': "SELECT true FROM standpoint_user_standpoint su WHERE su.standpoint_id = standpoint_standpoint.id AND su.user_id=%s" % request.user.id,
+                                                 },)\
+
+    decisions = Legislator_Vote.objects.select_related('vote', 'legislator', 'vote__sitting').filter(vote_id=vote_id).order_by('-decision', 'legislator__party')
     for decision in decisions:
         data = dict(decision.vote.results)
         data.pop('total', None)
-        return render(request, 'vote/vote.html', {'vote': decisions, 'data': data, 'standpoints': standpoints})
+        return render(request, 'vote/vote.html', {'vote': decisions, 'data': data, 'standpoints_of_vote': standpoints_of_vote})
     return redirect('vote:votes', index='normal')

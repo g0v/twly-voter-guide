@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from django.contrib.auth import logout
+from django.contrib import auth
 
 from haystack.query import SearchQuerySet
 
@@ -23,5 +23,5 @@ def home(request):
     return render(request, 'home.html', {'results': results, 'keyword': request.GET.get('keyword'), 'keyword_obj': keywords, 'hot_keyword': keywords[:6]})
 
 def logout(request):
-    logout(request)
+    auth.logout(request)
     return redirect('home')

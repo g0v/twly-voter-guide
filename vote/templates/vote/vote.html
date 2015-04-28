@@ -26,23 +26,28 @@
     {% endif %}
     <div class="row-fluid">
         <div class="span6">
-            <form action="{% url 'standpoint:create_vote_tag' vote_id=vote.uid %}" method="get" class="form-inline" id="form">
+            <form action="" method="get" class="form-inline" id="form">
                 {% csrf_token %}
                 <br>
                 <fieldset>
+                    <label>請輸入您覺得最能代表這個表決的關鍵字：</label>
                     <input type="search" name="title" id="title" class="span4" maxlength="20" autofocus>
-                    <button type="submit" class="btn">Go!</button>
+                    <button type="submit" class="btn">確定</button>
                 </fieldset>
             </form>
-            {% for standpoint in standpoints %}
-            <font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{standpoint}}&nbsp;:{{standpoint.pro}}</font>
+            {% for standpoint in standpoints_of_vote %}
+                <h4>{{standpoint.pro}}人認為是 <font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{standpoint}}</font>
+                    {% if not standpoint.have_voted %}
+                    <a class="btn" href="{% url "vote:vote_detail" vote_id=vote.uid %}?standpoint_id={{standpoint.id}}">+1</a>
+                    {% endif %}
+                </h4>
             {% endfor %}
             <div class="hero-unit">
                 <p class="text-success">表決日期：{{ vote.sitting.date|date:"Y-m-d" }}</p>
                 <span class="badge badge-info"><font class="lead">原文</font></span><br>
                 <p>{{ vote.content|linebreaksbr }}</p>
             </div>
-        </div><!--end: span6 -->
+        </div><!--end: span -->
         <div class="span6">
             <div align="center">
                 <br>
@@ -90,7 +95,7 @@
             <hr>
             <div class="fb-comments" data-width="600" data-num-posts="3" href="{{current_url}}" order_by="reverse_time"></div>
             {% endif %}
-        </div><!--end: span6 -->
+        </div><!--end: span -->
     </div><!--end: row-fluid -->
 {% endblock right %}
 

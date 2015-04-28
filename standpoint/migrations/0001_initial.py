@@ -18,6 +18,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=32, db_index=True)),
+                ('pro', models.IntegerField(default=0)),
                 ('vote', models.ForeignKey(related_name='standpoints', to='vote.Vote', null=True)),
             ],
         ),
@@ -25,7 +26,6 @@ class Migration(migrations.Migration):
             name='User_Standpoint',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('opinion', models.CharField(max_length=32, db_index=True)),
                 ('standpoint', models.ForeignKey(to='standpoint.Standpoint')),
                 ('user', models.ForeignKey(related_name='standpoints', to=settings.AUTH_USER_MODEL)),
             ],
