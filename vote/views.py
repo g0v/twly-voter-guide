@@ -20,7 +20,7 @@ def votes(request, index):
 def vote(request, vote_id):
     if request.GET:
         if not request.user.is_authenticated():
-            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.get_full_path()))
         if request.GET.get('title'):
             Standpoint.objects.get_or_create(title=request.GET['title'].strip(), vote_id=vote_id)
         elif request.GET.get('standpoint_id'):
