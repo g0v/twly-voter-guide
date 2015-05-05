@@ -37,8 +37,10 @@
             </form>
             {% for standpoint in standpoints_of_vote %}
                 <h4>{{standpoint.pro}}人認為是 <font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{standpoint}}</font>
-                    {% if not standpoint.have_voted %}
-                    <a class="btn" href="{% url "vote:vote_detail" vote_id=vote.uid %}?standpoint_id={{standpoint.id}}">+1</a>
+                    {% if standpoint.have_voted == None %}
+                        <a class="btn" href="{% url "vote:vote_detail" vote_id=vote.uid %}?standpoint_id={{standpoint.id}}">+1</a>
+                    {% elif standpoint.have_voted %}
+                        <a class="btn" href="{% url "vote:vote_detail" vote_id=vote.uid %}?standpoint_id={{standpoint.id}}&against=true">取消+1</a>
                     {% endif %}
                 </h4>
             {% endfor %}

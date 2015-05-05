@@ -2,6 +2,7 @@ twly-voter-guide [![Build Status](https://travis-ci.org/g0v/twly-voter-guide.png
 ================
 
 [立委投票指南網站](http://vote.ly.g0v.tw/)
+
 [Android App 開發](https://github.com/irisshu/g0v-twly-voter-guide-android)
 
 [日本語インストールドキュメント](https://github.com/g0v/twly-voter-guide/blob/master/README.ja.md) - by @nyampire
@@ -18,6 +19,7 @@ easy_install virtualenv
 ```
 
 0.2 set a password in your database(If you already have one, just skip this step)
+
 (you can use `whoami` to check your username, notice **&lt;username&gt;**  below, please replace with your own)
 
 ```
@@ -61,6 +63,7 @@ sudo /etc/init.d/elasticsearch start
 
 ## Django settings.py
 create and edit local_settings.py in twly-voter-guide/ly/ to configing your database parameter(notice **USER**, **PASSWORD** below) and **SECRET_KEY**, [sample](https://github.com/g0v/twly-voter-guide/blob/master/ly/local_settings.sample.py)
+
 See [Django tutorial](https://docs.djangoproject.com/en/dev/intro/tutorial01/) or maybe use [online generator](http://www.miniwebtool.com/django-secret-key-generator/) to get SECRET_KEY for convenience
 ```
 SECRET_KEY = '' # put random string inside and don't share it with anybody.
@@ -141,6 +144,6 @@ $ coverage run manage.py test --settings=ly.test
 
 CC0 1.0 Universal
 =================
-CC0 1.0 Universal
 This work is published from Taiwan.
+
 [about](http://vote.ly.g0v.tw/about/)
