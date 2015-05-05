@@ -40,7 +40,7 @@
                     {% if standpoint.have_voted == None %}
                         <a class="btn" href="{% url "vote:vote_detail" vote_id=vote.uid %}?standpoint_id={{standpoint.id}}">+1</a>
                     {% elif standpoint.have_voted %}
-                        <a class="btn" href="{% url "vote:vote_detail" vote_id=vote.uid %}?standpoint_id={{standpoint.id}}&against=true">取消+1</a>
+                        <a class="btn" href="{% url "vote:vote_detail" vote_id=vote.uid %}?standpoint_id={{standpoint.id}}&against=true">取消 +1</a>
                     {% endif %}
                 </h4>
             {% endfor %}
