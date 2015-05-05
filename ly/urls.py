@@ -28,8 +28,6 @@ urlpatterns = patterns('',
     url(r'^about/$', 'ly.views.about', name='about'),
     url(r'^reference/$', 'ly.views.reference', name='reference'),
     url('', include('social.apps.django_app.urls', namespace='social')),
-    #url(r'^accounts/profile/$', 'ly.views.profile', name='profile'),
     url(r'^accounts/logout/$', 'ly.views.logout', name='logout'),
-    #url(r'^$', 'candidates.views.counties', {'ad': 8}),
     url(r'^api/', include(router.urls)),
 )

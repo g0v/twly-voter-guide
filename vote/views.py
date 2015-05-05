@@ -32,7 +32,7 @@ def vote(request, vote_id):
     if request.user.is_authenticated():
         standpoints_of_vote = standpoints_of_vote.extra(select={
                                                      'have_voted': "SELECT true FROM standpoint_user_standpoint su WHERE su.standpoint_id = standpoint_standpoint.id AND su.user_id=%s" % request.user.id,
-                                                 },)\
+                                                 },)
 
     decisions = Legislator_Vote.objects.select_related('vote', 'legislator', 'vote__sitting').filter(vote_id=vote_id).order_by('-decision', 'legislator__party')
     for decision in decisions:
