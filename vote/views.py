@@ -9,7 +9,7 @@ from .models import Vote, Legislator_Vote
 from search.models import Keyword
 from standpoint.models import Standpoint, User_Standpoint
 from search.views import keyword_list, keyword_been_searched, keyword_normalize
-from ly.tasks import update_vote_index
+from .tasks import update_vote_index
 
 
 def votes(request, index):
