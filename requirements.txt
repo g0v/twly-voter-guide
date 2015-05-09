@@ -24,6 +24,10 @@ django-haystack==2.3.1
 # user-login
 python-social-auth==0.2.7
 
+# celery
+celery==3.1.18
+librabbitmq==1.6.1
+
 # others
 django-pagination==1.0.7
 django-debug-toolbar==1.3

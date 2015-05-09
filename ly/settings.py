@@ -126,6 +126,14 @@ LOGIN_URL = '/login/facebook/'
 
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 
+# For better celery performance
+CELERY_IGNORE_RESULT = True
+CELERY_DISABLE_RATE_LIMITS = True
+# Only accept json for safety and upcoming celery version default setting
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
 try:
     from local_settings import *
 except ImportError:
