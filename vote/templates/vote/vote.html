@@ -31,7 +31,7 @@
                 <br>
                 <fieldset>
                     <label>請輸入您覺得最能代表這個表決的關鍵字：</label>
-                    <input type="search" name="title" id="title" class="span4" maxlength="20" autofocus>
+                    <input type="search" name="keyword" id="keyword" class="span4" maxlength="20" autofocus>
                     <button type="submit" class="btn">確定</button>
                 </fieldset>
             </form>
@@ -107,6 +107,7 @@
 
 {% block script %}
     {% include "vote/vote_d3_pie_chart.html" %}
+    {% include "common/keyword_auto_complete.html" %}
     <script>
         $(document).ready( function() {
             $('#vote').addClass('active');

@@ -14,6 +14,11 @@
         {% else %}
             {{ fragment.text|linebreaksbr }}
         {% endif %}
+        <h5 class="text-success">標籤</h5>
+        {% for title, votes in fragment.tags %}
+            <font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{title}}</font>
+            （{{votes}}票）&nbsp;&nbsp;
+        {% endfor %}
         <h5 class="text-success">表決結果</h5>
         <div>
             <blockquote>
