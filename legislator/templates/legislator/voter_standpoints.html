@@ -19,8 +19,8 @@
             <div class="media-body well">
                 <h3 class="media-heading">{{standpoint.times}}次{{standpoint.decision}} {{standpoint.title}}</h3>
                 <div>
-                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#ref_votes"><font class="lead">相關表決 <b class="caret"></b></font></button>
-                    <div id="ref_votes" class="collapse">
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#ref_vote{{forloop.counter}}"><font class="lead">相關表決 <b class="caret"></b></font></button>
+                    <div id="ref_vote{{forloop.counter}}" class="collapse">
                     {% for fragment in standpoint.votes %}
                     <h4><a href="{% url 'vote:vote_detail' fragment.uid %}" target="_blank">☞ 表決{{forloop.counter}}<small>（覺得這個表決跟這個立場不符合嗎？點我參加投票一起來改進）</small></a></h4>
                         <blockquote>
