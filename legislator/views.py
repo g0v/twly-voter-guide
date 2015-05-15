@@ -12,6 +12,7 @@ from vote.models import Vote
 from bill.models import Bill
 from sittings.models import Sittings
 from committees.models import Legislator_Committees
+from search.models import Keyword
 from standpoint.models import Standpoint
 from search.views import keyword_list, keyword_normalize
 
