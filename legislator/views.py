@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Count, Sum, F, Q
+from django.db import connections
+from django.db.models import Count, Q
 from django.forms.models import model_to_dict
 
 from haystack.query import SearchQuerySet
@@ -11,6 +12,7 @@ from vote.models import Vote
 from bill.models import Bill
 from sittings.models import Sittings
 from committees.models import Legislator_Committees
+from standpoint.models import Standpoint
 from search.views import keyword_list, keyword_normalize
 
 
@@ -68,6 +70,48 @@ def personal_political_contributions(request, legislator_id, ad):
     except Exception, e:
         raise Http404
 
+def voter_standpoints(request, legislator_id, ad):
+    ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
+    c = connections['default'].cursor()
+    qs = u'''
+        SELECT
+        CASE
+            WHEN lv.decision = 1 THEN '贊成'
+            WHEN lv.decision = -1 THEN '反對'
+            WHEN lv.decision = 0 THEN '棄權'
+            WHEN lv.decision isnull THEN '沒投票'
+            END as decision,
+            s.title,
+            count(*) as times,
+            json_agg(v) as votes
+        FROM vote_legislator_vote lv
+        JOIN standpoint_standpoint s on s.vote_id = lv.vote_id
+        JOIN vote_vote v on lv.vote_id = v.uid
+        WHERE
+    '''
+    if request.GET.get('keyword'):
+        qs = qs + 's.title = %s AND'
+        param = [request.GET['keyword'], ly.id]
+    else:
+        param = [ly.id]
+    qs = qs + '''
+            lv.legislator_id = %s AND s.pro = (
+            SELECT max(pro)
+            FROM standpoint_standpoint ss
+            WHERE ss.pro > 0 AND s.vote_id = ss.vote_id
+            GROUP BY ss.vote_id
+        )
+        GROUP BY s.title, lv.decision
+        ORDER BY times DESC
+    '''
+    c.execute(qs, param)
+    standpoints = [
+        dict(zip([col[0] for col in c.description], row))
+        for row in c.fetchall()
+    ]
+    keyword_obj = list(Standpoint.objects.filter(pro__gt=0).values_list('title', flat=True).distinct())
+    return render(request, 'legislator/voter_standpoints.html', {'ly': ly, 'standpoints': standpoints, 'keyword_obj': keyword_obj})
+
 def voter_detail(request, legislator_id, ad, index):
     ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
     qs = Q(conflict=True) if index == 'conscience' else Q()
@@ -79,7 +123,7 @@ def voter_detail(request, legislator_id, ad, index):
         votes = ly.votes.select_related().filter(qs & Q(vote_id__in=[x.uid for x in sqs]))
     else:
         votes = ly.votes.select_related().filter(qs)
-    keywords = keyword_list(2)
+    keywords = [x.content for x in SearchQuerySet().filter(category__exact=2).models(Keyword).order_by('-hits')]
     return render(request, 'legislator/voter_detail.html', {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'ly': ly, 'index': index, 'votes': votes, 'keyword': request.GET.get('keyword')})
 
 def biller_detail(request, legislator_id, ad):

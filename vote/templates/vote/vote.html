@@ -30,8 +30,8 @@
                 {% csrf_token %}
                 <br>
                 <fieldset>
-                    <label>請輸入您覺得最能代表這個表決的關鍵字：</label>
-                    <input type="search" name="keyword" id="keyword" class="span4" maxlength="20" autofocus>
+                    <label>請輸入您覺得最能代表這個表決的命題：</label>
+                    <input type="search" name="keyword" id="keyword" class="span4" maxlength="20" placeholder="建議動詞+名詞的命題">
                     <button type="submit" class="btn">確定</button>
                 </fieldset>
             </form>
@@ -87,7 +87,7 @@
                     </tr><tr>
                     {% endif %}
                     {% with ly=fragment.legislator %}
-                        <td class="name {{ly.county}} {{ly.gender}}"><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=vote.0.vote.sitting.ad %}" rel="tooltip" title="這位立委的表決投票紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
+                        <td class="name {{ly.county}} {{ly.gender}}"><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=vote.0.vote.sitting.ad %}" rel="tooltip" title="這位立委的表決投票紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
                     {% endwith %}
                     {% endfor %}
                 {% endfor %}

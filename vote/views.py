@@ -35,7 +35,7 @@ def vote(request, vote_id):
                 if created:
                     Standpoint.objects.filter(pk=request.GET['standpoint_id']).update(pro=F('pro') + 1)
             update_vote_index.delay(vote_id)
-    standpoints = list(Standpoint.objects.values_list('title', flat=True).distinct())
+    standpoints = list(Standpoint.objects.filter(pro__gt=0).values_list('title', flat=True).distinct())
     standpoints_of_vote = Standpoint.objects.filter(vote_id=vote_id)\
                                             .order_by('-pro')
     if request.user.is_authenticated():

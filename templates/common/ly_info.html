@@ -154,8 +154,10 @@
                     <div class="btn-group">
                         <a id='url_vote' class="btn btn-large dropdown-toggle" href="#" data-toggle="dropdown">投票紀錄 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
+                            <li><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}" >表決立場</a></li>
                             <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}" >全投票表決紀錄</a></li>
                             <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad index='conscience' %}" >脫黨投票表決紀錄</a></li>
+
                         </ul>
                     </div>
                     {% if ly.ad > 7 %}
