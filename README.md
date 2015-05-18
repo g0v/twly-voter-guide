@@ -7,6 +7,30 @@ twly-voter-guide [![Build Status](https://travis-ci.org/g0v/twly-voter-guide.png
 
 [日本語インストールドキュメント](https://github.com/g0v/twly-voter-guide/blob/master/README.ja.md) - by @nyampire
 
+Docker
+=================
+## Install docker and docker-compose
+[docker](https://docs.docker.com/installation/)
+[docker-compose](https://docs.docker.com/compose/install/)
+
+## Clone source code from GitHub to local
+```
+git clone https://github.com/g0v/twly-voter-guide.git
+cd twly-voter-guide
+```
+
+## Run docker
+If you don't have superuser, please create one by `sudo passwd`
+```
+sudo su
+docker-compose run django pip install -r requirements.txt
+docker-compose run django createdb -h postgresql -U postgres ly
+docker-compose run django pg_restore --verbose --clean --no-acl --no-owner -h postgresql -U postgres -d ly local_db.dump
+docker-compose run django python manage.py rebuild_index
+docker-compose up -d
+```
+Now you can access http://localhost:80/
+
 In Ubuntu 12.04 LTS
 =================
 0.1 install basic tools

@@ -1,0 +1,55 @@
+postgresql:
+  image: postgres
+  environment:
+    - POSTGRESQL_USER=postgres
+    - POSTGRESQL_PASSWORD=password
+  volumes:
+    - ~/dockerfiles/twly-voter-guide/postgresql:/var/lib/postgresql
+  ports:
+    - "5432:5432"
+
+elasticsearch:
+  image: elasticsearch
+  ports:
+    - "9200:9200"
+
+rabbitmq:
+  image: rabbitmq
+  ports:
+    - "5672:5672"
+
+# NOTES:
+#   - The C_FORCE_ROOT variable allows celery to run as the root user.
+celery:
+  image: jcalazan/django
+  environment:
+    - C_FORCE_ROOT=true
+    - DATABASE_HOST=postgresql
+    - BROKER_URL=amqp://guest:guest@rabbitmq//
+  working_dir: /twly-voter-guide
+  command: bash -c "sleep 3 && celery -A ly worker -l info"
+  volumes_from:
+    - django
+  links:
+    - postgresql
+    - rabbitmq
+    - elasticsearch
+
+django:
+  image: jcalazan/django
+  environment:
+    - DATABASE_HOST=postgresql
+    - BROKER_URL=amqp://guest:guest@rabbitmq//
+    - ES_URL=elasticsearch
+  working_dir: /twly-voter-guide
+  command: bash -c "sleep 3 && python manage.py runserver 0.0.0.0:80" 
+  volumes:
+    - .:/twly-voter-guide
+    - ~/dockerfiles/twly-voter-guide/python:/usr/local/lib/python2.7
+    - ~/dockerfiles/twly-voter-guide/bin:/usr/local/bin
+  ports:
+    - "80:80"
+  links:
+    - postgresql
+    - rabbitmq
+    - elasticsearch
