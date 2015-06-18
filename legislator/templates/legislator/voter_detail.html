@@ -19,13 +19,13 @@
     <h4>熱門：
         {% for keyword in keyword_obj %}
         {% if forloop.counter0 < 5 %}
-        <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
+        <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#9999FF' '#99CCCC' '#99CC99' '#999966' '#99CC33' %};">{{keyword}}&nbsp;</font></a>
         {% endif %}
         {% endfor %}
     </h4>
     {% endif %}
     <div class="well well-small">
-        <font class="lead">{{ly.name}}第{{ly.ad}}屆的{% if index == 'conscience' %}<b>脫黨</b>{% endif %}表決紀錄：
+        {{ly.name}}第{{ly.ad}}屆的{% if index == 'conscience' %}<b>脫黨</b>{% endif %}表決紀錄：
         {% if keyword %}
         包含<font style="color: red;">"{{keyword}}"</font>的表決&nbsp;
         {% endif %}
@@ -41,7 +41,6 @@
                 {% endif %}
             {% endif %}
         {% endif %}
-        </font>
     </div>
     {% if votes %}
     {% load pagination_tags %}

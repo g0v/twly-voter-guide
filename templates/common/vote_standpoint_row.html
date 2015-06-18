@@ -1,7 +1,7 @@
 {% for standpoint in standpoints %}
     <h4>{{standpoint.pro}}人認為是
         <a href="{% url 'vote:votes' %}?tag={{standpoint}}" rel="tooltip" title="有同樣標籤的表決">
-            <font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};"> {{standpoint}}</font>
+            <font style="color: {% cycle '#9999FF' '#99CCCC' '#99CC99' '#999966' '#99CC33' %};"> {{standpoint}}</font>
         </a>
         {% if standpoint.have_voted == None %}
             <a class="btn" href="{% url "vote:vote_detail" vote_id=vote.uid %}?standpoint_id={{standpoint.id}}">+1</a>

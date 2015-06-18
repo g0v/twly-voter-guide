@@ -1,5 +1,4 @@
 {% extends "common/ly_info.html" %}
-{% load ly_extras %}
 
 {% block title %}
     <title>立委投票指南:{{ly.name}}第{{ly.ad}}屆的表決立場</title>
@@ -8,33 +7,24 @@
 {% endblock title %}
 
 {% block ly_detail %}
-    {% include "common/search_keyword_form.html" %}
-    {% if standpoints %}
-    {% load pagination_tags %}
-    {% autopaginate standpoints 10 %}
-    {% paginate %}
     <ul class="media-list">
     {% for standpoint in standpoints %}
         <li class="media">
             <div class="media-body well">
-                <h3 class="media-heading">{{standpoint.times}}次{{standpoint.decision}} {{standpoint.title}}</h3>
-                <div>
-                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#ref_vote{{forloop.counter}}"><font class="lead">相關表決 <b class="caret"></b></font></button>
+                <div class="media-heading"><font class="lead">{{standpoint.title}}</font>：{{standpoint.times}}次{{standpoint.decision}}
+                    &nbsp;&nbsp;<button type="button" class="btn btn-link" data-toggle="collapse" data-target="#ref_vote{{forloop.counter}}">表決內容&nbsp;<b class="caret"></b></button>
                     <div id="ref_vote{{forloop.counter}}" class="collapse">
                     {% for fragment in standpoint.votes %}
-                    <h4><a href="{% url 'vote:vote_detail' fragment.uid %}" target="_blank">☞ 表決{{forloop.counter}}<small>（覺得這個表決跟這個立場不符合嗎？點我參加投票一起來改進）</small></a></h4>
+                    <h4><a href="{% url 'vote:vote_detail' fragment.uid %}" target="_blank">☞ 表決{{forloop.counter}}<small>（覺得表決跟立場不符合嗎？點我來改進）</small></a></h4>
                         <blockquote>
                             <p>{{fragment.content}}</p>
                         </blockquote>
                     {% endfor %}
-                    </div>
                 </div>
             </div>
         </li>
     {% endfor %}
     </ul>
-    {% paginate %}
-    {% endif %}
 {% endblock ly_detail %}
 
 {% block script %}

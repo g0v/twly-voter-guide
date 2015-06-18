@@ -16,7 +16,7 @@
         {% if hot_keyword %}
             <h4>熱門搜尋：
                 {% for keyword in hot_keyword %}
-                    <a href="{% url 'bill:bills' %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的修正草案"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
+                    <a href="{% url 'bill:bills' %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的修正草案"><font style="color: {% cycle '#9999FF' '#99CCCC' '#99CC99' '#999966' '#99CC33' %};">{{keyword}}&nbsp;</font></a>
                 {% endfor %}
             </h4>
         {% endif %}

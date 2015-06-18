@@ -31,15 +31,21 @@
                 <br>
                 <fieldset>
                     <label>請輸入您覺得最能代表這個表決的標籤：</label>
-                    <input type="search" name="keyword" id="keyword" class="span4" maxlength="20" placeholder="建議動詞+名詞的命題">
-                    <button type="submit" class="btn">確定</button>
+                    {% if user.is_authenticated %}
+                        <input type="search" name="keyword" id="keyword" class="span4" maxlength="20" placeholder="建議動詞+名詞的命題">
+                        <button type="submit" class="btn">確定</button>
+                    {% else %}
+                        <a href="/login/facebook/?next={% url 'vote:vote_detail' vote.uid %}">登入</a>
+                    {% endif %}
                 </fieldset>
             </form>
             {% include "common/vote_standpoint_row.html" with standpoints=standpoints_of_vote %}
+            {% if standpoints_of_vote_hide %}
             <a data-toggle="collapse" data-target="#other_tags">其他標籤</a>
             <div id="other_tags" class="collapse in">
                 {% include "common/vote_standpoint_row.html" with standpoints=standpoints_of_vote_hide %}
             </div>
+            {% endif %}
             <div class="hero-unit">
                 <p class="text-success">表決日期：{{ vote.sitting.date|date:"Y-m-d" }}</p>
                 <span class="badge badge-info"><font class="lead">原文</font></span><br>
