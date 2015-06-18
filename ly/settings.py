@@ -102,6 +102,17 @@ TEMPLATES = [
     },
 ]
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'ly',
+        'USER': os.getenv('DATABASE_USER', 'postgres'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'password'),
+        'HOST': os.getenv('DATABASE_HOST', '127.0.0.1'),
+        'PORT': '5432',
+    }
+}
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
@@ -113,7 +124,7 @@ SITE_DOMAIN = 'http://twly.herokuapp.com'
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': 'http://127.0.0.1:9200/',
+        'URL': os.getenv('ES_URL', 'http://127.0.0.1:9200/'),
         'INDEX_NAME': 'twly',
     },
 }
@@ -126,6 +137,7 @@ LOGIN_URL = '/login/facebook/'
 
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 
+BROKER_URL = os.getenv('BROKER_URL', 'amqp://guest:guest@127.0.0.1//')
 # For better celery performance
 CELERY_IGNORE_RESULT = True
 CELERY_DISABLE_RATE_LIMITS = True
