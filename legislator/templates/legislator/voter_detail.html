@@ -24,20 +24,6 @@
         {% endfor %}
     </h4>
     {% endif %}
-    {% if index != 'conscience' and not keyword %}
-    <div class="btn-group">
-        <button type="button" class="btn dropdown-toggle btn-info" data-toggle="dropdown">
-            <span>以贊成、反對等分類</span> <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}">全部</a></li>
-            <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=agree"><font color="#66CC66">贊成</font></a></li>
-            <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=abstain"><font color="#999999">棄權</font></a></li>
-            <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=disagree"><font color="#FF66CC">反對</font></a></li>
-            <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=notvote"><font color="#996600">沒有投票</font></a></li>
-        </ul>
-    </div>
-    {% endif %}
     <div class="well well-small">
         <font class="lead">{{ly.name}}第{{ly.ad}}屆的{% if index == 'conscience' %}<b>脫黨</b>{% endif %}表決紀錄：
         {% if keyword %}
@@ -64,17 +50,15 @@
     <table class="table table-bordered zebra">
         <thead>
             <tr style="background-color: #FFFFCC;">
-                <th style="width: 6%">屆期</th>
                 <th style="width: 10%">個人投票</th>
                 <th style="width: 10%">表決結果</th>
                 <th style="width: 15%">日期</th>
-                <th style="width: 59%">表決內容</th>
+                <th style="width: 65%">表決內容</th>
             </tr>
         </thead>
         <tbody>
             {% for vote in votes %}
             <tr>
-                <td style="text-align:center; vertical-align:middle;">{{vote.vote.sitting.ad}}</td>
                 {% with decision=vote.decision %}
                 {% if decision == -1 %}
                 <td style="text-align:center; vertical-align:middle; background-color: #FF66CC;">反對
@@ -94,8 +78,6 @@
                     <a href="{% url 'vote:vote_detail' vote.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單和完整內容</a><br>
                     {% if keyword %}
                     {{vote.content|linebreaksbr|replace:keyword|safe}}
-                    {% elif vote.summary %}
-                    <span class="badge badge-warning">精簡版</span>&nbsp;{{ vote.summary }}
                     {% else %}
                     {{vote.content|linebreaksbr|truncatechars:120}}
                     {% endif %}

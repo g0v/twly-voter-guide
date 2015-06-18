@@ -3,7 +3,7 @@
 {% load highlight %}
 
 {% block title %}
-    {% if index == 'conscience' %}
+    {% if conscience %}
         <title>立委投票指南:脫黨表決檢索</title>
         <meta property="og:title" content="立委投票指南:脫黨表決檢索"/>
         <meta itemprop="name" content="立委投票指南:脫黨表決檢索">
@@ -18,19 +18,26 @@
     <div class="span2">
     </div>
     <div class="span8">
-        {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全" %}
-        {% if hot_keyword %}
-        <h4>熱門搜尋：
-            {% for keyword in hot_keyword %}
-            <a href="{% url 'vote:votes' index=index %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
-            {% endfor %}
-        </h4>
+        {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全" advance_search="common/vote_conscience_checkbox.html" %}
+        <h4>
+        {% if hot_standpoints %}
+            熱門標籤：
+                {% for standpoint in hot_standpoints %}
+                <a href="{% url 'vote:votes' %}?tag={{standpoint.title}}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#CC0099' '#CC33CC' '#CC6699' '#CC9966' '#CCCC00' %};">{{standpoint.title}}&nbsp;</font></a>
+                {% endfor %}
         {% endif %}
+        {% if hot_keyword %}
+            <br>熱門搜尋：
+                {% for keyword in hot_keyword %}
+                <a href="{% url 'vote:votes' %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{keyword}}&nbsp;</font></a>
+                {% endfor %}
+        {% endif %}
+        </h4>
         <div class="well well-small">
             <font class="lead">第六屆(2005)至今有 {{ votes|length }} 個
             {% if keyword %}有關<font style="color: red;">"{{keyword}}"</font>的
             {% endif %}
-            {% if index == 'conscience' %}<b>脫黨</b>
+            {% if conscience %}<b>脫黨</b>
             {% endif %}
             表決
             </font>
@@ -62,6 +69,7 @@
         $(document).ready( function() {
             $('#vote').addClass('active');
             $("[rel='tooltip']").tooltip();
+            $(".collapse").collapse();
         });
     </script>
 {% endblock script %}

@@ -13,4 +13,4 @@ def bills(request):
     qs = qs & Q(last_action=request.GET['progress']) if request.GET.get('progress') else qs
     bills = SearchQuerySet().filter(qs).models(Bill).order_by('-last_action_at')
     keywords = keyword_list(3)
-    return render(request, 'bill/bills.html', {'index': '', 'bills': bills, 'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'keyword': request.GET.get('keyword'), 'progress': request.GET.get('progress', '')})
+    return render(request, 'bill/bills.html', {'index': '', 'bills': bills, 'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'keyword': request.GET.get('keyword', ''), 'progress': request.GET.get('progress', '')})

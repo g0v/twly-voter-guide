@@ -16,9 +16,8 @@ class VoteTest(TestCase):
         Legislator_Vote.objects.create(legislator=legislator, vote=vote, decision=1)
 
     def test_votes(self):
-        for arg in ['normal', 'conscience']:
-            response = self.client.get(reverse('vote:votes', kwargs={"index": arg}))
-            self.assertEqual(response.status_code, 200)
+        response = self.client.get(reverse('vote:votes'))
+        self.assertEqual(response.status_code, 200)
 
     def test_vote(self):
         response = self.client.get(reverse('vote:vote_detail', kwargs={"vote_id": "08-01-YS-01-001"}))

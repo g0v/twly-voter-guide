@@ -30,20 +30,16 @@
                 {% csrf_token %}
                 <br>
                 <fieldset>
-                    <label>請輸入您覺得最能代表這個表決的命題：</label>
+                    <label>請輸入您覺得最能代表這個表決的標籤：</label>
                     <input type="search" name="keyword" id="keyword" class="span4" maxlength="20" placeholder="建議動詞+名詞的命題">
                     <button type="submit" class="btn">確定</button>
                 </fieldset>
             </form>
-            {% for standpoint in standpoints_of_vote %}
-                <h4>{{standpoint.pro}}人認為是 <font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{standpoint}}</font>
-                    {% if standpoint.have_voted == None %}
-                        <a class="btn" href="{% url "vote:vote_detail" vote_id=vote.uid %}?standpoint_id={{standpoint.id}}">+1</a>
-                    {% elif standpoint.have_voted %}
-                        <a class="btn" href="{% url "vote:vote_detail" vote_id=vote.uid %}?standpoint_id={{standpoint.id}}&against=true">取消 +1</a>
-                    {% endif %}
-                </h4>
-            {% endfor %}
+            {% include "common/vote_standpoint_row.html" with standpoints=standpoints_of_vote %}
+            <a data-toggle="collapse" data-target="#other_tags">其他標籤</a>
+            <div id="other_tags" class="collapse in">
+                {% include "common/vote_standpoint_row.html" with standpoints=standpoints_of_vote_hide %}
+            </div>
             <div class="hero-unit">
                 <p class="text-success">表決日期：{{ vote.sitting.date|date:"Y-m-d" }}</p>
                 <span class="badge badge-info"><font class="lead">原文</font></span><br>
@@ -111,6 +107,7 @@
     <script>
         $(document).ready( function() {
             $('#vote').addClass('active');
+            $(".collapse").collapse();
             $("[rel='tooltip']").tooltip();
             $('#county').change(function() {
                 $('#gender').val("");

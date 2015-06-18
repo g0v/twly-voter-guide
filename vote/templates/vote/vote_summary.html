@@ -8,28 +8,30 @@
         </div>
         <h5 class="text-success">表決內容</h5>
         {% if keyword %}
-            <small>（前文略）</small>
-            {% highlight fragment.text with keyword %}
-            <small>（後文略）</small>
+            <p>
+                <small class="muted">（前文略）</small>
+                {% highlight fragment.text with keyword %}
+                <small class="muted">（後文略）</small>
+            </p>
         {% else %}
-            {{ fragment.text|linebreaksbr }}
+            <p>{{ fragment.text|linebreaksbr }}</p>
         {% endif %}
-        <h5 class="text-success">標籤</h5>
-        {% for title, votes in fragment.tags %}
-            <font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{title}}</font>
-            （{{votes}}票）&nbsp;&nbsp;
-        {% endfor %}
+        <blockquote>
+            <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看各立委投什麼票">☞ 看投票名單、完整表決內容</a>
+        </blockquote>
+        {% if fragment.tags %}
+            <h5 class="text-success">標籤</h5>
+            {% for title, votes in fragment.tags %}
+                <a href="{% url 'vote:votes' %}?tag={{title}}" rel="tooltip" title="有同樣標籤的表決">
+                    <font style="color: {% cycle '#FF0099' '#FF33CC' '#FF6699' '#FF9966' '#FFCC00' %};">{{title}}</font>
+                </a>
+                （{{votes}}票）&nbsp;&nbsp;
+            {% endfor %}
+        {% endif %}
         <h5 class="text-success">表決結果</h5>
-        <div>
-            <blockquote>
-                <span class="label label-inverse"><font class="lead">{{fragment.result|vote_result:'cht'}}</font></span>
-                {% if fragment.conflict %}
-                    <small class="text-error"><font class="lead text-error">有立委脫黨投票</font></small>
-                {% endif %}
-            </blockquote>
-            <h4>
-                <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看各立委投什麼票">☞ 查看投票名單和完整內容</a>
-            </h4>
-        </div>
+            <span class="label label-inverse"><font class="lead">{{fragment.result|vote_result:'cht'}}</font></span>
+            {% if fragment.conflict %}
+                <small class="text-error"><font class="lead text-error">有立委脫黨投票</font></small>
+            {% endif %}
     </div>
 </li>

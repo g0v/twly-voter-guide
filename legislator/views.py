@@ -17,12 +17,6 @@ from standpoint.models import Standpoint
 from search.views import keyword_list, keyword_normalize
 
 
-def get_legislator(legislator_id, ad):
-    try:
-        return LegislatorDetail.objects.select_related().get(ad=ad, legislator_id=legislator_id)
-    except Exception, e:
-        print e
-
 def index(request, index, ad):
     outof_ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=False)
     maps = {
@@ -97,11 +91,11 @@ def voter_standpoints(request, legislator_id, ad):
         param = [ly.id]
     qs = qs + '''
             lv.legislator_id = %s AND s.pro = (
-            SELECT max(pro)
-            FROM standpoint_standpoint ss
-            WHERE ss.pro > 0 AND s.vote_id = ss.vote_id
-            GROUP BY ss.vote_id
-        )
+                SELECT max(pro)
+                FROM standpoint_standpoint ss
+                WHERE ss.pro > 0 AND s.vote_id = ss.vote_id
+                GROUP BY ss.vote_id
+            )
         GROUP BY s.title, lv.decision
         ORDER BY times DESC
     '''
@@ -121,11 +115,11 @@ def voter_detail(request, legislator_id, ad, index):
         qs = qs & decisions.get(request.GET['decision'], Q())
     if request.GET.get('keyword'):
         sqs = SearchQuerySet().filter(content=request.GET['keyword']).models(Vote)
-        votes = ly.votes.select_related().filter(qs & Q(vote_id__in=[x.uid for x in sqs]))
+        votes = ly.votes.select_related('vote', 'vote__sitting').filter(qs & Q(vote_id__in=[x.uid for x in sqs]))
     else:
-        votes = ly.votes.select_related().filter(qs)
+        votes = ly.votes.select_related('vote', 'vote__sitting').filter(qs)
     keywords = [x.content for x in SearchQuerySet().filter(category__exact=2).models(Keyword).order_by('-hits')]
-    return render(request, 'legislator/voter_detail.html', {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'ly': ly, 'index': index, 'votes': votes, 'keyword': request.GET.get('keyword')})
+    return render(request, 'legislator/voter_detail.html', {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'ly': ly, 'index': index, 'votes': votes, 'keyword': request.GET.get('keyword', '')})
 
 def biller_detail(request, legislator_id, ad):
     ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
@@ -134,7 +128,7 @@ def biller_detail(request, legislator_id, ad):
     qs = qs & Q(content=request.GET['keyword']) if request.GET.get('keyword') else qs
     bills = SearchQuerySet().filter(qs).models(Bill).order_by('-last_action_at')
     keywords = keyword_list(3)
-    return render(request, 'legislator/biller_detail.html',  {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'bills': bills, 'ly': ly, 'keyword': request.GET.get('keyword')})
+    return render(request, 'legislator/biller_detail.html',  {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'bills': bills, 'ly': ly, 'keyword': request.GET.get('keyword', '')})
 
 def platformer_detail(request, legislator_id, ad):
     ly = get_object_or_404(LegislatorDetail, ad=ad, legislator_id=legislator_id)

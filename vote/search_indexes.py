@@ -19,6 +19,7 @@ class VoteIndex(indexes.SearchIndex, indexes.Indexable):
     result = indexes.CharField(model_attr='result')
     results = indexes.CharField(model_attr='results')
     tags = indexes.MultiValueField()
+    tags_num = indexes.IntegerField()
 
     def get_model(self):
         return Vote
@@ -31,3 +32,7 @@ class VoteIndex(indexes.SearchIndex, indexes.Indexable):
                                      .annotate(votes=Count('user_standpoint__id'))\
                                      .order_by('-votes')
                ]
+
+    def prepare_tags_num(self, obj):
+        return Standpoint.objects.filter(vote=obj)\
+                                 .count()
