@@ -55,25 +55,59 @@
                         <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">找立委<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li class="dropdown-submenu">
-                            <a data-toggle="dropdown" data-target="#" >依<b>選區</b>分組</a>
-                            <ul class="dropdown-menu">
                                 <li><a href="{% url 'legislator:counties' %}" >全部</a></li>
-                                {% for fragment in district_list %}
-                                <li style="background-color: {% cycle '#DDDDDD' 'white' %};"><a href="{% url 'legislator:county' fragment %}" >{{fragment}}</a></li>
-                                {% endfor %}
-                            </ul>
+                                <li style="background-color: #DDDDDD;"><a href="{% url 'legislator:county' '僑居國外國民' %}" >僑居國外國民</a></li>
+                                <li><a href="{% url 'legislator:county' '全國不分區' %}" >全國不分區</a></li>
+                                <li class="dropdown-submenu" style="background-color: #DDDDDD;">
+                                    <a data-toggle="dropdown" data-target="#" >北部</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% url 'legislator:county' '臺北市' %}" >臺北市</a></li>
+                                        <li style="background-color: #DDDDDD;"><a href="{% url 'legislator:county' '新北市' %}" >新北市</a></li>
+                                        <li><a href="{% url 'legislator:county' '桃園縣' %}" >桃園縣</a></li>
+                                        <li style="background-color: #DDDDDD;"><a href="{% url 'legislator:county' '基隆市' %}" >基隆市</a></li>
+                                        <li><a href="{% url 'legislator:county' '宜蘭縣' %}" >宜蘭縣</a></li>
+                                        <li style="background-color: #DDDDDD;"><a href="{% url 'legislator:county' '新竹市' %}" >新竹市</a></li>
+                                        <li><a href="{% url 'legislator:county' '新竹縣' %}" >新竹縣</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a data-toggle="dropdown" data-target="#" >中部</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% url 'legislator:county' '苗栗縣' %}" >苗栗縣</a></li>
+                                        <li style="background-color: #DDDDDD;"><a href="{% url 'legislator:county' '臺中市' %}" >臺中市</a></li>
+                                        <li><a href="{% url 'legislator:county' '彰化縣' %}" >彰化縣</a></li>
+                                        <li style="background-color: #DDDDDD;"><a href="{% url 'legislator:county' '雲林縣' %}" >雲林縣</a></li>
+                                        <li><a href="{% url 'legislator:county' '南投縣' %}" >南投縣</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu" style="background-color: #DDDDDD;">
+                                    <a data-toggle="dropdown" data-target="#" >南部</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% url 'legislator:county' '嘉義縣' %}" >嘉義縣</a></li>
+                                        <li style="background-color: #DDDDDD;"><a href="{% url 'legislator:county' '嘉義市' %}" >嘉義市</a></li>
+                                        <li><a href="{% url 'legislator:county' '臺南市' %}" >臺南市</a></li>
+                                        <li style="background-color: #DDDDDD;"><a href="{% url 'legislator:county' '高雄市' %}" >高雄市</a></li>
+                                        <li><a href="{% url 'legislator:county' '屏東縣' %}" >屏東縣</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a data-toggle="dropdown" data-target="#" >東部</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% url 'legislator:county' '花蓮縣' %}" >花蓮縣</a></li>
+                                        <li style="background-color: #DDDDDD;"><a href="{% url 'legislator:county' '臺東縣' %}" >臺東縣</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu" style="background-color: #DDDDDD;">
+                                    <a data-toggle="dropdown" data-target="#" >離島</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% url 'legislator:county' '澎湖縣' %}" >澎湖縣</a></li>
+                                        <li style="background-color: #DDDDDD;"><a href="{% url 'legislator:county' '金門縣' %}" >金門縣</a></li>
+                                        <li><a href="{% url 'legislator:county' '連江縣' %}" >連江縣</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="{% url 'legislator:county' '山地原住民' %}" >山地原住民</a></li>
+                                <li style="background-color: #DDDDDD;"><a href="{% url 'legislator:county' '平地原住民' %}" >平地原住民</a></li>
                             </li>
-                            <li class="dropdown-submenu">
-                            <a data-toggle="dropdown" data-target="#" >依<b>委員會</b>分組</a>
-                            <ul class="dropdown-menu">
-                                {% for fragment in committee_list %}
-                                <li style="background-color: {% cycle '#DDDDDD' 'white' %};"><a href="{% url 'legislator:committee' fragment %}" >{{fragment}}</a></li>
-                                {% endfor %}
-                            </ul>
-                            </li>
-                            <li class="divider"></li>
-                            <li><a href="{% url 'legislator:index' 'not_voting' %}" >投票缺席率(多&rarr;少)</a></li>
-                            <li><a href="{% url 'legislator:index' 'conflict' %}" >脫黨投票率(多&rarr;少)</a></li>
                         </ul>
                         </li>
 
@@ -90,6 +124,9 @@
                             <li><a href="{% url 'legislator:chart_report' 'biller' %}" ><b>法條修正草案數</b><small>前十名</small></a></li>
                             <li class="divider"></li>
                             <li><a href="{% url 'legislator:political_contributions_report' index='in_party' compare='vote' party='中國國民黨' %}" ><b>政治獻金</b></a></li>
+                            <li class="divider"></li>
+                            <li><a href="{% url 'legislator:index' 'not_voting' %}" >投票缺席率(多&rarr;少)</a></li>
+                            <li><a href="{% url 'legislator:index' 'conflict' %}" >脫黨投票率(多&rarr;少)</a></li>
                         </ul>
                         </li>
                     </ul>
@@ -145,7 +182,6 @@
                 <br>
                 <a href="#top" class="btn btn-large"><i class="icon-chevron-up"></i></a>
             {% endblock backtotop %}
-            <br>
             <p><a href="mailto:g0v-ly@googlegroups.com">意見信箱</a></p>
         </div>
         </footer>
