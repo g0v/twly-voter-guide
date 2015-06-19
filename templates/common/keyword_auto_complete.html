@@ -13,6 +13,17 @@
                 return false;
             }
         });
+        {% if names %}
+            var availableNames = {{names|as_json}};
+            $("#name").autocomplete({
+                source: availableNames,
+                select: function(event, ui) {
+                    $(event.target).val(ui.item.value);
+                    $('#form-name').submit();
+                    return false;
+                }
+            });
+        {% endif %}
     });
 </script>
 
