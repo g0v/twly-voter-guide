@@ -18,6 +18,7 @@
         {% endif %}
         <blockquote>
             <a href="{% url 'vote:vote_detail' fragment.uid %}" rel="tooltip" title="查看各立委投什麼票">☞ 看投票名單、完整表決內容</a>
+            <a class="pull-right" href="{% url 'vote:vote_detail' fragment.uid %}" >☞ 加上標籤</a>
         </blockquote>
         {% if fragment.tags %}
             <h5 class="text-success">標籤</h5>
