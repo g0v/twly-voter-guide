@@ -110,9 +110,7 @@
                             </li>
                         </ul>
                         </li>
-
                         <li id="nav_bills" class="dropdown"><a href="{% url 'bill:bills' %}">找法案</a></li>
-
                         <li id="vote" class="dropdown"><a href="{% url 'vote:votes' %}" >找表決</a></li>
                         <li id="chart_report" class="dropdown">
                         <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">圖表<b class="caret"></b>
@@ -187,6 +185,13 @@
         </footer>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
         <script src="{% static "js/bootstrap.min.js" %}" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(document).ready( function() {
+                $('.dropdown').hover(function(){
+                    $('.dropdown-toggle', this).trigger('click');
+                });
+            });
+        </script>
         {% block script %}
         {% endblock script %}
     </body>

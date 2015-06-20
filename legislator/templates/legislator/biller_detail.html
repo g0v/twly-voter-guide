@@ -1,4 +1,5 @@
 {% extends "common/ly_info.html" %}
+{% load ly_extras %}
 
 {% block title %}
     {% if ly %}
@@ -11,7 +12,7 @@
 {% block ly_detail %}
     <form action="" method="get" class="form-search" id="form">
         <fieldset>
-            <input type="search" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:軍事審判 土地徵收 會計法...空格有交集效果" autofocus>
+            <input type="search" name="keyword" id="keyword" class="span5" maxlength="20" placeholder="例:軍事審判 土地徵收 會計法" autofocus>
             <button type="submit" class="btn">Go!</button>
         </fieldset>
     </form>
@@ -25,7 +26,7 @@
     </h4>
     {% endif %}
     <div class="well well-small">
-        {{ly.name}}(第{{ly.ad}}屆)：{{ bills|length }}個
+        {{ly.name}}（{{ly.ad|ad_year}}）：{{ bills|length }}個
         {% if keyword %}
         包含<font style="color: red;">"{{keyword}}"</font>的
         {% endif %}法條修正草案

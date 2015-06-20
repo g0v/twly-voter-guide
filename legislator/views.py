@@ -107,19 +107,21 @@ def voter_standpoints(request, legislator_id, ad):
     keyword_obj = list(Standpoint.objects.filter(pro__gt=0).values_list('title', flat=True).distinct())
     return render(request, 'legislator/voter_standpoints.html', {'ly': ly, 'standpoints': standpoints, 'keyword_obj': keyword_obj})
 
-def voter_detail(request, legislator_id, ad, index):
+def voter_detail(request, legislator_id, ad):
     ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
-    qs = Q(conflict=True) if index == 'conscience' else Q()
-    if 'decision' in request.GET:
+    qs = Q(conflict=True) if request.GET.get('conscience') else Q()
+    if request.GET.get('decision'):
         decisions = {"agree": Q(decision=1), "disagree": Q(decision=-1), "abstain": Q(decision=0), "notvote": Q(decision__isnull=True)}
         qs = qs & decisions.get(request.GET['decision'], Q())
-    if request.GET.get('keyword'):
-        sqs = SearchQuerySet().filter(content=request.GET['keyword']).models(Vote)
+    hsqs = Q(tags_num__gt=0) if request.GET.get('has_tag') else Q()
+    hsqs = hsqs & Q(content=request.GET['keyword']) if request.GET.get('keyword') else hsqs
+    if hsqs != Q():
+        sqs = SearchQuerySet().filter(hsqs).models(Vote)
         votes = ly.votes.select_related('vote', 'vote__sitting').filter(qs & Q(vote_id__in=[x.uid for x in sqs]))
     else:
         votes = ly.votes.select_related('vote', 'vote__sitting').filter(qs)
     keywords = [x.content for x in SearchQuerySet().filter(category__exact=2).models(Keyword).order_by('-hits')]
-    return render(request, 'legislator/voter_detail.html', {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'ly': ly, 'index': index, 'votes': votes, 'keyword': request.GET.get('keyword', '')})
+    return render(request, 'legislator/voter_detail.html', {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'ly': ly, 'origin': qs & hsqs == Q(), 'votes': votes, 'keyword': request.GET.get('keyword', '')})
 
 def biller_detail(request, legislator_id, ad):
     ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)

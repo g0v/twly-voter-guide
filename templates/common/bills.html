@@ -9,7 +9,7 @@
             <div class="media-heading">
                 {% if keyword %}
                     {{fragment.proposed_by}}
-                    <small>（略）</small>
+                    <small class="muted">（略）</small>
                     {% highlight fragment.text with keyword %}
                 {% else %}
                     {{fragment.abstract}}
@@ -22,7 +22,7 @@
                     <span class="label label-warning"><font class="lead">總共被退回程序委員會{{fragment.rejected_times}}次</font></span>
                     {% endif %}
                     {% for progress, date in fragment.progress_history %}
-                    {{progress}}（{{date}}）
+                    <i class="icon-ok"></i> {{progress}}<font class="muted">（{{date}}）</font>
                     {% endfor %}
                 </blockquote>
             </div>

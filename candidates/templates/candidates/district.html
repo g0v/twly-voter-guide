@@ -55,7 +55,7 @@
                             <td style="text-align:center; vertical-align:middle;">
                                 {% if candidate.latest_term.ad > 5 %}
                                     {{candidate.latest_term.vote_param.not_voting}} 次<br>(投票缺席率{{candidate.latest_term.vote_param.not_voting|divide:candidate.latest_term.vote_param.total}} %)
-                                    <a href="{% url 'legislator:voter_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（看完整表決）</a>
+                                    <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（看完整表決）</a>
                                 {% endif %}
                             </td>
                             <td style="text-align:center; vertical-align:middle;">{{candidate.latest_term.attendance_param.absent}}</td>

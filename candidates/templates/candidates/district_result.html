@@ -47,7 +47,7 @@
                         </td>
                         <td style="text-align:center; vertical-align:middle;">
                             {% if candidate.legislator_id %}
-                                <a href="{% url 'legislator:voter_detail' legislator_id=candidate.legislator.legislator_id ad=candidate.legislator.ad %}">{{candidate.name}}</a>
+                                <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.legislator.legislator_id ad=candidate.legislator.ad %}">{{candidate.name}}</a>
 
                             {% else %}
                                 {{candidate.name}}
