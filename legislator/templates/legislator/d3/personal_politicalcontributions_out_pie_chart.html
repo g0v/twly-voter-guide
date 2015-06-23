@@ -1,41 +1,40 @@
 {% load ly_extras %}
 <style>
-
     .arc text {
-        font: 16px sans-serif;
+        font: 20px sans-serif;
         font-weight: bold;
     }
-
     .arc path {
         stroke: #fff;
     }
-
     .label-line {
         stroke-width: 1;
         stroke: #393939;
     }
-
     .label-circle {
         fill: #393939;
     }
-
 </style>
 <script>
 
     var data = {{data_expenses|as_json}}
 
-    var width = 720,
+    var width = 760,
     height = 360,
     radius = Math.min(width, height) / 3,
     labelr = radius + 10; // radius for label anchor
 
     var color = d3.scale.ordinal()
-    .range(["#996699","#FF66CC",  "#66CC66", "#FF9933", "#6699FF", "#999999", "#FF9966", "#CCCC66", "#CC99FF", "#666699"])
-    .domain(["out_personnel", "out_propagate", "out_campaign_vehicle", "out_campaign_office", "out_rally", "out_travel", "out_miscellaneous", "out_return", "out_exchequer", "out_public_relation"]);
+    .range(["#C45F4E", "#D4C2AE", "#E9EDAD", "#A3A65A", "#485C3C", "#E0BC67", "#FFCC99", "#A37667", "#BAAED6", "#C0D6BF"])
+    .domain(["out_personnel", "out_return", "out_miscellaneous", "out_campaign_vehicle", "out_public_relation", "out_propagate", "out_rally", "out_exchequer", "out_campaign_office", "out_travel"]);
+
+    var legend_color = d3.scale.ordinal()
+    .range(["#C45F4E", "#C7B39D", "#8BB383", "#A3A65A", "#485C3C", "#BA8637", "#CC9999", "#73585B", "#836D8A", "#6AA39C"])
+    .domain(["out_personnel", "out_return", "out_miscellaneous", "out_campaign_vehicle", "out_public_relation", "out_propagate", "out_rally", "out_exchequer", "out_campaign_office", "out_travel"]);
 
     var legend = d3.scale.ordinal()
-    .range(["人事費用", "宣傳", "租用宣傳車輛", "租用競選辦事處", "集會", "交通旅運", "雜支", "返還捐贈", "繳庫", "公共關係費用"])
-    .domain(["out_personnel", "out_propagate", "out_campaign_vehicle", "out_campaign_office", "out_rally", "out_travel", "out_miscellaneous", "out_return", "out_exchequer", "out_public_relation"]);
+    .range(["人事費用", "返還捐贈", "雜支", "租用宣傳車輛", "公共關係費用", "宣傳", "集會", "繳庫", "租用競選辦事處", "交通旅運"])
+    .domain(["out_personnel", "out_return", "out_miscellaneous", "out_campaign_vehicle", "out_public_relation", "out_propagate", "out_rally", "out_exchequer", "out_campaign_office", "out_travel"]);
 
     var arc = d3.svg.arc()
     .outerRadius(radius - 10)
@@ -67,6 +66,7 @@
         fill: "#100",
         transform: function (d,i) {
         centroid = arc.centroid(d);
+        if (d.value != 0)
         return "translate(" + arc.centroid(d) + ")";
         },
         'class': "label-circle"
@@ -74,18 +74,22 @@
 
     textLines_out = g.append("line").attr({
         x1: function (d, i) {
+            if (d.value == 0) return;
             return arc.centroid(d)[0];
         },
         y1: function (d, i) {
+            if (d.value == 0) return;
             return arc.centroid(d)[1];
         },
         x2: function (d, i) {
+            if (d.value == 0) return;
             centroid = arc.centroid(d);
             midAngle = Math.atan2(centroid[1], centroid[0]);
             x = Math.cos(midAngle) * labelr;
             return x;
         },
         y2: function (d, i) {
+            if (d.value == 0) return;
             centroid = arc.centroid(d);
             midAngle = Math.atan2(centroid[1], centroid[0]);
             y = Math.sin(midAngle) * labelr;
@@ -122,11 +126,11 @@
         if (d.value != 0)
         return legend(d.data.key) + '：' + zhutil.approximate(d.value, {base: '萬', extra_decimal: 1});
     })
-    .style("fill", function(d, i) { return color(d.data.key); });
+    .style("fill", function(d, i) { return legend_color(d.data.key); });
 
     function relax_out() {
         alpha = 0.5;
-        spacing = 15;
+        spacing = 25;
         again = false;
         textLabels_out.each(function (d, i) {
             a = this;
@@ -161,6 +165,7 @@
        if(again) {
            labelElements = textLabels_out[0];
            textLines_out.attr("y2",function(d,i) {
+               if (d.value == 0) return;
                labelForLine = d3.select(labelElements[i]);
                return labelForLine.attr("y");
            });

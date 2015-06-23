@@ -38,12 +38,6 @@ class LegislatorTest(TestCase):
             # legislator_id not exist case
             response = self.client.get(reverse('legislator:%s' % arg, kwargs={"legislator_id": 0, "ad": 8}))
             self.assertEqual(response.status_code, 404)
-        for arg in ['biller_detail']:
-            response = self.client.get(reverse('legislator:%s' % arg, kwargs={"legislator_id": 1, "ad": 8}))
-            self.assertEqual(response.status_code, 200)
-        for arg in ['', 'conscience']:
-            response = self.client.get(reverse('legislator:voter_detail', kwargs={"index": arg, "legislator_id": 1, "ad": 8}))
-            self.assertEqual(response.status_code, 200)
 
     def test_chart_report(self):
         for arg in ['biller', 'conscience_vote', 'vote', 'ly']:

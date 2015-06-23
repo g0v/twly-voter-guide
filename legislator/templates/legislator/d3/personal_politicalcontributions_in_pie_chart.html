@@ -1,36 +1,35 @@
 {% load ly_extras %}
 <style>
-
     .arc text {
-        font: 16px sans-serif;
+        font: 20px sans-serif;
         font-weight: bold;
     }
-
     .arc path {
         stroke: #fff;
     }
-
     .label-line {
         stroke-width: 1;
         stroke: #393939;
     }
-
     .label-circle {
         fill: #393939;
     }
-
 </style>
 <script>
 
     var data = {{data_income|as_json}}
 
-    var width = 720,
+    var width = 760,
     height = 360,
     radius = Math.min(width, height) / 3,
     labelr = radius + 10; // radius for label anchor
 
     var color = d3.scale.ordinal()
-    .range(["#FF66CC", "#6699FF", "#66CC66", "#FFCC33", "#999999", "#FFCC66"])
+    .range(["#FF99CC", "#66CCFF", "#99FF66", "#FFCC66", "#999999", "#CCCC66"])
+    .domain(["in_individual", "in_profit", "in_party", "in_civil", "in_anonymous", "in_others"]);
+
+    var legend_color = d3.scale.ordinal()
+    .range(["#FF3399", "#3399FF", "#66CC33", "#FF9933", "#666666", "#CC9966"])
     .domain(["in_individual", "in_profit", "in_party", "in_civil", "in_anonymous", "in_others"]);
 
     var legend = d3.scale.ordinal()
@@ -67,6 +66,7 @@
         fill: "#100",
         transform: function (d,i) {
         centroid = arc.centroid(d);
+        if (d.value != 0)
         return "translate(" + arc.centroid(d) + ")";
         },
         'class': "label-circle"
@@ -74,18 +74,22 @@
 
     textLines_in = g.append("line").attr({
         x1: function (d, i) {
+            if (d.value == 0) return;
             return arc.centroid(d)[0];
         },
         y1: function (d, i) {
+            if (d.value == 0) return;
             return arc.centroid(d)[1];
         },
         x2: function (d, i) {
+            if (d.value == 0) return;
             centroid = arc.centroid(d);
             midAngle = Math.atan2(centroid[1], centroid[0]);
             x = Math.cos(midAngle) * labelr;
             return x;
         },
         y2: function (d, i) {
+            if (d.value == 0) return;
             centroid = arc.centroid(d);
             midAngle = Math.atan2(centroid[1], centroid[0]);
             y = Math.sin(midAngle) * labelr;
@@ -122,11 +126,11 @@
         if (d.value != 0)
         return legend(d.data.key) + '：' + zhutil.approximate(d.value, {base: '萬', extra_decimal: 1});
     })
-    .style("fill", function(d, i) { return color(d.data.key); });
+    .style("fill", function(d, i) { return legend_color(d.data.key); });
 
     function relax_in() {
         alpha = 0.5;
-        spacing = 15;
+        spacing = 25;
         again = false;
         textLabels_in.each(function (d, i) {
             a = this;
@@ -161,6 +165,7 @@
        if(again) {
            labelElements = textLabels_in[0];
            textLines_in.attr("y2",function(d,i) {
+               if (d.value == 0) return;
                labelForLine = d3.select(labelElements[i]);
                return labelForLine.attr("y");
            });
