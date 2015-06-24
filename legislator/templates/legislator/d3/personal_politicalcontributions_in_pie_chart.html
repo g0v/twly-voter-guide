@@ -2,7 +2,6 @@
 <style>
     .arc text {
         font: 20px sans-serif;
-        font-weight: bold;
     }
     .arc path {
         stroke: #fff;
@@ -17,9 +16,9 @@
 </style>
 <script>
 
-    var data = {{data_income|as_json}}
+    var data = {{data|as_json}}
 
-    var width = 760,
+    var width = 800,
     height = 360,
     radius = Math.min(width, height) / 3,
     labelr = radius + 10; // radius for label anchor
@@ -57,7 +56,18 @@
 
     g.append("path")
     .attr("d", arc)
-    .style("fill", function(d) { return color(d.data.key); });
+    .attr("id", function(d){ return "path_" + d.data.key; })
+    .style("fill", function(d) { return color(d.data.key); })
+    .on('mouseover', function(d) {
+        d3.select("#text_" + d.data.key)
+        .style("font-size", "26px")
+        .style("font-weight", "bold");
+    })
+    .on('mouseout', function(d) {
+        d3.select("#text_" + d.data.key)
+        .style("font-size", "20px")
+        .style("font-weight", "normal");
+    });
 
     g.append("circle").attr({
         x: 0,
@@ -73,22 +83,22 @@
     });
 
     textLines_in = g.append("line").attr({
-        x1: function (d, i) {
+        x1: function (d) {
             if (d.value == 0) return;
             return arc.centroid(d)[0];
         },
-        y1: function (d, i) {
+        y1: function (d) {
             if (d.value == 0) return;
             return arc.centroid(d)[1];
         },
-        x2: function (d, i) {
+        x2: function (d) {
             if (d.value == 0) return;
             centroid = arc.centroid(d);
             midAngle = Math.atan2(centroid[1], centroid[0]);
             x = Math.cos(midAngle) * labelr;
             return x;
         },
-        y2: function (d, i) {
+        y2: function (d) {
             if (d.value == 0) return;
             centroid = arc.centroid(d);
             midAngle = Math.atan2(centroid[1], centroid[0]);
@@ -100,7 +110,7 @@
 
     textLabels_in = g.append("text")
     .attr({
-        x: function (d,i) {
+        x: function (d) {
             centroid = arc.centroid(d);
             midAngle = Math.atan2(centroid[1], centroid[0]);
             x = Math.cos(midAngle) * labelr;
@@ -108,25 +118,34 @@
             labelX = x + (8 * sign)
             return labelX;
         },
-        y: function (d,i) {
+        y: function (d) {
             centroid = arc.centroid(d);
             midAngle = Math.atan2(centroid[1], centroid[0]);
             y = Math.sin(midAngle) * labelr;
             return y;
         },
-        'text-anchor': function (d, i) {
+        'text-anchor': function (d) {
             centroid = arc.centroid(d);
             midAngle = Math.atan2(centroid[1], centroid[0]);
             x = Math.cos(midAngle) * labelr;
             return (x > 0) ? "start" : "end";
         },
-        'class': 'label-text'
+        'class': 'label-text',
+        'id': function(d){ return "text_" + d.data.key; }
     })
     .text(function(d) {
         if (d.value != 0)
         return legend(d.data.key) + '：' + zhutil.approximate(d.value, {base: '萬', extra_decimal: 1});
     })
-    .style("fill", function(d, i) { return legend_color(d.data.key); });
+    .style("fill", function(d) { return legend_color(d.data.key); })
+    .on('mouseover', function(d) {
+        d3.select("#path_" + d.data.key)
+        .style("fill", "orangered");
+    })
+    .on('mouseout', function(d) {
+        d3.select("#path_" + d.data.key)
+        .style("fill", function(d) { return legend_color(d.data.key); });
+    });
 
     function relax_in() {
         alpha = 0.5;

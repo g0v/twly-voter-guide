@@ -61,7 +61,7 @@ def personal_political_contributions(request, legislator_id, ad):
     ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
     try:
         pc = ly.elected_candidate.get().politicalcontributions
-        return render(request, 'legislator/personal_politicalcontributions.html', {'ly': ly, 'data_total': {k: pc[k] for k in ['in_total', 'out_total']}, 'data_income': pc['in'], 'data_expenses': pc['out']})
+        return render(request, 'legislator/personal_politicalcontributions.html', {'ly': ly, 'pc': pc})
     except Exception, e:
         raise Http404
 

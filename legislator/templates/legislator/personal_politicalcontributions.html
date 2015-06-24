@@ -1,50 +1,66 @@
 {% extends "common/ly_info.html" %}
 {% load ly_extras %}
+
 {% block title %}
-{% if ly %}
     <title>立委投票指南:{{ly.name}}的政治獻金</title>
     <meta property="og:title" content="立委投票指南:{{ly.name}}的政治獻金"/>
     <meta itemprop="name" content="立委投票指南:{{ly.name}}的政治獻金">
-{% else %}
-    <title>立委投票指南:立委的政治獻金</title>
-    <meta property="og:title" content="立委投票指南:立委的政治獻金"/>
-    <meta itemprop="name" content="立委投票指南:立委的政治獻金">
-{% endif %}
 {% endblock title %}
+
 {% block ly_detail %}
     {% if ly.constituency == '全國不分區' or ly.constituency == '僑居國外國民' %}
         <p>登記為全國不分區、僑居國外國民立法委員選舉之候選人不得收受政治獻金。<a href="http://homepage.vghtpe.gov.tw/~ged/top2/top2_e13.htm" target="_blank">詳請參見問答第21</a></p>
     {% else %}
     <div align="center">
         <br>
+        <table class="table table-bordered">
+            <thead>
+                <tr style="font-weight:bold;background-color: #E1D0D0;">
+                    <th>收入</th>
+                    <th>支出</th>
+                    <th>餘額</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align:center; vertical-align:middle;">
+                        <a href="{% url 'legislator:personal_political_contributions' legislator_id=ly.legislator_id ad=ly.ad %}#d3_in"><font class="price">{{pc.in_total}}</font></a>
+                    </td>
+                    <td style="text-align:center; vertical-align:middle;">
+                        <a href="{% url 'legislator:personal_political_contributions' legislator_id=ly.legislator_id ad=ly.ad %}#d3_out"><font class="price">{{pc.out_total}}</font></a>
+                    </td>
+                    <td style="text-align:center; vertical-align:middle;">
+                        <font class="price">{{pc.balance}}</font>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <div class="hero-unit">
-            <p class="lead">收入：共<span class="price text-right">{{data_total.in_total}}</span>元</p>
-            <div id="d3_in" align="center"></div>
-        </div>
+            <p class="lead">收入：<span class="price text-right">{{pc.in_total}}</span>元</p>
+            <div id="d3_in" style="padding-top: 60px; margin-top: -60px;" align="center"></div>
             <br>
-        <div class="hero-unit">
-            <p class="lead">支出：共<span class="price text-right">{{data_total.out_total}}</span>元</p>
-            <div id="d3_out" align="center"></div>
+            <p class="lead">支出：<span class="price text-right">{{pc.out_total}}</span>元</p>
+            <div id="d3_out" style="padding-top: 60px; margin-top: -60px;" align="center"></div>
         </div>
     </div>
     {% endif %}
 {% endblock ly_detail %}
+
 {% block script %}
-<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/d3.min.js"></script>
-<script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/zhutil.min.js"></script>
-{% include "legislator/d3/personal_politicalcontributions_in_pie_chart.html" %}
-{% include "legislator/d3/personal_politicalcontributions_out_pie_chart.html" %}
-<script>
-    $(document).ready( function() {
-        $('#url_polticalcontributions').addClass("btn-info");
-        $('.price').each(function(index,ele){
-            var number = $(ele).text()
-            zh_number = zhutil.approximate(number, {base: '萬', extra_decimal: 2});
-            $(ele).replaceWith(zh_number)
+    <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/d3.min.js"></script>
+    <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/zhutil.min.js"></script>
+    {% include "legislator/d3/personal_politicalcontributions_in_pie_chart.html" with data=pc.in %}
+    {% include "legislator/d3/personal_politicalcontributions_out_pie_chart.html" with data=pc.out %}
+    <script>
+        $(document).ready( function() {
+            $('#url_polticalcontributions').addClass("btn-info");
+            $('.price').each(function(index,ele){
+                var number = $(ele).text()
+                zh_number = zhutil.approximate(number, {base: '萬', extra_decimal: 2});
+                $(ele).replaceWith(zh_number)
+            });
+            relax_in();
+            relax_out();
         });
-        relax_in();
-        relax_out();
-    });
-</script>
-{{ block.super }}
+    </script>
 {% endblock script %}

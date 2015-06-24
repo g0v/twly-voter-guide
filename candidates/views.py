@@ -33,5 +33,5 @@ def district(request, ad, county, constituency):
     return render(request, 'candidates/district.html', {'ad': ad, 'county': county, 'candidates': candidates})
 
 def political_contributions(request, uid, ad):
-    candidate = get_object_or_404(Candidates.objects.select_related('politicalcontributions'), ad=ad, uid=uid)
+    candidate = get_object_or_404(Candidates, ad=ad, uid=uid)
     return render(request, 'candidates/politicalcontributions.html', {'candidate': candidate})

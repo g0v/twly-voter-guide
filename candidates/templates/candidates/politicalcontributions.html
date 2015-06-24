@@ -22,13 +22,13 @@
         <div class="hero-unit">
             <p class="lead">{{candidate.name}}第{{candidate.ad}}屆的政治獻金</p>
             <div id="d3_in" style="padding-top: 60px; margin-top: -60px;" align="center"></div>
-            <p class="lead">收入：共<span class="price text-right">{{candidate.politicalcontributions.in_total}}</span>元</p>
+            <p class="lead">收入：<span class="price text-right">{{candidate.politicalcontributions.in_total}}</span>元</p>
         </div>
             <br>
         <div class="hero-unit">
             <p class="lead">{{candidate.name}}第{{candidate.ad}}屆的政治獻金</p>
             <div id="d3_out" style="padding-top: 60px; margin-top: -60px;" align="center"></div>
-            <p class="lead">支出：共<span class="price text-right">{{candidate.politicalcontributions.out_total}}</span>元</p>
+            <p class="lead">支出：<span class="price text-right">{{candidate.politicalcontributions.out_total}}</span>元</p>
         </div>
     </div>
     {% endif %}
@@ -37,8 +37,8 @@
 {% block script %}
     <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/d3.min.js"></script>
     <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/zhutil.min.js"></script>
-    {% include "candidates/d3/politicalcontributions_in_pie.html" %}
-    {% include "candidates/d3/politicalcontributions_out_pie.html" %}
+    {% include "legislator/d3/personal_politicalcontributions_in_pie_chart.html" with data=candidate.politicalcontributions.in %}
+    {% include "legislator/d3/personal_politicalcontributions_out_pie_chart.html" with data=candidate.politicalcontributions.out %}
     <script>
         $(document).ready( function() {
             $('.price').each(function(index,ele){
