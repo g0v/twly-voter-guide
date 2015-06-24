@@ -46,32 +46,32 @@
             </thead>
             <tbody>
                 {% for ly in ly_list %}
-                <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
-                    {% include "common/ly_dropdown.html" with color=True %}
-                    <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
-                    <td>{{ly.term_start|date:"Y-m-d"}}</td>
-                    {% if ad > 5 %}
-                        {% if ly.attendance_param %}
-                            <td><div class="text-center">{{ly.attendance_param.absent}} 次（{{ly.attendance_param.absent|divide:ly.attendance_param.total}} %）</div></td>
-                        {% else %}
-                            <td></td>
+                    <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
+                        <td><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">{{ly.name}}</a></td>
+                        <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
+                        <td>{{ly.term_start|date:"Y-m-d"}}</td>
+                        {% if ad > 5 %}
+                            {% if ly.attendance_param %}
+                                <td><div class="text-center">{{ly.attendance_param.absent}} 次（{{ly.attendance_param.absent|divide:ly.attendance_param.total}} %）</div></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            {% if ly.vote_param %}
+                            <td><div class="text-center">{{ly.vote_param.not_voting}} 次（{{ly.vote_param.not_voting|divide:ly.vote_param.total}} %）</div></td>
+                            <td><div class="text-center">{{ly.vote_param.conflict}} 次（{{ly.vote_param.conflict|divide:ly.vote_param.total}} %）</div></td>
+                            {% else %}
+                                <td></td>
+                                <td></td>
+                            {% endif %}
                         {% endif %}
-                        {% if ly.vote_param %}
-                        <td><div class="text-center">{{ly.vote_param.not_voting}} 次（{{ly.vote_param.not_voting|divide:ly.vote_param.total}} %）</div></td>
-                        <td><div class="text-center">{{ly.vote_param.conflict}} 次（{{ly.vote_param.conflict|divide:ly.vote_param.total}} %）</div></td>
-                        {% else %}
-                            <td></td>
-                            <td></td>
+                        {% if ad > 7 %}
+                            {% if ly.bill_param %}
+                                <td><div class="text-center">{{ly.bill_param.chief}}</div></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
-                    {% if ad > 7 %}
-                        {% if ly.bill_param %}
-                            <td><div class="text-center">{{ly.bill_param.chief}}</div></td>
-                        {% else %}
-                            <td></td>
-                        {% endif %}
-                    {% endif %}
-                </tr>
+                    </tr>
                 {% endfor %}
             </tbody>
             {% include "common/color_info_of_party.html" with column=21 %}
@@ -85,7 +85,6 @@
     <script>
         $(document).ready( function() {
             $('#ly').addClass('active');
-            $('.dropdown-toggle').dropdown();
             $("[rel='tooltip']").tooltip();
         });
     </script>

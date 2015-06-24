@@ -24,13 +24,13 @@ def index(request, index, ad):
             'title': u'脫黨投票',
             'description': u'<h4><p>脫黨投票：立委表決的決定與所屬政黨多數意見不同。</p><small>脫黨投票不一定較好，可能該立委是憑良心投票，也可能是受財團、企業影響所致，還請點選該立委觀看其脫黨投票的表決內容再作論定。</small>',
             'url_class': 'legislator:voter_detail',
-            'index': 'conscience',
+            'get_param': '?conscience=on',
         },
         'not_voting': {
             'title': u'投票缺席',
             'description': u'',
             'url_class': 'legislator:voter_detail',
-            'index': '',
+            'get_param': '',
         },
     }
     ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=True)\

@@ -1,8 +1,7 @@
 {% extends "legislator/index/index.html" %}
-{% load ly_extras %}
 
 {% block ly_table %}
-    <div class="description span12" style="margin-left: 1%;">
+    <div class="description" style="margin-left: 1%;">
         <h3 class="text-warning">
             {{param.title}}率
         </h3>
@@ -23,7 +22,7 @@
                     <td>{{ranking.grouper|floatformat}} % ~ {{ranking.grouper|add:10|floatformat}} %</td>
                     {% for ly in ranking.list %}
                         <td class="name {{ly.county}} {{ly.gender}}">
-                            <a href="{% url param.url_class legislator_id=ly.legislator_id ad=ly.ad index=param.index %}" rel="tooltip" title="{{param.title}}率{{ly.percentage}} %（{{param.title}}{{ly.count}}次）">
+                            <a href="{% url param.url_class legislator_id=ly.legislator_id ad=ly.ad %}{{param.get_param}}" rel="tooltip" title="{{param.title}}率{{ly.percentage}} %（{{param.title}}{{ly.count}}次）">
                         {% include "common/ly_color_by_party.html" %}
                         </a>
                         </td>

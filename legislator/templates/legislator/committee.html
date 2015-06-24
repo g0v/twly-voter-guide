@@ -16,15 +16,15 @@
         <table class="table table-bordered table-condensed" >
             {% regroup ly_list by session as session_list %}
             {% for session in session_list %}
-            <tr>
-                <td><div class="text-center">第{{session.grouper}}會期</div></td>
-                {% for fragment in session.list %}
-                {% with ly=fragment.legislator %}
-                {% include "common/ly_dropdown.html" with color=True %}
-                {% endwith %}
-                {% endfor %}
-            </tr>
-                {% endfor %}
+                <tr>
+                    <td><div class="text-center">第{{session.grouper}}會期</div></td>
+                    {% for fragment in session.list %}
+                        {% with ly=fragment.legislator %}
+                        <td><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">{{ly.name}}</a></td>
+                        {% endwith %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
             </tr>
         </table>
         <table class="table table-bordered table-condensed zebra" >
@@ -45,28 +45,28 @@
             <tbody>
                 {% regroup ly_list by session as session_list %}
                 {% for session in session_list %}
-                {% if forloop.counter == 1 %}
-                {% for fragment in session.list %}
-                    <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
-                        <td><div class="text-center">{{session.grouper}}</div></td>
-                        <td>
-                            {% if fragment.chair %}
-                            <div class="text-center">召集委員</div>
-                            {% endif %}
-                        </td>
-                        {% with ly=fragment.legislator %}
-                        {% include "common/ly_dropdown.html" with color=True %}
-                        <td><a href="{% url 'legislator:county' county=ly.county ad=ly.ad %}" >{{ly.county}}</a></td>
-                        <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
-                        <td>{{ly.term_start|date:"Y-m-d"}}</td>
-                        <td><div class="text-center">{{ly.attendance_param.absent}} 次（{{ly.attendance_param.absent|divide:ly.attendance_param.total}} %）</div></td>
-                        <td><div class="text-center">{{ly.bill_param.chief}}</div></td>
-                        <td><div class="text-center">{{ly.vote_param.not_voting}} 次（{{ly.vote_param.not_voting|divide:ly.vote_param.total}} %）</div></td>
-                        <td><div class="text-center">{{ly.vote_param.conflict}} 次（{{ly.vote_param.conflict|divide:ly.vote_param.total}} %）</div></td>
-                        {% endwith %}
-                    </tr>
-                {% endfor %}
-                {% endif %}
+                    {% if forloop.counter == 1 %}
+                    {% for fragment in session.list %}
+                        <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
+                            <td><div class="text-center">{{session.grouper}}</div></td>
+                            <td>
+                                {% if fragment.chair %}
+                                <div class="text-center">召集委員</div>
+                                {% endif %}
+                            </td>
+                            {% with ly=fragment.legislator %}
+                            <td><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">{{ly.name}}</a></td>
+                            <td><a href="{% url 'legislator:county' county=ly.county ad=ly.ad %}" >{{ly.county}}</a></td>
+                            <td>{% if ly.district %}<abbr title="{{ ly.district }}">{{ ly.district|truncatechars:20 }}</abbr>{% endif %}</td>
+                            <td>{{ly.term_start|date:"Y-m-d"}}</td>
+                            <td><div class="text-center">{{ly.attendance_param.absent}} 次（{{ly.attendance_param.absent|divide:ly.attendance_param.total}} %）</div></td>
+                            <td><div class="text-center">{{ly.bill_param.chief}}</div></td>
+                            <td><div class="text-center">{{ly.vote_param.not_voting}} 次（{{ly.vote_param.not_voting|divide:ly.vote_param.total}} %）</div></td>
+                            <td><div class="text-center">{{ly.vote_param.conflict}} 次（{{ly.vote_param.conflict|divide:ly.vote_param.total}} %）</div></td>
+                            {% endwith %}
+                        </tr>
+                    {% endfor %}
+                    {% endif %}
                 {% endfor %}
             </tbody>
             {% include "common/color_info_of_party.html" with column=21 %}

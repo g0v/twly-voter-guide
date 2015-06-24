@@ -1,117 +1,89 @@
 {% extends "base.html" %}
 {% load ly_extras %}
+
 {% block title %}
-<title>立委投票指南</title>
-<meta property="og:title" content="立委投票指南"/>
-<meta itemprop="name" content="立委投票指南">
+    <title>立委投票指南</title>
+    <meta property="og:title" content="立委投票指南"/>
+    <meta itemprop="name" content="立委投票指南">
 {% endblock title %}
+
 {% block right %}
-<div class="page-header text-center">
-    <h3>台灣<b>第{{ad}}屆</b>立委<small> {{ad|ad_year}}</small></h3>
-    {% if index == 'conflict' or index == 'not_voting' or index == 'district' %}
-    <h4>
-        <font class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">其他屆<b class="caret"></b></a>
-        <ul class="dropdown-menu">
-            <li><a href="{% url 'legislator:index' index %}" ><b>第8屆</b><small> 2012~2016</small></a></li>
-            <li><a href="{% url 'legislator:index' index=index ad=7 %}" ><b>第7屆</b><small> 2008~2012</small></a></li>
-            <li><a href="{% url 'legislator:index' index=index ad=6 %}" ><b>第6屆</b><small> 2005~2008</small></a></li>
-            {% if index == 'district' %}
-            <li><a href="{% url 'legislator:index' index=index ad=5 %}" ><b>第5屆</b><small> 2002~2005</small></a></li>
-            <li><a href="{% url 'legislator:index' index=index ad=4 %}" ><b>第4屆</b><small> 1999~2002</small></a></li>
-            <li><a href="{% url 'legislator:index' index=index ad=3 %}" ><b>第3屆</b><small> 1996~1999</small></a></li>
-            <li><a href="{% url 'legislator:index' index=index ad=2 %}" ><b>第2屆</b><small> 1993~1996</small></a></li>
-            <li><a href="{% url 'legislator:index' index=index ad=1 %}" ><b>第1屆</b><small> ~1993</small></a></li>
+    <div class="page-header text-center">
+        <h3>台灣<b>第{{ad}}屆</b>立委<small> {{ad|ad_year}}</small></h3>
+        {% if index == 'conflict' or index == 'not_voting' or index == 'district' %}
+        <h4>
+            <font class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">其他屆<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'legislator:index' index %}" ><b>第8屆</b><small> 2012~2016</small></a></li>
+                <li><a href="{% url 'legislator:index' index=index ad=7 %}" ><b>第7屆</b><small> 2008~2012</small></a></li>
+                <li><a href="{% url 'legislator:index' index=index ad=6 %}" ><b>第6屆</b><small> 2005~2008</small></a></li>
+                {% if index == 'district' %}
+                <li><a href="{% url 'legislator:index' index=index ad=5 %}" ><b>第5屆</b><small> 2002~2005</small></a></li>
+                <li><a href="{% url 'legislator:index' index=index ad=4 %}" ><b>第4屆</b><small> 1999~2002</small></a></li>
+                <li><a href="{% url 'legislator:index' index=index ad=3 %}" ><b>第3屆</b><small> 1996~1999</small></a></li>
+                <li><a href="{% url 'legislator:index' index=index ad=2 %}" ><b>第2屆</b><small> 1993~1996</small></a></li>
+                <li><a href="{% url 'legislator:index' index=index ad=1 %}" ><b>第1屆</b><small> ~1993</small></a></li>
+                {% endif %}
+            </ul>
+            <font>
+        </h4>
+        {% endif %}
+        {% include "common/highlight.html" with ad=ad %}
+    </div>
+    {% block ly_table %}
+    {% endblock ly_table %}
+    <hr>
+    {% if outof_ly_list %}
+    <table class="table table-bordered table-condensed">
+        <tr style="font-weight:bold; background-color: #FFFFCC;">
+            <td style="text-align:center; vertical-align:middle; width: 15%">離職立委</td>
+            <td style="text-align:center; vertical-align:middle; width: 15%">遞補立委</td>
+            <td style="text-align:center; vertical-align:middle; width: 15%">離職日期</td>
+            <td style="text-align:center; vertical-align:middle; width: 55%">離職原因</td>
+        </tr>
+        {% for ly in outof_ly_list %}
+        <tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
+            <td style="text-align:center; vertical-align:middle;">
+                <a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">{{ly.name}}</a>
+            </td>
+            {% if ly.term_end.replacement %}
+            <td style="text-align:center; vertical-align:middle;">{{ly.term_end.replacement}}</td>
+            {% else %}
+            <td></td>
             {% endif %}
-        </ul>
-        <font>
-    </h4>
+            <td>{{ly.term_end.date|date:"Y-m-d"}}</td>
+            <td>
+            {% if ly.term_end.reason %}
+                {{ly.term_end.reason}}
+            {% else %}
+                無資料
+            {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
     {% endif %}
-    {% include "common/highlight.html" with ad=ad %}
-</div>
-{% block ly_table %}
-{% endblock ly_table %}
-<hr>
-{% if outof_ly_list %}
-<table class="table table-bordered table-condensed">
-    <tr style="font-weight:bold; background-color: #FFFFCC;">
-        <td style="text-align:center; vertical-align:middle; width: 15%">離職立委</td>
-        <td style="text-align:center; vertical-align:middle; width: 15%">遞補立委</td>
-        <td style="text-align:center; vertical-align:middle; width: 15%">離職日期</td>
-        <td style="text-align:center; vertical-align:middle; width: 55%">離職原因</td>
-    </tr>
-    {% for ly in outof_ly_list %}
-    <tr style="background-color: {% cycle 'EEEEEE' 'white' %};">
-        {% include "common/ly_dropdown.html" with color=True %}
-        {% if ly.term_end.replacement %}
-        <td style="text-align:center; vertical-align:middle;">{{ly.term_end.replacement}}</td>
-        {% else %}
-        <td></td>
-        {% endif %}
-        <td>{{ly.term_end.date|date:"Y-m-d"}}</td>
-        <td>
-        {% if ly.term_end.reason %}
-            {{ly.term_end.reason}}
-        {% else %}
-            無資料
-        {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-{% endif %}
-<hr>
-<div class="fb-like pull-right" data-layout="box_count" data-show-faces="false" data-send="false" href="https://www.facebook.com/TW.Voter.Guide"></div>
-<div class="fb-comments" data-num-posts="3" href="{{current_url}}" order_by="reverse_time"></div>
+    <hr>
+    <div class="fb-like pull-right" data-layout="box_count" data-show-faces="false" data-send="false" href="https://www.facebook.com/TW.Voter.Guide"></div>
+    <div class="fb-comments" data-num-posts="3" href="{{current_url}}" order_by="reverse_time"></div>
 {% endblock right %}
+
 {% block script %}
-<link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-<script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-<style>
-    .ui-autocomplete-category {
-        font-weight: bold;
-        padding: .2em .4em;
-        margin: .8em 0 .2em;
-        line-height: 1.5;
-    }
-</style>
-<script>
-    $.widget( "custom.catcomplete", $.ui.autocomplete, {
-        _renderMenu: function( ul, items ) {
-            var that = this,
-            currentCategory = "";
-            $.each( items, function( index, item ) {
-                if ( item.category != currentCategory ) {
-                    ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-                    currentCategory = item.category;
-                }
-                that._renderItemData( ul, item );
+    <script>
+        $(document).ready( function() {
+            $('#ly').addClass('active');
+            $("[rel='tooltip']").tooltip();
+            $('#county').change(function() {
+                $('#gender').val("");
+                $('.name').css('backgroundColor', '#FFF');
+                $('.' + $(this).val()).css('backgroundColor', '#FF6');
             });
-        }
-    });
-</script>
-<script>
-    $(document).ready( function() {
-        $('#ly').addClass('active');
-        $('.dropdown-toggle').dropdown();
-        $("[rel='tooltip']").tooltip();
-        $('#proposertype').change(function() {
-            $("#form_bill").trigger('submit');
+            $('#gender').change(function() {
+                $('#county').val("");
+                $('.name').css('backgroundColor', '#FFF');
+                $('.' + $(this).val()).css('backgroundColor', '#FF6');
+            });
         });
-        $('#progress').change(function() {
-            $("#form_bill").trigger('submit');
-        });
-        $('#progress').val('{{progress}}')
-        $('#county').change(function() {
-            $('#gender').val("");
-            $('.name').css('backgroundColor', '#FFF');
-            $('.' + $(this).val()).css('backgroundColor', '#FF6');
-        });
-        $('#gender').change(function() {
-            $('#county').val("");
-            $('.name').css('backgroundColor', '#FFF');
-            $('.' + $(this).val()).css('backgroundColor', '#FF6');
-        });
-    });
-</script>
+    </script>
 {% endblock script %}

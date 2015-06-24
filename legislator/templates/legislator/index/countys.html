@@ -1,19 +1,20 @@
 {% extends "legislator/index/index.html" %}
+
 {% block ly_table %}
-{% if ly_list %}
-    <table class="table table-bordered table-condensed">
-        {% for ly in ly_list %}
-            {% if forloop.counter|divisibleby:26 %}
-                </tr><tr>
-            {% endif %}
-            {% ifchanged ly.county %}
-                <td><a href="{% url 'legislator:county' county=ly.county ad=ly.ad %}" class="btn btn-info btn-mini" rel="tooltip" title="{{ly.county}}的所有立委詳細資料"><b>{{ly.county}}</b></a></td>
-            {% endifchanged %}
-            {% include "common/ly_dropdown.html" with color=True %}
-        {% endfor %}
-        {% include "common/color_info_of_party.html" with column=40 %}
-    </table>
-{% else %}
-    <p class="text-error">沒有立委</p>
-{% endif %}
+    {% if ly_list %}
+        <table class="table table-bordered table-condensed">
+            {% for ly in ly_list %}
+                {% if forloop.counter|divisibleby:26 %}
+                    </tr><tr>
+                {% endif %}
+                {% ifchanged ly.county %}
+                    <td><a href="{% url 'legislator:county' county=ly.county ad=ly.ad %}" class="btn btn-info btn-mini" rel="tooltip" title="{{ly.county}}的所有立委詳細資料"><b>{{ly.county}}</b></a></td>
+                {% endifchanged %}
+                <td><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">{{ly.name}}</a></td>
+            {% endfor %}
+            {% include "common/color_info_of_party.html" with column=40 %}
+        </table>
+    {% else %}
+        <p class="text-error">沒有立委</p>
+    {% endif %}
 {% endblock ly_table %}
