@@ -3,7 +3,7 @@
 
 {% block right %}
     <div class="row-fluid">
-        <div class="span3">
+        <div class="span3 hidden-phone">
             <br>
             {% if ly %}
             <table class="table table-bordered">
@@ -151,13 +151,15 @@
                 <div class="span12">
                     <b>{{ ly.name }}</b>的&nbsp;
                     <a id='url_property' class="btn btn-large" href="http://sunshine.cy.g0v.tw/people/{{ly.name}}/property/overview/" target="_blank">個人財產申報</a>
-                    <div class="btn-group">
-                        <a id='url_vote' class="btn btn-large dropdown-toggle" href="#" data-toggle="dropdown">投票紀錄 <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}" >表決立場</a></li>
-                            <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}" >全投票表決紀錄</a></li>
-                        </ul>
-                    </div>
+                    {% if ly.ad > 5 %}
+                        <div class="btn-group">
+                            <a id='url_vote' class="btn btn-large dropdown-toggle" href="#" data-toggle="dropdown">投票紀錄 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}" >表決立場</a></li>
+                                <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}" >全投票表決紀錄</a></li>
+                            </ul>
+                        </div>
+                    {% endif %}
                     {% if ly.ad > 7 %}
                         <a class="btn btn-large" id='url_polticalcontributions' href="{% url 'legislator:personal_political_contributions' legislator_id=ly.legislator_id ad=ly.ad %}">政治獻金</a>
                         <a class="btn btn-large" id='url_bill' href="{% url 'legislator:biller_detail' legislator_id=ly.legislator_id ad=ly.ad %}">法條修正案</a>

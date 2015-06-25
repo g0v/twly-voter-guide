@@ -10,7 +10,7 @@
 {% block right %}
     <div class="hero-unit span12" style="margin-left: 0px;">
         <img class="pull-right" src="https://s3-ap-southeast-1.amazonaws.com/councilor.tw/county-logo/{{county}}.png"></img>
-        <h2 class="span8">{{ad|ad_year}} {{county}} - {{candidates.0.district}} 立委候選人</h2>
+        <h2 class="span8">{{ad|ad_year}} {{county}} - {{candidates.0.district}} 候選人</h2>
         <font class="span8"><a href="{% url 'candidates:districts' county=county ad=ad %}">☞ 其他選區</a></font>
 
     </div>

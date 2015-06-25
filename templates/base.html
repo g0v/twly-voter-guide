@@ -51,7 +51,7 @@
                 <div class="nav-collapse collapse">
                     <ul class="nav">
                         <li id="candidates"><a href="{% url 'candidates:counties' ad=8 %}" >2012候選人</a></li>
-                        <li id="ly" class="dropdown">
+                        <li id="ly" class="dropdown hidden-phone">
                         <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">找立委<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li class="dropdown-submenu">
@@ -112,7 +112,7 @@
                         </li>
                         <li id="nav_bills" class="dropdown"><a href="{% url 'bill:bills' %}">找法案</a></li>
                         <li id="vote" class="dropdown"><a href="{% url 'vote:votes' %}" >找表決</a></li>
-                        <li id="chart_report" class="dropdown">
+                        <li id="chart_report" class="dropdown hidden-phone">
                         <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">圖表<b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
@@ -132,9 +132,9 @@
                         <li id="reference"><a href="{% url 'reference' %}">資料來源</a></li>
                         <li id="about"><a href="{% url 'about' %}">關於</a></li>
                         <li class="divider-vertical"></li>
-                        <li><a class="btn btn-inverse btn-small" data-target="#searchModal" data-toggle="modal"><b>全站搜尋</b></a></li>
+                        <li class="hidden-phone"><a class="btn btn-inverse btn-small" data-target="#searchModal" data-toggle="modal"><b>全站搜尋</b></a></li>
                         <li class="divider-vertical"></li>
-                        <li style="padding:12px 0px 12px;"><font class="text-warning">資料更新時間&nbsp;<br>2015-06-12&nbsp;</font></li>
+                        <li class="hidden-phone" style="padding:12px 0px 12px;"><font class="text-warning">資料更新時間&nbsp;<br>2015-06-12&nbsp;</font></li>
                     </ul>
                 </div>
             </div>
@@ -175,19 +175,19 @@
         </div>
 
         <footer class="footer">
-        <div align="center" class="container">
-            {% block backtotop %}
-                <br>
-                <a href="#top" class="btn btn-large"><i class="icon-chevron-up"></i></a>
-            {% endblock backtotop %}
-            <p><a href="mailto:g0v-ly@googlegroups.com">意見信箱</a></p>
-        </div>
+            <div align="center" class="container">
+                {% block backtotop %}
+                    <br>
+                    <a href="#top" class="btn btn-large"><i class="icon-chevron-up"></i></a>
+                {% endblock backtotop %}
+                <p><a href="mailto:g0v-ly@googlegroups.com">意見信箱</a></p>
+            </div>
         </footer>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
         <script src="{% static "js/bootstrap.min.js" %}" type="text/javascript"></script>
         <script type="text/javascript">
             $(document).ready( function() {
-                $('.dropdown').hover(function(){
+                $('#ly.dropdown, #chart_report.dropdown').hover(function(){
                     $('.dropdown-toggle', this).trigger('click');
                 });
             });
