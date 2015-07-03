@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.contrib import auth
 from django.core.urlresolvers import reverse
 
@@ -9,6 +9,7 @@ from haystack.query import SearchQuerySet
 from legislator.models import Legislator
 from vote.models import Vote
 from bill.models import Bill
+from standpoint.models import Standpoint
 from search.models import Keyword
 
 def about(request):
@@ -27,7 +28,8 @@ def home(request):
     results = SearchQuerySet().filter(content=request.GET['keyword']).models(Vote, Bill) if request.GET.get('keyword') else []
     keywords = [x.content for x in SearchQuerySet().models(Keyword).order_by('-hits')]
     names = [x.name for x in SearchQuerySet().models(Legislator)]
-    return render(request, 'home.html', {'results': results, 'keyword': request.GET.get('keyword', ''), 'keyword_obj': keywords, 'hot_keyword': keywords[:6], 'names': names})
+    standpoints = Standpoint.objects.values('title').annotate(pro_sum=Sum('pro')).order_by('-pro_sum').distinct()
+    return render(request, 'home.html', {'results': results, 'keyword': request.GET.get('keyword', ''), 'keyword_obj': keywords, 'hot_keyword': keywords[:6], 'names': names, 'hot_standpoints': standpoints[:5]})
 
 def logout(request):
     auth.logout(request)

@@ -8,16 +8,16 @@
 {% endblock %}
 
 {% block right %}
-    <div class="description span12" align="center">
+    <div class="description span12 hidden-phone" align="center">
         <h2>立委投票指南</h2>
-        <p class="hidden-phone">減少盲目投票，讓民主社會的台灣更進步；輸入關鍵字，關心你關心的議題</p>
+        <p>減少盲目投票，讓民主社會的台灣更進步；輸入關鍵字，關心你關心的議題</p>
     </div>
     <div class="span12">
         <div class="span6" align="center">
             <h3 class="text-info">找候選人</h3>
             {% include "common/search_name_form.html" with placeholder_text="立委姓名" %}
             <div class="btn-group">
-                <a class="btn btn-large dropdown-toggle" href="#" data-toggle="dropdown">縣市 <span class="caret"></span></a>
+                <a class="btn btn-info dropdown-toggle" href="#" data-toggle="dropdown">縣市 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'candidates:districts' county='臺北市' ad=8 %}">臺北市</a></li>
                     <li><a href="{% url 'candidates:districts' county='新北市' ad=8 %}">新北市</a></li>
@@ -76,16 +76,25 @@
             </map>
         </div>
         <hr class="visible-phone">
-        <div class="span6" align="center">
-            <h3 class="text-warning">找議題</h3>
-            {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全" %}
+        <div class="span6">
+            <h3 class="text-warning" align="center">找議題</h3>
+            <div align="center">
+                {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全" %}
+            </div>
+            <p>
             {% if hot_keyword %}
-                <h4>熱門搜尋：
+                熱門搜尋：
                     {% for keyword in hot_keyword %}
-                        <a href="{% url 'home' %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決、法案"><font style="color: {% cycle '#9999FF' '#99CCCC' '#99CC99' '#999966' '#99CC33' %};">{{keyword}}&nbsp;</font></a>
+                        <a href="{% url 'home' %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決、法案"><b style="color: {% cycle '#BA8637' '#635761' '#8F4F56' '#D47479' '#A89D80' '#353D17' %};">{{keyword}}&nbsp;</b></a>
                     {% endfor %}
-                </h4>
             {% endif %}
+            {% if hot_standpoints %}
+                <br>熱門網友標籤：
+                    {% for standpoint in hot_standpoints %}
+                        <a href="{% url 'vote:votes' %}?tag={{standpoint.title}}" rel="tooltip" title="包含此標籤的表決"><b style="color: {% cycle '#9999FF' '#2B4A54' '#25285C' '#BF5A61' '#99CC33' %};">{{standpoint.title}}&nbsp;</b></a>
+                    {% endfor %}
+            {% endif %}
+            </p>
             {% if keyword %}
                 <div class="well well-small">
                     <font class="lead">

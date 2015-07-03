@@ -8,7 +8,7 @@
 {% endblock title %}
 
 {% block right %}
-    <div class="hero-unit span12" style="margin-left: 0px;">
+    <div class="hero-unit span12 hidden-phone" style="margin-left: 0px;">
         <img class="pull-right" src="https://s3-ap-southeast-1.amazonaws.com/councilor.tw/county-logo/{{county}}.png"></img>
         <h2 class="span8">{{ad|ad_year}} {{county}} - {{candidates.0.district}} 候選人</h2>
         <font class="span8"><a href="{% url 'candidates:districts' county=county ad=ad %}">☞ 其他選區</a></font>
@@ -20,6 +20,7 @@
             <thead>
                 <tr style="font-weight:bold;background-color: #E1D0D0;">
                     <th rowspan="2">當選註記</th>
+                    <th rowspan="2">表決立場</th>
                     <th rowspan="2">候選人</th>
                     <th rowspan="2">黨籍</th>
                     <th rowspan="2">性別</th>
@@ -45,10 +46,17 @@
                                 <span class="badge badge-warning">*</span>
                             {% endif %}
                         </td>
+                        <td style="vertical-align:middle;">
+                            {% if candidate.elected %}
+                                {% for standpoint in standpoints %}
+                                    {{standpoint.title}}：{{standpoint.times}}次{{standpoint.decision}}<br>
+                                {% endfor %}
+                                <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.legislator.legislator_id ad=candidate.legislator.ad %}" >其他...</a>
+                            {% endif %}
+                        </td>
                         <td style="text-align:center; vertical-align:middle;">
                             {% if candidate.legislator_id %}
                                 <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.legislator.legislator_id ad=candidate.legislator.ad %}">{{candidate.name}}</a>
-
                             {% else %}
                                 {{candidate.name}}
                             {% endif %}

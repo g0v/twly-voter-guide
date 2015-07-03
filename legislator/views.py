@@ -67,6 +67,7 @@ def personal_political_contributions(request, legislator_id, ad):
 
 def voter_standpoints(request, legislator_id, ad):
     ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
+    terms_id = tuple(LegislatorDetail.objects.filter(ad__lte=ad, legislator_id=legislator_id).values_list('id', flat=True))
     c = connections['default'].cursor()
     qs = u'''
         SELECT
@@ -86,11 +87,11 @@ def voter_standpoints(request, legislator_id, ad):
     '''
     if request.GET.get('keyword'):
         qs = qs + 's.title = %s AND'
-        param = [request.GET['keyword'], ly.id]
+        param = [request.GET['keyword'], terms_id]
     else:
-        param = [ly.id]
+        param = [terms_id]
     qs = qs + '''
-            lv.legislator_id = %s AND s.pro = (
+            lv.legislator_id in %s AND s.pro = (
                 SELECT max(pro)
                 FROM standpoint_standpoint ss
                 WHERE ss.pro > 0 AND s.vote_id = ss.vote_id
