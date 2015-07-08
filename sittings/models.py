@@ -7,8 +7,8 @@ class Sittings(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     committee = models.TextField(blank=True, null=True)
     date = models.DateField(db_index=True, )
-    ad = models.IntegerField()
-    session = models.IntegerField()
+    ad = models.PositiveIntegerField()
+    session = models.PositiveIntegerField()
     links = JSONField(null=True)
     def __unicode__(self):
         return self.name

@@ -21,3 +21,6 @@ class Legislator_Vote(models.Model):
     vote = models.ForeignKey(Vote)
     decision = models.IntegerField(db_index=True, blank=True, null=True)
     conflict = models.NullBooleanField(db_index=True)
+
+    class Meta:
+        unique_together = ("legislator", "vote")
