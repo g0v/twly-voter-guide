@@ -31,8 +31,12 @@
     .range(["#C45F4E", "#C7B39D", "#8BB383", "#A3A65A", "#485C3C", "#BA8637", "#CC9999", "#73585B", "#836D8A", "#6AA39C"])
     .domain(["out_personnel", "out_return", "out_miscellaneous", "out_campaign_vehicle", "out_public_relation", "out_propagate", "out_rally", "out_exchequer", "out_campaign_office", "out_travel"]);
 
-    var legend = d3.scale.ordinal()
+    var legend_out = d3.scale.ordinal()
     .range(["人事費用", "返還捐贈", "雜支", "租用宣傳車輛", "公共關係費用", "宣傳", "集會", "繳庫", "租用競選辦事處", "交通旅運"])
+    .domain(["out_personnel", "out_return", "out_miscellaneous", "out_campaign_vehicle", "out_public_relation", "out_propagate", "out_rally", "out_exchequer", "out_campaign_office", "out_travel"]);
+
+    var legend_out_eng = d3.scale.ordinal()
+    .range(["Staff cost", "Donation", "Misc", "Campaign vehicle", "Public relation cost", "Propaganda cost", "Rally cost", "Exchequer cost", "Campaign office cost", "Transportation cost"])
     .domain(["out_personnel", "out_return", "out_miscellaneous", "out_campaign_vehicle", "out_public_relation", "out_propagate", "out_rally", "out_exchequer", "out_campaign_office", "out_travel"]);
 
     var arc = d3.svg.arc()
@@ -135,7 +139,7 @@
     })
     .text(function(d) {
         if (d.value != 0)
-        return legend(d.data.key) + '：' + zhutil.approximate(d.value, {base: '萬', extra_decimal: 1});
+        return legend_out(d.data.key) + '：' + zhutil.approximate(d.value, {base: '萬', extra_decimal: 1});
     })
     .style("fill", function(d) { return legend_color(d.data.key); })
     .on('mouseover', function(d) {
@@ -146,6 +150,34 @@
         d3.select("#path_" + d.data.key)
         .style("fill", function(d) { return legend_color(d.data.key); });
     });
+
+    var checked = 0;
+    comma = d3.format(',')
+    d3.select("input").on("change", change);
+
+    function change() {
+        checked = 1 - checked;
+        textLabels_in.each(function (d) {
+            d3.select(this).text(function(d) {
+                if (d.value != 0) {
+                    if (checked == 1)
+                    return legend_in_eng(d.data.key) + '：' + comma(d.value);
+                    else
+                    return legend_in(d.data.key) + '：' + zhutil.approximate(d.value, {base: '萬', extra_decimal: 1});
+                }
+            })
+        })
+        textLabels_out.each(function (d) {
+            d3.select(this).text(function(d) {
+                if (d.value != 0) {
+                    if (checked == 1)
+                    return legend_out_eng(d.data.key) + '：' + comma(d.value);
+                    else
+                    return legend_out(d.data.key) + '：' + zhutil.approximate(d.value, {base: '萬', extra_decimal: 1});
+                }
+            })
+        })
+    }
 
     function relax_out() {
         alpha = 0.5;

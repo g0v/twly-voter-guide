@@ -31,8 +31,12 @@
     .range(["#FF3399", "#3399FF", "#66CC33", "#FF9933", "#666666", "#CC9966"])
     .domain(["in_individual", "in_profit", "in_party", "in_civil", "in_anonymous", "in_others"]);
 
-    var legend = d3.scale.ordinal()
+    var legend_in = d3.scale.ordinal()
     .range(["個人捐贈", "營利事業捐贈", "政黨捐贈", "人民團體捐贈", "匿名捐贈", "其他"])
+    .domain(["in_individual", "in_profit", "in_party", "in_civil", "in_anonymous", "in_others"]);
+
+    var legend_in_eng = d3.scale.ordinal()
+    .range(["From individual", "From profit org.", "From political parties", "From civil associations", "From anonymous", "Others"])
     .domain(["in_individual", "in_profit", "in_party", "in_civil", "in_anonymous", "in_others"]);
 
     var arc = d3.svg.arc()
@@ -135,7 +139,7 @@
     })
     .text(function(d) {
         if (d.value != 0)
-        return legend(d.data.key) + '：' + zhutil.approximate(d.value, {base: '萬', extra_decimal: 1});
+        return legend_in(d.data.key) + '：' + zhutil.approximate(d.value, {base: '萬', extra_decimal: 1});
     })
     .style("fill", function(d) { return legend_color(d.data.key); })
     .on('mouseover', function(d) {
