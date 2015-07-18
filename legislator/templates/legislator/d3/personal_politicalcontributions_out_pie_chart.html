@@ -20,7 +20,7 @@
 
     var width = 800,
     height = 360,
-    radius = Math.min(width, height) / 3,
+    radius = Math.min(width, height) * 0.3,
     labelr = radius + 10; // radius for label anchor
 
     var color = d3.scale.ordinal()
@@ -36,7 +36,7 @@
     .domain(["out_personnel", "out_return", "out_miscellaneous", "out_campaign_vehicle", "out_public_relation", "out_propagate", "out_rally", "out_exchequer", "out_campaign_office", "out_travel"]);
 
     var legend_out_eng = d3.scale.ordinal()
-    .range(["Staff cost", "Donation", "Misc", "Campaign vehicle", "Public relation cost", "Propaganda cost", "Rally cost", "Exchequer cost", "Campaign office cost", "Transportation cost"])
+    .range(["Salaries and wages", "Donation", "Misc", "Vehicle rental", "Public relation cost", "Advertising cost", "Assembly cost", "Exchequer cost", "Campaign office cost", "Travel cost"])
     .domain(["out_personnel", "out_return", "out_miscellaneous", "out_campaign_vehicle", "out_public_relation", "out_propagate", "out_rally", "out_exchequer", "out_campaign_office", "out_travel"]);
 
     var arc = d3.svg.arc()
