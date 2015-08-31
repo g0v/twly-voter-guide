@@ -20,7 +20,7 @@
 
     var width = 800,
     height = 360,
-    radius = Math.min(width, height) / 3,
+    radius = Math.min(width, height) * 0.3,
     labelr = radius + 10; // radius for label anchor
 
     var color = d3.scale.ordinal()
@@ -36,7 +36,7 @@
     .domain(["in_individual", "in_profit", "in_party", "in_civil", "in_anonymous", "in_others"]);
 
     var legend_in_eng = d3.scale.ordinal()
-    .range(["From individual", "From profit org.", "From political parties", "From civil associations", "From anonymous", "Others"])
+    .range(["From person", "Corporate doner", "From political party", "From organization", "From anonymous", "Other"])
     .domain(["in_individual", "in_profit", "in_party", "in_civil", "in_anonymous", "in_others"]);
 
     var arc = d3.svg.arc()
