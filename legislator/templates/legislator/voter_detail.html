@@ -110,9 +110,8 @@
     {% include "common/keyword_auto_complete.html" %}
     <script>
         $(document).ready( function() {
-            $('#url_vote').atrr('class', 'active');
+            $('#url_vote').attr('class', 'active');
             $("#advanced_search.collapse").collapse();
         });
     </script>
-{{ block.super }}
 {% endblock script %}
