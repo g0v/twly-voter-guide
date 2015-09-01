@@ -1,173 +1,30 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% load ly_extras %}
 
+{% block title %}
+{% endblock title %}
+
 {% block right %}
+    {% block top-menu %}
+    {% endblock top-menu %}
     <div class="row-fluid">
-        <div class="span3 hidden-phone">
-            <br>
-            {% if ly %}
-            <table class="table table-bordered">
-                <thead>
-                    <th style="width: 40%"></th>
-                    <th style="width: 60%"></th>
-                </thead>
-                <tbody>
-                    {% if ly.image %}
-                    <tr>
-                        <td colspan=2>
-                            <div align="center">
-                                <img src="{{ly.image}}" width="80%">
-                            </div>
-                        </td>
-                    </tr>
-                    {% endif %}
-                    <tr>
-                        <td style="background-color: lightgrey;">屆期</td>
-                        <td>
-                            <font class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>第{{ly.ad}}屆</b><small> {{ly.ad|ad_year}}</small><b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                {% for ad in ly.in_office_ad %}
-                                <li><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ad %}" ><b>第{{ad}}屆</b><small> {{ad|ad_year}}</small></a></li>
-                                {% endfor %}
-                            </ul>
-                            <font>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: lightgrey;">立委</td>
-                        <td><b>{{ ly.name }}</b></td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: lightgrey;">黨籍</td>
-                        <td>{{ ly.party }}</td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: lightgrey;">選區縣市</td>
-                        <td><a href="{% url 'legislator:county' county=ly.county ad=ly.ad %}" rel="tooltip" title="查看該選區的立委">{{ly.county}}</a></td>
-                    </tr>
-                    {% if ly.district %}
-                    <tr>
-                        <td style="background-color: lightgrey;">行政區</td>
-                        <td><abbr title="{{ ly.district }}">{{ ly.district|truncatechars:10 }}</abbr></td>
-                    </tr>
-                    {% endif %}
-                    <tr>
-                        <td style="background-color: lightgrey;">到職日期</td>
-                        <td>{{ ly.term_start|date:"Y-m-d" }}</td>
-                    </tr>
-                    {% if ly.ad > 7 %}
-                        {% if ly.bill_param %}
-                        <tr>
-                            <td style="background-color: lightgrey;">法條修正案</td>
-                            <td>{{ly.bill_param.chief}} 個</td>
-                        </tr>
-                        {% endif %}
-                    {% endif %}
-                    {% if ly.ad > 5 %}
-                        {% if ly.vote_param %}
-                        <tr>
-                            <td style="background-color: lightgrey;">沒投票表決</td>
-                            <td>{{ly.vote_param.not_voting}} 次<br>(投票缺席率{{ly.vote_param.not_voting|divide:ly.vote_param.total}} %)</td>
-                        </tr>
-                        <tr>
-                            <td style="background-color: lightgrey;">脫黨表決</td>
-                            <td>{{ly.vote_param.conflict}} 次<br>(脫黨投票率{{ly.vote_param.conflict|divide:ly.vote_param.total}} %)</td>
-                        </tr>
-                        {% endif %}
-                        {% if ly.attendance_param %}
-                        <tr>
-                            <td style="background-color: lightgrey;">院會缺席</td>
-                            <td>{{ly.attendance_param.absent}} 次<br>(院會缺席率{{ly.attendance_param.absent|divide:ly.attendance_param.total}} %)</td>
-                        </tr>
-                        {% endif %}
-                    {% endif %}
-                    {% for contact in ly.contacts %}
-                    <tr>
-                        <td colspan=2></td>
-                    </tr>
-                    {% if contact.name %}
-                    <tr style="background-color: {% cycle '#CCFF99' '#CCFFCC' '#FFFF99' %};">
-                        <td colspan=2 style="text-align:center; vertical-align:middle;">{{contact.name}}</td>
-                    </tr>
-                    {% endif %}
-                    {% if contact.address %}
-                    <tr>
-                        <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">地址</td>
-                        <td><a href="{{ "https://maps.google.com.tw/?q="|add:contact.address }}" target="_blank">{{contact.address}}</a></td>
-                    </tr>
-                    <tr>
-                    {% endif %}
-                    {% if contact.phone %}
-                        <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">電話</td>
-                        <td><a href="{{ "tel:"|add:contact.phone }}" target="_blank">{{contact.phone}}</a></td>
-                    </tr>
-                    {% endif %}
-                    {% if contact.fax %}
-                    <tr>
-                        <td style="background-color: lightgrey; text-align:center; vertical-align:middle;">傳真</td>
-                        <td>{{contact.fax}}</td>
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
-                    {% if ly.education %}
-                    <tr>
-                        <td colspan=2></td>
-                    </tr>
-                    <tr style="background-color: #CCCC66 ;">
-                        <td colspan=2 style="text-align:center; vertical-align:middle;">學歷</td>
-                    </tr>
-                    <tr>
-                        <td colspan=2>{{ly.education|linebreaksbr}}</td>
-                    </tr>
-                    {% endif %}
-                    {% if ly.experience %}
-                    <tr>
-                        <td colspan=2></td>
-                    </tr>
-                    <tr style="background-color: #CCCC99;">
-                        <td colspan=2 style="text-align:center; vertical-align:middle;">經歷</td>
-                    </tr>
-                    <tr>
-                        <td colspan=2>{{ly.experience|linebreaksbr}}</td>
-                    </tr>
-                    {% endif %}
-                    {% if ly.links.ly %}
-                    <tr>
-                        <td colspan=2></td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: lightgrey;">外部連結</td>
-                        <td><a href="{{ ly.links.ly }}" target="_blank">{{ ly.name }}的立院官網</a></td>
-                    </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-            {% endif %}
-        </div>
-        <div class="span9">
-            <br>
-            <div class="row-fluid">
-                <div class="span12">
-                    <b>{{ ly.name }}</b>的&nbsp;
-                    <a id='url_property' class="btn btn-large" href="http://sunshine.cy.g0v.tw/people/{{ly.name}}/property/overview/" target="_blank">個人財產申報</a>
-                    {% if ly.ad > 5 %}
-                        <div class="btn-group">
-                            <a id='url_vote' class="btn btn-large dropdown-toggle" href="#" data-toggle="dropdown">投票紀錄 <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}" >表決立場</a></li>
-                                <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}" >全投票表決紀錄</a></li>
-                            </ul>
-                        </div>
-                    {% endif %}
-                    {% if ly.ad > 7 %}
-                        <a class="btn btn-large" id='url_polticalcontributions' href="{% url 'legislator:personal_political_contributions' legislator_id=ly.legislator_id ad=ly.ad %}">政治獻金</a>
-                        <a class="btn btn-large" id='url_bill' href="{% url 'legislator:biller_detail' legislator_id=ly.legislator_id ad=ly.ad %}">法條修正案</a>
-                        <a class="btn btn-large" id='url_politics' href="{% url 'legislator:platformer_detail' legislator_id=ly.legislator_id ad=ly.ad %}">競選政見</a>
-                    {% endif %}
-                </div>
+        <div id="sidebar-left" class="span2">
+            <div class="nav-collapse sidebar-nav">
+                <ul class="nav nav-tabs nav-stacked">
+                    <p class="lead">{{ ly.name }}</p>
+                    <img src="{{ly.image}}" width="50%">
+                    <li id='url_info'><a href="{% url 'legislator:info' legislator_id=ly.legislator_id ad=ly.ad %}"><i class="fa fa-info"> 基本資料</i></a></li>
+                    <li id='url_property'><a href="http://sunshine.cy.g0v.tw/people/{{ly.name}}/property/overview/" target="_blank"><i class="fa fa-bank"> 個人財產申報</i></a></li>
+                    <li id='url_vote'><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}"><i class="fa fa-balance-scale"> 表決</i></a></li>
+                    <li id='url_polticalcontributions'><a href="{% url 'legislator:personal_political_contributions' legislator_id=ly.legislator_id ad=ly.ad %}"><i class="fa fa-dollar"> 政治獻金</i></a></li>
+                    <li id='url_bill'><a href="{% url 'legislator:biller_detail' legislator_id=ly.legislator_id ad=ly.ad %}"><i class="fa fa-book"> 法條修正案</i></a></li>
+                    <li id='url_politics'><a href="{% url 'legislator:platformer_detail' legislator_id=ly.legislator_id ad=ly.ad %}"><i class="fa fa-comment"> 競選政見</i></a></li>
+                </ul>
             </div>
             <br>
+        </div>
+        <div id="content" class="span10" style="min-height: 700px; padding-bottom: 150px;">
             {% block ly_detail %}
             {% endblock ly_detail %}
             <hr>
@@ -175,14 +32,3 @@
         </div>
     </div>
 {% endblock right %}
-
-{% block script %}
-    {% include "common/keyword_auto_complete.html" %}
-    <script>
-        $(document).ready( function() {
-            $('#ly').addClass('active');
-            $('.dropdown-toggle').dropdown();
-            $("[rel='tooltip']").tooltip();
-        });
-    </script>
-{% endblock script %}

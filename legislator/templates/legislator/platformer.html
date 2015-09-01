@@ -2,7 +2,7 @@
 
 {% block title %}
     {% if ly %}
-        <title>立委投票指南:{{ly.name}}的競選政見</title>
+        <title>立委投票指南:{{ly.name}}第{{ly.ad}}屆的競選政見</title>
         <meta property="og:title" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的競選政見"/>
         <meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的競選政見">
     {% endif %}
@@ -20,10 +20,7 @@
 {% block script %}
     <script>
         $(document).ready( function() {
-            $('#ly').addClass('active');
-            $('.dropdown-toggle').dropdown();
-            $("[rel='tooltip']").tooltip();
-            $('#url_politics').removeAttr('href').addClass("btn-info");
+            $('#url_politics').attr('class', 'active');
         });
     </script>
 {% endblock script %}

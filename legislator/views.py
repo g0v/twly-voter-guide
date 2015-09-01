@@ -57,6 +57,10 @@ def committee(request, committee, ad):
     ly_list = Legislator_Committees.objects.select_related('legislator').filter(ad=ad, legislator__in_office=True, committee=committee).order_by('-session', 'legislator__party', 'legislator__name')
     return render(request, 'legislator/committee.html',  {'ly_list': ly_list, 'committee': committee})
 
+def info(request, legislator_id, ad):
+    ly = get_object_or_404(LegislatorDetail, ad=ad, legislator_id=legislator_id)
+    return render(request, 'legislator/info.html', {'ly': ly})
+
 def personal_political_contributions(request, legislator_id, ad):
     ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
     try:

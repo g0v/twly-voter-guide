@@ -6,6 +6,19 @@
     <meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的表決立場">
 {% endblock title %}
 
+{% block top-menu %}
+    <div class="row-fluid">
+        <div id="sidebar-leftx" class="span2">
+        </div>
+        <div class="tabnav">
+            <ul>
+                <li class="active"><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">表決立場</a></li>
+                <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}">全表決紀錄</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
 {% block ly_detail %}
     <ul class="media-list">
     {% for standpoint in standpoints %}
@@ -15,7 +28,7 @@
                     &nbsp;&nbsp;<button type="button" class="btn btn-link" data-toggle="collapse" data-target="#ref_vote{{forloop.counter}}">表決內容&nbsp;<b class="caret"></b></button>
                     <div id="ref_vote{{forloop.counter}}" class="collapse">
                     {% for fragment in standpoint.votes %}
-                    <h4><a href="{% url 'vote:vote_detail' fragment.uid %}" target="_blank">☞ 表決{{forloop.counter}}<small>（覺得表決跟立場不符合嗎？點我來改進）</small></a></h4>
+                        <h4><a href="{% url 'vote:vote_detail' fragment.uid %}" target="_blank">☞ 表決{{forloop.counter}}<small>（覺得表決跟立場不符合嗎？點我來改進）</small></a></h4>
                         <blockquote>
                             <p>{{fragment.content}}</p>
                         </blockquote>
@@ -32,7 +45,7 @@
     {% include "common/keyword_auto_complete.html" %}
     <script>
         $(document).ready( function() {
-            $('#url_vote').addClass("btn-info");
+            $('#url_vote').attr('class', 'active');
         });
     </script>
 {% endblock script %}

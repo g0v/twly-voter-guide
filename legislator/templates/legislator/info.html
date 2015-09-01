@@ -1,0 +1,95 @@
+{% extends "common/ly_info.html" %}
+{% load ly_extras %}
+
+{% block title %}
+    {% if ly %}
+        <title>立委投票指南:{{ly.name}}第{{ly.ad}}屆的基本資料</title>
+        <meta property="og:title" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的基本資料"/>
+        <meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的基本資料">
+    {% endif %}
+{% endblock %}
+
+{% block ly_detail %}
+    <dl class="dl-horizontal">
+        <dt>屆期</dt>
+        <dd>
+            <font class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>第{{ly.ad}}屆</b><small> {{ly.ad|ad_year}}</small><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    {% for ad in ly.in_office_ad %}
+                    <li><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ad %}" ><b>第{{ad}}屆</b><small> {{ad|ad_year}}</small></a></li>
+                    {% endfor %}
+                </ul>
+            <font>
+        </dd>
+        <dt>黨籍</dt>
+        <dd>{{ ly.party }}
+        </dd>
+        <dt>選區縣市</dt>
+        <dd>
+            <a href="{% url 'legislator:county' county=ly.county ad=ly.ad %}" rel="tooltip" title="查看該選區的立委">{{ly.county}}</a>
+        </dd>
+        {% if ly.district %}
+            <dt>行政區</dt>
+            <dd>{{ ly.district|truncatechars:10 }}</dd>
+        {% endif %}
+        <dt>到職日期</dt>
+        <dd>{{ ly.term_start|date:"Y-m-d" }}</dd>
+        <hr>
+        {% if ly.ad > 7 and ly.bill_param %}
+            <dt>法條修正案</dt>
+            <dd>{{ly.bill_param.chief}} 個</dd>
+        {% endif %}
+        {% if ly.ad > 5 and ly.vote_param %}
+            <dt>沒投票表決</dt>
+            <dd>{{ly.vote_param.not_voting}} 次 (投票缺席率{{ly.vote_param.not_voting|divide:ly.vote_param.total}} %)</dd>
+            <dt>脫黨表決</dt>
+            <dd>{{ly.vote_param.conflict}} 次 (脫黨投票率{{ly.vote_param.conflict|divide:ly.vote_param.total}} %)</dd>
+        {% endif %}
+        {% if ly.ad > 5 and ly.attendance_param %}
+            <dt>院會缺席</dt>
+            <dd>{{ly.attendance_param.absent}} 次 (院會缺席率{{ly.attendance_param.absent|divide:ly.attendance_param.total}} %)</dd>
+        {% endif %}
+        <hr>
+        {% for contact in ly.contacts %}
+            <dt>通訊處{{forloop.counter}}</dt>
+            <dd>
+                <ul>
+                {% if contact.name %}
+                    <li>{{contact.name}}</li>
+                {% endif %}
+                {% if contact.address %}
+                    <li><a href="{{ "https://maps.google.com.tw/?q="|add:contact.address }}" target="_blank">{{contact.address}}</a></li>
+                {% endif %}
+                {% if contact.phone %}
+                    <li>電話：<a href="{{ "tel:"|add:contact.phone }}" target="_blank">{{contact.phone}}</a></li>
+                {% endif %}
+                {% if contact.fax %}
+                    <li>傳真：{{contact.fax}}</li>
+                {% endif %}
+                </ul>
+            </dd>
+        {% endfor %}
+        <hr>
+        {% if ly.education %}
+            <dt>學歷</tt>
+            <dd>{{ly.education|linebreaksbr}}</dd>
+        {% endif %}
+        {% if ly.experience %}
+            <dt>經歷</tt>
+            <dd>{{ly.experience|linebreaksbr}}</dd>
+        {% endif %}
+        {% if ly.links.ly %}
+            <dt>外部連結</tt>
+            <dd><a href="{{ ly.links.ly }}" target="_blank">{{ ly.name }}的立院官網</a></dd>
+        {% endif %}
+    </dl>
+{% endblock ly_detail %}
+
+{% block script %}
+    <script>
+        $(document).ready( function() {
+            $('#url_info').attr('class', 'active');
+        });
+    </script>
+{% endblock script %}

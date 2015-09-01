@@ -8,6 +8,19 @@
     <meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的投票表決紀錄">
 {% endblock title %}
 
+{% block top-menu %}
+    <div class="row-fluid">
+        <div class="span2">
+        </div>
+        <div class="tabnav">
+            <ul>
+                <li><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">表決立場</a></li>
+                <li class="active"><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}">全表決紀錄</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
 {% block ly_detail %}
     {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全" advance_search="common/vote_conscience_checkbox.html" %}
     {% if keyword_obj %}
@@ -92,12 +105,14 @@
     {% paginate %}
 {% endif %}
 {% endblock ly_detail %}
+
 {% block script %}
-<script>
-    $(document).ready( function() {
-        $('#url_vote').addClass("btn-info");
-        $("#advanced_search.collapse").collapse();
-    });
-</script>
+    {% include "common/keyword_auto_complete.html" %}
+    <script>
+        $(document).ready( function() {
+            $('#url_vote').atrr('class', 'active');
+            $("#advanced_search.collapse").collapse();
+        });
+    </script>
 {{ block.super }}
 {% endblock script %}

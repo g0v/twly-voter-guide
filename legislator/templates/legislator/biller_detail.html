@@ -3,7 +3,7 @@
 
 {% block title %}
     {% if ly %}
-        <title>立委投票指南:{{ly.name}}的法條修正草案</title>
+        <title>立委投票指南:{{ly.name}}第{{ly.ad}}屆的法條修正草案</title>
         <meta property="og:title" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的法條修正草案"/>
         <meta itemprop="name" content="立委投票指南:{{ly.name}}第{{ly.ad}}屆的法條修正草案">
     {% endif %}
@@ -41,9 +41,10 @@
 {% endblock ly_detail %}
 
 {% block script %}
+    {% include "common/keyword_auto_complete.html" %}
     <script>
         $(document).ready( function() {
-            $('#url_bill').addClass("btn-info");
+            $('#url_bill').attr('class', 'active');
         });
     </script>
     {{ block.super }}
