@@ -36,52 +36,6 @@
 
 }
 
-/* Higher than 960 (desktop devices)
-====================================================================== */
-@media only screen and (min-width: 980px) and (max-width: 1199px) {
-
-    #content {
-        padding: 10px;
-        margin-left: -2px;
-        overflow: hidden;
-    }
-
-    .dark {
-        padding: 10px;
-        top: -10px;
-        right: -10px;
-        margin-bottom: -40px;
-        margin-right: -20px;
-    }
-
-    #sidebar-left {
-        background: transparent;
-        margin: -1px 0px 0px 20px;
-        padding-top: 0px;
-    }
-
-    #sidebar-leftx {
-        background: transparent;
-        margin: -1px 0px 0px 20px;
-        padding-top: 0px;
-    }
-
-    .sidebar-nav > ul {
-        margin: 0px 0px 0px -20px;
-    }
-
-    footer {
-        margin: 20px 0px 0px 0px;
-        /*padding: 10px 20px;*/
-        position: fixed;
-        z-index: 51;
-    }
-    .tabnav ul.tools li {
-        width: 109px !important;
-    }
-
-}
-
 /* Tablet Portrait (devices and browsers)
 ====================================================================== */
 @media only screen and (min-width: 768px) and (max-width: 979px) {
@@ -248,28 +202,17 @@
 ====================================================================== */
 @media only screen and (min-width: 480px) and (max-width: 767px) {
 
-    body {
-        padding: 0px;
-    }
-
     #content {
         padding: 5px;
     }
 
     .pull-right {
-        /*width: 100%;*/
         margin: 10px auto;
-        text-align: center;
     }
 
     footer {
-        /*padding: 10px 20px;*/
         position: fixed;
         z-index: 51;
-    }
-
-    .brand {
-        font-size: 1em !important;
     }
 
     .tabnav ul li {
@@ -298,18 +241,12 @@
 =================================================================== */
 @media only screen and (max-width: 479px) {
 
-    body {
-        padding: 0px;
-    }
-
     #content {
         padding: 5px;
     }
 
     .pull-right {
-        /*width: 100%;*/
         margin: 10px auto;
-        text-align: center;
     }
 
     table,
@@ -319,10 +256,6 @@
 
     .pagination {
         padding: 5px;
-    }
-
-    .brand {
-        font-size: 0.8em !important;
     }
 
     .header-nav a.btn {

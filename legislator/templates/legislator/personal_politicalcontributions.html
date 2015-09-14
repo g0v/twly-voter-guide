@@ -35,13 +35,15 @@
                 </tr>
             </tbody>
         </table>
-        <div class="hero-unit">
+        <div>
             <label class="pull-right"><input type="checkbox"> Switch to English</label>
-            <p class="lead">收入：<span class="price text-right">{{pc.in_total}}</span>元</p>
-            <div id="d3_in" style="padding-top: 60px; margin-top: -60px;" align="center"></div>
+            <div id="d3_in" class="hero-unit">
+                <p class="lead">收入：<span class="price text-right">{{pc.in_total}}</span>元</p>
+            </div>
             <br>
-            <p class="lead">支出：<span class="price text-right">{{pc.out_total}}</span>元</p>
-            <div id="d3_out" style="padding-top: 60px; margin-top: -60px;" align="center"></div>
+            <div id="d3_out" class="hero-unit">
+                <p class="lead">支出：<span class="price text-right">{{pc.out_total}}</span>元</p>
+            </div>
         </div>
     </div>
     {% endif %}

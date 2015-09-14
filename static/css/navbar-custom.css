@@ -22,14 +22,12 @@
     border: 2px solid #eee;
     border-top: 4px solid #666666;
     border-radius: 4px 4px 0 0;
-    background: #ffffff;
     background-color: #fff;
     margin-left: -2px;
     margin-bottom: -1px;
-    padding-top: 5px;
     z-index: 0;
     top: 10px;
-    padding: 0px 10px 10px 10px;
+    padding: 4px 10px 10px 10px;
     font-size: 18px;
     filter: progid:dximagetransform.microsoft.gradient(startColorstr='#fafafa', endColorstr='#efefef', GradientType=0);
     -webkit-box-shadow: 0 1px 0px rgba(255, 255, 255, .8);
@@ -59,7 +57,7 @@
     margin-bottom: -1px;
     text-shadow: 0 1px 0px rgba(255, 255, 255, 1);
     top: 0px;
-    padding: 5px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -ms-transition: all 0.3s ease;
@@ -78,7 +76,7 @@
     margin-bottom: -1px;
     text-shadow: 0 1px 0px rgba(255, 255, 255, 1);
     top: 0px;
-    padding: 5px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -ms-transition: all 0.3s ease;
@@ -107,7 +105,6 @@
 }
 
 .navbar {
-    position: fixed !important;
     width: 100% !important;
     z-index: 51 !important;
     margin-top: 0 !important;
