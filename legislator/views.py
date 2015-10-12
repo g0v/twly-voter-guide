@@ -15,6 +15,7 @@ from committees.models import Legislator_Committees
 from search.models import Keyword
 from standpoint.models import Standpoint
 from search.views import keyword_list, keyword_normalize
+from candidates.models import Candidates
 
 
 def index(request, index, ad):
@@ -66,6 +67,8 @@ def personal_political_contributions(request, legislator_id, ad):
     try:
         pc = ly.elected_candidate.get().politicalcontributions
         return render(request, 'legislator/personal_politicalcontributions.html', {'ly': ly, 'pc': pc})
+    except Candidates.DoesNotExist:
+        return render(request, 'legislator/personal_politicalcontributions.html', {'ly': ly, 'pc': None})
     except Exception, e:
         raise Http404
 
