@@ -30,6 +30,7 @@ class LegislatorDetail(models.Model):
     gender = models.CharField(max_length=100, blank=True, null=True)
     title = models.CharField(max_length=100, blank=True, null=True)
     party = models.CharField(db_index=True, max_length=100, blank=True, null=True)
+    elected_party = models.CharField(db_index=True, max_length=100, blank=True, null=True)
     caucus = models.CharField(max_length=100, blank=True, null=True)
     constituency = models.IntegerField(db_index=True, blank=True, null=True)
     county = models.CharField(db_index=True, max_length=100, blank=True, null=True)
