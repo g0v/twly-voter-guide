@@ -44,10 +44,11 @@ class AttendanceSerializer(serializers.HyperlinkedModelSerializer):
         model = Attendance
 
 class SittingsSerializer(serializers.HyperlinkedModelSerializer):
+    links = fields.Field()
     votes = VoteSerializer(many=True, read_only=True)
     class Meta:
         model = Sittings
-        fields = ('url', 'uid', 'name', 'committee', 'date', 'ad', 'session', 'votes')
+        fields = ('url', 'uid', 'name', 'committee', 'date', 'ad', 'session', 'links', 'votes')
 
 class LegislatorDetailSerializer(serializers.HyperlinkedModelSerializer):
     contacts = fields.Field()
@@ -58,7 +59,7 @@ class LegislatorDetailSerializer(serializers.HyperlinkedModelSerializer):
     attendance_param = fields.Field()
     class Meta:
         model = LegislatorDetail
-        fields = ('url', 'id', 'legislator', 'ad', 'name', 'gender', 'title', 'party', 'caucus', 'constituency', 'county', 'district', 'in_office', 'contacts', 'term_start', 'term_end', 'education', 'experience', 'remark', 'image', 'links', 'platform', 'bill_param', 'vote_param', 'attendance_param', 'elected_candidate', )
+        fields = ('url', 'id', 'legislator', 'ad', 'name', 'gender', 'title', 'party', 'elected_party', 'caucus', 'constituency', 'county', 'district', 'in_office', 'contacts', 'term_start', 'term_end', 'education', 'experience', 'remark', 'image', 'links', 'platform', 'bill_param', 'vote_param', 'attendance_param', 'elected_candidate', )
 
 class CandidatesSerializer(serializers.HyperlinkedModelSerializer):
     contact_details = fields.Field()

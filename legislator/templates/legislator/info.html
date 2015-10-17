@@ -22,6 +22,10 @@
                 </ul>
             <font>
         </dd>
+        {% if ly.elected_party != ly.party %}
+            <dt>當選黨籍</dt>
+            <dd>{{ ly.elected_party }}
+        {% endif %}
         <dt>黨籍</dt>
         <dd>{{ ly.party }}
         </dd>
@@ -35,6 +39,10 @@
         {% endif %}
         <dt>到職日期</dt>
         <dd>{{ ly.term_start|date:"Y-m-d" }}</dd>
+        {% if ly.remark %}
+            <dt>備註</dt>
+            <dd>{{ ly.remark }}</dd>
+        {% endif %}
         <hr>
         {% if ly.ad > 7 and ly.bill_param %}
             <dt>法條修正案</dt>

@@ -35,7 +35,7 @@
                         <input type="search" name="keyword" id="keyword" class="span4" maxlength="20" placeholder="建議動詞+名詞的命題">
                         <button type="submit" class="btn">確定</button>
                     {% else %}
-                        <a href="/login/facebook/?next={% url 'vote:vote_detail' vote.uid %}">登入</a>
+                        <a href="/login/facebook/?next={% url 'vote:vote_detail' vote.uid %}"><i class="fa fa-sign-in"> 登入加標籤</i></a>
                     {% endif %}
                 </fieldset>
             </form>
@@ -47,8 +47,8 @@
             </div>
             {% endif %}
             <div class="hero-unit">
+                <a href="{{vote.sitting.links.pdf}}" target="_blank"><i class="fa fa-file-pdf-o"> 立院會議記錄(pdf)</i></a>
                 <p class="text-success">表決日期：{{ vote.sitting.date|date:"Y-m-d" }}</p>
-                <span class="badge badge-info"><font class="lead">原文</font></span><br>
                 <p>{{ vote.content|linebreaksbr }}</p>
             </div>
         </div><!--end: span -->

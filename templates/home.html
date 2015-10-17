@@ -83,15 +83,15 @@
             </div>
             <p>
             {% if hot_keyword %}
-                熱門搜尋：
+                <i class="fa fa-search"> 熱門搜尋：</i>
                     {% for keyword in hot_keyword %}
                         <a href="{% url 'home' %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決、法案"><b style="color: {% cycle '#BA8637' '#635761' '#8F4F56' '#D47479' '#A89D80' '#353D17' %};">{{keyword}}&nbsp;</b></a>
                     {% endfor %}
             {% endif %}
             {% if hot_standpoints %}
-                <br>熱門網友標籤：
+                <br><i class="fa fa-tag"> 熱門網友標籤：</i>
                     {% for standpoint in hot_standpoints %}
-                        <a href="{% url 'vote:votes' %}?tag={{standpoint.title}}" rel="tooltip" title="包含此標籤的表決"><b style="color: {% cycle '#9999FF' '#2B4A54' '#25285C' '#BF5A61' '#99CC33' %};">{{standpoint.title}}&nbsp;</b></a>
+                        <a href="{% url 'vote:votes' %}?tag={{standpoint.title}}" rel="tooltip" title="包含此標籤的表決"><b style="color: {% cycle '#9999FF' '#2B4A54' '#669999' '#BF5A61' '#99CC33' %};">{{standpoint.title}}&nbsp;</b></a>
                     {% endfor %}
             {% endif %}
             </p>
