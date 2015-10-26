@@ -8,16 +8,20 @@
 {% endblock %}
 
 {% block right %}
-    <div class="description span12 hidden-phone" align="center">
-        <h2><i class="fa fa-compass"> 立委投票指南</i></h2>
-        <p>減少盲目投票，讓民主社會的台灣更進步；輸入關鍵字，關心你關心的議題</p>
+    <div class="page-header hidden-phone" align="center">
+        <h4><i class="fa fa-compass"> <b>減少盲目投票，讓民主社會的台灣更進步。</b></i></h2>
+        <p>請輸入關鍵字，或你所關心的議題、立委</p>
     </div>
     <div class="span12">
-        <div class="span6" align="center">
-            <h3 class="text-info">找候選人</h3>
-            {% include "common/search_name_form.html" with placeholder_text="立委姓名" %}
+        <div class="span2">
+        </div>
+        <div class="span4">
+            <div>
+                <h4><i class="fa fa-group fa-lg"></i> 找立委</h4>
+                {% include "common/search_name_form.html" with placeholder_text="請輸入名稱" %}
+            </div>
             <div class="btn-group">
-                <a class="btn btn-info dropdown-toggle" href="#" data-toggle="dropdown">縣市 <span class="caret"></span></a>
+                <a class="btn btn-moonc dropdown-toggle" href="#" data-toggle="dropdown">縣市 <i class="fa fa-angle-down"></i></a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'candidates:districts' county='臺北市' ad=8 %}">臺北市</a></li>
                     <li><a href="{% url 'candidates:districts' county='新北市' ad=8 %}">新北市</a></li>
@@ -46,52 +50,24 @@
                     <li><a href="{% url 'candidates:districts' county='平地原住民' ad=8 %}">平地原住民</a></li>
                 </ul>
             </div>
-            <img class="hidden-phone" id="ImageMap" src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/taiwan.png" border="0" usemap="#Map">
-            <map name="Map">
-                <area shape="rect" coords="375,9,443,43" href="{% url 'candidates:districts' county='臺北市' ad=8 %}" title="臺北市"/>
-                <area shape="rect" coords="299,8,367,41" href="{% url 'candidates:districts' county='新北市' ad=8 %}" title="新北市"/>
-                <area shape="rect" coords="224,10,293,42" href="{% url 'candidates:districts' county='桃園縣' ad=8 %}" title="桃園縣"/>
-                <area shape="rect" coords="450,46,518,82" href="{% url 'candidates:districts' county='基隆市' ad=8 %}" title="基隆市"/>
-                <area shape="rect" coords="440,124,508,158" href="{% url 'candidates:districts' county='宜蘭縣' ad=8 %}" title="宜蘭縣"/>
-                <area shape="rect" coords="415,223,484,257" href="{% url 'candidates:districts' county='花蓮縣' ad=8 %}" title="花蓮縣"/>
-                <area shape="rect" coords="403,340,471,374" href="{% url 'candidates:districts' county='臺東縣' ad=8 %}" title="臺東縣"/>
-                <area shape="rect" coords="225,410,292,444" href="{% url 'candidates:districts' county='屏東縣' ad=8 %}" title="屏東縣"/>
-                <area shape="rect" coords="194,360,263,395" href="{% url 'candidates:districts' county='高雄市' ad=8 %}" title="高雄市"/>
-                <area shape="rect" coords="144,310,212,344" href="{% url 'candidates:districts' county='臺南市' ad=8 %}" title="臺南市"/>
-                <area shape="rect" coords="148,257,216,291" href="{% url 'candidates:districts' county='嘉義市' ad=8 %}" title="嘉義市"/>
-                <area shape="rect" coords="73,259,141,293" href="{% url 'candidates:districts' county='嘉義縣' ad=8 %}" title="嘉義縣"/>
-                <area shape="rect" coords="123,215,191,249" href="{% url 'candidates:districts' county='雲林縣' ad=8 %}" title="雲林縣"/>
-                <area shape="rect" coords="144,172,212,206" href="{% url 'candidates:districts' county='彰化縣' ad=8 %}" title="彰化縣"/>
-                <area shape="rect" coords="168,130,236,164" href="{% url 'candidates:districts' county='臺中市' ad=8 %}" title="臺中市"/>
-                <area shape="rect" coords="193,92,261,126" href="{% url 'candidates:districts' county='苗栗縣' ad=8 %}" title="苗栗縣"/>
-                <area shape="rect" coords="165,51,233,85" href="{% url 'candidates:districts' county='新竹縣' ad=8 %}" title="新竹縣"/>
-                <area shape="rect" coords="239,50,307,84" href="{% url 'candidates:districts' county='新竹市' ad=8 %}" title="新竹市"/>
-                <area shape="rect" coords="9,43,77,77" href="{% url 'candidates:districts' county='連江縣' ad=8 %}" title="連江縣"/>
-                <area shape="rect" coords="10,83,78,117" href="{% url 'candidates:districts' county='金門縣' ad=8 %}" title="金門縣"/>
-                <area shape="rect" coords="14,179,82,213" href="{% url 'candidates:districts' county='澎湖縣' ad=8 %}" title="澎湖縣"/>
-                <area shape="rect" coords="295,180,363,214" href="{% url 'candidates:districts' county='南投縣' ad=8 %}" title="南投縣"/>
-                <area shape="rect" coords="15,329,83,363" href="{% url 'candidates:districts' county='全國不分區' ad=8 %}" title="全國不分區"/>
-                <area shape="rect" coords="14,370,82,404" href="{% url 'candidates:districts' county='山地原住民' ad=8 %}" title="山地原住民"/>
-                <area shape="rect" coords="14,411,82,445" href="{% url 'candidates:districts' county='平地原住民' ad=8 %}" title="平地原住民"/>
-            </map>
         </div>
         <hr class="visible-phone">
-        <div class="span6">
-            <h3 class="text-warning" align="center">找議題</h3>
-            <div align="center">
-                {% include "common/search_keyword_form.html" with placeholder_text="例:核四 食品安全" %}
+        <div class="span4">
+            <div>
+                <h4><i class="fa fa-file-text fa-lg"></i> 找議題</h4>
+                {% include "common/search_keyword_form.html" with placeholder_text="請輸入關心的議題" %}
             </div>
             <p>
             {% if hot_keyword %}
                 <i class="fa fa-search"> 熱門搜尋：</i>
                     {% for keyword in hot_keyword %}
-                        <a href="{% url 'home' %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決、法案"><b style="color: {% cycle '#BA8637' '#635761' '#8F4F56' '#D47479' '#A89D80' '#353D17' %};">{{keyword}}&nbsp;</b></a>
+                        <a href="{% url 'home' %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決、法案"><b style="color: #9F0050;">{{keyword}}&nbsp;&nbsp;</b></a>
                     {% endfor %}
             {% endif %}
             {% if hot_standpoints %}
                 <br><i class="fa fa-tag"> 熱門網友標籤：</i>
                     {% for standpoint in hot_standpoints %}
-                        <a href="{% url 'vote:votes' %}?tag={{standpoint.title}}" rel="tooltip" title="包含此標籤的表決"><b style="color: {% cycle '#9999FF' '#2B4A54' '#669999' '#BF5A61' '#99CC33' %};">{{standpoint.title}}&nbsp;</b></a>
+                        <a href="{% url 'vote:votes' %}?tag={{standpoint.title}}" rel="tooltip" title="包含此標籤的表決"><b style="color: #9F0050;">{{standpoint.title}}&nbsp;&nbsp;</b></a>
                     {% endfor %}
             {% endif %}
             </p>
@@ -118,6 +94,8 @@
                 </ul>
                 {% paginate %}
             {% endif %}
+        </div>
+        <div class="span2">
         </div>
     </div>
 {% endblock right %}

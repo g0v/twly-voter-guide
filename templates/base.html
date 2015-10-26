@@ -46,7 +46,7 @@
             js.src = "//connect.facebook.net/zh_TW/all.js#xfbml=1";
             fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));</script>
-        <div class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -59,7 +59,7 @@
                         <ul class="nav">
                             <li id="candidates"><a href="{% url 'candidates:counties' ad=8 %}" >2012候選人</a></li>
                             <li id="ly" class="dropdown visible-desktop">
-                                <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">找立委<b class="caret"></b></a>
+                                <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">找立委 <i class="fa fa-angle-down"></i></a>
                                 <ul class="dropdown-menu">
                                     <li class="dropdown-submenu">
                                         <li><a href="{% url 'legislator:counties' %}" >全部</a></li>
@@ -120,7 +120,7 @@
                             <li id="nav_bills"><a href="{% url 'bill:bills' %}">找法案</a></li>
                             <li id="vote"><a href="{% url 'vote:votes' %}" >找表決</a></li>
                             <li id="chart_report" class="dropdown visible-desktop">
-                            <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">圖表<b class="caret"></b>
+                            <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">相關圖表 <i class="fa fa-angle-down"></i></b>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'legislator:chart_report' 'conscience_vote' %}" >脫黨表決次數<small>前十名</small></a></li>
@@ -134,10 +134,6 @@
                                 <li><a href="{% url 'legislator:index' 'conflict' %}" >脫黨投票率(多&rarr;少)</a></li>
                             </ul>
                             </li>
-                        </ul>
-                        <ul class="nav pull-right">
-                            <li id="reference"><a href="{% url 'reference' %}">資料來源</a></li>
-                            <li id="about"><a href="{% url 'about' %}">關於</a></li>
                         </ul>
                     </div>
                 </div>
@@ -153,9 +149,8 @@
 
         <footer class="footer">
             <div align="center" class="container">
-                {% block backtotop %}
-                    <a href="#top"><i class="icon-chevron-up icon-white"></i></a>
-                {% endblock backtotop %}
+                <a id="about" href="{% url 'about' %}">關於</a>
+                <a id="reference" href="{% url 'reference' %}">資料來源</a>
                 <a href="mailto:g0v-ly@googlegroups.com">意見信箱</a>
             </div>
         </footer>

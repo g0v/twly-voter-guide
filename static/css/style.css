@@ -37,7 +37,7 @@ body {
     min-height: 40px;
     padding-right: 20px;
     padding-left: 20px;
-    background: #3b3b41;
+    background: #E0E0E0;
     filter: none;
     /*text-shadow: 1px 1px 1px #0a0c0e;*/
     border: none;
@@ -46,7 +46,7 @@ body {
     -moz-border-radius: 0px;
     border-radius: 0px;
     *zoom: 1;
-    border-bottom: 1px solid #38383D; /* rgba(0, 0, 0, 0.05); */
+    border-bottom: 1px solid #E0E0E0; /* rgba(0, 0, 0, 0.05); */
 
 }
 
@@ -69,9 +69,10 @@ body {
     margin: -12px 0px -5px 0px;
 }
 
-a.brand span {
-    color: #fff;
+a.brand i {
+    color: #272727;
     text-shadow: none;
+    font-weight: bold;
 }
 
 .header-nav {
@@ -256,7 +257,7 @@ a.brand span {
 .navbar .nav li.dropdown.active > .dropdown-toggle,
 .navbar .nav li.dropdown.open.active > .dropdown-toggle {
     margin-bottom: -1px;
-    color: #ddd;
+    color: #272727;
     outline: 0;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
@@ -487,6 +488,24 @@ ul.messages li .message {
     background-color: #fafafa;
 }
 
+/* Button
+=================================================================== */
+
+.btn-moonc {
+    background: #9F0050;
+    color: #eeeeee;
+}
+     
+.btn-moonc:hover, .btn-moonc:focus, .btn-moonc:active, .btn-moonc.active, .open > .dropdown-toggle.btn-moonc {
+    background: #BF0060;
+    color: #ffffff;
+}
+ 
+.btn-moonc:active, .btn-moonc.active {
+    background: #BF0060;
+    box-shadow: none;
+}
+
 /* Footer
 =================================================================== */
 
@@ -495,9 +514,15 @@ footer {
     width: 100%;
     padding: 10px 0px;
     max-height: 24px;
-    background: #3b3b41;
+    background: #574A68;
     color: #fff !important;
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     border-radius: 0px;
 }
+
+footer > .container > a {
+    color: #fff;
+    padding-left: 20px;
+}
+
