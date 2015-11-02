@@ -102,11 +102,9 @@
 
 {% block script %}
     {% include "common/keyword_auto_complete.html" %}
-    <script type="text/javascript" src="http://davidlynch.org/projects/maphilight/jquery.maphilight.js"></script>
     <script type="text/javascript">
         $(document).ready( function() {
             $("[rel='tooltip']").tooltip();
-            $('#ImageMap').maphilight();
         });
     </script>
 {% endblock script %}
