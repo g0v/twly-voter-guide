@@ -51,6 +51,7 @@ def counties(request, ad):
 
 def county(request, county, ad):
     ly_list = LegislatorDetail.objects.filter(ad=ad, in_office=True, county=county)\
+                                      .select_related('elected_candidate')\
                                       .order_by('party', 'name')
     return render(request, 'legislator/county.html', {'ad': int(ad), 'ly_list': ly_list, 'county': county})
 
@@ -59,13 +60,13 @@ def committee(request, committee, ad):
     return render(request, 'legislator/committee.html',  {'ly_list': ly_list, 'committee': committee})
 
 def info(request, legislator_id, ad):
-    ly = get_object_or_404(LegislatorDetail, ad=ad, legislator_id=legislator_id)
+    ly = get_object_or_404(LegislatorDetail.objects.select_related('elected_candidate'), ad=ad, legislator_id=legislator_id)
     return render(request, 'legislator/info.html', {'ly': ly})
 
 def personal_political_contributions(request, legislator_id, ad):
-    ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
+    ly = get_object_or_404(LegislatorDetail.objects.select_related('elected_candidate'), ad=ad, legislator_id=legislator_id)
     try:
-        pc = ly.elected_candidate.get().politicalcontributions
+        pc = ly.elected_candidate.politicalcontributions
         return render(request, 'legislator/personal_politicalcontributions.html', {'ly': ly, 'pc': pc})
     except Candidates.DoesNotExist:
         return render(request, 'legislator/personal_politicalcontributions.html', {'ly': ly, 'pc': None})

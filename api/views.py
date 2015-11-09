@@ -18,7 +18,7 @@ class LegislatorViewSet(viewsets.ReadOnlyModelViewSet):
     filter_fields = ('uid', 'name')
 
 class LegislatorDetailViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = LegislatorDetail.objects.all().prefetch_related('legislator', 'elected_candidate')
+    queryset = LegislatorDetail.objects.all().select_related('legislator', 'elected_candidate')
     serializer_class = LegislatorDetailSerializer
     filter_fields = ('legislator', 'ad', 'name', 'gender', 'party', 'elected_party', 'caucus', 'constituency', 'county', 'in_office', 'term_start')
 

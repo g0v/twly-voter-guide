@@ -6,8 +6,8 @@ from json_field import JSONField
 
 class Candidates(models.Model):
     uid = models.CharField(max_length=64, primary_key=True)
-    latest_term = models.ForeignKey('legislator.LegislatorDetail', blank=True, null=True)
-    legislator = models.ForeignKey('legislator.LegislatorDetail', blank=True, null=True, related_name='elected_candidate')
+    latest_term = models.OneToOneField('legislator.LegislatorDetail', blank=True, null=True)
+    legislator = models.OneToOneField('legislator.LegislatorDetail', blank=True, null=True, related_name='elected_candidate')
     ad = models.IntegerField(db_index=True, )
     number = models.IntegerField(db_index=True, blank=True, null=True)
     name = models.CharField(max_length=100)

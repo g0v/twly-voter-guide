@@ -11,6 +11,8 @@
 <font color=FF00FF>{{ ly.name|truncatechars:6 }}</font>
 {% elif ly.party == "無黨籍" %}
 <font color=777777>{{ ly.name|truncatechars:6 }}</font>
+{% elif ly.party == "民國黨" %}
+<font color=330066>{{ ly.name|truncatechars:6 }}</font>
 {% elif ly.party == "新黨" %}
 <font color=FFCC00>{{ ly.name|truncatechars:6 }}</font>
 {% else %}

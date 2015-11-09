@@ -33,9 +33,9 @@
         <dd>
             <a href="{% url 'legislator:county' county=ly.county ad=ly.ad %}" rel="tooltip" title="查看該選區的立委">{{ly.county}}</a>
         </dd>
-        {% if ly.district %}
+        {% if ly.elected_candidate.district %}
             <dt>行政區</dt>
-            <dd>{{ ly.district|truncatechars:10 }}</dd>
+            <dd>{{ ly.elected_candidate.district }}</dd>
         {% endif %}
         <dt>到職日期</dt>
         <dd>{{ ly.term_start|date:"Y-m-d" }}</dd>
