@@ -95,7 +95,7 @@
                             {% endif %}
                         {% endif %}
                         <td><a href="{% url 'legislator:county' county=ly.county ad=ly.ad %}" rel="tooltip" title="{{ly.constituency }}的立委詳細資料">{{ly.county}}</a></td>
-                        <td>{% if ly.district %}{{ly.district}}{% endif %}</td>
+                        <td>{% if ly.elected_candidate.district %}{{ly.elected_candidate.district}}{% endif %}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

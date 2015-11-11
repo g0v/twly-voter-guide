@@ -148,21 +148,22 @@ def platformer_detail(request, legislator_id, ad):
 def chart_report(request, ad, index='vote'):
     ly_obj, ly_name, vote_obj, title, content, compare, data = [], [], [], None, None, None, None
     ad = ad or 8
+    lys = LegislatorDetail.objects.select_related('elected_candidate')
     if index == 'vote':
         compare = Vote.objects.filter(sitting__ad=ad).count()
-        ly_obj = LegislatorDetail.objects.filter(ad=ad, in_office=True, votes__decision__isnull=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')[:10]
+        ly_obj = lys.filter(ad=ad, in_office=True, votes__decision__isnull=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')[:10]
         title, content = u'立法院表決缺席前十名', u'可和立法院開會缺席交叉比較，為何開會有出席但沒有參加表決？(點選立委名字可看立委個人投票紀錄)'
     elif index == 'conscience_vote':
         compare = Vote.objects.filter(sitting__ad=ad).count()
-        ly_obj = LegislatorDetail.objects.filter(ad=ad, in_office=True, votes__conflict=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')[:10]
+        ly_obj = lys.filter(ad=ad, in_office=True, votes__conflict=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')[:10]
         title, content = u'脫黨投票次數前十名', u'脫黨投票不一定較好，可能該立委是憑良心投票，也可能是受財團、企業影響所致，還請點選該立委觀看其脫黨投票的表決內容再作論定。'
     elif index == 'biller':
         compare = "{0:.2f}".format(Bill.objects.count()/116.0)
-        ly_obj = LegislatorDetail.objects.filter(ad=8, in_office=True, bills__priproposer=True, bills__petition=False).annotate(totalNum=Count('bills__id')).order_by('-totalNum','party')[:10]
+        ly_obj = lys.filter(ad=8, in_office=True, bills__priproposer=True, bills__petition=False).annotate(totalNum=Count('bills__id')).order_by('-totalNum','party')[:10]
         title, content = u'法條修正草案數前十名', u'量化數據不能代表好壞只能參考，修正草案數多不一定較好，還請點選該立委觀看其修正草案的內容再作論定。'
     elif index == 'ly':
         compare = Sittings.objects.filter(ad=ad, committee='').count()
-        ly_obj = LegislatorDetail.objects.filter(ad=ad, in_office=True, attendance__category='YS', attendance__status='absent').annotate(totalNum=Count('attendance__id')).order_by('-totalNum','party')[:10]
+        ly_obj = lys.filter(ad=ad, in_office=True, attendance__category='YS', attendance__status='absent').annotate(totalNum=Count('attendance__id')).order_by('-totalNum','party')[:10]
         title, content = u'立法院開會缺席前十名', u'立委須參加立法院例行會議，在會議中進行質詢、法案討論表決、人事表決等重要工作(點選立委名字可看立委投票紀錄)'
     return render(request,'legislator/chart_report.html', {'compare':compare,'ad':ad,'title':u'%s(第%s屆)' %(title, ad),'content':content,'index':index,'vote_obj':vote_obj,'ly_name': [ly.name for ly in ly_obj],'ly_obj':ly_obj, 'data': list(ly_obj.values('name', 'totalNum'))} )
 
