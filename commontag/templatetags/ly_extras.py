@@ -9,6 +9,10 @@ from legislator.models import LegislatorDetail
 
 register = template.Library()
 
+@register.filter(name='json_lookup')
+def json_lookup(value, arg):
+    return value.get(arg) if value else None
+
 @register.filter(name='distinct_county')
 def distinct_county(value):
     return LegislatorDetail.objects.filter(ad=value).exclude(county='').values_list('county', flat=True).distinct().order_by('county')

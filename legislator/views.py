@@ -78,20 +78,22 @@ def voter_standpoints(request, legislator_id, ad):
     terms_id = tuple(LegislatorDetail.objects.filter(ad__lte=ad, legislator_id=legislator_id).values_list('id', flat=True))
     c = connections['default'].cursor()
     qs = u'''
-        SELECT
-        CASE
-            WHEN lv.decision = 1 THEN '贊成'
-            WHEN lv.decision = -1 THEN '反對'
-            WHEN lv.decision = 0 THEN '棄權'
-            WHEN lv.decision isnull THEN '沒投票'
-            END as decision,
-            s.title,
-            count(*) as times,
-            json_agg(v) as votes
-        FROM vote_legislator_vote lv
-        JOIN standpoint_standpoint s on s.vote_id = lv.vote_id
-        JOIN vote_vote v on lv.vote_id = v.uid
-        WHERE
+        SELECT json_agg(row)
+        FROM (
+            SELECT
+                CASE
+                    WHEN lv.decision = 1 THEN '贊成'
+                    WHEN lv.decision = -1 THEN '反對'
+                    WHEN lv.decision = 0 THEN '棄權'
+                    WHEN lv.decision isnull THEN '沒投票'
+                END as decision,
+                s.title,
+                count(*) as times,
+                json_agg(v) as votes
+            FROM vote_legislator_vote lv
+            JOIN standpoint_standpoint s on s.vote_id = lv.vote_id
+            JOIN vote_vote v on lv.vote_id = v.uid
+            WHERE
     '''
     if request.GET.get('keyword'):
         qs = qs + 's.title = %s AND'
@@ -99,22 +101,20 @@ def voter_standpoints(request, legislator_id, ad):
     else:
         param = [terms_id]
     qs = qs + '''
-            lv.legislator_id in %s AND s.pro = (
-                SELECT max(pro)
-                FROM standpoint_standpoint ss
-                WHERE ss.pro > 0 AND s.vote_id = ss.vote_id
-                GROUP BY ss.vote_id
-            )
-        GROUP BY s.title, lv.decision
-        ORDER BY times DESC
+                lv.legislator_id in %s AND s.pro = (
+                    SELECT max(pro)
+                    FROM standpoint_standpoint ss
+                    WHERE ss.pro > 0 AND s.vote_id = ss.vote_id
+                    GROUP BY ss.vote_id
+                )
+            GROUP BY s.title, lv.decision
+            ORDER BY times DESC
+        ) row
     '''
     c.execute(qs, param)
-    standpoints = [
-        dict(zip([col[0] for col in c.description], row))
-        for row in c.fetchall()
-    ]
-    keyword_obj = list(Standpoint.objects.filter(pro__gt=0).values_list('title', flat=True).distinct())
-    return render(request, 'legislator/voter_standpoints.html', {'ly': ly, 'standpoints': standpoints, 'keyword_obj': keyword_obj})
+    r = c.fetchone()
+    standpoints = r[0] if r else []
+    return render(request, 'legislator/voter_standpoints.html', {'ly': ly, 'standpoints': standpoints})
 
 def voter_detail(request, legislator_id, ad):
     ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)

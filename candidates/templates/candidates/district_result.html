@@ -47,16 +47,22 @@
                             {% endif %}
                         </td>
                         <td style="vertical-align:middle;">
-                            {% if candidate.elected %}
-                                {% for standpoint in standpoints %}
+                            {% with sp=standpoints|json_lookup:candidate.uid %}
+                            {% if sp %}
+                                {% for standpoint in sp %}
                                     {{standpoint.title}}：{{standpoint.times}}次{{standpoint.decision}}<br>
                                 {% endfor %}
-                                <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.legislator.legislator_id ad=candidate.legislator.ad %}" >其他...</a>
+                                <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.legislator_uid ad=candidate.latest_ad %}" >其他...</a>
                             {% endif %}
+                            {% endwith %}
                         </td>
                         <td style="text-align:center; vertical-align:middle;">
-                            {% if candidate.legislator_id %}
-                                <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.legislator.legislator_id ad=candidate.legislator.ad %}">{{candidate.name}}</a>
+                            {% if candidate.legislator_uid %}
+                                {% if candidate.latest_ad > 5 %}
+                                    <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.legislator_uid ad=candidate.latest_ad %}">{{candidate.name}}</a>
+                                {% else %}
+                                    <a href="{% url 'legislator:info' legislator_id=candidate.legislator_uid ad=candidate.latest_ad %}">{{candidate.name}}</a>
+                                {% endif %}
                             {% else %}
                                 {{candidate.name}}
                             {% endif %}
