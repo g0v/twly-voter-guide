@@ -28,11 +28,11 @@ def districts(request, ad, county):
 def district(request, ad, county, constituency):
     candidates = Candidates.objects.select_related('latest_term', 'legislator')\
                                    .filter(ad=ad, county=county, constituency=constituency)\
-                                      .extra(select={
-                                          'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_candidates.legislator_id or id = candidates_candidates.latest_term_id",
-                                          'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_candidates.legislator_id or id = candidates_candidates.latest_term_id limit 1",
-                                      },)\
-                                   .order_by('legislator_id', 'party')
+                                   .extra(select={
+                                       'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_candidates.legislator_id or id = candidates_candidates.latest_term_id",
+                                       'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_candidates.legislator_id or id = candidates_candidates.latest_term_id limit 1",
+                                   },)\
+                                   .order_by('number')
     standpoints = {}
     for candidate in candidates:
         if candidate.latest_ad > 5 and candidate.legislator_uid:

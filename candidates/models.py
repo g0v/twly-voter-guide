@@ -31,6 +31,7 @@ class Candidates(models.Model):
 
     class Meta:
         unique_together = ('uid', 'ad')
+        index_together = ['ad', 'county', 'constituency']
 
     def __unicode__(self):
         return self.name
