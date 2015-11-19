@@ -25,6 +25,7 @@ If you don't have superuser, please create one by `sudo passwd`
 sudo su
 docker-compose run django pip install -r requirements.txt
 docker-compose run django createdb -h postgresql -U postgres ly
+docker-compose run django python manage.py migrate
 docker-compose run django pg_restore --verbose --clean --no-acl --no-owner -h postgresql -U postgres -d ly local_db.dump
 docker-compose run django python manage.py rebuild_index
 docker-compose up -d
