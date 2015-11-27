@@ -1,17 +1,32 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 from json_field import JSONField
 
 
 class Candidates(models.Model):
     uid = models.CharField(max_length=64, primary_key=True)
+    name = models.CharField(max_length=100)
+    former_names = ArrayField(
+        models.CharField(max_length=100),
+        null=True,
+        default=None,
+    )
+    birth = models.DateField(blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
+
+class Terms(models.Model):
+    id = models.CharField(max_length=70, primary_key=True)
+    candidate = models.ForeignKey(Candidates)
     latest_term = models.OneToOneField('legislator.LegislatorDetail', blank=True, null=True)
     legislator = models.OneToOneField('legislator.LegislatorDetail', blank=True, null=True, related_name='elected_candidate')
     ad = models.IntegerField(db_index=True, )
     number = models.IntegerField(db_index=True, blank=True, null=True)
+    priority = models.IntegerField(db_index=True, blank=True, null=True)
     name = models.CharField(max_length=100)
-    birth = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=100, blank=True, null=True)
     party = models.CharField(db_index=True, max_length=100, blank=True, null=True)
     constituency = models.IntegerField(db_index=True)
@@ -30,7 +45,6 @@ class Candidates(models.Model):
     politicalcontributions = JSONField(null=True)
 
     class Meta:
-        unique_together = ('uid', 'ad')
         index_together = ['ad', 'county', 'constituency']
 
     def __unicode__(self):

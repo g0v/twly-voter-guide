@@ -47,7 +47,7 @@
                             {% endif %}
                         </td>
                         <td style="vertical-align:middle;">
-                            {% with sp=standpoints|json_lookup:candidate.uid %}
+                            {% with sp=standpoints|json_lookup:candidate.id %}
                             {% if sp %}
                                 {% for standpoint in sp %}
                                     {{standpoint.title}}：{{standpoint.times}}次{{standpoint.decision}}<br>
@@ -92,12 +92,12 @@
                         </td>
                         <td style="text-align:center; vertical-align:middle;">
                             {% if candidate.politicalcontributions %}
-                                <a href="{% url 'candidates:political_contributions' uid=candidate.uid ad=candidate.ad %}#d3_in"><font class="price">{{candidate.politicalcontributions.in_total}}</font></a>
+                                <a href="{% url 'candidates:political_contributions' id=candidate.id %}#d3_in"><font class="price">{{candidate.politicalcontributions.in_total}}</font></a>
                             {% endif %}
                         </td>
                         <td style="text-align:center; vertical-align:middle;">
                             {% if candidate.politicalcontributions %}
-                                <a href="{% url 'candidates:political_contributions' uid=candidate.uid ad=candidate.ad %}#d3_out"><font class="price">{{candidate.politicalcontributions.out_total}}</font></a>
+                                <a href="{% url 'candidates:political_contributions' id=candidate.id %}#d3_out"><font class="price">{{candidate.politicalcontributions.out_total}}</font></a>
                             {% endif %}
                         </td>
                         <td style="text-align:center; vertical-align:middle;">

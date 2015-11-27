@@ -7,5 +7,5 @@ urlpatterns = patterns('',
     url(r'^(?P<ad>\d+)/(?P<county>\S+)/(?P<constituency>\d+)/$', views.district, name='district'),
     url(r'^(?P<ad>\d+)/(?P<county>\S+)/$', views.districts, name='districts'),
     url(r'^(?P<ad>\d+)/$', views.counties, name='counties'),
-    url(r'^pc/(?P<uid>\S+)/(?P<ad>\d+)/$', views.political_contributions, name='political_contributions'),
+    url(r'^pc/(?P<id>\S+)/$', views.political_contributions, name='political_contributions'),
 )

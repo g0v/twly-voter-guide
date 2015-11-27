@@ -5,32 +5,32 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Count
 from django.db import connections
 
-from .models import Candidates
+from .models import Candidates, Terms
 from legislator.models import LegislatorDetail
 
 
 def counties(request, ad):
-    counties = Candidates.objects.filter(ad=ad)\
+    counties = Terms.objects.filter(ad=ad)\
                                  .values('county')\
-                                 .annotate(candidates=Count('uid'))\
+                                 .annotate(candidates=Count('id'))\
                                  .order_by('-candidates')
     return render(request, 'candidates/counties.html', {'ad': ad, 'counties': counties})
 
 def districts(request, ad, county):
-    districts = Candidates.objects.filter(ad=ad, county=county)\
+    districts = Terms.objects.filter(ad=ad, county=county)\
                                   .values('constituency', 'district')\
-                                  .annotate(candidates=Count('uid'))\
+                                  .annotate(candidates=Count('id'))\
                                   .order_by('constituency')
     if len(districts) == 1:
         return HttpResponseRedirect(reverse('candidates:district', kwargs={'ad': ad, 'county': county, 'constituency': 1}))
     return render(request, 'candidates/districts.html', {'ad': ad, 'county': county, 'districts': districts})
 
 def district(request, ad, county, constituency):
-    candidates = Candidates.objects.select_related('latest_term', 'legislator')\
+    candidates = Terms.objects.select_related('latest_term', 'legislator')\
                                    .filter(ad=ad, county=county, constituency=constituency)\
                                    .extra(select={
-                                       'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_candidates.legislator_id or id = candidates_candidates.latest_term_id",
-                                       'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_candidates.legislator_id or id = candidates_candidates.latest_term_id limit 1",
+                                       'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
+                                       'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
                                    },)\
                                    .order_by('number')
     standpoints = {}
@@ -65,10 +65,10 @@ def district(request, ad, county, constituency):
             '''
             c.execute(qs, [terms_id])
             r = c.fetchone()
-            standpoints.update({candidate.uid: r[0] if r else []})
+            standpoints.update({candidate.id: r[0] if r else []})
     return render(request, 'candidates/district_result.html', {'ad': ad, 'county': county, 'candidates': candidates, 'standpoints': standpoints})
     return render(request, 'candidates/district.html', {'ad': ad, 'county': county, 'candidates': candidates})
 
-def political_contributions(request, uid, ad):
-    candidate = get_object_or_404(Candidates, ad=ad, uid=uid)
+def political_contributions(request, id):
+    candidate = get_object_or_404(Terms, id=id)
     return render(request, 'candidates/politicalcontributions.html', {'candidate': candidate})
