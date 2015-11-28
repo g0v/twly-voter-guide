@@ -8,13 +8,12 @@
 {% endblock title %}
 
 {% block right %}
-    <div class="hero-unit span12 hidden-phone" style="margin-left: 0px;">
-        <img class="pull-right" src="https://s3-ap-southeast-1.amazonaws.com/councilor.tw/county-logo/{{county}}.png"></img>
-        <h2 class="span8">{{ad|ad_year}} {{county}} - {{candidates.0.district}} 候選人</h2>
+    <div class="description span12 hidden-phone" style="margin-left: 0px;">
+        <h3>{{ad|ad_year}} {{county}} - {{candidates.0.district}} 候選人</h3>
         <font class="span8"><a href="{% url 'candidates:districts' county=county ad=ad %}">☞ 其他選區</a></font>
 
     </div>
-    <div class="row-fluid">
+    <div class="row-fluid" style="padding-bottom: 24px;">
         {% if candidates %}
         <table class="table table-bordered table-condensed table-striped sortable" >
             <thead>
@@ -28,7 +27,7 @@
                     <th rowspan="2">選前最近任期</th>
                     <th rowspan="2">得票數</th>
                     <th rowspan="2">得票率</th>
-                    <th colspan="3">上次競選政治獻金</th>
+                    <th colspan="3">競選政治獻金</th>
                     <th rowspan="2">財產申報</th>
                 </tr>
                 <tr style="background-color: #CCFFCC;">
@@ -39,7 +38,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for candidate in candidates %}
+                {% for candidate in candidates_previous %}
                     <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
                         <td style="text-align:center; vertical-align:middle;">
                             {% if candidate.elected %}
@@ -80,7 +79,7 @@
                             {% if candidate.latest_term_id %}
                                 {{candidate.latest_term.ad|ad_year}}
                                 {% if candidate.latest_term.ad > 7 %}
-                                    <a href="{% url 'legislator:platformer_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（{{candidate.ad}} 競選政見）</a>
+                                    <a href="{% url 'legislator:platformer_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（當時競選政見）</a>
                                 {% endif %}
                             {% endif %}
                         </td>
@@ -115,8 +114,6 @@
             </tbody>
         </table>
         {% endif %}
-        <hr>
-        <div id="disqus_thread"></div>
     </div>
 {% endblock right %}
 

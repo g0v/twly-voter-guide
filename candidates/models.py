@@ -21,7 +21,7 @@ class Candidates(models.Model):
 class Terms(models.Model):
     id = models.CharField(max_length=70, primary_key=True)
     candidate = models.ForeignKey(Candidates)
-    latest_term = models.OneToOneField('legislator.LegislatorDetail', blank=True, null=True)
+    latest_term = models.ForeignKey('legislator.LegislatorDetail', blank=True, null=True)
     legislator = models.OneToOneField('legislator.LegislatorDetail', blank=True, null=True, related_name='elected_candidate')
     ad = models.IntegerField(db_index=True, )
     number = models.IntegerField(db_index=True, blank=True, null=True)

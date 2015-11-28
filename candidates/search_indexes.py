@@ -15,4 +15,4 @@ class CandidatesIndex(indexes.SearchIndex, indexes.Indexable):
         return Terms
 
     def index_queryset(self, using=None):
-        return self.get_model().objects.filter(ad=8)
+        return self.get_model().objects.filter(ad=9)

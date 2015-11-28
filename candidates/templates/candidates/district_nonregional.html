@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load ly_extras %}
+
+{% block title %}
+    <title>立委投票指南: {{ad|ad_year}} {{county}} - {{candidates.0.district}}候選人</title>
+    <meta property="og:title" content="立委投票指南: {{ad}}{{county}} - {{candidates.0.district}}候選人"/>
+    <meta itemprop="name" content="立委投票指南: {{ad}}{{county}} - {{candidates.0.district}}候選人">
+{% endblock title %}
+
+{% block right %}
+    <div class="description span12 hidden-phone">
+        <h3>{{ad|ad_year}} {{county}} - {{candidates.0.district}} 候選人
+        <a class="pull-right" href="{% url 'candidates:districts' county=county ad=ad %}">☞ 其他選區</a>
+        </h3>
+    </div>
+    <div class="row-fluid" style="padding-bottom: 24px;">
+        {% if candidates %}
+        <table class="table table-bordered table-condensed table-striped sortable" >
+            <thead>
+                <tr style="font-weight:bold; background-color: #9F0050;">
+                    <th colspan="8" class="lead" style="color: #eeeeee; padding-top: 10px; padding-bottom: 10px">{{ad|ad_year:1}} 立委候選人</th>
+                </tr>
+                <tr style="font-weight:bold;background-color: #E1D0D0;">
+                    <th>候選人</th>
+                    <th>名單次序</th>
+                    <th>黨籍</th>
+                    <th>最近任期</th>
+                    <th>主提案數 / 參與提案數</th>
+                    <th>投票缺席率（%）</th>
+                    <th>院會缺席次數</th>
+                    <th>財產申報</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for candidate in candidates %}
+                    <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
+                        <td style="text-align:center; vertical-align:middle;">{{candidate.name}}</td>
+                        <td style="text-align:center; vertical-align:middle;">
+                            {{candidate.priority}}<br>
+                        </td>
+                        <td style="text-align:center; vertical-align:middle;">{{candidate.party}}</td>
+                        {% if candidate.latest_term_id %}
+                            <td style="text-align:center; vertical-align:middle;">
+                                {{candidate.latest_term.ad|ad_year}}
+                                {% if candidate.latest_term.ad > 7 %}
+                                    <a href="{% url 'legislator:platformer_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（當時競選政見）</a>
+                                {% endif %}
+                            </td>
+                            <td style="text-align:center; vertical-align:middle;">
+                                {% if candidate.latest_term.ad > 7 %}
+                                    {% if candidate.latest_term.bill_param.proposal %}
+                                        {{candidate.latest_term.bill_param.chief}} / {{candidate.latest_term.bill_param.proposal}}
+                                        <a href="{% url 'legislator:biller_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（看提案）</a>
+                                    {% else %}
+                                        無提案
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td style="text-align:center; vertical-align:middle;">
+                                {% if candidate.latest_term.ad > 5 %}
+                                    {{candidate.latest_term.vote_param.not_voting}} 次<br>(投票缺席率{{candidate.latest_term.vote_param.not_voting|divide:candidate.latest_term.vote_param.total}} %)
+                                    <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（看表決）</a>
+                                {% endif %}
+                            </td>
+                            <td style="text-align:center; vertical-align:middle;">{{candidate.latest_term.attendance_param.absent}}</td>
+                            <td style="text-align:center; vertical-align:middle;"><a href="http://sunshine.cy.g0v.tw/people/{{candidate.name}}/property/overview/" target="_blank">{{candidate.name}}</a></td>
+                        {% else %}
+                            <td colspan="5"/>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+{% endblock right %}
+
+{% block script %}
+    <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/zhutil.min.js"></script>
+    <script>
+        $(document).ready( function() {
+            $(".collapse").collapse()
+            $('.price').each(function(index,ele){
+                var number = $(ele).text()
+                zh_number = zhutil.approximate(number, {base: '萬', extra_decimal: 0});
+                $(ele).replaceWith(zh_number)
+            })
+        });
+    </script>
+{% endblock script %}

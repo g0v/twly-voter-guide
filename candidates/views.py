@@ -26,48 +26,65 @@ def districts(request, ad, county):
     return render(request, 'candidates/districts.html', {'ad': ad, 'county': county, 'districts': districts})
 
 def district(request, ad, county, constituency):
-    candidates = Terms.objects.select_related('latest_term', 'legislator')\
-                                   .filter(ad=ad, county=county, constituency=constituency)\
-                                   .extra(select={
-                                       'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
-                                       'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
-                                   },)\
-                                   .order_by('number')
-    standpoints = {}
-    for candidate in candidates:
-        if candidate.latest_ad > 5 and candidate.legislator_uid:
-            terms_id = tuple(LegislatorDetail.objects.filter(legislator_id=candidate.legislator_uid).values_list('id', flat=True))
-            c = connections['default'].cursor()
-            qs = u'''
-                SELECT json_agg(row)
-                FROM (
-                    SELECT
-                        CASE
-                            WHEN lv.decision = 1 THEN '贊成'
-                            WHEN lv.decision = -1 THEN '反對'
-                            WHEN lv.decision = 0 THEN '棄權'
-                            WHEN lv.decision isnull THEN '沒投票'
-                        END as decision,
-                        s.title,
-                        count(*) as times
-                    FROM vote_legislator_vote lv
-                    JOIN standpoint_standpoint s on s.vote_id = lv.vote_id
-                    WHERE lv.legislator_id in %s AND s.pro = (
-                        SELECT max(pro)
-                        FROM standpoint_standpoint ss
-                        WHERE ss.pro > 0 AND s.vote_id = ss.vote_id
-                        GROUP BY ss.vote_id
-                    )
-                    GROUP BY s.title, lv.decision
-                    ORDER BY times DESC
-                    LIMIT 3
-                ) row
-            '''
-            c.execute(qs, [terms_id])
-            r = c.fetchone()
-            standpoints.update({candidate.id: r[0] if r else []})
-    return render(request, 'candidates/district_result.html', {'ad': ad, 'county': county, 'candidates': candidates, 'standpoints': standpoints})
-    return render(request, 'candidates/district.html', {'ad': ad, 'county': county, 'candidates': candidates})
+    if county == u'全國不分區' or county == u'僑居國外國民':
+        candidates = Terms.objects.select_related('latest_term', 'legislator')\
+                                  .filter(ad=ad, county=county, constituency=constituency)\
+                                  .extra(select={
+                                      'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
+                                      'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
+                                  },)\
+                                  .order_by('party', 'priority')
+        return render(request, 'candidates/district_nonregional.html', {'ad': ad, 'county': county, 'candidates': candidates})
+    else:
+        candidates_previous = Terms.objects.select_related('candidate', 'latest_term', 'legislator')\
+                                        .filter(ad=int(ad)-1, county=county, constituency=constituency)\
+                                        .extra(select={
+                                            'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
+                                            'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
+                                        },)\
+                                        .order_by('number')
+        candidates = Terms.objects.select_related('latest_term', 'legislator')\
+                                .filter(ad=ad, county=county, constituency=constituency)\
+                                .extra(select={
+                                    'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
+                                    'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
+                                },)\
+                                .order_by('number')
+        standpoints = {}
+        for term in [candidates_previous, candidates]:
+            for candidate in term:
+                if candidate.latest_ad > 5 and candidate.legislator_uid:
+                    terms_id = tuple(LegislatorDetail.objects.filter(legislator_id=candidate.legislator_uid).values_list('id', flat=True))
+                    c = connections['default'].cursor()
+                    qs = u'''
+                        SELECT json_agg(row)
+                        FROM (
+                            SELECT
+                                CASE
+                                    WHEN lv.decision = 1 THEN '贊成'
+                                    WHEN lv.decision = -1 THEN '反對'
+                                    WHEN lv.decision = 0 THEN '棄權'
+                                    WHEN lv.decision isnull THEN '沒投票'
+                                END as decision,
+                                s.title,
+                                count(*) as times
+                            FROM vote_legislator_vote lv
+                            JOIN standpoint_standpoint s on s.vote_id = lv.vote_id
+                            WHERE lv.legislator_id in %s AND s.pro = (
+                                SELECT max(pro)
+                                FROM standpoint_standpoint ss
+                                WHERE ss.pro > 0 AND s.vote_id = ss.vote_id
+                                GROUP BY ss.vote_id
+                            )
+                            GROUP BY s.title, lv.decision
+                            ORDER BY times DESC
+                            LIMIT 3
+                        ) row
+                    '''
+                    c.execute(qs, [terms_id])
+                    r = c.fetchone()
+                    standpoints.update({candidate.id: r[0] if r else []})
+        return render(request, 'candidates/district.html', {'ad': ad, 'county': county, 'candidates': candidates, 'candidates_previous': candidates_previous, 'standpoints': standpoints})
 
 def political_contributions(request, id):
     candidate = get_object_or_404(Terms, id=id)

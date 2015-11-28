@@ -18,140 +18,16 @@ def distinct_county(value):
     return LegislatorDetail.objects.filter(ad=value).exclude(county='').values_list('county', flat=True).distinct().order_by('county')
 
 @register.filter(name='ad_year')
-def ad_year(value):
-    term_end_year = {1:1993, 2:1996, 3:1999, 4:2002, 5:2005, 6:2008, 7:2012, 8:2016}
+def ad_year(value, just_start=False):
+    term_end_year = {1:1993, 2:1996, 3:1999, 4:2002, 5:2005, 6:2008, 7:2012, 8:2016, 9:2020}
     try:
         value = int(value)
-        return '%s~%s' % (term_end_year.get(value-1, ''), term_end_year.get(value, ''))
+        if just_start:
+            return term_end_year.get(value-1, '')
+        else:
+            return '%s~%s' % (term_end_year.get(value-1, ''), term_end_year.get(value, ''))
     except Exception, e:
         return ''
-
-@register.filter(name='personal_property_summary')
-def personal_property_summary(value, arg):
-    attribute = {
-        'insurance': {
-            'after_title': u'共',
-            'count_unit': u'筆',
-            'remark': False,
-            'cht': u'保險'
-        },
-        'claim': {
-            'after_title': u'總額',
-            'count_unit': u'筆',
-            'after_unit': u'約',
-            'zhutil_unit': u'price',
-            'total_unit': u'元',
-            'remark': False,
-            'cht': u'債權'
-        },
-        'debt': {
-            'after_title': u'總額',
-            'count_unit': u'筆',
-            'after_unit': u'約',
-            'zhutil_unit': u'price',
-            'total_unit': u'元',
-            'remark': False,
-            'cht': u'債務'
-        },
-        'investment': {
-            'after_title': u'總額',
-            'count_unit': u'筆',
-            'after_unit': u'約',
-            'zhutil_unit': u'price',
-            'total_unit': u'元',
-            'remark': False,
-            'cht': u'事業投資'
-        },
-        'antique': {
-            'after_title': u'共',
-            'count_unit': u'種',
-            'remark': False,
-            'cht': u'具有相當價值之財產'
-        },
-        'otherbonds': {
-            'after_title': u'總額',
-            'count_unit': u'筆',
-            'after_unit': u'約',
-            'zhutil_unit': u'price',
-            'total_unit': u'元',
-            'remark': False,
-            'cht': u'其他有價證券'
-        },
-        'fund': {
-            'after_title': u'總額',
-            'count_unit': u'筆',
-            'after_unit': u'約',
-            'zhutil_unit': u'price',
-            'total_unit': u'元',
-            'remark': False,
-            'cht': u'基金'
-        },
-        'bonds': {
-            'after_title': u'總額',
-            'count_unit': u'筆',
-            'after_unit': u'約',
-            'zhutil_unit': u'price',
-            'total_unit': u'元',
-            'remark': False,
-            'cht': u'債券'
-        },
-        'stock': {
-            'after_title': u'總額',
-            'count_unit': u'筆',
-            'after_unit': u'約',
-            'zhutil_unit': u'price',
-            'total_unit': u'元',
-            'remark': False,
-            'cht': u'股票'
-        },
-        'land': {
-            'after_title': u'持有總面積',
-            'count_unit': u'筆',
-            'after_unit': u'約',
-            'zhutil_unit': u'price',
-            'total_unit': u'平方公尺',
-            'remark': True,
-            'cht': u'土地'
-        },
-        'building': {
-            'after_title': u'持有總面積',
-            'count_unit': u'筆',
-            'after_unit': u'約',
-            'zhutil_unit': u'area',
-            'total_unit': u'平方公尺',
-            'remark': True,
-            'cht': u'建物'
-        },
-        'car': {
-            'after_title': u'',
-            'count_unit': u'輛',
-            'after_unit': u'總汽缸容量約',
-            'zhutil_unit': u'area',
-            'total_unit': u' cc',
-            'remark': False,
-            'cht': u'汽車'
-        },
-        'cash': {
-            'after_title': u'總額',
-            'count_unit': u'筆',
-            'after_unit': u'約',
-            'zhutil_unit': u'price',
-            'total_unit': u'元',
-            'remark': False,
-            'cht': u'現金'
-        },
-        'deposit': {
-            'after_title': u'總額',
-            'count_unit': u'筆',
-            'after_unit': u'約',
-            'zhutil_unit': u'price',
-            'total_unit': u'元',
-            'remark': False,
-            'cht': u'存款'
-        }
-    }
-    if attribute.get(value):
-        return attribute.get(value).get(arg)
 
 @register.filter(name='vote_result')
 def vote_result(value, arg):
@@ -174,7 +50,10 @@ def mod(value, arg):
 
 @register.filter(name='subtract')
 def subtract(value, arg):
-    return value - arg
+    try:
+        return int(value) - arg
+    except:
+        return value
 
 @register.filter(name='multiply')
 def multiply(value, arg):
