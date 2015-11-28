@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from haystack import indexes
 
-from .models import Candidates
+from .models import Terms
 
 
 class CandidatesIndex(indexes.SearchIndex, indexes.Indexable):
@@ -12,7 +12,7 @@ class CandidatesIndex(indexes.SearchIndex, indexes.Indexable):
     constituency = indexes.CharField(model_attr='constituency')
 
     def get_model(self):
-        return Candidates
+        return Terms
 
     def index_queryset(self, using=None):
         return self.get_model().objects.filter(ad=8)
