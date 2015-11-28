@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from . import fields
 from legislator.models import Legislator, LegislatorDetail, Attendance
-from candidates.models import Candidates
+from candidates.models import Candidates, Terms
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from vote.models import Vote, Legislator_Vote
@@ -62,11 +62,15 @@ class LegislatorDetailSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'id', 'legislator', 'ad', 'name', 'gender', 'title', 'party', 'elected_party', 'caucus', 'constituency', 'county', 'district', 'in_office', 'contacts', 'term_start', 'term_end', 'education', 'experience', 'remark', 'image', 'links', 'platform', 'bill_param', 'vote_param', 'attendance_param', 'elected_candidate', )
 
 class CandidatesSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Candidates
+
+class Candidates_TermsSerializer(serializers.HyperlinkedModelSerializer):
     contact_details = fields.Field()
     links = fields.Field()
     politicalcontributions = fields.Field()
     class Meta:
-        model = Candidates
+        model = Terms
 
 class LegislatorSerializer(serializers.HyperlinkedModelSerializer):
     each_terms = LegislatorDetailSerializer(many=True, read_only=True)

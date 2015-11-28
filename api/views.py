@@ -5,7 +5,7 @@ from rest_framework import filters
 from rest_framework import generics
 from .serializers import *
 from legislator.models import Legislator, LegislatorDetail, Attendance
-from candidates.models import Candidates
+from candidates.models import Candidates, Terms
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from vote.models import Vote, Legislator_Vote
@@ -28,9 +28,14 @@ class AttendanceViewSet(viewsets.ReadOnlyModelViewSet):
     filter_fields = ('legislator', 'sitting', 'category', 'status')
 
 class CandidatesViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Candidates.objects.all().select_related('legislator', 'latest_term')
+    queryset = Candidates.objects.all()
     serializer_class = CandidatesSerializer
-    filter_fields = ('latest_term', 'legislator', 'ad', 'number', 'name', 'birth', 'gender', 'party', 'constituency', 'county', 'district', 'votes', 'votes_percentage', 'elected')
+    filter_fields = ('name', 'birth')
+
+class Candidates_TermsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Terms.objects.all().select_related('legislator', 'latest_term')
+    serializer_class = Candidates_TermsSerializer
+    filter_fields = ('candidate', 'latest_term', 'legislator', 'ad', 'number', 'priority', 'name', 'gender', 'party', 'constituency', 'county', 'district', 'votes', 'votes_percentage', 'elected')
 
 class SittingsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Sittings.objects.all().prefetch_related('votes')

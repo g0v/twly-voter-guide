@@ -18,6 +18,7 @@ router.register(r'bill', views.BillViewSet)
 router.register(r'legislator_bill', views.Legislator_BillViewSet)
 router.register(r'attendance', views.AttendanceViewSet)
 router.register(r'candidates', views.CandidatesViewSet)
+router.register(r'candidates_terms', views.Candidates_TermsViewSet)
 #<--
 urlpatterns = patterns('',
     url(r'^$', 'ly.views.home', name='home'),
