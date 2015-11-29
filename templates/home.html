@@ -18,64 +18,64 @@
         <div class="span4">
             <div>
                 <h4><i class="fa fa-group fa-lg"></i> 找候選人</h4>
-                {% include "common/search_name_form.html" with placeholder_text="請輸入名稱" %}
+                {% include "common/search_name_form.html" with placeholder_text="請輸入候選人或縣市名稱" %}
             </div>
             <div class="btn-group">
-                <a class="btn btn-moonc dropdown-toggle" href="#" data-toggle="dropdown">縣市 <i class="fa fa-angle-down"></i></a>
+                <a class="btn btn-moonc hidden-desktop" href="{% url 'candidates:counties' ad=9 %}">找縣市 <i class="fa fa-angle-down"></i></a>
+                <a class="btn btn-moonc dropdown-toggle hidden-phone hidden-tablet" href="#" data-toggle="dropdown">找縣市 <i class="fa fa-angle-down"></i></a>
                 <ul class="dropdown-menu">
                     <li class="dropdown-submenu">
-                        <li class="dropdown-submenu">
-                            <a data-toggle="dropdown" data-target="#" >北部</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{% url 'candidates:districts' county='臺北市' ad=9 %}">臺北市</a></li>
-                                <li><a href="{% url 'candidates:districts' county='新北市' ad=9 %}">新北市</a></li>
-                                <li><a href="{% url 'candidates:districts' county='桃園市' ad=9 %}">桃園市</a></li>
-                                <li><a href="{% url 'candidates:districts' county='基隆市' ad=9 %}">基隆市</a></li>
-                                <li><a href="{% url 'candidates:districts' county='宜蘭縣' ad=9 %}">宜蘭縣</a></li>
-                                <li><a href="{% url 'candidates:districts' county='新竹縣' ad=9 %}">新竹縣</a></li>
-                                <li><a href="{% url 'candidates:districts' county='新竹市' ad=9 %}">新竹市</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown-submenu">
-                            <a data-toggle="dropdown" data-target="#" >中部</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{% url 'candidates:districts' county='苗栗縣' ad=9 %}">苗栗縣</a></li>
-                                <li><a href="{% url 'candidates:districts' county='臺中市' ad=9 %}">臺中市</a></li>
-                                <li><a href="{% url 'candidates:districts' county='彰化縣' ad=9 %}">彰化縣</a></li>
-                                <li><a href="{% url 'candidates:districts' county='雲林縣' ad=9 %}">雲林縣</a></li>
-                                <li><a href="{% url 'candidates:districts' county='南投縣' ad=9 %}">南投縣</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown-submenu">
-                            <a data-toggle="dropdown" data-target="#" >南部</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{% url 'candidates:districts' county='嘉義縣' ad=9 %}">嘉義縣</a></li>
-                                <li><a href="{% url 'candidates:districts' county='嘉義市' ad=9 %}">嘉義市</a></li>
-                                <li><a href="{% url 'candidates:districts' county='臺南市' ad=9 %}">臺南市</a></li>
-                                <li><a href="{% url 'candidates:districts' county='高雄市' ad=9 %}">高雄市</a></li>
-                                <li><a href="{% url 'candidates:districts' county='屏東縣' ad=9 %}">屏東縣</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown-submenu">
-                            <a data-toggle="dropdown" data-target="#" >東部</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{% url 'candidates:districts' county='花蓮縣' ad=9 %}">花蓮縣</a></li>
-                                <li><a href="{% url 'candidates:districts' county='臺東縣' ad=9 %}">臺東縣</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown-submenu">
-                            <a data-toggle="dropdown" data-target="#" >離島</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{% url 'candidates:districts' county='澎湖縣' ad=9 %}">澎湖縣</a></li>
-                                <li><a href="{% url 'candidates:districts' county='金門縣' ad=9 %}">金門縣</a></li>
-                                <li><a href="{% url 'candidates:districts' county='連江縣' ad=9 %}">連江縣</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="{% url 'candidates:districts' county='全國不分區' ad=9 %}">全國不分區</a></li>
-                        <li><a href="{% url 'candidates:districts' county='山地原住民' ad=9 %}">山地原住民</a></li>
-                        <li><a href="{% url 'candidates:districts' county='平地原住民' ad=9 %}">平地原住民</a></li>
-                        <li><a href="{% url 'candidates:counties' ad=9 %}" >全部</a></li>
+                        <a data-toggle="dropdown" data-target="#" >北部</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'candidates:districts' county='臺北市' ad=9 %}">臺北市</a></li>
+                            <li><a href="{% url 'candidates:districts' county='新北市' ad=9 %}">新北市</a></li>
+                            <li><a href="{% url 'candidates:districts' county='桃園市' ad=9 %}">桃園市</a></li>
+                            <li><a href="{% url 'candidates:districts' county='基隆市' ad=9 %}">基隆市</a></li>
+                            <li><a href="{% url 'candidates:districts' county='宜蘭縣' ad=9 %}">宜蘭縣</a></li>
+                            <li><a href="{% url 'candidates:districts' county='新竹縣' ad=9 %}">新竹縣</a></li>
+                            <li><a href="{% url 'candidates:districts' county='新竹市' ad=9 %}">新竹市</a></li>
+                        </ul>
                     </li>
+                    <li class="dropdown-submenu">
+                        <a data-toggle="dropdown" data-target="#" >中部</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'candidates:districts' county='苗栗縣' ad=9 %}">苗栗縣</a></li>
+                            <li><a href="{% url 'candidates:districts' county='臺中市' ad=9 %}">臺中市</a></li>
+                            <li><a href="{% url 'candidates:districts' county='彰化縣' ad=9 %}">彰化縣</a></li>
+                            <li><a href="{% url 'candidates:districts' county='雲林縣' ad=9 %}">雲林縣</a></li>
+                            <li><a href="{% url 'candidates:districts' county='南投縣' ad=9 %}">南投縣</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown-submenu">
+                        <a data-toggle="dropdown" data-target="#" >南部</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'candidates:districts' county='嘉義縣' ad=9 %}">嘉義縣</a></li>
+                            <li><a href="{% url 'candidates:districts' county='嘉義市' ad=9 %}">嘉義市</a></li>
+                            <li><a href="{% url 'candidates:districts' county='臺南市' ad=9 %}">臺南市</a></li>
+                            <li><a href="{% url 'candidates:districts' county='高雄市' ad=9 %}">高雄市</a></li>
+                            <li><a href="{% url 'candidates:districts' county='屏東縣' ad=9 %}">屏東縣</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown-submenu">
+                        <a data-toggle="dropdown" data-target="#" >東部</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'candidates:districts' county='花蓮縣' ad=9 %}">花蓮縣</a></li>
+                            <li><a href="{% url 'candidates:districts' county='臺東縣' ad=9 %}">臺東縣</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown-submenu">
+                        <a data-toggle="dropdown" data-target="#" >離島</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'candidates:districts' county='澎湖縣' ad=9 %}">澎湖縣</a></li>
+                            <li><a href="{% url 'candidates:districts' county='金門縣' ad=9 %}">金門縣</a></li>
+                            <li><a href="{% url 'candidates:districts' county='連江縣' ad=9 %}">連江縣</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'candidates:districts' county='山地原住民' ad=9 %}">山地原住民</a></li>
+                    <li><a href="{% url 'candidates:districts' county='平地原住民' ad=9 %}">平地原住民</a></li>
+                    <li><a href="{% url 'candidates:districts' county='全國不分區' ad=9 %}">全國不分區</a></li>
+                    <li><a href="{% url 'candidates:districts' county='僑居國外國民' ad=9 %}">僑居國外國民</a></li>
+                    <li><a href="{% url 'candidates:counties' ad=9 %}" >全部</a></li>
                 </ul>
             </div>
         </div>
