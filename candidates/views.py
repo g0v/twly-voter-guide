@@ -40,20 +40,21 @@ def district(request, ad, county, constituency):
                                   .order_by('party', 'priority')
         return render(request, 'candidates/district_nonregional.html', {'ad': ad, 'county': county, 'candidates': candidates})
     else:
+        county_changes = {"9": {u"桃園市": u"桃園縣"}}
         candidates_previous = Terms.objects.select_related('candidate', 'latest_term', 'legislator')\
-                                        .filter(ad=int(ad)-1, county=county, constituency=constituency)\
-                                        .extra(select={
-                                            'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
-                                            'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
-                                        },)\
-                                        .order_by('number')
+                                           .filter(ad=int(ad)-1, county=county_changes.get(ad, {}).get(county, county), constituency=constituency)\
+                                           .extra(select={
+                                               'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
+                                               'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
+                                           },)\
+                                           .order_by('-votes')
         candidates = Terms.objects.select_related('latest_term', 'legislator')\
-                                .filter(ad=ad, county=county, constituency=constituency)\
-                                .extra(select={
-                                    'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
-                                    'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
-                                },)\
-                                .order_by('number')
+                                  .filter(ad=ad, county=county, constituency=constituency)\
+                                  .extra(select={
+                                      'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
+                                      'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
+                                  },)\
+                                  .order_by('legislator_uid')
         standpoints = {}
         for term in [candidates_previous, candidates]:
             for candidate in term:
