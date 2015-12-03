@@ -108,9 +108,6 @@
             {% endif %}
 
             {% if results %}
-                {% load pagination_tags %}
-                {% autopaginate results 100 %}
-                {% paginate %}
                 <ul class="media-list">
                     {% for fragment in results %}
                         {% if fragment.model_name == 'vote' %}
@@ -120,7 +117,6 @@
                         {% endif %}
                     {% endfor %}
                 </ul>
-                {% paginate %}
             {% endif %}
         </div>
         <div class="span2">

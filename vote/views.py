@@ -18,6 +18,7 @@ def votes(request):
     qs = qs & Q(tags_num__gt=0) if request.GET.get('has_tag') else qs
     qs = qs & Q(tags__in=[request.GET['tag']]) if request.GET.get('tag') else qs
     votes = SearchQuerySet().filter(qs).models(Vote).order_by('-date', 'vote_seq')
+    votes = votes if len(qs) else votes[:10]
     keywords = [x.content for x in SearchQuerySet().filter(category__exact=2).models(Keyword).order_by('-hits')]
     standpoints = Standpoint.objects.values('title').annotate(pro_sum=Sum('pro')).order_by('-pro_sum').distinct()
     return render(request, 'vote/votes.html', {'votes': votes, 'conscience': request.GET.get('conscience'), 'keyword': request.GET.get('keyword', ''), 'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'hot_standpoints': standpoints[:5]})

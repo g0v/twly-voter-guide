@@ -32,11 +32,7 @@
         {% endif %}法條修正草案
     </div>
     {% if bills %}
-        {% load pagination_tags %}
-        {% autopaginate bills 10 %}
-        {% paginate %}
         {% include "common/bills.html" %}
-        {% paginate %}
     {% endif %}
 {% endblock ly_detail %}
 

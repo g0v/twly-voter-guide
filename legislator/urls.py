@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from legislator import views
 
 ad = 8
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^(?P<index>conflict|not_voting)/(?P<ad>[1-9])/$', views.index, name='index'),
     url(r'^(?P<index>conflict|not_voting)/$', views.index, {'ad': ad}, name='index'),
     url(r'^counties/(?P<ad>\d+)/$', views.counties, name='counties'),
@@ -21,4 +21,4 @@ urlpatterns = patterns('',
     url(r'^report/(?P<index>biller|conscience_vote|vote|ly)/(?P<ad>\d+)/$', views.chart_report, name='chart_report'),
     url(r'^report/(?P<index>biller|conscience_vote|vote|ly)/$', views.chart_report, {'ad': ''}, name='chart_report'),
     url(r'^report/political_contributions/(?P<index>\S+)/(?P<compare>\S+)/(?P<party>\S+)/$', views.political_contributions_report, name='political_contributions_report'),
-)
+]

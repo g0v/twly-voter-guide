@@ -1,6 +1,6 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from bill import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', views.bills, name='bills'),
-)
+]

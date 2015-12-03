@@ -55,7 +55,6 @@ INSTALLED_APPS = (
     #'django.contrib.admin',
     'social.apps.django_app.default',
     'haystack',
-    'json_field',
     'legislator',
     'candidates',
     'committees',
