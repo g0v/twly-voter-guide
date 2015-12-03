@@ -2,7 +2,8 @@
 import datetime
 from django.db import models
 from django.utils import timezone
-from json_field import JSONField
+from django.contrib.postgres.fields import JSONField
+
 from vote.models import Vote, Legislator_Vote
 from bill.models import Legislator_Bill
 from committees.models import Legislator_Committees

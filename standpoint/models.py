@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.db import models
-from json_field import JSONField
 
 
 class Standpoint(models.Model):

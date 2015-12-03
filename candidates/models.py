@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
-
-from json_field import JSONField
+from django.contrib.postgres.fields import ArrayField, JSONField
 
 
 class Candidates(models.Model):

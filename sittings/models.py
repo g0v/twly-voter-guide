@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from json_field import JSONField
+from django.contrib.postgres.fields import JSONField
+
 
 class Sittings(models.Model):
     uid = models.CharField(max_length=32, primary_key=True)
