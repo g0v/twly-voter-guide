@@ -153,7 +153,7 @@
                         <td style="text-align:center; vertical-align:middle;">{{candidate.party}}</td>
                         {% if candidate.latest_term_id %}
                             <td style="text-align:center; vertical-align:middle;">
-                                {{candidate.latest_term.term_start|date:"Y"}}~{{candidate.latest_term.term_end.date|date:"Y"}}
+                                {{candidate.latest_term.term_start|date:"Y"}}~{{candidate.latest_term.term_end.date|year_tmp}}
                                 {% if candidate.latest_term.ad > 7 %}
                                     <a href="{% url 'legislator:platformer_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（當時競選政見）</a>
                                 {% endif %}
@@ -166,11 +166,15 @@
                             </td>
                             <td style="text-align:center; vertical-align:middle;">
                                 {% if candidate.latest_term.ad > 5 %}
-                                    {{candidate.latest_term.vote_param.not_voting}} 次<br>(投票缺席率{{candidate.latest_term.vote_param.not_voting|divide:candidate.latest_term.vote_param.total}} %)
+                                    {{candidate.latest_term.vote_param.not_voting}} 次<br>（投票缺席率{{candidate.latest_term.vote_param.not_voting|divide:candidate.latest_term.vote_param.total}} %）
                                     <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（看表決）</a>
                                 {% endif %}
                             </td>
-                            <td style="text-align:center; vertical-align:middle;">{{candidate.latest_term.attendance_param.absent}} 次<br>(缺席率{{candidate.latest_term.attendance_param.absent|divide:candidate.latest_term.attendance_param.total}} %)</td>
+                            <td style="text-align:center; vertical-align:middle;">
+                                {% if candidate.latest_term.ad > 5 %}
+                                    {{candidate.latest_term.attendance_param.absent}} 次<br>（缺席率{{candidate.latest_term.attendance_param.absent|divide:candidate.latest_term.attendance_param.total}} %）
+                                {% endif %}
+                            </td>
                             <td style="text-align:center; vertical-align:middle;"><a href="http://sunshine.cy.g0v.tw/people/{{candidate.name}}/property/overview/" target="_blank">{{candidate.name}}</a></td>
                         {% else %}
                             <td/>

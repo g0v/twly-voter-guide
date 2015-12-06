@@ -9,6 +9,10 @@ from legislator.models import LegislatorDetail
 
 register = template.Library()
 
+@register.filter(name='year_tmp')
+def year_tmp(value):
+    return value.split('-')[0] if value else None
+
 @register.filter(name='json_lookup')
 def json_lookup(value, arg):
     return value.get(arg) if value else None
