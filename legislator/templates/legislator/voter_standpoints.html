@@ -20,25 +20,50 @@
 {% endblock %}
 
 {% block ly_detail %}
-    <ul class="media-list">
-    {% for standpoint in standpoints %}
-        <li class="media">
-            <div class="media-body well">
-                <div class="media-heading"><font class="lead">{{standpoint.title}}</font>：{{standpoint.times}}次{{standpoint.decision}}
-                    &nbsp;&nbsp;<button type="button" class="btn btn-link" data-toggle="collapse" data-target="#ref_vote{{forloop.counter}}">表決內容&nbsp;<b class="caret"></b></button>
-                    <div id="ref_vote{{forloop.counter}}" class="collapse">
-                    {% for fragment in standpoint.votes %}
-                        <h4><a href="{% url 'vote:vote_detail' fragment.uid %}" target="_blank">☞ 表決{{forloop.counter}}<small>（覺得表決跟立場不符合嗎？點我來改進）</small></a></h4>
-                        <blockquote>
-                            <p>{{fragment.content}}</p>
-                        </blockquote>
+    <div class="row-fluid">
+    {% regroup standpoints by decision as decision_list %}
+    {% for decision_group in decision_list %}
+        <div class="span4">
+            <ul class="media-list">
+                <li>
+                    <h3 align="center">
+                        {% if decision_group.grouper == "反對" %}
+                        <i class="fa fa-times-circle"> </i>
+                        {% elif decision_group.grouper == "贊成" %}
+                        <i class="fa fa-check-circle"> </i>
+                        {% else %}
+                            {% if decision_group.grouper == "棄權" %}
+                            <i class="fa fa-question-circle"> </i>
+                            {% elif decision_group.grouper == "沒投票" %}
+                            <i class="fa fa-bed"> </i>
+                            {% endif %}
+                        {% endif %}
+                        {{ decision_group.grouper }}
+                    </h3>
+                <ul>
+                    {% for standpoint in decision_group.list %}
+                    <li class="media">
+                        <div class="media-body well">
+                            <div class="media-heading"><font class="lead">{{standpoint.title}}</font>：{{standpoint.times}}次
+                                <button type="button" class="btn btn-link pull-right" data-toggle="collapse" data-target="#ref_vote_{{standpoint.decision}}_{{standpoint.title}}_{{forloop.counter}}">表決內容&nbsp;<b class="caret"></b></button>
+                                <div id="ref_vote_{{standpoint.decision}}_{{standpoint.title}}_{{forloop.counter}}" class="collapse">
+                                {% for fragment in standpoint.votes %}
+                                    <h4><a href="{% url 'vote:vote_detail' fragment.uid %}" target="_blank">☞ 表決{{forloop.counter}}<small>（覺得表決跟立場不符合嗎？點我來改進）</small></a></h4>
+                                    <blockquote>
+                                        <p>{{fragment.content}}</p>
+                                    </blockquote>
+                                {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                     {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </li>
+                </ul>
+                </li>
+            </ul>
+        </div>
     {% endfor %}
-    </ul>
+    </div>
 {% endblock ly_detail %}
 
 {% block script %}

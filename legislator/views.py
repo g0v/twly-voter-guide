@@ -108,7 +108,7 @@ def voter_standpoints(request, legislator_id, ad):
                     GROUP BY ss.vote_id
                 )
             GROUP BY s.title, lv.decision
-            ORDER BY times DESC
+            ORDER BY lv.decision
         ) row
     '''
     c.execute(qs, param)
