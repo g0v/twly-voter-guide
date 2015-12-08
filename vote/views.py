@@ -46,8 +46,18 @@ def vote(request, vote_id):
         standpoints_of_vote = standpoints_of_vote.extra(select={
             'have_voted': "SELECT true FROM standpoint_user_standpoint su WHERE su.standpoint_id = standpoint_standpoint.id AND su.user_id = %s" % request.user.id,
         },)
-
-    decisions = Legislator_Vote.objects.select_related('vote', 'legislator', 'vote__sitting').filter(vote_id=vote_id).order_by('-decision', 'legislator__party')
+    decisions = Legislator_Vote.objects.select_related('vote', 'legislator', 'vote__sitting')\
+                                       .filter(vote_id=vote_id)\
+                                       .extra(
+                                           select={
+                                               'party_moment': '''
+                                                   select d.name\
+                                                   from legislator_legislatordetail l, jsonb_to_recordset(l.party) d(name text, start_at date, end_at date), vote_vote v, sittings_sittings s\
+                                                   where v.uid = vote_legislator_vote.vote_id and vote_legislator_vote.legislator_id = l.id and v.sitting_id = s.uid and d.start_at < s.date and d.end_at > s.date\
+                                               '''
+                                           },
+                                       )\
+                                       .order_by('-decision', 'party_moment')
     for decision in decisions:
         data = dict(decision.vote.results)
         data.pop('total', None)

@@ -22,12 +22,12 @@
                 </ul>
             <font>
         </dd>
-        {% if ly.elected_party != ly.party %}
+        {% if ly.elected_party != ly.party.0.name %}
             <dt>當選黨籍</dt>
             <dd>{{ ly.elected_party }}
         {% endif %}
         <dt>黨籍</dt>
-        <dd>{{ ly.party }}
+        <dd>{{ ly.party.0.name }}
         </dd>
         <dt>選區縣市</dt>
         <dd>

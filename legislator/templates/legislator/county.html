@@ -47,7 +47,7 @@
             <tbody>
                 {% for ly in ly_list %}
                     <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
-                        <td><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">{% include "common/ly_color_by_party.html" %}</a></td>
+                        <td><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">{% include "common/ly_color_by_party.html" with party=ly.party.0.name %}</a></td>
                         <td>{% if ly.elected_candidate.district %}<abbr title="{{ ly.elected_candidate.district }}">{{ ly.elected_candidate.district|truncatechars:20 }}</abbr>{% endif %}</td>
                         <td>{{ly.term_start|date:"Y-m-d"}}</td>
                         {% if ad > 5 %}

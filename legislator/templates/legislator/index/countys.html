@@ -10,7 +10,7 @@
                 {% ifchanged ly.county %}
                     <td><a href="{% url 'legislator:county' county=ly.county ad=ly.ad %}" class="btn btn-info btn-mini" rel="tooltip" title="{{ly.county}}的所有立委詳細資料"><b>{{ly.county}}</b></a></td>
                 {% endifchanged %}
-                <td><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">{% include "common/ly_color_by_party.html" %}</a></td>
+                <td><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">{% include "common/ly_color_by_party.html" with party=ly.party.0.name %}</a></td>
             {% endfor %}
             {% include "common/color_info_of_party.html" with column=40 %}
         </table>

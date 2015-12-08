@@ -1,21 +1,22 @@
 {% spaceless %}
-{% if ly.party == "中國國民黨" %}
-<font color=0033FF>{{ ly.name|truncatechars:6 }}</font>
-{% elif ly.party == "民主進步黨" %}
-<font color=009900>{{ ly.name|truncatechars:6 }}</font>
-{% elif ly.party == "親民黨" %}
-<font color=FF6600>{{ ly.name|truncatechars:6 }}</font>
-{% elif ly.party == "臺灣團結聯盟" %}
-<font color=brown>{{ ly.name|truncatechars:6 }}</font>
-{% elif ly.party == "無黨團結聯盟" %}
-<font color=FF00FF>{{ ly.name|truncatechars:6 }}</font>
-{% elif ly.party == "無黨籍" %}
-<font color=777777>{{ ly.name|truncatechars:6 }}</font>
-{% elif ly.party == "民國黨" %}
-<font color=330066>{{ ly.name|truncatechars:6 }}</font>
-{% elif ly.party == "新黨" %}
-<font color=FFCC00>{{ ly.name|truncatechars:6 }}</font>
+{% if party == "中國國民黨" %}
+<font color=0033FF>
+{% elif party == "民主進步黨" %}
+<font color=009900>
+{% elif party == "親民黨" %}
+<font color=FF6600>
+{% elif party == "臺灣團結聯盟" %}
+<font color=brown>
+{% elif party == "無黨團結聯盟" %}
+<font color=FF00FF>
+{% elif party == "無黨籍" %}
+<font color=777777>
+{% elif party == "民國黨" %}
+<font color=330066>
+{% elif party == "新黨" %}
+<font color=FFCC00>
 {% else %}
-<font >{{ ly.name|truncatechars:6 }}</font>
+<font>
 {% endif %}
+{{ ly.name|truncatechars:6 }}</font>
 {% endspaceless %}

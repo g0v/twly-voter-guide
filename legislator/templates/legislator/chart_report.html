@@ -77,11 +77,11 @@
                 {% for ly in ly_obj %}
                 <tr style="background-color: {% cycle '#EEEEEE' 'white' %};">
                         {% if index == 'vote' or index = 'ly' %}
-                            <td><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
+                            <td><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}" rel="tooltip" title="{{ly.name}}的投票表決紀錄">{% include "common/ly_color_by_party.html" with party=ly.party.0.name %}</a></td>
                         {% elif index == 'conscience_vote' %}
-                            <td><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?conscience=on" rel="tooltip" title="{{ly.name}}的投票表決紀錄">{% include "common/ly_color_by_party.html" %}</a></td>
+                            <td><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?conscience=on" rel="tooltip" title="{{ly.name}}的投票表決紀錄">{% include "common/ly_color_by_party.html" with party=ly.party.0.name %}</a></td>
                         {% else %}
-                            <td><a href="{% url 'legislator:biller_detail' legislator_id=ly.legislator_id ad=ly.ad %}" rel="tooltip" title="{{ly.name}}的法條修正草案">{% include "common/ly_color_by_party.html" %}</a></td>
+                            <td><a href="{% url 'legislator:biller_detail' legislator_id=ly.legislator_id ad=ly.ad %}" rel="tooltip" title="{{ly.name}}的法條修正草案">{% include "common/ly_color_by_party.html" with party=ly.party.0.name %}</a></td>
                         {% endif %}
                         {% if index == 'vote' %}
                             <td>{{ly.totalNum}}</td>
