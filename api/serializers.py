@@ -1,6 +1,6 @@
 #from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from . import fields
+
 from legislator.models import Legislator, LegislatorDetail, Attendance
 from candidates.models import Candidates, Terms
 from sittings.models import Sittings
