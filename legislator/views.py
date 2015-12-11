@@ -93,25 +93,17 @@ def voter_standpoints(request, legislator_id, ad):
             FROM vote_legislator_vote lv
             JOIN standpoint_standpoint s on s.vote_id = lv.vote_id
             JOIN vote_vote v on lv.vote_id = v.uid
-            WHERE
-    '''
-    if request.GET.get('keyword'):
-        qs = qs + 's.title = %s AND'
-        param = [request.GET['keyword'], terms_id]
-    else:
-        param = [terms_id]
-    qs = qs + '''
-                lv.legislator_id in %s AND s.pro = (
-                    SELECT max(pro)
-                    FROM standpoint_standpoint ss
-                    WHERE ss.pro > 0 AND s.vote_id = ss.vote_id
-                    GROUP BY ss.vote_id
-                )
+            WHERE lv.legislator_id in %s AND s.pro = (
+                SELECT max(pro)
+                FROM standpoint_standpoint ss
+                WHERE ss.pro > 0 AND s.vote_id = ss.vote_id
+                GROUP BY ss.vote_id
+            )
             GROUP BY s.title, lv.decision
             ORDER BY lv.decision
         ) row
     '''
-    c.execute(qs, param)
+    c.execute(qs, [terms_id])
     r = c.fetchone()
     standpoints = r[0] if r else []
     return render(request, 'legislator/voter_standpoints.html', {'ly': ly, 'standpoints': standpoints})

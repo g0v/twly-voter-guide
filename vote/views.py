@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q, F, Sum
+from django.db import connections
 
 from haystack.query import SearchQuerySet
 
@@ -24,6 +25,7 @@ def votes(request):
     return render(request, 'vote/votes.html', {'votes': votes, 'conscience': request.GET.get('conscience'), 'keyword': request.GET.get('keyword', ''), 'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'hot_standpoints': standpoints[:5]})
 
 def vote(request, vote_id):
+    vote = get_object_or_404(Vote.objects.select_related('sitting'), pk=vote_id)
     if request.GET:
         if not request.user.is_authenticated():
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.get_full_path()))
@@ -46,20 +48,5 @@ def vote(request, vote_id):
         standpoints_of_vote = standpoints_of_vote.extra(select={
             'have_voted': "SELECT true FROM standpoint_user_standpoint su WHERE su.standpoint_id = standpoint_standpoint.id AND su.user_id = %s" % request.user.id,
         },)
-    decisions = Legislator_Vote.objects.select_related('vote', 'legislator', 'vote__sitting')\
-                                       .filter(vote_id=vote_id)\
-                                       .extra(
-                                           select={
-                                               'party_moment': '''
-                                                   select d.name\
-                                                   from legislator_legislatordetail l, jsonb_to_recordset(l.party) d(name text, start_at date, end_at date), vote_vote v, sittings_sittings s\
-                                                   where v.uid = vote_legislator_vote.vote_id and vote_legislator_vote.legislator_id = l.id and v.sitting_id = s.uid and d.start_at < s.date and d.end_at > s.date\
-                                               '''
-                                           },
-                                       )\
-                                       .order_by('-decision', 'party_moment')
-    for decision in decisions:
-        data = dict(decision.vote.results)
-        data.pop('total', None)
-        return render(request, 'vote/vote.html', {'vote': decisions, 'data': data, 'keyword_obj': standpoints, 'standpoints_of_vote': standpoints_of_vote[:3], 'standpoints_of_vote_hide': standpoints_of_vote[3:]})
+    return render(request, 'vote/vote.html', {'vote': vote, 'keyword_obj': standpoints, 'standpoints_of_vote': standpoints_of_vote[:3], 'standpoints_of_vote_hide': standpoints_of_vote[3:]})
     return redirect('vote:votes')

@@ -23,7 +23,7 @@
     <div class="row-fluid">
     {% regroup standpoints by decision as decision_list %}
     {% for decision_group in decision_list %}
-        <div class="span4">
+        <div class="span{% widthratio 12 decision_list|length 1 %}">
             <ul class="media-list">
                 <li>
                     <h3 align="center">
