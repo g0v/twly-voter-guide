@@ -77,7 +77,7 @@ def voter_standpoints(request, legislator_id, ad):
     ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
     terms_id = tuple(LegislatorDetail.objects.filter(ad__lte=ad, legislator_id=legislator_id).values_list('id', flat=True))
     c = connections['default'].cursor()
-    qs = u'''
+    c.execute(u'''
         SELECT json_agg(row)
         FROM (
             SELECT
@@ -89,7 +89,7 @@ def voter_standpoints(request, legislator_id, ad):
                 END as decision,
                 s.title,
                 count(*) as times,
-                json_agg(v) as votes
+                json_agg((select x from (select v.uid, v.content) x)) as votes
             FROM vote_legislator_vote lv
             JOIN standpoint_standpoint s on s.vote_id = lv.vote_id
             JOIN vote_vote v on lv.vote_id = v.uid
@@ -102,8 +102,7 @@ def voter_standpoints(request, legislator_id, ad):
             GROUP BY s.title, lv.decision
             ORDER BY lv.decision
         ) row
-    '''
-    c.execute(qs, [terms_id])
+    ''', [terms_id])
     r = c.fetchone()
     standpoints = r[0] if r else []
     return render(request, 'legislator/voter_standpoints.html', {'ly': ly, 'standpoints': standpoints})

@@ -48,5 +48,6 @@ def vote(request, vote_id):
         standpoints_of_vote = standpoints_of_vote.extra(select={
             'have_voted': "SELECT true FROM standpoint_user_standpoint su WHERE su.standpoint_id = standpoint_standpoint.id AND su.user_id = %s" % request.user.id,
         },)
+    standpoints_of_vote = list(standpoints_of_vote)
     return render(request, 'vote/vote.html', {'vote': vote, 'keyword_obj': standpoints, 'standpoints_of_vote': standpoints_of_vote[:3], 'standpoints_of_vote_hide': standpoints_of_vote[3:]})
     return redirect('vote:votes')
