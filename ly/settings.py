@@ -119,7 +119,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-SITE_DOMAIN = 'http://twly.herokuapp.com'
+SITE_DOMAIN = 'http://vote.ly.g0v.tw'
 
 HAYSTACK_CONNECTIONS = {
     'default': {
