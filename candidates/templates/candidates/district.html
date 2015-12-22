@@ -129,7 +129,7 @@
                     <th>表決立場</th>
                     <th>黨籍</th>
                     <th>最近任期</th>
-                    <th>主提案數 / 參與提案數</th>
+                    <th>主提案數</th>
                     <th>投票缺席率（%）</th>
                     <th>院會缺席次數</th>
                     <th>財產申報</th>
@@ -160,7 +160,7 @@
                             </td>
                             <td style="text-align:center; vertical-align:middle;">
                                 {% if candidate.latest_term.ad > 7 %}
-                                    {{candidate.latest_term.bill_param.chief}} / {{candidate.latest_term.bill_param.proposal}}
+                                    {{candidate.latest_term.bill_param.sponsor}}
                                     <a href="{% url 'legislator:biller_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（看提案）</a>
                                 {% endif %}
                             </td>

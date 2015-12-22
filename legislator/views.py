@@ -124,11 +124,13 @@ def voter_detail(request, legislator_id, ad):
     return render(request, 'legislator/voter_detail.html', {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'ly': ly, 'origin': qs & hsqs == Q(), 'votes': votes, 'keyword': request.GET.get('keyword', '')})
 
 def biller_detail(request, legislator_id, ad):
+    qs = Q(content=request.GET['keyword']) if request.GET.get('keyword') else Q()
+    bills_id = [x.uid for x in SearchQuerySet().filter(qs).models(Bill).order_by('-uid')]
     ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
-    bills = ly.bills.filter(legislator_id=ly.id, priproposer=True)
-    qs = Q(uid__in=bills.values_list('bill_id', flat=True))
-    qs = qs & Q(content=request.GET['keyword']) if request.GET.get('keyword') else qs
-    bills = SearchQuerySet().filter(qs).models(Bill).order_by('-last_action_at')
+    if len(qs):
+        bills = ly.bills.select_related('bill').filter(legislator_id=ly.id, role='sponsor', bill_id__in=bills_id)
+    else:
+        bills = ly.bills.select_related('bill').filter(legislator_id=ly.id, role='sponsor')
     keywords = keyword_list(3)
     return render(request, 'legislator/biller_detail.html',  {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'bills': bills, 'ly': ly, 'keyword': request.GET.get('keyword', '')})
 
@@ -149,8 +151,8 @@ def chart_report(request, ad, index='vote'):
         ly_obj = lys.filter(ad=ad, in_office=True, votes__conflict=True).annotate(totalNum=Count('votes__id')).order_by('-totalNum','party')[:10]
         title, content = u'脫黨投票次數前十名', u'脫黨投票不一定較好，可能該立委是憑良心投票，也可能是受財團、企業影響所致，還請點選該立委觀看其脫黨投票的表決內容再作論定。'
     elif index == 'biller':
-        compare = "{0:.2f}".format(Bill.objects.count()/116.0)
-        ly_obj = lys.filter(ad=8, in_office=True, bills__priproposer=True, bills__petition=False).annotate(totalNum=Count('bills__id')).order_by('-totalNum','party')[:10]
+        compare = "{0:.2f}".format(Bill.objects.filter(ad=ad).count()/116.0)
+        ly_obj = lys.filter(ad=8, in_office=True, bills__role='sponsor').annotate(totalNum=Count('bills__id')).order_by('-totalNum','party')[:10]
         title, content = u'法條修正草案數前十名', u'量化數據不能代表好壞只能參考，修正草案數多不一定較好，還請點選該立委觀看其修正草案的內容再作論定。'
     elif index == 'ly':
         compare = Sittings.objects.filter(ad=ad, committee='').count()

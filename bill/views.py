@@ -10,8 +10,8 @@ from search.views import keyword_list
 
 def bills(request):
     qs = Q(content=request.GET['keyword']) if request.GET.get('keyword') else Q()
-    qs = qs & Q(last_action=request.GET['progress']) if request.GET.get('progress') else qs
-    bills = SearchQuerySet().filter(qs).models(Bill).order_by('-last_action_at')
-    bills = bills if len(qs) else bills[:10]
+    bills_uid = [x.uid for x in SearchQuerySet().filter(qs).models(Bill).order_by('-uid')]
+    bills_uid = bills_uid if len(qs) else bills_uid[:10]
+    bills = Bill.objects.filter(uid__in=bills_uid)
     keywords = keyword_list(3)
-    return render(request, 'bill/bills.html', {'index': '', 'bills': bills, 'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'keyword': request.GET.get('keyword', ''), 'progress': request.GET.get('progress', '')})
+    return render(request, 'bill/bills.html', {'bills': bills, 'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'keyword': request.GET.get('keyword', '')})

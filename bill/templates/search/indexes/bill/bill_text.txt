@@ -1,2 +1,1 @@
-{{ object.abstract }}
-{{ object.summary }}
+{{ object.for_search }}

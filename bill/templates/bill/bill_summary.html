@@ -1,31 +1,25 @@
 {% load ly_extras %}
-{% load highlight %}
 
 <li class="media">
     <div class="media-body well">
-        <h5 class="text-success">立法理由</h5>
         <div class="media-heading">
-            {% if keyword %}
-                {{fragment.proposed_by}}
-                <small>（略）</small>
-                {% highlight fragment.text with keyword %}
-            {% else %}
-                {{fragment.abstract}}
-            {% endif %}
+            <h4>{{fragment.data.提案名稱}}</h4>
+            <span class="pull-right">提案日期：{{fragment.data.提案日期}}</span>
         </div>
         <div>
-            <h5 class="text-success">進展</h5>
+            <h5 class="text-success">主提案</h5>
             <blockquote>
-                {% if fragment.rejected_times != 0 %}
-                <span class="label label-warning"><font class="lead">總共被退回程序委員會{{fragment.rejected_times}}次</font></span>
-                {% endif %}
-                {% for progress, date in fragment.progress_history %}
-                {{progress}}（{{date}}）
-                {% endfor %}
+            {% for name in fragment.data.主提案 %}
+                {{name}}
+            {% endfor %}
+            </blockquote>
+            <h5 class="text-success">主題</h5>
+            <blockquote>
+                {{fragment.data.主題}}
             </blockquote>
         </div>
         <h4>
-            <a href="{{ "http://ly.g0v.tw/bills/"|add:fragment.uid }}" target="_blank">☞ 查看法條修正對照表</a>
+            <a href="{{fragment.data.links.關係文書}}" target="_blank">☞ 查看詳細草案內容</a>
         </h4>
     </div>
 </li>

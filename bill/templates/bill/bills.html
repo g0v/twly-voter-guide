@@ -12,7 +12,7 @@
     <div class="span2">
     </div>
     <div class="span8">
-        {% include "common/search_keyword_form.html" with placeholder_text="例:軍事審判 土地徵收 會計法" advance_search="common/bills_progress_form.html" %}
+        {% include "common/search_keyword_form.html" with placeholder_text="例:軍事審判 土地徵收 會計法" %}
         {% if hot_keyword %}
             <h4>熱門搜尋：
                 {% for keyword in hot_keyword %}
@@ -52,10 +52,6 @@
         $(document).ready( function() {
             $('#nav_bills').addClass('active');
             $("[rel='tooltip']").tooltip();
-            $('#progress').change(function() {
-                $("#form_bill").trigger('submit');
-            });
-            $('#progress').val('{{progress}}');
         });
     </script>
 {% endblock script %}

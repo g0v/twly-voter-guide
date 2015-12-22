@@ -1,6 +1,0 @@
-<select name="progress" id="progress">
-    <option value="">最新進展</option>
-    {% for fragment in distinct_progress_of_bill %}
-        <option value="{{fragment}}" style="background-color: {% cycle '#EEEEEE' 'white' %};">{{fragment}}</option>
-    {% endfor %}
-</select>

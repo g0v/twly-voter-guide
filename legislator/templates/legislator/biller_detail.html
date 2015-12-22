@@ -28,11 +28,15 @@
     <div class="well well-small">
         {{ly.name}}（{{ly.ad|ad_year}}）：{{ bills|length }}個
         {% if keyword %}
-        包含<font style="color: red;">"{{keyword}}"</font>的
+        有關<font style="color: red;">"{{keyword}}"</font>的
         {% endif %}法條修正草案
     </div>
     {% if bills %}
-        {% include "common/bills.html" %}
+        <ul class="media-list">
+            {% for fragment in bills %}
+                {% include "bill/bill_summary.html" with fragment=fragment.bill %}
+            {% endfor %}
+        </ul>
     {% endif %}
 {% endblock ly_detail %}
 
