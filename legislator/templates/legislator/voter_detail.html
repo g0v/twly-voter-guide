@@ -27,7 +27,7 @@
     <h4>熱門：
         {% for keyword in keyword_obj %}
         {% if forloop.counter0 < 5 %}
-        <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: {% cycle '#9999FF' '#99CCCC' '#99CC99' '#999966' '#99CC33' %};">{{keyword}}&nbsp;</font></a>
+        <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?keyword={{keyword}}" rel="tooltip" title="包含此關鍵字的表決"><font style="color: #9F0050;">{{keyword}}&nbsp;</font></a>
         {% endif %}
         {% endfor %}
     </h4>
@@ -83,7 +83,6 @@
                 <td style="text-align:center; vertical-align:middle; background-color: #{{vote.result|vote_result:'td_bgcolor'}}">{{vote.result|vote_result:'cht'}}</td>
                 <td style="text-align:center; vertical-align:middle;">{{ vote.sitting.date|date:"Y-m-d" }}</td>
                 <td>
-                    <a href="{% url 'vote:vote_detail' vote.uid %}" rel="tooltip" title="查看各立委投什麼票">查看投票名單和完整內容</a><br>
                     {% if keyword %}
                         <p>
                             <small class="muted">（前文略）</small>
@@ -93,6 +92,7 @@
                     {% else %}
                         {{vote.content|linebreaksbr|truncatechars:120}}
                     {% endif %}
+                    <a href="{% url 'vote:vote_detail' vote.uid %}">詳細</a><br>
                 </td>
                 {% endwith %}
             </tr>
