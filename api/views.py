@@ -76,4 +76,4 @@ class BillViewSet(viewsets.ReadOnlyModelViewSet):
 class Legislator_BillViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Legislator_Bill.objects.all().select_related('bill', 'legislator')
     serializer_class = Legislator_BillSerializer
-    filter_fields = ('legislator', 'bill', 'priproposer', 'petition')
+    filter_fields = ('legislator', 'bill', 'role')
