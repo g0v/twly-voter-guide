@@ -35,7 +35,7 @@ class Legislator_BillSerializer(serializers.HyperlinkedModelSerializer):
 class BillSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Bill
-        fields = ('url', 'uid', 'proposer', 'ad', 'api_bill_id', 'abstract', 'summary', 'bill_type', 'doc', 'proposed_by', 'sitting_introduced', 'last_action_at', 'last_action')
+        fields = ('url', 'uid', 'ad', 'data')
 
 class AttendanceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

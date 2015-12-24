@@ -71,7 +71,7 @@ class Legislator_VoteViewSet(viewsets.ReadOnlyModelViewSet):
 class BillViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Bill.objects.all().prefetch_related('proposer')
     serializer_class = BillSerializer
-    filter_fields = ('proposer', 'uid', 'api_bill_id', 'bill_type', 'sitting_introduced', 'last_action_at', 'last_action')
+    filter_fields = ('uid', 'ad', 'data')
 
 class Legislator_BillViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Legislator_Bill.objects.all().select_related('bill', 'legislator')
