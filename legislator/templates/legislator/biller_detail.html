@@ -25,18 +25,16 @@
         {% endfor %}
     </h4>
     {% endif %}
-    <div class="well well-small">
-        {{ly.name}}（{{ly.ad|ad_year}}）：{{ bills|length }}個
-        {% if keyword %}
-        有關<font style="color: red;">"{{keyword}}"</font>的
-        {% endif %}法條修正草案
-    </div>
     {% if bills %}
-        <ul class="media-list">
-            {% for fragment in bills %}
-                {% include "bill/bill_summary.html" with fragment=fragment.bill %}
-            {% endfor %}
-        </ul>
+    <div class="well well-small">
+        {{ly.name}}：{{ bills.paginator.count }}個搜尋結果，這是第{{ bills.number }}頁（共{{ bills.paginator.num_pages }}頁）
+    </div>
+    <ul class="media-list">
+        {% for fragment in bills %}
+            {% include "bill/bill_summary.html" with fragment=fragment.bill %}
+        {% endfor %}
+    </ul>
+    {% include "common/pagination.html" with items=bills %}
     {% endif %}
 {% endblock ly_detail %}
 

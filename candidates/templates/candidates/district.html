@@ -153,7 +153,10 @@
                         <td style="text-align:center; vertical-align:middle;">{{candidate.party}}</td>
                         {% if candidate.latest_term_id %}
                             <td style="text-align:center; vertical-align:middle;">
-                                {{candidate.latest_term.term_start|date:"Y"}}~{{candidate.latest_term.term_end.date|year_tmp}}
+                                {{candidate.latest_term.term_start|date:"Y"}}~
+                                {% if candidate.latest_term.term_end.date %}
+                                {{candidate.latest_term.term_end.date|year_tmp}}
+                                {% endif %}
                                 {% if candidate.latest_term.ad > 7 %}
                                     <a href="{% url 'legislator:platformer_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（當時競選政見）</a>
                                 {% endif %}

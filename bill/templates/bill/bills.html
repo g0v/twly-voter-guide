@@ -11,7 +11,7 @@
 {% block right %}
     <div class="span2">
     </div>
-    <div class="span8">
+    <div class="span8" style="padding-bottom: 30px;">
         {% include "common/search_keyword_form.html" with placeholder_text="例:軍事審判 土地徵收 會計法" %}
         {% if hot_keyword %}
             <h4>熱門搜尋：
@@ -31,11 +31,15 @@
             </font>
         </div>
         {% if bills %}
+            <div class="well well-small">
+                {{ bills.paginator.count }}個搜尋結果，這是第{{ bills.number }}頁（共{{ bills.paginator.num_pages }}頁）
+            </div>
             <ul class="media-list">
                 {% for fragment in bills %}
                     {% include "bill/bill_summary.html" %}
                 {% endfor %}
             </ul>
+        {% include "common/pagination.html" with items=bills %}
         {% endif %}
     </div>
     <div class="span2">

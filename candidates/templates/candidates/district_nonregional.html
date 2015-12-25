@@ -9,12 +9,20 @@
 
 {% block right %}
     <div class="description span12 hidden-phone">
-        <h3>{{ad|ad_year}} {{county}} - {{candidates.0.district}} 候選人
+        <h3>{{ad|ad_year}} {{county}} - {{candidates.0.district}} {{party}} 候選人
         <a class="pull-right" href="{% url 'candidates:districts' county=county ad=ad %}">☞ 其他選區</a>
         </h3>
     </div>
     <div class="row-fluid" style="padding-bottom: 24px;">
         {% if candidates %}
+        <div class="btn-group">
+            <a class="btn btn-inverse dropdown-toggle" href="#" data-toggle="dropdown">找單一政黨 <i class="fa fa-angle-down"></i></a>
+            <ul class="dropdown-menu">
+            {% for party in parties %}
+                <li><a href="{% url 'candidates:district' county='全國不分區' ad=ad constituency=1 %}?party={{party}}">{{party}}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
         <table class="table table-bordered table-condensed table-striped sortable" >
             <thead>
                 <tr style="font-weight:bold; background-color: #9F0050;">
@@ -79,17 +87,3 @@
         <div id="disqus_thread"></div>
     </div>
 {% endblock right %}
-
-{% block script %}
-    <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/zhutil.min.js"></script>
-    <script>
-        $(document).ready( function() {
-            $(".collapse").collapse()
-            $('.price').each(function(index,ele){
-                var number = $(ele).text()
-                zh_number = zhutil.approximate(number, {base: '萬', extra_decimal: 0});
-                $(ele).replaceWith(zh_number)
-            })
-        });
-    </script>
-{% endblock script %}

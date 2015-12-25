@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.db import connections
 from django.db.models import Count, Q
 from django.forms.models import model_to_dict
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from haystack.query import SearchQuerySet
 
@@ -16,6 +17,7 @@ from search.models import Keyword
 from standpoint.models import Standpoint
 from search.views import keyword_list, keyword_normalize
 from candidates.models import Candidates
+from commontag.views import paginate
 
 
 def index(request, index, ad):
@@ -120,8 +122,9 @@ def voter_detail(request, legislator_id, ad):
         votes = ly.votes.select_related('vote', 'vote__sitting').filter(qs & Q(vote_id__in=[x.uid for x in sqs]))
     else:
         votes = ly.votes.select_related('vote', 'vote__sitting').filter(qs)
+    votes = paginate(request, votes)
     keywords = [x.content for x in SearchQuerySet().filter(category__exact=2).models(Keyword).order_by('-hits')]
-    return render(request, 'legislator/voter_detail.html', {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'ly': ly, 'origin': qs & hsqs == Q(), 'votes': votes, 'keyword': request.GET.get('keyword', '')})
+    return render(request, 'legislator/voter_detail.html', {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'ly': ly, 'origin': len(qs & hsqs), 'votes': votes, 'keyword': request.GET.get('keyword', '')})
 
 def biller_detail(request, legislator_id, ad):
     qs = Q(content=request.GET['keyword']) if request.GET.get('keyword') else Q()
@@ -131,6 +134,7 @@ def biller_detail(request, legislator_id, ad):
         bills = ly.bills.select_related('bill').filter(legislator_id=ly.id, role='sponsor', bill_id__in=bills_id)
     else:
         bills = ly.bills.select_related('bill').filter(legislator_id=ly.id, role='sponsor')
+    bills = paginate(request, bills)
     keywords = keyword_list(3)
     return render(request, 'legislator/biller_detail.html',  {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'bills': bills, 'ly': ly, 'keyword': request.GET.get('keyword', '')})
 

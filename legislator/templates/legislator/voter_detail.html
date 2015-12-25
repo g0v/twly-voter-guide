@@ -32,29 +32,10 @@
         {% endfor %}
     </h4>
     {% endif %}
-    <div class="well well-small">
-        {{ly.name}}（{{ly.ad|ad_year}}）：
-        {% if origin %}
-            {% if ly.vote_param and ly.vote_param.total > 0 %}
-                <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=agree">{{ly.vote_param.agree}}次贊成</a>&nbsp;,&nbsp;
-                <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=abstain">{{ly.vote_param.abstain}}次棄權</a>&nbsp;,&nbsp;
-                <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=disagree">{{ly.vote_param.disagree}}次反對</a>&nbsp;,&nbsp;
-                <a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}?decision=notvote">{{ly.vote_param.not_voting}}次沒有投票</a>&nbsp;,&nbsp;
-            {% else %}
-                {% if ly.ad > 5 %}
-                    <p class="text-error">沒有參加任何表決</p>
-                {% endif %}
-            {% endif %}
-        {% else %}
-            {{votes|length}}個
-            {% if keyword %}
-                包含<font style="color: red;">"{{keyword}}"</font>的表決
-            {% else %}
-                搜尋結果
-            {% endif %}
-        {% endif %}
-    </div>
     {% if votes %}
+    <div class="well well-small">
+        {{ly.name}}：{{ votes.paginator.count }}個搜尋結果，這是第{{ votes.number }}頁（共{{ votes.paginator.num_pages }}頁）
+    </div>
     <table class="table table-bordered table-striped">
         <thead>
             <tr style="background-color: #FFFFCC;">
@@ -99,6 +80,7 @@
             {% endfor %}
         </tbody>
     </table>
+    {% include "common/pagination.html" with items=votes %}
 {% endif %}
 {% endblock ly_detail %}
 

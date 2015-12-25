@@ -2,7 +2,7 @@
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.db import connections
 
 from .models import Candidates, Terms
@@ -31,14 +31,17 @@ def districts(request, ad, county):
 
 def district(request, ad, county, constituency):
     if county == u'全國不分區' or county == u'僑居國外國民':
+        parties = Terms.objects.filter(ad=ad, county=county, constituency=constituency).distinct('party').values_list('party', flat=True)
+        party = request.GET.get('party', '')
+        qs = Q(party=party) if party else Q()
         candidates = Terms.objects.select_related('latest_term', 'legislator')\
-                                  .filter(ad=ad, county=county, constituency=constituency)\
+                                  .filter(Q(ad=ad, county=county, constituency=constituency) & qs)\
                                   .extra(select={
                                       'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
                                       'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
                                   },)\
                                   .order_by('party', 'priority')
-        return render(request, 'candidates/district_nonregional.html', {'ad': ad, 'county': county, 'candidates': candidates})
+        return render(request, 'candidates/district_nonregional.html', {'ad': ad, 'county': county, 'candidates': candidates, 'parties': parties, 'party': party})
     else:
         county_changes = {"9": {u"桃園市": u"桃園縣"}}
         candidates_previous = Terms.objects.select_related('candidate', 'latest_term', 'legislator')\
