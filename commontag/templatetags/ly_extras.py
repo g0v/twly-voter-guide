@@ -3,11 +3,19 @@ import re
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django import template
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 from legislator.models import LegislatorDetail
 
 
 register = template.Library()
+
+@register.filter(name='age')
+def age(value):
+    try:
+        return timezone.now().year - value.year
+    except:
+        return ''
 
 @register.filter(name='year_tmp')
 def year_tmp(value):

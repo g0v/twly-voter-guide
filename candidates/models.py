@@ -42,6 +42,7 @@ class Terms(models.Model):
     platform = models.TextField(blank=True, null=True)
     politicalcontributions = JSONField(null=True)
     councilor = JSONField(null=True)
+    cec_data = JSONField(null=True)
 
     class Meta:
         index_together = ['ad', 'county', 'constituency']

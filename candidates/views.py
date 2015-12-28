@@ -57,7 +57,7 @@ def district(request, ad, county, constituency):
                                       'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
                                       'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
                                   },)\
-                                  .order_by('legislator_uid')
+                                  .order_by('number', 'legislator_uid')
         standpoints = {}
         for term in [candidates_previous, candidates]:
             for candidate in term:
