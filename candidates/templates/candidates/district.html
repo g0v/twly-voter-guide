@@ -13,7 +13,7 @@
         <a class="pull-right" href="{% url 'candidates:districts' county=county ad=ad %}">☞ 其他選區</a>
         </h3>
     </div>
-    <div class="row-fluid" style="padding-bottom: 24px;">
+    <div class="row-fluid">
         {% if candidates_previous %}
         <button type="button" class="btn btn-moonc" data-toggle="collapse" data-target="#ref_candidates_previous"><font class="lead">{{ad|subtract:1|ad_year:1}} 立委選舉得票狀況 <i class="fa fa-angle-down"></i></font></button>
         <div id="ref_candidates_previous" class="collapse in">
@@ -186,7 +186,7 @@
                         {% else %}
                         <td colspan="6" style="text-align:center; vertical-align:middle;">
                         {% if candidate.cec_data.drawno %}
-                        未擔任過立委，所以沒有過去紀錄，可參考下方學經歷、政見等資訊
+                        未擔任過立委，所以沒有過去紀錄，可參考下方<a href=".#{{candidate.name}}">學經歷、政見</a>等資訊
                         {% endif %}
                         </td>
                         {% endif %}
@@ -211,11 +211,14 @@
             <li>
                 <ul>
                 {% for candidate in candidates %}
-            <div class="span4">
+                <div class="span4" id="{{candidate.name}}" style="padding-top: 60px; margin-top: -60px;">
                     <li class="media">
                         <div class="media-body well">
-                            <h4 class="media-heading"><span class='badge badge-success'>{{candidate.number}}號</span> {{candidate.name}}</h4>
+
+                            <h4 class="media-heading"><span class='badge badge-success'>{{candidate.number}}號</span> {{candidate.name}}&nbsp;<a href=".#{{candidate.name}}"><i class="fa fa-link"></i></a></h4>
                             <ul>
+                                <li>出生地：{{candidate.cec_data.placecityname}}</li>
+                                <br>
                                 <li>學歷：{{candidate.cec_data.rptedu|safe|linebreaks}}</li>
                                 <br>
                                 <li>經歷：{{candidate.cec_data.rptexp|safe|linebreaks}}</li>
@@ -224,7 +227,7 @@
                             </ul>
                         </div>
                     </li>
-            </div>
+                </div>
                 {% endfor %}
                 </ul>
             </li>
