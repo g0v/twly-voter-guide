@@ -12,6 +12,7 @@
         <h3>{{ad|ad_year}} {{county}} - {{candidates.0.district}} 候選人
         <a class="pull-right" href="{% url 'candidates:districts' county=county ad=ad %}">☞ 其他選區</a>
         </h3>
+        <span>選舉公報學經歷、政見來自中選會，資料取得時間：{{update_at}} UTC</span>
     </div>
     <div class="row-fluid">
         {% if candidates_previous %}

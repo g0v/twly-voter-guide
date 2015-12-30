@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Q
 from django.db import connections
+from django.utils import timezone
 
 from .models import Candidates, Terms
 from legislator.models import LegislatorDetail
@@ -30,6 +31,8 @@ def districts(request, ad, county):
     return render(request, 'candidates/districts.html', {'ad': ad, 'county': county, 'districts': districts})
 
 def district(request, ad, county, constituency):
+    now = timezone.now()
+    update_at = '%s-%s-%s %d:00:00' % (now.year, now.month, now.day, 19 if now.hour > 18 else 7)
     if county == u'全國不分區' or county == u'僑居國外國民':
         parties = Terms.objects.filter(ad=ad, county=county, constituency=constituency).distinct('party').values_list('party', flat=True)
         party = request.GET.get('party', '')
@@ -92,7 +95,7 @@ def district(request, ad, county, constituency):
                     c.execute(qs, [terms_id])
                     r = c.fetchone()
                     standpoints.update({candidate.id: r[0] if r else []})
-        return render(request, 'candidates/district.html', {'ad': ad, 'county': county, 'candidates': candidates, 'candidates_previous': candidates_previous, 'standpoints': standpoints})
+        return render(request, 'candidates/district.html', {'ad': ad, 'county': county, 'candidates': candidates, 'candidates_previous': candidates_previous, 'standpoints': standpoints, 'update_at': update_at})
 
 def political_contributions(request, id):
     candidate = get_object_or_404(Terms, id=id)
