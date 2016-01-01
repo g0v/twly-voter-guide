@@ -2,7 +2,6 @@ Django==1.9
 
 # db related
 psycopg2==2.5.5
-django-json-field==0.5.5
 
 # api related
 djangorestframework==3.3.1
