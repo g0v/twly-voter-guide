@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('legislator', '0001_initial'),
+        ('legislator', '__first__'),
     ]
 
     operations = [

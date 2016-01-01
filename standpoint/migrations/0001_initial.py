@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('vote', '0001_initial'),
+        ('vote', '__first__'),
     ]
 
     operations = [
