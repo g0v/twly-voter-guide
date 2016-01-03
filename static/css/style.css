@@ -526,3 +526,27 @@ footer > .container > a {
     padding-left: 20px;
 }
 
+
+/* candidates
+=================================================================== */
+
+.property-header {
+    font-weight: bold;
+}
+
+.property-body {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.political-opinion-header {
+
+}
+
+.political-opinion-body {
+    margin-left: 20px;
+}
+
+hr.candidates-separator {
+    border-top: #bbb 1px solid
+}
