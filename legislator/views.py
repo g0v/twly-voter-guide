@@ -124,7 +124,8 @@ def voter_detail(request, legislator_id, ad):
         votes = ly.votes.select_related('vote', 'vote__sitting').filter(qs)
     votes = paginate(request, votes)
     keywords = [x.content for x in SearchQuerySet().filter(category__exact=2).models(Keyword).order_by('-hits')]
-    return render(request, 'legislator/voter_detail.html', {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'ly': ly, 'origin': len(qs & hsqs), 'votes': votes, 'keyword': request.GET.get('keyword', '')})
+    get_params = '&'.join(['%s=%s' % (x, request.GET[x]) for x in ['keyword', 'conscience'] if request.GET.get(x)])
+    return render(request, 'legislator/voter_detail.html', {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'ly': ly, 'origin': len(qs & hsqs), 'votes': votes, 'keyword': request.GET.get('keyword', ''), 'get_params': get_params})
 
 def biller_detail(request, legislator_id, ad):
     qs = Q(content=request.GET['keyword']) if request.GET.get('keyword') else Q()
@@ -136,7 +137,8 @@ def biller_detail(request, legislator_id, ad):
         bills = ly.bills.select_related('bill').filter(legislator_id=ly.id, role='sponsor')
     bills = paginate(request, bills)
     keywords = keyword_list(3)
-    return render(request, 'legislator/biller_detail.html',  {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'bills': bills, 'ly': ly, 'keyword': request.GET.get('keyword', '')})
+    get_params = '&'.join(['%s=%s' % (x, request.GET[x]) for x in ['keyword'] if request.GET.get(x)])
+    return render(request, 'legislator/biller_detail.html',  {'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'bills': bills, 'ly': ly, 'keyword': request.GET.get('keyword', ''), 'get_params': get_params})
 
 def platformer_detail(request, legislator_id, ad):
     ly = get_object_or_404(LegislatorDetail, ad=ad, legislator_id=legislator_id)

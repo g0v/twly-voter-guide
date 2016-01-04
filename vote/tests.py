@@ -22,5 +22,3 @@ class VoteTest(TestCase):
     def test_vote(self):
         response = self.client.get(reverse('vote:vote_detail', kwargs={"vote_id": "08-01-YS-01-001"}))
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(reverse('vote:vote_detail', kwargs={"vote_id": "not_exist_id"}))
-        self.assertEqual(response.status_code, 302)

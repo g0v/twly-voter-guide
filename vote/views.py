@@ -53,4 +53,3 @@ def vote(request, vote_id):
         },)
     standpoints_of_vote = list(standpoints_of_vote)
     return render(request, 'vote/vote.html', {'vote': vote, 'keyword_obj': standpoints, 'standpoints_of_vote': standpoints_of_vote[:3], 'standpoints_of_vote_hide': standpoints_of_vote[3:]})
-    return redirect('vote:votes')

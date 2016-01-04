@@ -17,4 +17,5 @@ def bills(request):
         bills = Bill.objects.filter(ad=8)
     bills = paginate(request, bills)
     keywords = keyword_list(3)
-    return render(request, 'bill/bills.html', {'bills': bills, 'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'keyword': request.GET.get('keyword', '')})
+    get_params = '&'.join(['%s=%s' % (x, request.GET[x]) for x in ['keyword'] if request.GET.get(x)])
+    return render(request, 'bill/bills.html', {'bills': bills, 'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'keyword': request.GET.get('keyword', ''), 'get_params': get_params})
