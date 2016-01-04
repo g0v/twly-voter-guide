@@ -55,7 +55,7 @@
                     <a class="brand" href="/"><i class="fa fa-compass">立委投票指南</i></a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
-                            <li id="candidates"><a href="{% url 'candidates:counties' ad=9 %}" >2016候選人</a></li>
+                            <li id="candidates" class="visible-desktop"><a href="{% url 'candidates:counties' ad=9 %}" >2016候選人</a></li>
                             <li id="ly" class="dropdown visible-desktop">
                                 <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">找立委 <i class="fa fa-angle-down"></i></a>
                                 <ul class="dropdown-menu">
@@ -113,8 +113,8 @@
                                     <li><a href="{% url 'legislator:counties' %}" >全部</a></li>
                                 </ul>
                             </li>
-                            <li id="nav_bills"><a href="{% url 'bill:bills' %}">找法案</a></li>
-                            <li id="vote"><a href="{% url 'vote:votes' %}" >找表決</a></li>
+                            <li id="nav_bills" class="visible-desktop"><a href="{% url 'bill:bills' %}">找法案</a></li>
+                            <li id="vote" class="visible-desktop"><a href="{% url 'vote:votes' %}" >找表決</a></li>
                             <li id="chart_report" class="dropdown visible-desktop">
                             <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">相關圖表 <i class="fa fa-angle-down"></i></b>
                             </a>
