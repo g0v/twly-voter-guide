@@ -22,7 +22,8 @@
             <thead>
                 <tr style="font-weight:bold;background-color: #E1D0D0;">
                     <th rowspan="2">當選註記</th>
-                    <th rowspan="2">網友關注立場</th>
+                    <th rowspan="2">表決立場 <a rel="tooltip" title="立場由網友自行標註、投票產生，歡迎一起讓資料更好" data-placement="right"><i class="fa fa-question-circle"></i></a></li>
+                    </th>
                     <th rowspan="2">候選人</th>
                     <th rowspan="2">黨籍</th>
                     <th rowspan="2">性別</th>
@@ -129,7 +130,7 @@
                     <th>候選人</th>
                     <th>黨籍</th>
                     <th>年齡</th>
-                    <th>網友關注立場</th>
+                    <th>表決立場 <a rel="tooltip" title="立場由網友自行標註、投票產生，歡迎一起讓資料更好"><i class="fa fa-question-circle"></i></a></th>
                     <th>最近任期</th>
                     <th>主提案數</th>
                     <th>投票缺席率（%）</th>
@@ -245,6 +246,7 @@
     <script src="https://s3-ap-northeast-1.amazonaws.com/twly.tw/zhutil.min.js"></script>
     <script>
         $(document).ready( function() {
+            $("[rel='tooltip']").tooltip();
             $(".collapse").collapse()
             $('.price').each(function(index,ele){
                 var number = $(ele).text()

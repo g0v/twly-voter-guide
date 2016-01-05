@@ -12,7 +12,7 @@
         </div>
         <div class="tabnav">
             <ul>
-                <li class="active"><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">網友關注表決立場</a></li>
+                <li class="active"><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}">表決立場</a></li>
                 <li><a href="{% url 'legislator:voter_detail' legislator_id=ly.legislator_id ad=ly.ad %}">全表決紀錄</a></li>
             </ul>
         </div>
@@ -21,6 +21,9 @@
 
 {% block ly_detail %}
     <div class="row-fluid">
+        <div class="description">
+            立場由網友自行標註、投票產生，歡迎進入表決內容一起讓資料更好
+        </div>
     {% regroup standpoints by decision as decision_list %}
     {% for decision_group in decision_list %}
         <div class="span{% widthratio 12 decision_list|length 1 %}">
