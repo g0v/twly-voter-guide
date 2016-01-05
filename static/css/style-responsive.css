@@ -2,6 +2,13 @@
 ====================================================================== */
 @media (min-width: 1200px) {
 
+    .container-fluid {
+        padding-right: 20px;
+        padding-left: 20px;
+        *zoom: 1;
+        margin:0 50px 0 50px;
+    }
+
     #content {
         padding: 20px;
         margin-left: -2px;
@@ -39,6 +46,13 @@
 /* Tablet Portrait (devices and browsers)
 ====================================================================== */
 @media only screen and (min-width: 768px) and (max-width: 979px) {
+
+    .container-fluid {
+        padding-right: 20px;
+        padding-left: 20px;
+        *zoom: 1;
+        margin:0 50px 0 50px;
+    }
 
     #content {
         padding: 10px;
