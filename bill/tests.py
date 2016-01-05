@@ -7,7 +7,7 @@ from legislator.models import Legislator, LegislatorDetail
 
 class BillTest(TestCase):
     def setUp(self):
-        Bill.objects.create(uid="08-01-YS-01-001", api_bill_id="08-01-YS-01", ad=8, abstract="test content")
+        Bill.objects.create(uid="08-01-YS-01-001", ad=8, data={'test': 'test'})
 
     def test(self):
         response = self.client.get(reverse('bill:bills'))
