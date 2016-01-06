@@ -30,7 +30,7 @@
                 </tr>
                 <tr style="font-weight:bold;background-color: #E1D0D0;">
                     <th>候選人</th>
-                    <th>名單次序</th>
+                    <th>順位</th>
                     <th>黨籍</th>
                     <th>最近任期</th>
                     <th>主提案數 / 參與提案數</th>
@@ -83,6 +83,36 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% endif %}
+        {% if candidates.0.cec_data.drawno %}
+        <br>
+        <div >
+            {% for candidate in candidates %}
+            <div class="row" id="{{candidate.name}}">
+                <div class="span4">
+                    <h4>
+                        <span class='badge badge-success'>順位{{candidate.priority}}</span>
+                        {{candidate.name}}&nbsp;
+                        <a href=".#{{candidate.name}}"><i class="fa fa-link"></i></a>
+                    </h4>
+                    <div class="text-center"><img class="candidate-photo" src="http://g0v-data.github.io/cec-crawler/images/{{candidate.cec_data.cityno}}-{{candidate.cec_data.cityname|urlencode}}-{{candidate.cec_data.sessionname|urlencode}}-{{candidate.cec_data.drawno}}-{{candidate.cec_data.candidatename|urlencode}}.jpg"></div>
+                    <div class="property-header">出生地</div>
+                    <div class="property-body">{{candidate.cec_data.placecityname}}</div>
+                    <div class="property-header">學歷</div>
+                    <div class="property-body">{{candidate.cec_data.rptedu|safe|linebreaks}}</div>
+                    <div class="property-header">經歷</div>
+                    <div class="property-body">{{candidate.cec_data.rptexp|safe|linebreaks}}</div>
+                </div>
+                <div class="span8">
+                    <h4 class="political-opinion-header">政見</h4>
+                    <div class="political-opinion-body">
+                        {{candidate.cec_data.politics|safe|linebreaks}}
+                    </div>
+                </div>
+            </div>
+            <hr class="candidates-separator">
+            {% endfor %}
+        </div>
         {% endif %}
         <div id="disqus_thread"></div>
     </div>
