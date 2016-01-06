@@ -23,8 +23,9 @@ def reference(request):
 
 def home(request):
     if request.GET.get('name'):
-        name, county = request.GET['name'].split(u' - ')
-        person = SearchQuerySet().filter(name=name, county=county).models(Terms)
+        params = request.GET['name'].split(u' - ')
+        q = Q(name=params[0]) if len(params) == 1 else Q(name=params[0], county=params[1])
+        person = SearchQuerySet().filter(q).models(Terms)
         if person:
             return redirect(reverse('candidates:district', kwargs={"ad": person[0].ad, "county": person[0].county, "constituency": person[0].constituency}))
     results = SearchQuerySet().filter(content=request.GET['keyword']).models(Vote, Bill) if request.GET.get('keyword') else []
