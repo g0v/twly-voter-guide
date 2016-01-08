@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from .models import Candidates, Terms
 from legislator.models import LegislatorDetail
+from elections.models import Elections
 
 
 def counties(request, ad):
@@ -28,7 +29,15 @@ def districts(request, ad, county):
                                   .order_by('constituency')
     if len(districts) == 1:
         return HttpResponseRedirect(reverse('candidates:district', kwargs={'ad': ad, 'county': county, 'constituency': 1}))
-    return render(request, 'candidates/districts.html', {'ad': ad, 'county': county, 'districts': districts})
+    c = connections['default'].cursor()
+    c.execute(u'''
+        select data->%s->'duplicated'
+        from elections_elections
+        where id = '9'
+    ''', [county])
+    r = c.fetchone()
+    duplicates = r[0] if r else []
+    return render(request, 'candidates/districts.html', {'ad': ad, 'county': county, 'districts': districts, 'duplicates': duplicates})
 
 def district(request, ad, county, constituency):
     now = timezone.now()

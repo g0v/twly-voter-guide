@@ -56,6 +56,7 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'haystack',
     'legislator',
+    'elections',
     'candidates',
     'committees',
     'sittings',
