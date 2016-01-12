@@ -196,7 +196,7 @@
                         {% if candidate.councilor %}
                         <td style="text-align:center; vertical-align:middle;">
                             {% if candidate.councilor.elected %}
-                            <span class='badge badge-success'><h4>現任議員</h4></span>
+                            <span class='badge badge-success'><h4>當選議員</h4></span>
                             {% endif %}
                             <a href="http://councils.g0v.tw/candidates/2014/{{candidate.councilor.county}}/{{candidate.councilor.constituency}}/" target="_blank">參選{{candidate.councilor.county}}議員紀錄</a>
                         </td>
@@ -214,11 +214,13 @@
             <div class="row" id="{{candidate.name}}">
                 <div class="span4">
                     <h4>
-                        <span class='badge badge-success'>{{candidate.number}}號</span>
+                        <span class='badge badge-success'>{{candidate.number}} 號</span>
                         {{candidate.name}}&nbsp;
                         <a href=".#{{candidate.name}}"><i class="fa fa-link"></i></a>
                     </h4>
                     <div class="text-center"><img class="candidate-photo" src="http://g0v-data.github.io/cec-crawler/images/{{candidate.cec_data.cityno}}-{{candidate.cec_data.cityname|urlencode}}-{{candidate.cec_data.sessionname|urlencode}}-{{candidate.cec_data.drawno}}-{{candidate.cec_data.candidatename|urlencode}}.jpg"></div>
+                    <div class="property-header">黨籍</div>
+                    <div class="property-body">{{candidate.party}}</div>
                     <div class="property-header">出生地</div>
                     <div class="property-body">{{candidate.cec_data.placecityname}}</div>
                     <div class="property-header">學歷</div>
