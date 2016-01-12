@@ -3,7 +3,7 @@ twly-voter-guide [![Build Status](https://travis-ci.org/g0v/twly-voter-guide.png
 
 [立委投票指南網站](http://vote.ly.g0v.tw/)
 
-[Android App 開發](https://github.com/irisshu/g0v-twly-voter-guide-android)
+[Android App 開發](https://github.com/HMW/VoterGuide)
 
 [日本語インストールドキュメント](https://github.com/g0v/twly-voter-guide/blob/master/README.ja.md) - by @nyampire
 
