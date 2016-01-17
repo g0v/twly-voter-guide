@@ -40,8 +40,7 @@ def districts(request, ad, county):
     return render(request, 'candidates/districts.html', {'ad': ad, 'county': county, 'districts': districts, 'duplicates': duplicates})
 
 def district(request, ad, county, constituency):
-    now = timezone.now()
-    update_at = '%s-%s-%s %d:00:00' % (now.year, now.month, now.day, 19 if now.hour > 18 else 7)
+    update_at = '2016-01-17 00:00'
     if county == u'全國不分區' or county == u'僑居國外國民':
         parties = Terms.objects.filter(ad=ad, county=county, constituency=constituency).distinct('party').values_list('party', flat=True)
         party = request.GET.get('party', '')
@@ -69,7 +68,7 @@ def district(request, ad, county, constituency):
                                       'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
                                       'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
                                   },)\
-                                  .order_by('number', 'legislator_uid')
+                                  .order_by('-votes')
         standpoints = {}
         for term in [candidates_previous, candidates]:
             for candidate in term:
