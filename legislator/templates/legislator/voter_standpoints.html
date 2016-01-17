@@ -49,8 +49,8 @@
                         <div class="media-body well">
                             <div class="media-heading"><font class="lead">{{standpoint.title}}</font>：{{standpoint.times}}次
                                 <div align="right">
-                                    <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#ref_vote_{{standpoint.decision}}_{{standpoint.title}}_{{forloop.counter}}">表決內容&nbsp;<b class="caret"></b></button><br>
-                                    <div id="ref_vote_{{standpoint.decision}}_{{standpoint.title}}_{{forloop.counter}}" class="collapse">
+                                    <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#ref_vote_{{standpoint.votes.0.uid}}">表決內容&nbsp;<b class="caret"></b></button><br>
+                                    <div id="ref_vote_{{standpoint.votes.0.uid}}" class="collapse">
                                         {% for fragment in standpoint.votes %}
                                         <h4><a href="{% url 'vote:vote_detail' fragment.uid %}" target="_blank">☞ 表決{{forloop.counter}}<small>（覺得表決跟立場不符合嗎？點我來改進）</small></a></h4>
                                         <blockquote>
