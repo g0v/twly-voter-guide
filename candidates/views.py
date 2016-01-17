@@ -46,12 +46,12 @@ def district(request, ad, county, constituency):
         party = request.GET.get('party', '')
         qs = Q(party=party) if party else Q()
         candidates = Terms.objects.select_related('latest_term', 'legislator')\
-                                  .filter(Q(ad=ad, county=county, constituency=constituency) & qs)\
+                                  .filter(Q(elected=True, ad=ad, county=county, constituency=constituency) & qs)\
                                   .extra(select={
                                       'latest_ad': "select max(ld.ad) from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id",
                                       'legislator_uid': "select ld.legislator_id from legislator_legislatordetail ld where id = candidates_terms.legislator_id or id = candidates_terms.latest_term_id limit 1",
                                   },)\
-                                  .order_by('party', 'priority')
+                                  .order_by('elected', 'party', 'priority')
         return render(request, 'candidates/district_nonregional.html', {'ad': ad, 'county': county, 'candidates': candidates, 'parties': parties, 'party': party})
     else:
         county_changes = {"9": {u"桃園市": u"桃園縣"}}

@@ -26,9 +26,10 @@
         <table class="table table-bordered table-condensed table-striped sortable" >
             <thead>
                 <tr style="font-weight:bold; background-color: #9F0050;">
-                    <th colspan="10" class="lead" style="color: #eeeeee; padding-top: 10px; padding-bottom: 10px">{{ad|ad_year:1}} 立委候選人</th>
+                    <th colspan="11" class="lead" style="color: #eeeeee; padding-top: 10px; padding-bottom: 10px">{{ad|ad_year:1}} 立委候選人</th>
                 </tr>
                 <tr style="font-weight:bold;background-color: #E1D0D0;">
+                    <th>當選註記</th>
                     <th>候選人</th>
                     <th>黨籍</th>
                     <th>順位</th>
@@ -44,6 +45,11 @@
             <tbody>
                 {% for candidate in candidates %}
                     <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
+                        <td style="text-align:center; vertical-align:middle;">
+                            {% if candidate.elected %}
+                                <span class="badge badge-warning">◎</span>
+                            {% endif %}
+                        </td>
                         <td style="text-align:center; vertical-align:middle;"><a href=".#{{candidate.name}}">{{candidate.name}}</a></td>
                         <td style="text-align:center; vertical-align:middle;">{{candidate.party}}</td>
                         <td style="text-align:center; vertical-align:middle;">{{candidate.priority}}</td>
