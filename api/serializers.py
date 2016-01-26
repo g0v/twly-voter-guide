@@ -7,6 +7,7 @@ from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from vote.models import Vote, Legislator_Vote
 from bill.models import Bill, Legislator_Bill
+from standpoint.models import Standpoint
 
 
 class CommitteesSerializer(serializers.HyperlinkedModelSerializer):
@@ -64,3 +65,7 @@ class LegislatorSerializer(serializers.HyperlinkedModelSerializer):
     each_terms = LegislatorDetailSerializer(many=True, read_only=True)
     class Meta:
         model = Legislator
+
+class StandpointSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Standpoint

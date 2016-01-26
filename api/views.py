@@ -3,6 +3,8 @@ import django_filters
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import generics
+from rest_framework.decorators import api_view
+
 from .serializers import *
 from legislator.models import Legislator, LegislatorDetail, Attendance
 from candidates.models import Candidates, Terms
@@ -10,6 +12,7 @@ from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from vote.models import Vote, Legislator_Vote
 from bill.models import Bill, Legislator_Bill
+from standpoint.models import Standpoint
 
 
 class LegislatorViewSet(viewsets.ReadOnlyModelViewSet):
@@ -77,3 +80,8 @@ class Legislator_BillViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Legislator_Bill.objects.all().select_related('bill', 'legislator')
     serializer_class = Legislator_BillSerializer
     filter_fields = ('legislator', 'bill', 'role')
+
+class StandpointViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Standpoint.objects.all()
+    serializer_class = StandpointSerializer
+    filter_fields = ('title', 'vote', 'pro')

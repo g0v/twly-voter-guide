@@ -20,6 +20,7 @@ router.register(r'legislator_bill', api_views.Legislator_BillViewSet)
 router.register(r'attendance', api_views.AttendanceViewSet)
 router.register(r'candidates', api_views.CandidatesViewSet)
 router.register(r'candidates_terms', api_views.Candidates_TermsViewSet)
+router.register(r'standpoint', api_views.StandpointViewSet)
 #<--
 urlpatterns = [
     url(r'^$', ly_views.home, name='home'),
