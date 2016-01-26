@@ -37,8 +37,10 @@ def vote(request, vote_id):
             update_vote_index.delay(vote_id)
         elif request.GET.get('standpoint_id'):
             if request.GET.get('against'):
-                User_Standpoint.objects.filter(standpoint_id=request.GET['standpoint_id'], user=request.user).delete()
-                Standpoint.objects.filter(pk=request.GET['standpoint_id']).update(pro=F('pro') - 1)
+                user_standpoint = User_Standpoint.objects.filter(standpoint_id=request.GET['standpoint_id'], user=request.user)
+                if user_standpoint:
+                    user_standpoint.delete()
+                    Standpoint.objects.filter(pk=request.GET['standpoint_id']).update(pro=F('pro') - 1)
             else:
                 obj, created = User_Standpoint.objects.get_or_create(standpoint_id=request.GET['standpoint_id'], user=request.user)
                 if created:
