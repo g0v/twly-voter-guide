@@ -176,7 +176,7 @@
                         {% endif %}
                         </td>
                         <td style="text-align:center; vertical-align:middle;">
-                        {% if candidate.latest_term.ad > 7 %}
+                        {% if candidate.latest_term.ad > 1 %}
                             {{candidate.latest_term.bill_param.sponsor}}
                             <a href="{% url 'legislator:biller_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（看提案）</a>
                         {% endif %}

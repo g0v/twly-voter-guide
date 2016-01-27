@@ -11,10 +11,10 @@ from search.views import keyword_list
 
 def bills(request):
     if request.GET.get('keyword'):
-        bills_uid = [x.uid for x in SearchQuerySet().filter(content=request.GET['keyword']).models(Bill).order_by('-uid')]
+        bills_uid = [x.uid for x in SearchQuerySet().filter(content=request.GET['keyword']).models(Bill)]
         bills = Bill.objects.filter(uid__in=bills_uid)
     else:
-        bills = Bill.objects.filter(ad=8)
+        bills = Bill.objects.all().order_by('-uid')
     bills = paginate(request, bills)
     keywords = keyword_list(3)
     get_params = '&'.join(['%s=%s' % (x, request.GET[x]) for x in ['keyword'] if request.GET.get(x)])

@@ -99,29 +99,48 @@
                     {% endfor %}
             {% endif %}
             </p>
-            {% if keyword %}
-                <div class="well well-small">
-                    <font class="lead">
-                        {{ results|length }} 個有關<font style="color: red;">"{{keyword}}"</font>的表決、法案
-                    </font>
-                </div>
-            {% endif %}
-
-            {% if results %}
+        </div>
+        <div class="span2">
+        </div>
+    </div>
+    <br>
+    {% if keyword %}
+    <div class="span12">
+        <div class="span1">
+        </div>
+        <div class="span5 hero-unit">
+            <div class="well well-small">
+                <font class="lead">
+                    {{ votes|length }} 個有關<font style="color: red;">"{{keyword}}"</font>的表決
+                </font>
+            </div>
+            {% if votes %}
                 <ul class="media-list">
-                    {% for fragment in results %}
-                        {% if fragment.model_name == 'vote' %}
-                            {% include "vote/vote_summary.html" %}
-                        {% elif fragment.model_name == 'bill' %}
-                            {% include "bill/bill_summary.html" %}
-                        {% endif %}
+                    {% for fragment in votes %}
+                        {% include "vote/vote_summary.html" %}
                     {% endfor %}
                 </ul>
             {% endif %}
         </div>
-        <div class="span2">
+        <div class="span5 hero-unit">
+            <div class="well well-small">
+                <font class="lead">
+                    {{ bills|length }} 個有關<font style="color: red;">"{{keyword}}"</font>的法案
+                </font>
+            </div>
+            {% if bills %}
+                <ul class="media-list">
+                    {% for fragment in bills %}
+                        {% include "bill/bill_summary.html" %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </div>
-    <div id="disqus_thread"></div>
+        <div class="span1">
+        </div>
+    {% endif %}
+    <div class="span12">
+        <div id="disqus_thread"></div>
     </div>
 {% endblock right %}
 
