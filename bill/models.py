@@ -19,3 +19,11 @@ class Legislator_Bill(models.Model):
 
     class Meta:
         unique_together = ("legislator", "bill")
+
+class Law(models.Model):
+    bill = models.ForeignKey(Bill, null=True, related_name='laws')
+    uid = models.TextField(primary_key=True)
+    ad = models.IntegerField(db_index=True, )
+    data = JSONField(null=True)
+    def __unicode__(self):
+        return self.uid

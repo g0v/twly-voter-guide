@@ -1,0 +1,13 @@
+<ul>
+{% for element in list %}
+    <li data-toggle="collapse" data-target="#ref_bill_{{role}}_{{element.party}}"><span>{{element.party}}：{{element.legislators|length}}人 <i class="fa fa-caret-square-o-down"></i></span></li>
+    <div id="ref_bill_{{role}}_{{element.party}}" class="collapse">
+        <ul class="inline">
+        {% for ly in element.legislators %}
+            <li><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=law.ad %}">{{ly.name}}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+    <br>
+{% endfor %}
+</ul>

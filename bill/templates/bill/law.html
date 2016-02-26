@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load ly_extras %}
+
+{% block title %}
+    <title>立委投票指南:{{ law.data.title }}</title>
+    <meta property="og:title" content="立委投票指南:{{ law.data.title }}"/>
+    <meta itemprop="name" content="立委投票指南:{{ law.data.title }}">
+{% endblock title %}
+
+{% block right %}
+    {% if law %}
+    <div class="row-fluid">
+        <div id="sidebar-left" class="span2" style="margin: 10px 5px">
+            <a href="{{law.bill.data.links.關係文書}}" target="_blank" class="lead"><i class="fa fa-file-pdf-o"> 官方文件</i></a>
+            <h3>
+                <i class="fa fa-pencil"> 主提案</i>
+            </h3>
+            {% include "common/sponsor.html" with list=law.bill.data.group_list.sponsor.party_list role="sponsor" %}
+            <br>
+            <h3>
+                <i class="fa fa-users"> 連署提案</i>
+            </h3>
+            {% include "common/sponsor.html" with list=law.bill.data.group_list.cosponsor.party_list role="cosponsor" %}
+        </div>
+        <div id="content" class="span10" style="min-height: 700px; padding-bottom: 150px;">
+            <div class="page-header">
+                <h3 class="text-center">
+                    {{ law.data.title }}
+                </h3>
+                <div class="well pull-right">
+                    <span style="color:green">綠色為新增</span>
+                    <span style="color:red; text-decoration:line-through"><span style='color:#3b3b41'>紅線為刪除</span></span>
+                </div>
+            </div>
+            {% for line in law.data.lines %}
+                <div class="row-fluid">
+                    <div class="span12" id="{{forloop.counter}}" style="padding-top: 60px; margin-top: -60px;">
+                        <div class="span1" align="center">
+                            <a href=".#{{forloop.counter}}"><i class="fa fa-link fa-2x"></i></a>
+                        </div>
+                        <div class="span3">
+                            <p>
+                            {% for fragment in line.fragment %}
+                                {{fragment.from}}
+                            {% endfor %}
+                            </p>
+                        </div>
+                        <div class="span1" align="center">
+                            <i class="fa fa-arrow-right fa-2x"></i>
+                        </div>
+                        <div class="span3">
+                            <p>
+                            {% for fragment in line.fragment %}
+                            {% if fragment.tag == 'equal' %}
+                                <span>{{fragment.to}}</span>
+                            {% elif fragment.tag == 'insert' %}
+                                <span style="color:green">{{fragment.to}}</span>
+                            {% else %}
+                                <span style="color:red; text-decoration:line-through"><span style='color:#3b3b41'>{{fragment.from}}</span></span>
+                                <span style="color:green">{{fragment.to}}</span>
+                            {% endif %}
+                            {% endfor %}
+                            </p>
+                        </div>
+                        <div class="span1" align="center">
+                            <i class="fa fa-commenting-o fa-2x"></i>
+                            <br>
+                            <small>說明</small>
+                        </div>
+                        <div class="span3">
+                            <p>{{line.description}}</p>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+{% endblock right %}
+
+{% block script %}
+    <script>
+        $(document).ready( function() {
+            $('#nav_bills').addClass('active');
+            $("[rel='tooltip']").tooltip();
+        });
+    </script>
+{% endblock script %}

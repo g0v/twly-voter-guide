@@ -11,7 +11,7 @@
     <div class="span2">
     </div>
     <div class="span8 hero-unit" style="padding-bottom: 30px;">
-        {% include "common/search_keyword_form.html" with placeholder_text="例:軍事審判 土地徵收 會計法" %}
+        {% include "common/search_keyword_form.html" with placeholder_text="例:軍事審判 土地徵收" %}
         {% if hot_keyword %}
             <h4>熱門搜尋：
                 {% for keyword in hot_keyword %}
@@ -34,10 +34,6 @@
     <div class="span2">
     </div>
 {% endblock right %}
-
-{% block backtotop %}
-    {{ block.super }}
-{% endblock backtotop %}
 
 {% block script %}
     {% include "common/keyword_auto_complete.html" %}

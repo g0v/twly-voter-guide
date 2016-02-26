@@ -4,7 +4,7 @@
     <div class="media-body well">
         <div class="media-heading">
             <h4>{{fragment.data.提案名稱}}</h4>
-            <span class="pull-right">提案日期：{{fragment.data.提案日期}}</span>
+            <span class="pull-right">提案日期：{{fragment.data.date}}</span>
         </div>
         <div>
             <h5 class="text-success">主提案</h5>
@@ -19,7 +19,11 @@
             </blockquote>
         </div>
         <h4>
-            <a href="{{fragment.data.links.關係文書}}" target="_blank">☞ 查看詳細草案內容</a>
+            {% if fragment.laws.all %}
+            <a href="{% url 'bill:bill' fragment.uid %}" target="_blank"><i class="fa fa-file-pdf-o"> 法律條文對照表</i></a>
+            {% else %}
+            <a href="{{fragment.data.links.關係文書}}" target="_blank"><i class="fa fa-file-pdf-o"> 法律條文對照表</i></a>
+            {% endif %}
         </h4>
     </div>
 </li>

@@ -129,12 +129,12 @@ def voter_detail(request, legislator_id, ad):
 
 def biller_detail(request, legislator_id, ad):
     qs = Q(content=request.GET['keyword']) if request.GET.get('keyword') else Q()
-    bills_id = [x.uid for x in SearchQuerySet().filter(qs).models(Bill).order_by('-uid')]
     ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
     if len(qs):
-        bills = ly.bills.select_related('bill').filter(legislator_id=ly.id, role='sponsor', bill_id__in=bills_id)
+        bills_id = [x.uid for x in SearchQuerySet().filter(qs).models(Bill).order_by('-uid')]
+        bills = ly.bills.select_related('bill').prefetch_related('bill__laws').filter(legislator_id=ly.id, role='sponsor', bill_id__in=bills_id)
     else:
-        bills = ly.bills.select_related('bill').filter(legislator_id=ly.id, role='sponsor')
+        bills = ly.bills.select_related('bill').prefetch_related('bill__laws').filter(legislator_id=ly.id, role='sponsor')
     bills = paginate(request, bills)
     keywords = keyword_list(3)
     get_params = '&'.join(['%s=%s' % (x, request.GET[x]) for x in ['keyword'] if request.GET.get(x)])
