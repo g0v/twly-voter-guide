@@ -15,3 +15,6 @@ class Legislator_Committees(models.Model):
     ad = models.IntegerField()
     session = models.IntegerField()
     chair = models.BooleanField()
+
+    class Meta:
+        unique_together = ("legislator", "committee", "ad", "session")

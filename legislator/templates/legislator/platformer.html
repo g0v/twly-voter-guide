@@ -12,7 +12,12 @@
     {% if ly %}
         <div>
             <font class="lead">政見：</font><br>
-            {{ ly.platform|linebreaksbr }}
+            {{ ly.elected_candidate }}
+            {% if ly.elected_candidate %}
+                {{ ly.elected_candidate.cec_data.rptpolitics|safe|linebreaks }}
+            {% elif ly.platform %}
+                {{ ly.platform|linebreaksbr }}
+            {% endif %}
         </div>
     {% endif %}
 {% endblock ly_detail %}
