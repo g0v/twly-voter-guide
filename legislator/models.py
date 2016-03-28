@@ -21,6 +21,7 @@ class Legislator(models.Model):
     uid = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
     former_names = models.CharField(max_length=100, blank=True, null=True)
+    identifiers = JSONField(null=True)
     def __unicode__(self):
         return self.name
 
