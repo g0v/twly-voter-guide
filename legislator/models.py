@@ -14,6 +14,10 @@ class Attendance(models.Model):
     sitting = models.ForeignKey('sittings.Sittings', to_field="uid")
     category = models.CharField(db_index=True, max_length=100)
     status = models.CharField(db_index=True, max_length=100)
+
+    class Meta:
+        unique_together = ("legislator", "sitting", "category")
+
     def __unicode__(self):
         return self.sitting
 
