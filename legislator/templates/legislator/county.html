@@ -14,7 +14,8 @@
             <font class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">其他屆<b class="caret"></b></a>
             <ul class="dropdown-menu">
-                <li><a href="{% url 'legislator:county' county %}" ><b>第8屆</b><small> 2012~2016</small></a></li>
+                <li><a href="{% url 'legislator:county' county=county ad=9 %}" ><b>第9屆(本屆)</b><small> 2016~</small></a></li>
+                <li><a href="{% url 'legislator:county' county=county ad=8 %}" ><b>第8屆</b><small> 2012~2016</small></a></li>
                 <li><a href="{% url 'legislator:county' county=county ad=7 %}" ><b>第7屆</b><small> 2008~2012</small></a></li>
                 <li><a href="{% url 'legislator:county' county=county ad=6 %}" ><b>第6屆</b><small> 2005~2008</small></a></li>
                 <li><a href="{% url 'legislator:county' county=county ad=5 %}" ><b>第5屆</b><small> 2002~2005</small></a></li>
