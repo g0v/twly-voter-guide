@@ -1,7 +1,15 @@
 {
-    "author": "thewayiam",
-    "status": "alpha",
     "name": "twly-voter-guide",
+    "name_zh": "立委投票指南",
+    "status": "Alpha",
+    "tags": [
+        "twly",
+        "legislator",
+        "Django",
+        "python"
+    ],
+    "license": "CC0-1.0",
+    "author": "thewayiam",
     "description": "Taiwan Legislators Voter Guide",
     "description_zh": "立委投票指南",
     "homepage": "http://vote.ly.g0v.tw/",
@@ -9,36 +17,25 @@
         "type": "git",
         "url": "https://github.com/g0v/twly-voter-guide"
     },
-    "licenses": [
-    {
-        "type": "CC0 1.0 Universal"
-    }
+    "audience": [
+        "public"
     ],
-        "keywords": [
-            "twly",
-        "legislator",
-        "Django",
-        "python"
-            ],
-        "audience": [
-            "public"
-            ],
-        "products": [
-            "website", "api" 
-            ],
-        "projects": [
-            "twly-voter-guide",
+    "products": [
+        "website", "api" 
+    ],
+    "projects": [
+        "twly-voter-guide",
         "twly_crawler"
-            ],
-        "contributors": [
-            "wildjcrt",
-            "yhsiang",
-            "audreyt",
-            "thewayiam"
-            ],
-        "needs": [
-            "writer",
-            "programmer",
-            "designer"
-            ]
+    ],
+    "contributors": [
+        "wildjcrt",
+        "yhsiang",
+        "audreyt",
+        "thewayiam"
+    ],
+    "needs": [
+        "writer",
+        "programmer",
+        "designer"
+    ]
 }
