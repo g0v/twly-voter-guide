@@ -29,4 +29,4 @@ librabbitmq==1.6.1
 
 # others
 django-pagination==1.0.7
-django-debug-toolbar==1.4
+django-debug-toolbar==1.5
