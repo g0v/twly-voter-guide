@@ -1,17 +1,14 @@
-Django==1.9.4
+Django==1.9.13
 
 # db related
-psycopg2==2.5.5
+psycopg2==2.6.2
 
 # api related
 djangorestframework==3.3.1
 django-filter==0.11
 
 # deploy related
-dj-database-url==0.3.0
-dj-static==0.0.6
-gunicorn==19.1.1
-static==0.4
+gunicorn==19.6.0
 
 # testing related
 coverage==3.7.1
@@ -24,7 +21,7 @@ django-haystack==2.4.0
 python-social-auth==0.2.7
 
 # celery
-celery==3.1.18
+celery==3.1.23
 librabbitmq==1.6.1
 
 # others
