@@ -6,7 +6,7 @@ from candidates.models import Candidates, Terms
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from vote.models import Vote, Legislator_Vote
-from bill.models import Bill, Legislator_Bill
+from bill.models import Bill, Legislator_Bill, Law
 from standpoint.models import Standpoint
 
 
@@ -37,6 +37,10 @@ class BillSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Bill
         fields = ('url', 'uid', 'ad', 'data')
+
+class LawSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Law
 
 class AttendanceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

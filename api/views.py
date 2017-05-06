@@ -11,7 +11,7 @@ from candidates.models import Candidates, Terms
 from sittings.models import Sittings
 from committees.models import Committees, Legislator_Committees
 from vote.models import Vote, Legislator_Vote
-from bill.models import Bill, Legislator_Bill
+from bill.models import Bill, Legislator_Bill, Law
 from standpoint.models import Standpoint
 
 
@@ -70,6 +70,11 @@ class Legislator_VoteViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Legislator_Vote.objects.all().select_related('vote', 'legislator')
     serializer_class = Legislator_VoteSerializer
     filter_class = Legislator_VoteFilter
+
+class LawViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Law.objects.all().select_related('bill')
+    serializer_class = LawSerializer
+    filter_fields = ('bill', 'uid', 'ad', 'data')
 
 class BillViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Bill.objects.all().prefetch_related('proposer')
