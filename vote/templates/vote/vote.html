@@ -24,52 +24,21 @@
     </div>
     {% endif %}
     <div class="row-fluid">
-        <div class="span5">
-            <form action="" method="get" class="form-inline" id="form">
-                {% csrf_token %}
-                <br>
-                <fieldset>
-                    <label>請輸入您覺得最能代表這個表決的標籤：</label>
-                    {% if user.is_authenticated %}
-                        <input type="search" name="keyword" id="keyword" class="span4" maxlength="20" placeholder="建議動詞+名詞的命題">
-                        <button type="submit" class="btn">確定</button>
-                    {% else %}
-                        <a href="/login/facebook/?next={% url 'vote:vote_detail' vote.uid %}"><i class="fa fa-sign-in"> 登入加標籤</i></a>
-                    {% endif %}
-                </fieldset>
-            </form>
-            {% include "common/vote_standpoint_row.html" with standpoints=standpoints_of_vote %}
-            {% if standpoints_of_vote_hide %}
-            <a data-toggle="collapse" data-target="#other_tags">其他標籤</a>
-            <div id="other_tags" class="collapse in">
-                {% include "common/vote_standpoint_row.html" with standpoints=standpoints_of_vote_hide %}
-            </div>
-            {% endif %}
-            <div class="hero-unit">
-                <span class="badge badge-important pull-right"><font class="lead">{{vote.result|vote_result:'cht'}}</font></span>
-                <a href="{{vote.sitting.links.pdf}}" target="_blank"><i class="fa fa-file-pdf-o"> 立院會議記錄(pdf)</i></a>
-                <p class="text-success">表決日期：{{ vote.sitting.date|date:"Y-m-d" }}</p>
-                <p>{{ vote.content|linebreaksbr }}</p>
-            </div>
-        </div><!--end: span -->
-        <div class="span7">
-            <br>
+        <div class="span3">
             <div class="row-fluid">
             {% for fragment in vote.results %}
-                <div class="span6">
+                <div class="span12">
                     <h3>
                         {% if fragment.decision == "反對" %}
-                        <i class="fa fa-times-circle"> </i>
+                            <i class="fa fa-times-circle text-error">
                         {% elif fragment.decision == "贊成" %}
-                        <i class="fa fa-check-circle"> </i>
+                            <i class="fa fa-check-circle text-success">
+                        {% elif fragment.decision == "沒投票" %}
+                            <i class="fa fa-bed muted">
                         {% else %}
-                            {% if fragment.decision == "棄權" %}
-                            <i class="fa fa-question-circle"> </i>
-                            {% elif fragment.decision == "沒投票" %}
-                            <i class="fa fa-bed"> </i>
-                            {% endif %}
+                            <i class="fa fa-question-circle text-warning">
                         {% endif %}
-                        {{ fragment.decision }}
+                        {{ fragment.decision }} </i>
                     </h3>
                     <ul>
                     {% for element in fragment.party_list %}
@@ -81,21 +50,67 @@
                             {% endfor %}
                             </ul>
                         </div>
-                        <br>
                     {% endfor %}
                     </ul>
                 </div><!--end: span -->
             {% endfor %}
             </div><!--end: row-fluid -->
-            <hr>
-            <div id="disqus_thread"></div>
             {% endif %}
         </div><!--end: span -->
+
+        <div class="span5">
+            <div class="hero-unit">
+                <span class="badge badge-important pull-right"><font class="lead">{{vote.result|vote_result:'cht'}}</font></span>
+                <a href="{{vote.sitting.links.pdf}}" target="_blank"><i class="fa fa-file-pdf-o"> 立院會議記錄(pdf)</i></a>
+                <p class="text-success">表決日期：{{ vote.sitting.date|date:"Y-m-d" }}</p>
+                <p>{{ vote.content|linebreaksbr }}</p>
+            </div>
+        </div><!--end: span -->
+
+        <div class="span4" style="background-color: #ffff001a">
+            <form action="" method="post" class="form-inline">
+                {% csrf_token %}
+                <br>
+                <fieldset>
+                    <label>請輸入最能代表這個提案的標籤：</label>
+                    {% if user.is_authenticated %}
+                        <input type="search" name="keyword" id="keyword" maxlength="20" placeholder="建議:動+名詞，如降屯房稅">
+                        <button type="submit" class="btn">確定</button>
+                    {% else %}
+                        <a href="/login/facebook/?next={% url 'vote:vote_detail' vote.uid %}"><i class="fa fa-sign-in"> 登入加標籤</i></a>
+                    {% endif %}
+                </fieldset>
+                {% with size=3 %}
+                {% for standpoint in standpoints_of_vote %}
+                    {% if forloop.counter0 == size %}
+                        <button type="button" class="btn " data-toggle="collapse" data-target="#ref_more"><font>..... 其他標籤 <i class="fa fa-angle-down"></i></font></button>
+                        <div id="ref_more" class="collapse">
+                    {% endif %}
+                    <h4>{{standpoint.pro}}人認為是
+                        <span class="label label-success">{{standpoint}}</span>
+                        {% if user.is_authenticated %}
+                            {% if standpoint.have_voted %}
+                                <button name="against" class="btn" value="{{standpoint.id}}">取消 +1</button>
+                            {% else %}
+                                <button name="pro" class="btn" value="{{standpoint.id}}">+1</button>
+                            {% endif %}
+                        {% else %}
+                        <a href="/login/facebook/?next={% url 'bills:bill_detail' county=bill.county bill_id=bill.uid %}" class="btn btn-default"><i class="fa fa-sign-in"> 登入投票</i></a>
+                        {% endif %}
+                    </h4>
+                {% endfor %}
+                {% if standpoints_of_bill|length > size %}
+                    </div>
+                {% endif %}
+                {% endwith %}
+            </form>
+        </div>
     </div><!--end: row-fluid -->
+    <hr>
+    <div id="disqus_thread"></div>
 {% endblock right %}
 
 {% block script %}
-    {% include "vote/vote_d3_pie_chart.html" %}
     {% include "common/keyword_auto_complete.html" %}
     <script>
         $(document).ready( function() {

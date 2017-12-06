@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q, F, Sum
 from django.db import connections
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import IntegrityError, transaction
 
 from haystack.query import SearchQuerySet
 
@@ -28,30 +29,26 @@ def votes(request):
     return render(request, 'vote/votes.html', {'votes': votes, 'conscience': request.GET.get('conscience'), 'keyword': request.GET.get('keyword', ''), 'keyword_obj': keywords, 'hot_keyword': keywords[:5], 'hot_standpoints': standpoints[:5], 'get_params': get_params})
 
 def vote(request, vote_id):
-    vote = get_object_or_404(Vote.objects.select_related('sitting'), pk=vote_id)
-    if request.GET:
-        if not request.user.is_authenticated():
-            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.get_full_path()))
-        if request.GET.get('keyword'):
-            Standpoint.objects.get_or_create(title=request.GET['keyword'].strip(), vote_id=vote_id)
-            update_vote_index.delay(vote_id)
-        elif request.GET.get('standpoint_id'):
-            if request.GET.get('against'):
-                user_standpoint = User_Standpoint.objects.filter(standpoint_id=request.GET['standpoint_id'], user=request.user)
-                if user_standpoint:
-                    user_standpoint.delete()
-                    Standpoint.objects.filter(pk=request.GET['standpoint_id']).update(pro=F('pro') - 1)
-            else:
-                obj, created = User_Standpoint.objects.get_or_create(standpoint_id=request.GET['standpoint_id'], user=request.user)
-                if created:
-                    Standpoint.objects.filter(pk=request.GET['standpoint_id']).update(pro=F('pro') + 1)
-            update_vote_index.delay(vote_id)
-    standpoints = list(Standpoint.objects.filter(pro__gt=0).values_list('title', flat=True).distinct())
+
+    vote = get_object_or_404(Vote.objects.select_related('sitting'), uid=vote_id)
+    if request.user.is_authenticated():
+        if request.POST:
+            with transaction.atomic():
+                if request.POST.get('keyword', '').strip():
+                    standpoint_id = u'vote-%s-%s' % (vote_id, request.POST['keyword'].strip())
+                    Standpoint.objects.get_or_create(uid=standpoint_id, title=request.POST['keyword'].strip(), vote_id=vote_id, user=request.user)
+                elif request.POST.get('pro'):
+                    User_Standpoint.objects.create(standpoint_id=request.POST['pro'], user=request.user)
+                    Standpoint.objects.filter(id=request.POST['pro']).update(pro=F('pro') + 1)
+                elif request.POST.get('against'):
+                    User_Standpoint.objects.get(standpoint_id=request.POST['against'], user=request.user).delete()
+                    Standpoint.objects.filter(id=request.POST['against']).update(pro=F('pro') - 1)
+
     standpoints_of_vote = Standpoint.objects.filter(vote_id=vote_id)\
                                             .order_by('-pro')
     if request.user.is_authenticated():
         standpoints_of_vote = standpoints_of_vote.extra(select={
             'have_voted': "SELECT true FROM standpoint_user_standpoint su WHERE su.standpoint_id = standpoint_standpoint.id AND su.user_id = %s" % request.user.id,
         },)
-    standpoints_of_vote = list(standpoints_of_vote)
-    return render(request, 'vote/vote.html', {'vote': vote, 'keyword_obj': standpoints, 'standpoints_of_vote': standpoints_of_vote[:3], 'standpoints_of_vote_hide': standpoints_of_vote[3:]})
+    standpoints = list(Standpoint.objects.filter(vote__isnull=False, pro__gt=0).values_list('title', flat=True).distinct())
+    return render(request, 'vote/vote.html', {'vote': vote, 'keyword_obj': standpoints, 'standpoints_of_vote': standpoints_of_vote})
