@@ -21,16 +21,14 @@
         <table class="table table-bordered table-condensed table-striped sortable" >
             <thead>
                 <tr style="font-weight:bold;background-color: #E1D0D0;">
-                    <th rowspan="2">當選註記</th>
+                    <th rowspan="2">候選人</th>
+                    <th rowspan="2">當選／得票</th>
                     <th rowspan="2">表決立場 <a rel="tooltip" title="立場由網友自行標註、投票產生，歡迎一起讓資料更好" data-placement="right"><i class="fa fa-question-circle"></i></a></li>
                     </th>
-                    <th rowspan="2">候選人</th>
                     <th rowspan="2">黨籍</th>
                     <th rowspan="2">性別</th>
                     <th rowspan="2">出生年次</th>
                     <th rowspan="2">選前最近任期</th>
-                    <th rowspan="2">得票數</th>
-                    <th rowspan="2">得票率</th>
                     <th colspan="3">競選政治獻金</th>
                     <th rowspan="2">財產申報</th>
                 </tr>
@@ -45,9 +43,21 @@
                 {% for candidate in candidates_previous %}
                     <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
                         <td style="text-align:center; vertical-align:middle;">
-                            {% if candidate.elected %}
-                                <span class="badge badge-warning">◎</span>
+                            {% if candidate.legislator_uid %}
+                                {% if candidate.latest_ad > 5 %}
+                                    <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.legislator_uid ad=candidate.latest_ad %}">{{candidate.name}}</a>
+                                {% else %}
+                                    <a href="{% url 'legislator:info' legislator_id=candidate.legislator_uid ad=candidate.latest_ad %}">{{candidate.name}}</a>
+                                {% endif %}
+                            {% else %}
+                                {{candidate.name}}
                             {% endif %}
+                        </td>
+                        <td style="text-align:center; vertical-align:middle;">
+                            {% if candidate.elected %}
+                                <i class="fa fa-flag text-success fa-lg"></i>
+                            {% endif %}
+                            {{candidate.votes}}
                         </td>
                         <td style="vertical-align:middle;">
                             {% with sp=standpoints|json_lookup:candidate.id %}
@@ -58,17 +68,6 @@
                                 <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.legislator_uid ad=candidate.latest_ad %}" >看更多...</a>
                             {% endif %}
                             {% endwith %}
-                        </td>
-                        <td style="text-align:center; vertical-align:middle;">
-                            {% if candidate.legislator_uid %}
-                                {% if candidate.latest_ad > 5 %}
-                                    <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.legislator_uid ad=candidate.latest_ad %}">{{candidate.name}}</a>
-                                {% else %}
-                                    <a href="{% url 'legislator:info' legislator_id=candidate.legislator_uid ad=candidate.latest_ad %}">{{candidate.name}}</a>
-                                {% endif %}
-                            {% else %}
-                                {{candidate.name}}
-                            {% endif %}
                         </td>
                         <td style="text-align:center; vertical-align:middle;">
                             {{candidate.party}}
@@ -88,12 +87,6 @@
                             {% endif %}
                         </td>
                         <td style="text-align:center; vertical-align:middle;">
-                            {{candidate.votes}}
-                        </td>
-                        <td style="text-align:center; vertical-align:middle;">
-                            {% widthratio candidate.votes_percentage 1 100 %} ％
-                        </td>
-                        <td style="text-align:center; vertical-align:middle;">
                             {% if candidate.politicalcontributions %}
                                 <a href="{% url 'candidates:political_contributions' id=candidate.id %}#d3_in"><font class="price">{{candidate.politicalcontributions.in_total}}</font></a>
                             {% endif %}
@@ -110,7 +103,7 @@
                         </td>
                         <td style="text-align:center; vertical-align:middle;">
                             {% if candidate.legislator_uid %}
-                                <a href="http://sunshine.cy.g0v.tw/people/{{candidate.name}}/property/overview/" target="_blank">{{candidate.name}}</a>
+                                <a href="http://sunshine.cy.g0v.tw/people/{{candidate.name}}/property/overview/" target="_blank">財產申報</a>
                             {% endif %}
                         </td>
                     </tr>
@@ -127,16 +120,14 @@
                     <th colspan="13" class="lead" style="color: #eeeeee; padding-top: 10px; padding-bottom: 10px">{{ad|ad_year:1}} 立委候選人</th>
                 </tr>
                 <tr style="font-weight:bold;background-color: #E1D0D0;">
-                    <th>當選註記</th>
-                    <th>得票數</th>
-                    <th>得票率</th>
                     <th>候選人</th>
+                    <th>當選／得票</th>
                     <th>黨籍</th>
                     <th>年齡</th>
                     <th>表決立場 <a rel="tooltip" title="立場由網友自行標註、投票產生，歡迎一起讓資料更好"><i class="fa fa-question-circle"></i></a></th>
                     <th>最近任期</th>
                     <th>數字統計</th>
-                    <th>財產申報</th>
+                    <th></th>
                     <th>上次競選政治獻金</th>
                     <th>議員資料</th>
                 </tr>
@@ -144,15 +135,16 @@
             <tbody>
                 {% for candidate in candidates %}
                     <tr style="background-color: {% cycle 'gainsboro' 'white' %};">
+                        <td style="text-align:center; vertical-align:middle;" nowrap>
+                            <a href="./#{{candidate.name}}">{{candidate.name}}</a>
+                        </td>
                         <td style="text-align:center; vertical-align:middle;">
                             {% if candidate.elected %}
-                                <span class="badge badge-warning">◎</span>
+                                <i class="fa fa-flag text-success fa-lg"></i>
                             {% endif %}
+                            {{candidate.votes}}
                         </td>
-                        <td style="text-align:center; vertical-align:middle;">{{candidate.votes}}</td>
-                        <td style="text-align:center; vertical-align:middle;">{% widthratio candidate.votes_percentage 1 1 %} ％</td>
-                        <td style="text-align:center; vertical-align:middle;">{{candidate.name}}</td>
-                        <td style="text-align:center; vertical-align:middle;">{{candidate.party}}</td>
+                        <td style="vertical-align:middle;">{{candidate.party}}</td>
                         <td style="text-align:center; vertical-align:middle;">{{candidate.candidate.birth|age}}</td>
                         {% if candidate.latest_term_id %}
                         <td style="vertical-align:middle;">
@@ -191,9 +183,9 @@
                             <a href="http://sunshine.cy.g0v.tw/people/{{candidate.name}}/property/overview/" target="_blank">財產申報</a>
                         </td>
                         {% else %}
-                        <td colspan="4" style="text-align:center; vertical-align:middle;">
+                        <td colspan="4" style="vertical-align:middle;">
                             {% if candidate.cec_data.drawno %}
-                            未擔任過立委，所以沒有過去紀錄，可參考下方<a href=".#{{candidate.name}}">學經歷、政見</a>等資訊
+                            未擔任過立委沒有過去紀錄，可參考下方<a href=".#{{candidate.name}}">學經歷、政見</a>等資訊
                             {% endif %}
                         </td>
                         {% endif %}
@@ -207,7 +199,7 @@
                             {% endif %}
                         </td>
                         {% if candidate.councilor %}
-                        <td style="text-align:center; vertical-align:middle;">
+                        <td style="vertical-align:middle;">
                             {% if candidate.councilor.elected %}
                             <span class='badge badge-success'><h4>當選議員</h4></span>
                             {% endif %}
