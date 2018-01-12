@@ -135,10 +135,9 @@
                     <th>年齡</th>
                     <th>表決立場 <a rel="tooltip" title="立場由網友自行標註、投票產生，歡迎一起讓資料更好"><i class="fa fa-question-circle"></i></a></th>
                     <th>最近任期</th>
-                    <th>主提案數</th>
-                    <th>投票缺席率（%）</th>
-                    <th>院會缺席次數</th>
+                    <th>數字統計</th>
                     <th>財產申報</th>
+                    <th>上次競選政治獻金</th>
                     <th>議員資料</th>
                 </tr>
             </thead>
@@ -167,42 +166,46 @@
                         {% endwith %}
                         </td>
                         <td style="text-align:center; vertical-align:middle;">
-                        {{candidate.latest_term.term_start|date:"Y"}}~
-                        {% if candidate.latest_term.term_end.date %}
-                        {{candidate.latest_term.term_end.date|year_tmp}}
-                        {% endif %}
-                        {% if candidate.latest_term.ad > 7 %}
-                            <a href="{% url 'legislator:platformer_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（當時競選政見）</a>
-                        {% endif %}
+                            {{candidate.latest_term.term_start|date:"Y"}}~
+                            {% if candidate.latest_term.term_end.date %}
+                                {{candidate.latest_term.term_end.date|year_tmp}}
+                            {% endif %}
+                            {% if candidate.latest_term.ad > 7 %}
+                                <a href="{% url 'legislator:platformer_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（競選政見）</a>
+                            {% endif %}
+                        </td>
+                        <td style="vertical-align:middle;">
+                            <ul>
+                            {% if candidate.latest_term.ad > 1 %}
+                                <li>
+                                    <a href="{% url 'legislator:biller_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}">{{candidate.latest_term.bill_param.sponsor}} 次主提案</a>
+                                </li>
+                            {% endif %}
+                            {% if candidate.latest_term.ad > 5 %}
+                                <li>投票缺席率：{{candidate.latest_term.vote_param.not_voting}} 次（{{candidate.latest_term.vote_param.not_voting|divide:candidate.latest_term.vote_param.total}} %）</li>
+                                <li>議會缺席率：{{candidate.latest_term.attendance_param.absent}} 次<br>（{{candidate.latest_term.attendance_param.absent|divide:candidate.latest_term.attendance_param.total}} %）</li>
+                            {% endif %}
+                            </ul>
                         </td>
                         <td style="text-align:center; vertical-align:middle;">
-                        {% if candidate.latest_term.ad > 1 %}
-                            {{candidate.latest_term.bill_param.sponsor}}
-                            <a href="{% url 'legislator:biller_detail' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（看提案）</a>
-                        {% endif %}
-                        </td>
-                        <td style="text-align:center; vertical-align:middle;">
-                        {% if candidate.latest_term.ad > 5 %}
-                            {{candidate.latest_term.vote_param.not_voting}} 次<br>（投票缺席率{{candidate.latest_term.vote_param.not_voting|divide:candidate.latest_term.vote_param.total}} %）
-                            <a href="{% url 'legislator:voter_standpoints' legislator_id=candidate.latest_term.legislator_id ad=candidate.latest_term.ad %}"><br>（看表決）</a>
-                        {% endif %}
-                        </td>
-                        <td style="text-align:center; vertical-align:middle;">
-                        {% if candidate.latest_term.ad > 5 %}
-                            {{candidate.latest_term.attendance_param.absent}} 次<br>（缺席率{{candidate.latest_term.attendance_param.absent|divide:candidate.latest_term.attendance_param.total}} %）
-                        {% endif %}
-                        </td>
-                        <td style="text-align:center; vertical-align:middle;">
-                            <a href="http://sunshine.cy.g0v.tw/people/{{candidate.name}}/property/overview/" target="_blank">{{candidate.name}}</a>
+                            <a href="http://sunshine.cy.g0v.tw/people/{{candidate.name}}/property/overview/" target="_blank">財產申報</a>
                         </td>
                         {% else %}
-                        <td colspan="6" style="text-align:center; vertical-align:middle;">
-                        {% if candidate.cec_data.drawno %}
-                        未擔任過立委，所以沒有過去紀錄，可參考下方<a href=".#{{candidate.name}}">學經歷、政見</a>等資訊
-                        {% endif %}
+                        <td colspan="4" style="text-align:center; vertical-align:middle;">
+                            {% if candidate.cec_data.drawno %}
+                            未擔任過立委，所以沒有過去紀錄，可參考下方<a href=".#{{candidate.name}}">學經歷、政見</a>等資訊
+                            {% endif %}
                         </td>
                         {% endif %}
-
+                        <td style="vertical-align:middle;" nowrap>
+                            {% if candidate.politicalcontributions %}
+                                <a href="{% url 'candidates:political_contributions' id=candidate.id %}#d3_in">收：<font class="price">{{candidate.politicalcontributions.in_total}}</font></a>
+                                <br>
+                                <a href="{% url 'candidates:political_contributions' id=candidate.id %}#d3_out">支：<font class="price">{{candidate.politicalcontributions.out_total}}</font></a>
+                                <br>
+                                餘：<font class="price">{{candidate.politicalcontributions.balance}}</font>
+                            {% endif %}
+                        </td>
                         {% if candidate.councilor %}
                         <td style="text-align:center; vertical-align:middle;">
                             {% if candidate.councilor.elected %}
