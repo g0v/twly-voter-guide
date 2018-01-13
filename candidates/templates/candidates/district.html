@@ -21,22 +21,16 @@
         <table class="table table-bordered table-condensed table-striped sortable" >
             <thead>
                 <tr style="font-weight:bold;background-color: #E1D0D0;">
-                    <th rowspan="2">候選人</th>
-                    <th rowspan="2">當選／得票</th>
-                    <th rowspan="2">表決立場 <a rel="tooltip" title="立場由網友自行標註、投票產生，歡迎一起讓資料更好" data-placement="right"><i class="fa fa-question-circle"></i></a></li>
+                    <th>候選人</th>
+                    <th>當選／得票</th>
+                    <th>表決立場 <a rel="tooltip" title="立場由網友自行標註、投票產生，歡迎一起讓資料更好" data-placement="right"><i class="fa fa-question-circle"></i></a></li>
                     </th>
-                    <th rowspan="2">黨籍</th>
-                    <th rowspan="2">性別</th>
-                    <th rowspan="2">出生年次</th>
-                    <th rowspan="2">選前最近任期</th>
-                    <th colspan="3">競選政治獻金</th>
-                    <th rowspan="2">財產申報</th>
-                </tr>
-                <tr style="background-color: #CCFFCC;">
-                    <th>收入</th>
-                    <th>支出</th>
-                    <th>餘額</th>
-                    </tr>
+                    <th>黨籍</th>
+                    <th>性別</th>
+                    <th>出生年次</th>
+                    <th>選前最近任期</th>
+                    <th>競選政治獻金</th>
+                    <th>財產申報</th>
                 </tr>
             </thead>
             <tbody>
@@ -86,20 +80,19 @@
                                 {% endif %}
                             {% endif %}
                         </td>
-                        <td style="text-align:center; vertical-align:middle;">
-                            {% if candidate.politicalcontributions %}
-                                <a href="{% url 'candidates:political_contributions' id=candidate.id %}#d3_in"><font class="price">{{candidate.politicalcontributions.in_total}}</font></a>
-                            {% endif %}
-                        </td>
-                        <td style="text-align:center; vertical-align:middle;">
-                            {% if candidate.politicalcontributions %}
-                                <a href="{% url 'candidates:political_contributions' id=candidate.id %}#d3_out"><font class="price">{{candidate.politicalcontributions.out_total}}</font></a>
-                            {% endif %}
-                        </td>
-                        <td style="text-align:center; vertical-align:middle;">
-                            {% if candidate.politicalcontributions %}
-                                <font class="price">{{candidate.politicalcontributions.balance}}</font>
-                            {% endif %}
+                        <td style="vertical-align:middle;" nowrap>
+                            <div class="row-fluid">
+                            {% for term in candidate.politicalcontributions %}
+                                <div class="span6" style="display:inline-block; float: none;">
+                                    <div class="label" align="center" style="display:block;">{{term.election_year}}</div>
+                                    <a href="{% url 'candidates:pc' candidate_id=candidate.candidate_id ad=term.ad %}">收：<font class="price">{{term.pc.in_total}}</font></a>
+                                    <br>
+                                    <a href="{% url 'candidates:pc' candidate_id=candidate.candidate_id ad=term.ad %}">支：<font class="price">{{term.pc.out_total}}</font></a>
+                                    <br>
+                                    餘：<font class="price">{{term.pc.balance}}</font>
+                                </div>
+                            {% endfor %}
+                            </div>
                         </td>
                         <td style="text-align:center; vertical-align:middle;">
                             {% if candidate.legislator_uid %}
@@ -190,13 +183,18 @@
                         </td>
                         {% endif %}
                         <td style="vertical-align:middle;" nowrap>
-                            {% if candidate.politicalcontributions %}
-                                <a href="{% url 'candidates:political_contributions' id=candidate.id %}#d3_in">收：<font class="price">{{candidate.politicalcontributions.in_total}}</font></a>
-                                <br>
-                                <a href="{% url 'candidates:political_contributions' id=candidate.id %}#d3_out">支：<font class="price">{{candidate.politicalcontributions.out_total}}</font></a>
-                                <br>
-                                餘：<font class="price">{{candidate.politicalcontributions.balance}}</font>
-                            {% endif %}
+                            <div class="row-fluid">
+                            {% for term in candidate.politicalcontributions %}
+                                <div class="span6" style="display:inline-block; float: none;">
+                                    <div class="label" align="center" style="display:block;">{{term.election_year}}</div>
+                                    <a href="{% url 'candidates:pc' candidate_id=candidate.candidate_id ad=term.ad %}">收：<font class="price">{{term.pc.in_total}}</font></a>
+                                    <br>
+                                    <a href="{% url 'candidates:pc' candidate_id=candidate.candidate_id ad=term.ad %}">支：<font class="price">{{term.pc.out_total}}</font></a>
+                                    <br>
+                                    餘：<font class="price">{{term.pc.balance}}</font>
+                                </div>
+                            {% endfor %}
+                            </div>
                         </td>
                         {% if candidate.councilor %}
                         <td style="vertical-align:middle;">

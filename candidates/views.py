@@ -105,6 +105,6 @@ def district(request, ad, county, constituency):
                     standpoints.update({candidate.id: r[0] if r else []})
         return render(request, 'candidates/district.html', {'ad': ad, 'county': county, 'candidates': candidates, 'candidates_previous': candidates_previous, 'standpoints': standpoints, 'update_at': update_at})
 
-def political_contributions(request, id):
-    candidate = get_object_or_404(Terms, id=id)
-    return render(request, 'candidates/politicalcontributions.html', {'candidate': candidate})
+def pc(request, candidate_id, ad):
+    candidate = get_object_or_404(Terms, candidate_id=candidate_id, ad=ad)
+    return render(request, 'candidates/pc.html', {'candidate': candidate})
