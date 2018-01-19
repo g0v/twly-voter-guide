@@ -37,12 +37,15 @@ def vote(request, vote_id):
                 if request.POST.get('keyword', '').strip():
                     standpoint_id = u'vote-%s-%s' % (vote_id, request.POST['keyword'].strip())
                     Standpoint.objects.get_or_create(uid=standpoint_id, title=request.POST['keyword'].strip(), vote_id=vote_id, user=request.user)
+                    update_vote_index.delay(vote_id)
                 elif request.POST.get('pro'):
                     User_Standpoint.objects.create(standpoint_id=request.POST['pro'], user=request.user)
                     Standpoint.objects.filter(id=request.POST['pro']).update(pro=F('pro') + 1)
+                    update_vote_index.delay(vote_id)
                 elif request.POST.get('against'):
                     User_Standpoint.objects.get(standpoint_id=request.POST['against'], user=request.user).delete()
                     Standpoint.objects.filter(id=request.POST['against']).update(pro=F('pro') - 1)
+                    update_vote_index.delay(vote_id)
 
     standpoints_of_vote = Standpoint.objects.filter(vote_id=vote_id)\
                                             .order_by('-pro')
