@@ -17,7 +17,9 @@
                     <li id='url_info'><a href="{% url 'legislator:info' legislator_id=ly.legislator_id ad=ly.ad %}"><i class="fa fa-info"> 基本資料</i></a></li>
                     <li id='url_property'><a href="http://sunshine.cy.g0v.tw/people/{{ly.name}}/property/overview/" target="_blank"><i class="fa fa-bank"> 個人財產申報</i></a></li>
                     <li id='url_vote'><a href="{% url 'legislator:voter_standpoints' legislator_id=ly.legislator_id ad=ly.ad %}"><i class="fa fa-balance-scale"> 表決</i></a></li>
-                    <li id='url_polticalcontributions'><a href="{% url 'legislator:personal_political_contributions' legislator_id=ly.legislator_id ad=ly.ad %}"><i class="fa fa-dollar"> 政治獻金</i></a></li>
+                    {% if councilor.elected_candidate %}
+                    <li id='url_polticalcontributions'><a href="{% url 'candidates:pc' candidate_id=ly.elected_candidate.candidate_id ad=ly.ad %}"><i class="fa fa-dollar"> 政治獻金</i></a></li>
+                    {% endif %}
                     <li id='url_bill'><a href="{% url 'legislator:biller_detail' legislator_id=ly.legislator_id ad=ly.ad %}"><i class="fa fa-book"> 法條修正案</i></a></li>
                     <li id='url_politics'><a href="{% url 'legislator:platformer_detail' legislator_id=ly.legislator_id ad=ly.ad %}"><i class="fa fa-comment"> 競選政見</i></a></li>
                 </ul>
