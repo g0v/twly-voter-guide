@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponseRedirect, Http404
+from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404
 from django.db import connections
 from django.db.models import Count, Q
@@ -67,13 +68,7 @@ def info(request, legislator_id, ad):
 
 def personal_political_contributions(request, legislator_id, ad):
     ly = get_object_or_404(LegislatorDetail.objects.select_related('elected_candidate'), ad=ad, legislator_id=legislator_id)
-    try:
-        pc = ly.elected_candidate.politicalcontributions
-        return render(request, 'legislator/personal_politicalcontributions.html', {'ly': ly, 'pc': pc})
-    except Candidates.DoesNotExist:
-        return render(request, 'legislator/personal_politicalcontributions.html', {'ly': ly, 'pc': None})
-    except Exception, e:
-        raise Http404
+    return HttpResponseRedirect(reverse('candidates:pc', kwargs={'ad': ad, 'candidate_id': ly.elected_candidate.candidate_id}))
 
 def voter_standpoints(request, legislator_id, ad):
     ly = get_object_or_404(LegislatorDetail.objects, ad=ad, legislator_id=legislator_id)
