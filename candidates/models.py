@@ -12,6 +12,7 @@ class Candidates(models.Model):
         default=None,
     )
     birth = models.DateField(blank=True, null=True)
+    identifiers = JSONField(null=True)
     data = JSONField(null=True)
 
     def __unicode__(self):
